@@ -6,9 +6,6 @@ module.exports = {
       const slogan = await Slogan.create(data);
       res.ok({
         message: 'create slogan success',
-        controller: 'slogan',
-        action: 'create',
-        success: true,
         data: slogan,
       });
     } catch (e) {
