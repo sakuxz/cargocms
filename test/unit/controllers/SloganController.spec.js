@@ -8,7 +8,6 @@ describe.only('about Slogan Controller operation.', function() {
       const res = await request(sails.hooks.http.app)
       .post(`/slogan`)
       .send(data);
-      console.log(res.body);
       res.status.should.be.eq(200);
       res.body.should.be.Object;
       res.body.message.should.be.eq('create slogan success');
