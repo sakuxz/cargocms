@@ -78,6 +78,8 @@ module.exports.routes = {
   'put /post/:postId': 'PostController.update',
   'delete /post/:postId': 'PostController.delete',
 
+  //----- SloganController -----
+  'post /slogan': 'SloganController.create',
 
   /***************************************************************************
   *                                                                          *

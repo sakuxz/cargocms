@@ -1,4 +1,4 @@
-describe('about Slogan Controller operation.', function() {
+describe.only('about Slogan Controller operation.', function() {
   it('create Slogan should success.', async (done) => {
     const data = {
       content: 'we are pokemon trainer',
@@ -12,8 +12,8 @@ describe('about Slogan Controller operation.', function() {
       res.body.should.be.Object;
       res.body.message.should.be.eq('create slogan success');
       res.body.controller.should.be.eq('slogan');
-      res.body.action.shoule.be.eq('create');
-      res.body.success.shoule.be.true;
+      res.body.action.should.be.eq('create');
+      res.body.success.should.be.true;
       res.body.data.content.should.be.eq(data.content);
       res.body.data.source.should.be.eq(data.source);
       done();
