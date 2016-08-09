@@ -10,8 +10,12 @@ describe('about Slogan Controller operation.', function() {
       .send(data);
       res.status.should.be.eq(200);
       res.body.should.be.Object;
-      res.body.slogan.content = data.content;
-      res.body.slogan.source = data.source;
+      res.body.message.should.be.eq('create slogan success');
+      res.body.controller.should.be.eq('slogan');
+      res.body.action.shoule.be.eq('create');
+      res.body.success.shoule.be.true;
+      res.body.data.content.should.be.eq(data.content);
+      res.body.data.source.should.be.eq(data.source);
       done();
     } catch (e) {
       done(e);
