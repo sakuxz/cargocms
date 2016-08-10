@@ -45,8 +45,8 @@ module.exports = {
     res.send(new Buffer('var __ADMIN_CONFIG__='+JSON.stringify(config)+';'));
   },
 
-  // slogan: function(req, res) {
-  //   res.ok({view: true});
-  // },
+  slogan: function(req, res) {
+    res.ok({view: true});
+  },
 
 };
