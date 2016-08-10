@@ -38,7 +38,7 @@ var userApp = new Vue({
   methods: {
     cancel: function (event) {
       userApp.onLeavePageEdit(function() {
-        location.href = '/admin/#/admin/user';
+        location.href = '/admin/#/admin/slogan';
       });
     },
     save: function (event) {
@@ -55,7 +55,7 @@ var userApp = new Vue({
 
       function ajaxSuccess(result) {
         if (result.success) {
-          location.href = '/admin/#/admin/user';
+          location.href = '/admin/#/admin/slogan';
           messageApp.show({desc: '新增會員成功！', type: 'success'});
         } else {
           messageApp.show({desc: '新增資料失敗！errorMessage:' + result.message, type: 'error'});
@@ -76,7 +76,7 @@ var userApp = new Vue({
 
       function ajaxSuccess(result) {
         if (result.success) {
-          location.href = '/admin/#/admin/user';
+          location.href = '/admin/#/admin/slogan';
           messageApp.show({desc: '更新會員資料成功！', type: 'success'});
         } else {
           messageApp.show({desc: '更新資料失敗！errorMessage:' + result.message, type: 'error'});
@@ -240,7 +240,7 @@ var userApp = new Vue({
                if (isSelected) {
                  var index = userAppModel.view.table.selectIndex;
                  var userId = userAppModel.data.items[index].id;
-                 location.href = '/admin/#/admin/user/show/' + userId;
+                 location.href = '/admin/#/admin/slogan/show/' + userId;
                } else {
                  messageApp.show({desc: '請選擇會員', type: 'warning'});
                }
@@ -250,7 +250,7 @@ var userApp = new Vue({
              "sExtends": "text",
              "sButtonText": "新增",
              "fnClick": function ( nButton, oConfig, oFlash ) {
-               location.href = '/admin/#/admin/user/create';
+               location.href = '/admin/#/admin/slogan/create';
              }
            },
            {
@@ -261,7 +261,7 @@ var userApp = new Vue({
                if (isSelected) {
                  var index = userAppModel.view.table.selectIndex;
                  var userId = userAppModel.data.items[index].id;
-                 location.href = '/admin/#/admin/user/edit/' + userId;
+                 location.href = '/admin/#/admin/slogan/edit/' + userId;
                } else {
                  messageApp.show({desc: '請選擇會員', type: 'warning'});
                }
@@ -309,10 +309,10 @@ var userApp = new Vue({
       }
     },
     show: function (userId) {
-      location.href = '/admin/#/admin/user/show/' + userId;
+      location.href = '/admin/#/admin/slogan/show/' + userId;
     },
     edit: function (userId) {
-      location.href = '/admin/#/admin/user/edit/' + userId;
+      location.href = '/admin/#/admin/slogan/edit/' + userId;
     },
     delete: function() {
       messageApp.confirm({
@@ -337,7 +337,7 @@ var userApp = new Vue({
               userAppModel.view.table.selectIndex = COMMON.DEFAULT_INDEX;
               messageApp.show({desc: `刪除資料成功！`, type: 'success'});
               setTimeout(function() {
-                location.href = '/admin/#/admin/user';
+                location.href = '/admin/#/admin/slogan';
               }, 500);
             } else {
               messageApp.show({desc: '刪除資料失敗！errorMessage:' + result.message, type: 'error'});
