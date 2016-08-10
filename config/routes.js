@@ -102,8 +102,7 @@ module.exports.routes = {
   '/admin': 'AdminController.index',
 
 
-  //----- SloganController -----
-  'post /slogan': 'SloganController.create',
+
 
   /***************************************************************************
   *                                                                          *
@@ -114,91 +113,5 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-
-  //----- Admin -----
-
-
-  '/admin/login': {
-    view: 'admin/login',
-    locals: {
-      layout: false
-    }
-  },
-
-  '/admin/': {
-      controller: 'AdminController',
-      action: 'index',
-      locals: {
-       layout: false
-      }
-   },
-
-//----- Admin User -----
-  '/admin/user': {
-    view: 'admin/user/index',
-    locals: {
-      layout: false
-    }
-  },
-  '/admin/dashboard': {
-    view: 'admin/dashboard/index',
-    locals: {
-      layout: false
-    }
-  },
-
-
-  '/admin/user/create': {
-    view: 'admin/user/create',
-    locals: {
-      layout: false
-    }
-  },
-  '/admin/user/edit/:id': {
-    view: 'admin/user/edit',
-    locals: {
-      layout: false
-    }
-  },
-  '/admin/user/show/:id': {
-    view: 'admin/user/show',
-    locals: {
-      layout: false
-    }
-  },
-
-  '/admin/post': {
-    view: 'admin/post/index',
-    locals: {
-      layout: false
-    }
-  },
-
-  '/admin/debug': 'AdminController.debug',
-
-  '/admin/slogan': {
-    view: 'admin/slogan/index',
-    locals: {
-      layout: false
-    }
-  },
-  '/admin/slogan/create': {
-    view: 'admin/slogan/create',
-    locals: {
-      layout: false
-    }
-  },
-  '/admin/slogan/edit/:id': {
-    view: 'admin/slogan/edit',
-    locals: {
-      layout: false
-    }
-  },
-  '/admin/slogan/show/:id': {
-    view: 'admin/slogan/show',
-    locals: {
-      layout: false
-    }
-  },
 
 };

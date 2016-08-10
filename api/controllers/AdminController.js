@@ -21,6 +21,7 @@ module.exports = {
           { href: '/admin/post', title: '內容資料' },
           { href: '/admin/labfnp/recipe', title: '配方資料' },
           { href: '/admin/mock', title: '實驗室' },
+          { href: '/admin/slogan', title: 'Slogan' }
         ]},
       ],
     });
@@ -43,5 +44,9 @@ module.exports = {
     res.set('Content-Type', 'text/javascript');
     res.send(new Buffer('var __ADMIN_CONFIG__='+JSON.stringify(config)+';'));
   },
+
+  // slogan: function(req, res) {
+  //   res.ok({view: true});
+  // },
 
 };

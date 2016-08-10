@@ -5,7 +5,7 @@ var COMMON = {
 };
 
 var itemBeforeEdit = {};
-var userAppModel = {
+var sloganAppModel = {
   data: {
     item: {
       content: '',
@@ -34,7 +34,7 @@ var userAppModel = {
 }
 
 var userApp = new Vue({
-  data: userAppModel,
+  data: sloganAppModel,
   methods: {
     cancel: function (event) {
       userApp.onLeavePageEdit(function() {
@@ -43,7 +43,7 @@ var userApp = new Vue({
     },
     save: function (event) {
       $.ajax({
-        url: '/user',
+        url: '/api/user',
         type: 'POST',
         dataType: 'json',
         data: userAppModel.data.item,
@@ -64,7 +64,7 @@ var userApp = new Vue({
     },
     update: function (event) {
       $.ajax({
-        url: '/user/' + userAppModel.data.item.id,
+        url: '/api/user/' + userAppModel.data.item.id,
         type: 'PUT',
         dataType: 'json',
         data: userAppModel.data.item,
@@ -85,7 +85,7 @@ var userApp = new Vue({
     },
     loadItem: function (event) {
       window.onbeforeunload = null;
-      $.get('/user/' + userAppModel.data.item.id, ajaxSuccess);
+      $.get('/api/user/' + userAppModel.data.item.id, ajaxSuccess);
 
       function ajaxSuccess(result) {
         console.log("loadItem result.data=>", result.data);
@@ -178,7 +178,7 @@ var userApp = new Vue({
     },
     loadItems: function (cb) {
       window.onbeforeunload = null;
-      $.get('/user', ajaxSuccess);
+      $.get('/api/user', ajaxSuccess);
 
       function ajaxSuccess(result) {
         //userAppModel.data.items = result.data.items;
@@ -323,7 +323,7 @@ var userApp = new Vue({
       function(ButtonPressed) {
         if (ButtonPressed ==='刪除') {
           $.ajax({
-            url: '/user/' + userAppModel.data.item.id,
+            url: '/api/user/' + userAppModel.data.item.id,
             type: 'DELETE',
             dataType: 'json',
             xhrFields: {
