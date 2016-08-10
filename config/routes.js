@@ -151,4 +151,30 @@ module.exports.routes = {
   },
 
   '/admin/debug': 'AdminController.debug',
+
+  '/admin/slogan': {
+    view: 'admin/slogan/index',
+    locals: {
+      layout: false
+    }
+  },
+  '/admin/slogan/create': {
+    view: 'admin/slogan/create',
+    locals: {
+      layout: false
+    }
+  },
+  '/admin/slogan/edit/:id': {
+    view: 'admin/slogan/edit',
+    locals: {
+      layout: false
+    }
+  },
+  '/admin/slogan/show/:id': {
+    view: 'admin/slogan/show',
+    locals: {
+      layout: false
+    }
+  },
+
 };
