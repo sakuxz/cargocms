@@ -52,17 +52,42 @@ module.exports = {
     }
   },
   associations: function() {
-    User.hasMany(Post);
-    User.hasMany(Passport);
-    User.belongsToMany(Role, {through: 'UserRole'});
+    User.hasMany(Image, {
+      foreignKey: {
+        name: 'UserId'
+      }
+    });
+    User.hasMany(Post, {
+      foreignKey: {
+        name: 'UserId'
+      }
+    });
+    User.hasMany(Passport, {
+      foreignKey: {
+        name: 'UserId'
+      }
+    });
+    User.hasMany(Recipe, {
+      foreignKey: {
+        name: 'UserId'
+      }
+    });
+    User.belongsToMany(Role, {
+      through: 'UserRole',
+      foreignKey: {
+        name: 'UserId',
+        as: 'Roles'
+      }
+    });
   },
   options: {
+    // tableName: 'Users',
     classMethods: {
-      findOneWithPassport: async function({userId}) {
-        sails.log.info("findOneWithPassport userId=>", userId);
+      findOneWithPassport: async function({id}) {
+        sails.log.info("findOneWithPassport id=>", id);
         return await User.findOne({
           where: {
-            id: userId
+            id
           },
           include: [ Role, {
               model: Passport,

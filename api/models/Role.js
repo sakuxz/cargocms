@@ -2,9 +2,18 @@ module.exports = {
   attributes: {
     authority: Sequelize.STRING
   },
-  classMethods: {
-    associate: (models) => {
-      User.belongsToMany(Role, {through: 'UserRole'});
-    }
+
+  associate: (models) => {
+    User.belongsToMany(Role, {
+
+      through: 'UserRole',
+      foreignKey: {
+        name: 'RoleId',
+        as: 'Users'
+      }
+    });
+  },
+  options: {
   }
+
 };

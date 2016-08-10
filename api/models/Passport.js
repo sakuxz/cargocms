@@ -27,6 +27,7 @@ module.exports = {
     Passport.belongsTo(User);
   },
   options: {
+    // tableName: 'Passports',
     classMethods: {
       hashPassword: async (passport) => {
 

@@ -1,0 +1,107 @@
+<script src="//d3js.org/d3.v3.min.js"></script>
+
+<style>
+.sky-form section {
+  margin-bottom: 0;
+}
+</style>
+
+<!--=== Content Part ===-->
+<div class="container content">
+	<div class="row">
+
+		<!-- Begin Content -->
+		<div class="col-md-8">
+			<!-- General Unify Forms -->
+			<form id="main-form" action="/api/labfnp/recipe" method="post" class="sky-form">
+				<header>新香水配方</header>
+
+				<fieldset>
+					<section>
+						<label class="label">創作者姓名（必填）</label>
+						<label class="input">
+							<input type="text" name="authorName" placeholder="Enter Name" value="<%= user.username %>" required />
+						</label>
+					</section>
+
+					<section>
+						<label class="label">香水品名（必填）</label>
+						<label class="input">
+							<input type="text" name="perfumeName" placeholder="Enter Perfume Name" required />
+						</label>
+					</section>
+
+				</fieldset>
+
+				<fieldset>
+				  <% for (var i = 0; i < 6; i++) { %>
+				  <div class="row">
+  					<section class="col col-4">
+  						<label class="label">分類</label>
+  						<label class="select">
+  							<select class="scents-categories" data-index="<%= i %>">
+  								<option></option>
+  								<option value="T">T - 前位（Top）</option>
+  								<option value="M">M - 中位（Middle）</option>
+  								<option value="B">B - 後位（Base）</option>
+  							</select>
+  							<i></i>
+  						</label>
+  					</section>
+  					<section class="col col-4">
+  						<label class="label">所選之香味分子<%= i + 1 %></label>
+  						<label class="select">
+  							<select name="formulaScents[<%= i %>]" class="scents-dropdown" data-index="<%= i %>">
+									<option value=""></option>
+									<% scents.forEach(function(scent) { %>
+									  <option value="<%= scent.name %>" data-color="<%= scent.color %>">
+									      <%= scent.name %>
+									  </option>
+									<% }); %>
+  							</select>
+  							<i></i>
+  						</label>
+  					</section>
+  					<section class="col col-4">
+  						<label class="label">滴數</label>
+  						<label class="input">
+  							<input type="number" name="formulaDrops[<%= i %>]" value="0" class="scents-drops" data-index="<%= i %>">
+  						</label>
+  				  </section>
+				  </div>
+				  <% } %>
+				</fieldset>
+
+				<fieldset>
+
+					<section>
+						<label class="label">其他訊息</label>
+						<label class="textarea textarea-resizable">
+							<textarea rows="3"></textarea>
+						</label>
+					</section>
+
+				</fieldset>
+
+				<footer>
+					<button type="submit" class="btn-u">送出資料</button>
+					<button type="button" class="btn-u btn-u-default" onclick="window.history.back();">返回</button>
+				</footer>
+			</form>
+			<!-- General Unify Forms -->
+
+		</div>
+		<div class="col-md-4">
+		  <p>LFP account: </p>
+		  <p>目前滴數總和 <span id="total-drops">0</span> drops</p>
+
+      <!-- create container element for visualization -->
+      <div id="d3-container" class="animated"></div>
+
+	  </div>
+		<!-- End Content -->
+	</div>
+</div><!--/container-->
+<!--=== End Content Part ===-->
+
+<% LayoutUtils.addScripts('/assets/labfnp/page/scents/creator.js'); %>

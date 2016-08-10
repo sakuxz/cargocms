@@ -20,9 +20,7 @@ describe('about Auth Controller operation.', function() {
       });
 
       checkUser.email.should.be.equal(newUser.email);
-      checkUser.Passports[0].password.should.be.equal(newUser.password);
       result.status.should.be.equal(302);
-      result.headers.location.should.be.equal('/');
 
       done();
     } catch (e) {
@@ -49,7 +47,7 @@ describe('about Auth Controller operation.', function() {
     });
 
 
-    it('should success.', async (done) => {
+    it('should be success.', async (done) => {
 
       try {
         let loginInfo = {
@@ -63,7 +61,6 @@ describe('about Auth Controller operation.', function() {
         .send(loginInfo);
 
         result.status.should.be.equal(302);
-        result.headers.location.should.be.equal('/');
 
         let checkUser = await User.findById(user.id);
         checkUser.userAgent.should.not.eq('');

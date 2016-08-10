@@ -1,0 +1,433 @@
+var COMMON = {
+	DOUBLE_CLICK_TIME_PERIOD: 250,
+	DEFAULT_INDEX: -1,
+  PAGE_NAME: 'labfnp-recipe-',
+};
+
+var LINK = {
+  PAGE_INDEX: '/admin/#/admin/labfnp/recipe',
+  PAGE_CREATE: '/admin/#/admin/labfnp/recipe/create',
+  PAGE_EDIT: '/admin/#/admin/labfnp/recipe/edit/',
+  PAGE_SHOW: '/admin/#/admin/labfnp/recipe/show/',
+  API_LIST_SCENT: '/api/labfnp/scent/simpleList',
+  API_LIST: '/api/labfnp/recipe',
+  API_ITEM: '/api/labfnp/recipe/',
+  API_CREATE: '/api/labfnp/recipe',
+  API_UPDATE: '/api/labfnp/recipe/',
+};
+
+var itemBeforeEdit = {};
+var formula = [
+  {
+    scent: '',
+    drops: 0,
+  },
+  {
+    scent: '',
+    drops: 0,
+  },
+  {
+    scent: '',
+    drops: 0,
+  },
+  {
+    scent: '',
+    drops: 0,
+  },
+  {
+    scent: '',
+    drops: 0,
+  },
+  {
+    scent: '',
+    drops: 0,
+  },
+];
+var userAppModel = {
+	data: {
+		item: {
+      authorName: '',
+			perfumeName: '',
+			formulaLogs: '',
+      formula: formula,
+      UserId: '',
+      User: {},
+		},
+		items: [],
+    select: {
+      scents: [],
+    },
+		option: {
+		}
+	},
+	view: {
+		table: {
+			selectIndex: COMMON.DEFAULT_INDEX,
+		},
+	}
+};
+
+var userApp = new Vue({
+	data: userAppModel,
+	methods: {
+		cancel: function (event) {
+			userApp.onLeavePageEdit(function () {
+				location.href = LINK.PAGE_INDEX;
+			});
+		},
+		save: function (event) {
+			$.ajax({
+				url: LINK.API_CREATE,
+				type: 'POST',
+				dataType: 'json',
+				data: userAppModel.data.item,
+				xhrFields: {
+					withCredentials: true,
+				},
+				success: ajaxSuccess,
+				error: ajaxError,
+			});
+
+			function ajaxSuccess(result) {
+				location.href = LINK.PAGE_INDEX;
+				messageApp.show({
+					desc: '新增資料成功！',
+					type: 'success'
+				});
+			} // end ajaxSuccess
+
+			function ajaxError(result) {
+				messageApp.show({
+					desc: '新增資料失敗！errorMessage: ' + result.responseJSON.message,
+					type: 'error'
+				});
+			}
+		},
+		update: function (event) {
+			$.ajax({
+				url: LINK.API_UPDATE + userAppModel.data.item.id,
+				type: 'PUT',
+				dataType: 'json',
+				data: userAppModel.data.item,
+				xhrFields: {
+					withCredentials: true,
+				},
+				success: ajaxSuccess,
+				error: ajaxError,
+			});
+
+			function ajaxSuccess(result) {
+				location.href = LINK.PAGE_INDEX;
+				messageApp.show({
+					desc: '更新會員資料成功！',
+					type: 'success'
+				});
+			} // end ajaxSuccess
+
+			function ajaxError(result) {
+				console.log(result);
+				messageApp.show({
+					desc: '更新資料失敗！errorMessage: ' + result.responseJSON.message,
+					type: 'error'
+				});
+			}
+		},
+    loadSelectOptions: function (cb) {
+      $.get(LINK.API_LIST_SCENT, ajaxSuccess);
+
+      function ajaxSuccess(result) {
+        userAppModel.data.select.scents = result.data.items;
+                console.log("userAppModel stringify=>", JSON.parse(JSON.stringify(userAppModel.data.item)));
+        if (typeof cb !== 'undefined') setTimeout(cb, 1);
+      } // end ajaxSuccess
+    },
+		loadItem: function (cb) {
+			window.onbeforeunload = null;
+			$.get(LINK.API_ITEM + userAppModel.data.item.id, ajaxSuccess);
+
+			function ajaxSuccess(result) {
+				if (result.success) {
+					userAppModel.data.item = result.data;
+					var hasAvatar = typeof result.data.avatar === 'string';
+					if (!hasAvatar) {
+						userAppModel.data.item.avatar = COMMON.DEFAULT_AVATAR;
+					}
+          if (typeof cb !== 'undefined') setTimeout(cb, 1);
+				}
+			} // end ajaxSuccess
+		},
+		setupForm: function (type) {
+			var registerForm = $('#' + COMMON.PAGE_NAME + 'form');
+			registerForm.validate({
+				// Rules for form validation
+				rules: {
+          authorName: {
+            required: true,
+          },
+					perfumeName: {
+						required: true
+					},
+					formulaLogs: {
+						required: true,
+					},
+					formula: {
+						required: true,
+            minlength: 1,
+					},
+				},
+
+				// Messages for form validation
+				messages: {
+					authorName: {
+						required: '請輸入作者名稱'
+					},
+					perfumeName: {
+						required: '請輸入香水名稱'
+					},
+					formulaLogs: {
+						required: '請輸入formulaLogs',
+					},
+					formula: {
+						required: '請選擇配方',
+            minlength: "Enter at leas",
+					},
+				},
+
+				// Do not change code below
+				errorPlacement: function (error, element) {
+					error.insertAfter(element.parent());
+				},
+
+				submitHandler: function (form) {
+					if (type == 'create') {
+						userApp.save();
+						return false;
+					} else if (type == 'edit') {
+						userApp.update();
+						return false;
+					}
+				}
+			});
+		},
+		isPageEditDataModified: function () {
+			var itemBeforeLeave = JSON.stringify(userAppModel.data.item);
+			var isDataModified = itemBeforeEdit !== itemBeforeLeave;
+			if (!isDataModified) window.onbeforeunload = null;
+			return isDataModified;
+		},
+		onEnterPageEdit: function () {
+			itemBeforeEdit = JSON.stringify(userAppModel.data.item);
+			console.log("itemBeforeEdit=>", JSON.parse(itemBeforeEdit));
+			window.onbeforeunload = function (e) {
+				if (userApp.isPageEditDataModified()) {
+					var message = '您已經修改過資料，是否確定要放棄本次的修改？';
+					e.returnValue = message;
+					return message;
+				}
+			};
+		},
+    onEnterPageCreare: function () {
+    },
+		onLeavePageEdit: function (cb) {
+			if (userApp.isPageEditDataModified()) {
+				var msgInfo = {
+					title: '注意',
+					content: '您已經修改過資料，是否確定要放棄本次的修改？',
+					btnArray: ['放棄', '取消'],
+				};
+				var action = function (ButtonPressed) {
+					if (ButtonPressed === '放棄') {
+						setTimeout(function () {
+							return cb();
+						}, 500);
+					}
+				};
+				messageApp.confirm(msgInfo, action);
+			} else return cb();
+		},
+		loadItems: function (cb) {
+			window.onbeforeunload = null;
+			$.get(LINK.API_LIST, ajaxSuccess);
+
+			function ajaxSuccess(result) {
+				userAppModel.data.items = result.data.items;
+        console.log("result=>", result);
+				if (typeof cb !== 'undefined') setTimeout(cb, 0);
+			} // end ajaxSuccess
+		},
+		renderTable: function () {
+			/* BASIC ;*/
+			var responsiveHelper_user_table = undefined;
+			var responsiveHelper_datatable_fixed_column = undefined;
+			var responsiveHelper_datatable_col_reorder = undefined;
+			var responsiveHelper_datatable_tabletools = undefined;
+
+			var breakpointDefinition = {
+				tablet: 1024,
+				phone: 480
+			};
+			/* TABLETOOLS */
+			var table = $('#' + COMMON.PAGE_NAME + 'table').dataTable({
+				// Tabletools options:
+				//   https://datatables.net/extensions/tabletools/button_options
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'Tl>r>" +
+					"t" +
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+				"oLanguage": {
+					"sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>',
+					"sInfo": "顯示 _START_ 到 _END_ 總共 _TOTAL_ 筆紀錄",
+					"sInfoPostFix": "",
+					"sInfoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+					"sInfoFiltered": "(從 _MAX_ 項結果中過濾)",
+					"sProcessing": "處理中...",
+					"sLoadingRecords": "載入中...",
+					"sLengthMenu": "顯示 _MENU_ 項結果　",
+					"sZeroRecords": "沒有符合的結果",
+					"oPaginate": {
+						"sFirst": "第一頁",
+						"sPrevious": "上一頁",
+						"sNext": "下一頁",
+						"sLast": "最後一頁"
+					},
+					"sAria": {
+						"sortAscending": ": 升冪排列",
+						"sortDescending": ": 降冪排列"
+					}
+				},
+				"columnDefs": [
+					{
+						"targets": 'no-sort',
+						"orderable": false,
+        },
+      ],
+				"oTableTools": {
+					"aButtons": [
+						{
+							"sExtends": "text",
+							"sButtonText": "檢視",
+							"fnClick": function (nButton, oConfig, oFlash) {
+								var isSelected = userAppModel.view.table.selectIndex !== COMMON.DEFAULT_INDEX;
+								if (isSelected) {
+									var index = userAppModel.view.table.selectIndex;
+									var id = userAppModel.data.items[index].id;
+									location.href = LINK.PAGE_SHOW + id;
+								} else {
+									messageApp.show({
+										desc: '請選擇一筆資料',
+										type: 'warning'
+									});
+								}
+							}
+           },
+						{
+							"sExtends": "text",
+							"sButtonText": "新增",
+							"fnClick": function (nButton, oConfig, oFlash) {
+                location.href = LINK.PAGE_CREATE;
+							}
+           },
+						{
+							"sExtends": "text",
+							"sButtonText": "編輯",
+							"fnClick": function (nButton, oConfig, oFlash) {
+								var isSelected = userAppModel.view.table.selectIndex !== COMMON.DEFAULT_INDEX;
+								if (isSelected) {
+									var index = userAppModel.view.table.selectIndex;
+									var id = userAppModel.data.items[index].id;
+									location.href = LINK.PAGE_EDIT + id;
+								} else {
+									messageApp.show({
+										desc: '請選擇一筆資料',
+										type: 'warning'
+									});
+								}
+							}
+           },
+         ]
+				},
+				"autoWidth": true,
+				"preDrawCallback": function () {
+					// Initialize the responsive datatables helper once.
+					if (!responsiveHelper_datatable_tabletools) {
+						responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#' + COMMON.PAGE_NAME + 'table'), breakpointDefinition);
+					}
+				},
+				"rowCallback": function (nRow) {
+					responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
+				},
+				"drawCallback": function (oSettings) {
+					responsiveHelper_datatable_tabletools.respond();
+				}
+			});
+
+			// selection
+			table.on('click', 'tr', function () {
+				if ($(this).hasClass('selected')) {
+					$(this).removeClass('selected');
+				} else {
+					$('#' + COMMON.PAGE_NAME + 'table tbody tr').removeClass('selected');
+					$(this).addClass('selected');
+				}
+			});
+
+			$('#' + COMMON.PAGE_NAME + 'table-widget').fadeIn();
+		},
+		dblclick: function (index) {
+			var id = userAppModel.data.items[index].id;
+			this.show(id);
+		},
+		selection: function (index) {
+			if (index !== userAppModel.view.table.selectIndex) {
+				userAppModel.view.table.selectIndex = index;
+				console.log("userAppModel.view.table.selectIndex", userAppModel.view.table.selectIndex);
+			} else {
+				userAppModel.view.table.selectIndex = COMMON.DEFAULT_INDEX;
+			}
+		},
+		show: function (id) {
+			location.href = LINK.PAGE_SHOW + id;
+		},
+		edit: function (id) {
+			location.href = LINK.PAGE_EDIT + id;
+		},
+		delete: function () {
+			messageApp.confirm({
+					title: '刪除',
+					content: '確認刪除此筆資料？',
+					btnArray: ['刪除', '取消'],
+				},
+				function (ButtonPressed) {
+					if (ButtonPressed === '刪除') {
+						$.ajax({
+							url: LINK.API_UPDATE + userAppModel.data.item.id,
+							type: 'DELETE',
+							dataType: 'json',
+							xhrFields: {
+								withCredentials: true
+							},
+							success: ajaxSuccess,
+							error: ajaxError,
+						});
+
+						function ajaxSuccess(result) {
+							userAppModel.view.table.selectIndex = COMMON.DEFAULT_INDEX;
+							messageApp.show({
+								desc: `刪除資料成功！`,
+								type: 'success'
+							});
+							setTimeout(function () {
+								location.href = LINK.PAGE_INDEX;
+							}, 500);
+						} // end ajaxSuccess
+
+						function ajaxError(result) {
+							messageApp.show({
+								desc: '刪除資料失敗！errorMessage: ' + result.responseJSON.message,
+								type: 'error'
+							});
+						}
+					}
+				});
+		}
+	},
+});

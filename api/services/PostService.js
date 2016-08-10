@@ -1,32 +1,38 @@
 module.exports = {
-  create: async (data = {
-    title,
-    content,
-    cover,
-    url,
-    abstract,
-  }) => {
+  create: async function ({ title,  content,  cover = null,  url,  abstract, UserId }) {
     try {
-      return await Post.create(data);
+      return await Post.create({
+        title,
+        content,
+        cover: cover === '' ? null : cover,
+        url,
+        abstract,
+        UserId
+      });
     } catch (e) {
       sails.log.error(e);
       throw e;
     }
   },
 
-  update: async (postId, data = {
-    title,
-    content,
-    cover,
-    url,
-    abstract,
-  }) => {
+  update: async function (postId, { title,  content,  cover,  url,  abstract, TagsArray }) {
     try {
-      return await Post.update(data, {
+      await Post.update({
+        title,
+        content,
+        cover: cover === '' ? null : cover,
+        url,
+        abstract
+      }, {
         where: {
           id: postId,
         }
       });
+      await TagService.updateOrCreate({
+        postId,
+        datas: TagsArray
+      });
+      return true;
     } catch (e) {
       sails.log.error(e);
       throw e;

@@ -5,7 +5,13 @@ module.exports = {
     },
   },
   associations: () => {
-    Tag.belongsToMany(Post,  {through: 'PostTag'});
+    Tag.belongsToMany(Post,  {
+      through: 'PostTag',
+      foreignKey: {
+        name: 'TagId',
+        as: 'Posts'
+      }
+    });
   },
   options: {
     classMethods: {},

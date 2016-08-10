@@ -28,6 +28,27 @@ module.exports = {
 
   log: {
     level: "info"
+  },
+  passport: {
+    local: {
+      strategy: require('passport-local').Strategy
+    },
+    facebook: {
+      name: 'Facebook',
+      protocol: 'oauth2',
+      strategy: require('passport-facebook').Strategy,
+      options: {
+        clientID: '144219216008720',
+        clientSecret: '',
+        callbackURL: "",
+        profileFields: [
+          'id', 'email', 'gender', 'link', 'locale',
+          'name', 'timezone', 'updated_time', 'verified',
+          'displayName', 'photos'
+        ]
+      }
+    }
   }
+
 
 };

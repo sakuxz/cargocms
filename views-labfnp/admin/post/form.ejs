@@ -1,0 +1,41 @@
+
+<fieldset>
+
+  <label class="label">封面</label>
+  <%- include ../image/upload.ejs %>
+
+  <section>
+    <label class="label">標題</label>
+    <label class="input">
+      <input type="text" name="title" placeholder="請輸入標題" v-model="data.item.title">
+      <b class="tooltip tooltip-bottom-right">請輸入標題</b> </label>
+  </section>
+
+  <section>
+    <label class="label">簡述</label>
+    <label class="textarea">
+      <textarea rows="3" name="abstract" placeholder="請輸入 100 字以內的簡短的描述" v-model="data.item.abstract"></textarea>
+      <b class="tooltip tooltip-bottom-right">請輸入 100 字以內的簡短的描述</b> </label>
+  </section>
+
+  <section>
+    <label class="label">內容</label>
+    <div style="border: 1px solid #a9a9a9;">
+      <div v-summernote="data.item.content" class="summernote">
+        {{{ data.item.content }}}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <label class="label">標籤</label>
+    <input id="tagsinput" value="" data-role="tagsInputLabel">
+  </section>
+
+  <!-- <section>
+    <label class="input">
+      <input type="text" name="url" placeholder="網址" v-model="data.item.url">
+      <b class="tooltip tooltip-bottom-right">輸入網址</b> </label>
+  </section> -->
+
+</fieldset>

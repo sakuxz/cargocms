@@ -20,9 +20,16 @@
 module.exports.policies = {
   '*': ['nocache', 'passport', 'sessionAuth'],
   'AuthController': {
-    '*': ['passport']
+    '*': ['passport'],
   },
   'UserController': {
+    'index': ['nocache'],
+    'findOne': ['nocache'],
+    'create': ['nocache'],
+    'update': ['nocache'],
+    'delete': ['nocache']
+  },
+  'RecipeController': {
     'index': ['nocache'],
     'findOne': ['nocache'],
     'create': ['nocache'],

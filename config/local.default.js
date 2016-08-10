@@ -1,4 +1,10 @@
 module.exports = {
+  siteId: 'labfnp',
+  // appUrl: 'http://cargo-dev.trunksys.com/',
+  // port: 5001,
+  urls: {
+    afterSignIn: '/lab'
+  },
   passport: {
     local: {
       strategy: require('passport-local').Strategy

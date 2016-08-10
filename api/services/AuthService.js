@@ -23,7 +23,7 @@ module.exports = {
     user.Roles.forEach((role) => {
       if(role.authority == 'admin') isAdmin = true;
     });
-    
+
     return isAdmin;
   }
 

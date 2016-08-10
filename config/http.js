@@ -8,7 +8,7 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
-
+var express = require('express');
 
 module.exports.http = {
 
@@ -86,6 +86,14 @@ module.exports.http = {
 
   cache: 0,
 
+  customMiddleware: function(app) {
+    // app.use(express.logger());
+    // app.use(express.compress());
+
+    app.use('/assets/labfnp', express.static('assets-labfnp'));
+    app.use('/assets/unify', express.static('assets-unify'));
+    app.use('/assets/admin', express.static('assets-admin'));
+  },
   middleware: {
     order: [
       'startRequestTimer',
@@ -178,9 +186,9 @@ module.exports.http = {
   },
   locals: {
     filters: {
-      formatDate: function(date) {
-        return "AAA";
-      }
+      // formatDate: function(date) {
+      //   return ...;
+      // }
     }
   }
 };

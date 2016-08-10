@@ -3,11 +3,16 @@ describe('about Tag model operation.', function() {
   let tag;
   before(async (done) => {
     try {
+      const image = await Image.create({
+        filePath: 'http://www.labfnp.com/modules/core/img/update1.jpg',
+        type: 'image/jpeg',
+        storage: 'url',
+      });
       targetPost = await Post.create({
         title: '1213',
         content: '1213',
         category: '1213',
-        cover: '1213',
+        cover: image.id,
         url: '1213',
         abstract: '1213',
       })

@@ -1,0 +1,149 @@
+
+var userAppModel = {
+  data: {
+    cols: [],
+    items: [],
+    title: ""
+  }
+}
+
+var userApp = new Vue({
+  data: userAppModel,
+  methods: {
+    loadItems: function (cb) {
+      window.onbeforeunload = null;
+      $.get('/api/admin/mock', ajaxSuccess);
+
+      function ajaxSuccess(result) {
+        userAppModel.data.cols = result.data.cols;
+        userAppModel.data.items = result.data.items;
+        userAppModel.data.title = result.data.title;
+
+        if (typeof cb !== 'undefined') setTimeout(cb, 0);
+      } // end ajaxSuccess
+    },
+    renderTable: function() {
+      /* BASIC ;*/
+     var responsiveHelper_user_table = undefined;
+     var responsiveHelper_datatable_fixed_column = undefined;
+     var responsiveHelper_datatable_col_reorder = undefined;
+     var responsiveHelper_datatable_tabletools = undefined;
+
+     var breakpointDefinition = {
+       tablet : 1024,
+       phone : 480
+     };
+     /* TABLETOOLS */
+     var table = $('#mock-table').dataTable({
+       // Tabletools options:
+       //   https://datatables.net/extensions/tabletools/button_options
+       "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'Tl>r>"+
+           "t"+
+           "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+       "oLanguage": {
+          "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>',
+          "sInfo": "顯示 _START_ 到 _END_ 總共 _TOTAL_ 筆紀錄",
+         	"sInfoPostFix":  "",
+         	"sInfoEmpty":    "顯示第 0 至 0 項結果，共 0 項",
+         	"sInfoFiltered": "(從 _MAX_ 項結果中過濾)",
+         	"sProcessing":   "處理中...",
+         	"sLoadingRecords": "載入中...",
+         	"sLengthMenu":   "顯示 _MENU_ 項結果　",
+         	"sZeroRecords":  "沒有符合的結果",
+         	"oPaginate": {
+         		"sFirst":    "第一頁",
+         		"sPrevious": "上一頁",
+         		"sNext":     "下一頁",
+         		"sLast":     "最後一頁"
+         	},
+         	"sAria": {
+         		"sortAscending":  ": 升冪排列",
+         		"sortDescending": ": 降冪排列"
+         	}
+       },
+      "columnDefs": [
+        {
+          "targets"  : 'no-sort',
+          "orderable": false,
+        },
+      ],
+       "oTableTools": {
+         "aButtons": [
+           {
+             "sExtends": "text",
+             "sButtonText": "檢視",
+             "fnClick": function ( nButton, oConfig, oFlash ) {
+               var isSelected = userAppModel.view.table.selectIndex !== COMMON.DEFAULT_INDEX;
+               if (isSelected) {
+                 var index = userAppModel.view.table.selectIndex;
+                 var userId = userAppModel.data.items[index].id;
+                 location.href = '/admin/#/admin/user/show/' + userId;
+               } else {
+                 messageApp.show({desc: '請選擇會員', type: 'warning'});
+               }
+             }
+           },
+           {
+             "sExtends": "text",
+             "sButtonText": "新增",
+             "fnClick": function ( nButton, oConfig, oFlash ) {
+               location.href = '/admin/#/admin/user/create';
+             }
+           },
+           {
+             "sExtends": "text",
+             "sButtonText": "編輯",
+             "fnClick": function ( nButton, oConfig, oFlash ) {
+               var isSelected = userAppModel.view.table.selectIndex !== COMMON.DEFAULT_INDEX;
+               if (isSelected) {
+                 var index = userAppModel.view.table.selectIndex;
+                 var userId = userAppModel.data.items[index].id;
+                 location.href = '/admin/#/admin/user/edit/' + userId;
+               } else {
+                 messageApp.show({desc: '請選擇會員', type: 'warning'});
+               }
+             }
+           },
+         ]
+       },
+       "autoWidth" : true,
+       "preDrawCallback" : function() {
+         // Initialize the responsive datatables helper once.
+         if (!responsiveHelper_datatable_tabletools) {
+           responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#mock-table'), breakpointDefinition);
+         }
+       },
+       "rowCallback" : function(nRow) {
+         responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
+       },
+       "drawCallback" : function(oSettings) {
+         responsiveHelper_datatable_tabletools.respond();
+       }
+     });
+
+     // selection
+     table.on('click', 'tr', function () {
+       if ( $(this).hasClass('selected') ) {
+         $(this).removeClass('selected');
+       } else {
+         $('#mock-table tbody tr').removeClass('selected');
+         $(this).addClass('selected');
+       }
+     });
+
+     $('#mock-table-widget').fadeIn();
+    },
+    dblclick: function(index) {
+      var userId = userAppModel.data.items[index].id;
+      this.show(userId);
+    },
+    selection: function (index) {
+      if (index !== userAppModel.view.table.selectIndex) {
+        userAppModel.view.table.selectIndex = index;
+        console.log("userAppModel.view.table.selectIndex", userAppModel.view.table.selectIndex);
+      } else {
+        userAppModel.view.table.selectIndex = COMMON.DEFAULT_INDEX;
+      }
+    },
+  },
+});

@@ -82,6 +82,7 @@ module.exports = {
     await passport.callback(req, res, function(err, user, challenges, statuses) {
       console.info('=== callback user ===', user);
       console.info('=== passport.callback ===', err);
+      
       if (err || !user) {
         return tryAgain(err);
       }

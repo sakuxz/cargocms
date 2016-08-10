@@ -16,6 +16,9 @@ module.exports = function sendOK (data, options) {
   var req = this.req;
   var res = this.res;
   var sails = req._sails;
+  var url = req._parsedUrl;
+  var path = url.path || "";
+  var isAdminView = path.startsWith("/admin");
 
   sails.log.silly('res.ok() :: Sending 200 ("OK") response');
 
@@ -23,7 +26,7 @@ module.exports = function sendOK (data, options) {
   res.status(200);
 
   // If appropriate, serve data as JSON(P)
-  if (req.wantsJSON) {
+  if (req.wantsJSON && !data.view) {
     // data.controller = req.options.controller;
     // data.action = req.options.action;
     if(data){
@@ -43,13 +46,27 @@ module.exports = function sendOK (data, options) {
   // Otherwise try to guess an appropriate view, or if that doesn't
   // work, just send JSON.
 
-  sails.log.info('=== response ok data ===', data);
-  if (options.view) {
-    return res.view(options.view, { data: data });
+  // 指定 layout sample 
+  // res.ok({
+  //   view: true,
+  //   layout: 'layoutAdmin'
+  // });
+
+  var params = { data: data };
+
+  if(isAdminView && !data.layout){
+    params.layout = false;
+  } else if(data.layout){
+    params.layout = data.layout;
   }
+
+  if (options.view) {
+    return res.view(options.view, params);
+  }
+
   // If no second argument provided, try to serve the implied view,
   // but fall back to sending JSON(P) if no view can be inferred.
-  else return res.guessView({ data: data }, function couldNotGuessView () {
+  else return res.guessView(params, function couldNotGuessView () {
     return res.jsonx(data);
   });
 
