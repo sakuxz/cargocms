@@ -5,7 +5,7 @@ var COMMON = {
 };
 
 var itemBeforeEdit = {};
-var sloganAppModel = {
+var userAppModel = {
   data: {
     item: {
       content: '',
@@ -34,7 +34,7 @@ var sloganAppModel = {
 }
 
 var userApp = new Vue({
-  data: sloganAppModel,
+  data: userAppModel,
   methods: {
     cancel: function (event) {
       userApp.onLeavePageEdit(function() {
