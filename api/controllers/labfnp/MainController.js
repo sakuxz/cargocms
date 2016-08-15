@@ -21,8 +21,11 @@ module.exports = {
 
   explore: async function(req, res) {
     try {
+      let user = AuthService.getSessionUser(req);
+      const recipes = await Recipe.findAndIncludeUserLike({user});
+
       return res.view({
-        recipes: await Recipe.findAll()
+        recipes: recipes
       });
     }
     catch (e) {
@@ -34,9 +37,39 @@ module.exports = {
   recipe: async function(req, res) {
     const { id } = req.params;
 
+    let recipe = await Recipe.findById(id);
+
+    if (!recipe) {
+      return res.notFound();
+    }
+
+    try {
+      return res.view({ recipe });
+    }
+    catch (e) {
+      console.log(e);
+      return res.serverError(e);
+    }
+  },
+
+  portfolio: async function(req, res) {
+
+    let user = null;
+
+    if (req.params.id) {
+      user = await User.findById(req.params.id);
+    }
+    else {
+      user = AuthService.getSessionUser(req);
+    }
+
     try {
       return res.view({
-        recipe: await Recipe.findById(id)
+        user,
+        recipes: await Recipe.findAll({
+          where: { userId: user.id },
+          order: 'updatedAt desc',
+        })
       });
     }
     catch (e) {
@@ -44,5 +77,4 @@ module.exports = {
       res.serverError(e);
     }
   },
-
 }

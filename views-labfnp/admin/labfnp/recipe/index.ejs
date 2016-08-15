@@ -44,10 +44,10 @@
               <thead>
                 <tr>
                   <th class="" data-hide="">#</th>
-                  <th class="" data-hide="phone,tablet">香水名稱</th>
+                  <th class="" data-hide="">香水名稱</th>
                   <th class="" data-hide="">創作人</th>
-                  <!-- <th class="" data-hide="phone" style="">配方描述</th> -->
-                  <th class="no-sort" data-hide="phone"></th>
+                  <th class="" data-hide="phone,tablet" style="">其他訊息</th>
+                  <th class="no-sort" data-hide="phone,tablet"></th>
                 </tr>
               </thead>
               <tbody>
@@ -55,7 +55,7 @@
                   <td>{{ recipe.id }}</td>
                   <td><a href="/admin/#/admin/labfnp/recipe/show/{{recipe.id}}">{{ recipe.perfumeName }}</a></td>
                   <td>{{ recipe.authorName }}</td>
-                  <!-- <td>{{ recipe.formulaLogs }}</td> -->
+                  <td>{{ recipe.message }}</td>
                   <td align="center" style="cursor: pointer;">
                     <div class="row">
                       <a class="btn btn-default btn-xs" role="button" v-on:click="show(recipe.id)">
@@ -163,12 +163,11 @@
   };
 
   // load related plugins
-
-  loadScript("/admin/js/plugin/datatables/jquery.dataTables.min.js", function() {
-    loadScript("/admin/js/plugin/datatables/dataTables.colVis.min.js", function() {
-      loadScript("/admin/js/plugin/datatables/dataTables.tableTools.min.js", function() {
-        loadScript("/admin/js/plugin/datatables/dataTables.bootstrap.min.js", function() {
-          loadScript("/admin/js/plugin/datatable-responsive/datatables.responsive.min.js", pagefunction)
+  loadScript("/assets/admin/js/plugin/datatables/jquery.dataTables.min.js", function(){
+    loadScript("/assets/admin/js/plugin/datatables/dataTables.colVis.min.js", function(){
+      loadScript("/assets/admin/js/plugin/datatables/dataTables.tableTools.min.js", function(){
+        loadScript("/assets/admin/js/plugin/datatables/dataTables.bootstrap.min.js", function(){
+          loadScript("/assets/admin/js/plugin/datatable-responsive/datatables.responsive.min.js", pagefunction)
         });
       });
     });

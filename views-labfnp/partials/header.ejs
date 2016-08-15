@@ -3,7 +3,8 @@
   <div class="container">
     <!-- Logo -->
     <a class="logo" href="/">
-      <img src="/assets/labfnp/img/lfp-logo.png" width="103" height="39" alt="Logo">
+      <!--<img src="/assets/labfnp/img/logo.png" width="103" height="39" alt="Logo">-->
+      <h1>LFP</h1>
     </a>
     <!-- End Logo -->
 
@@ -18,7 +19,7 @@
           <li><a href="/logout">登出</a></li>
           <li class="topbar-devider"></li>
           <li>
-            <a href="/user/<%= req.session.passport.user.id %>">
+            <a href="/me">
               <%= req.session.passport.user.displayName %>
             </a>
           </li>
@@ -51,9 +52,11 @@
         <li class="<%= (req.path=='/blog')?'active':'' %>">
           <a href="/blog">網誌</a>
         </li>
+        <!--
         <li class="<%= (req.path=='/shop')?'active':'' %>">
           <a href="/shop">活動報名</a>
         </li>
+        -->
       </ul>
     </div><!--/end container-->
   </div><!--/navbar-collapse-->

@@ -1,3 +1,18 @@
+<style>
+  .drops, .scent {
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+  }
+  .scent {
+    padding: 2px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+  }
+</style>
 <!-- Bread crumbs -->
 <div class="row">
   <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
@@ -14,9 +29,8 @@
 <!-- END Bread crumbs -->
 
 <!-- vue section -->
-<section id="labfnp-recipe-show">
+<section id="main-show">
   <input type="text" name="id" id="id" v-model="data.item.id" hidden="hidden" value="<%= req.params.id %>">
-
 
   <!-- row -->
   <div class="row" style="padding-top: 50px;">
@@ -39,53 +53,27 @@
                     <!-- end row -->
                   </div>
 
-                  <!-- new -->
                   <!-- product -->
                   <div class="product-wrap clearfix product-deatil">
-                    <div class="row">
-                      <div class="col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="product-image">
-                          <div id="myCarousel-2" class="carousel slide">
-                            <ol class="carousel-indicators">
-                              <li data-target="#myCarousel-2" data-slide-to="0" class=""></li>
-                              <li data-target="#myCarousel-2" data-slide-to="1" class="active"></li>
-                              <li data-target="#myCarousel-2" data-slide-to="2" class=""></li>
-                            </ol>
-                            <div class="carousel-inner pull-right" style="width:150px;">
-                              <!-- Slide 1 -->
-                              <div class="item active">
-                                <img src="/assets/labfnp/img/perfume_512.png" alt="">
-                              </div>
-                              <!-- Slide 2 -->
-                              <!-- <div class="item">
-                                  <img src="img/demo/e-comm/detail-2.png" alt="">
-                                </div> -->
-                              <!-- Slide 3 -->
-                              <!-- <div class="item">
-                                  <img src="img/demo/e-comm/detail-3.png" alt="">
-                                </div> -->
-                            </div>
-                            <!-- <a class="left carousel-control" href="#myCarousel-2" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span> </a>
-                              <a class="right carousel-control" href="#myCarousel-2" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span> </a> -->
-                          </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                      <div class="product-image">
+                        <canvas id="pieChart" height="300px" width="350px"></canvas>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+                      <h2 class="name"><small>配方名稱</small>{{ data.item.perfumeName }}</h2>
+                      <hr>
+                      <div class="row">
+                        <div class="col col-xs-6 vcol-md-3 col-sm-12 col-lg-3">
+                          <h2 class="name"><small>創作人</small>{{ data.item.authorName }}</h2>
+                        </div>
+                        <div class="col col-xs-6 vcol-md-3 col-sm-12 col-lg-3">
+                          <h2 class="name"><small>建立者</small>{{ data.item.User.displayName }}</h2>
                         </div>
                       </div>
-                      <div class="col-md-8 col-sm-12 col-xs-12">
-
-                        <h2 class="name">
-                          <small>香水名稱</small>
-                            <p class="padding-5">{{ data.item.perfumeName }}</p>
-                          <hr>
-                          <div class="row">
-                            <div class="col col-xs-3">
-              							  <small>創作人</small>{{ data.item.authorName }}
-                            </div>
-                            <div class="col col-xs-3">
-              							  <small>建立者</small>{{ data.item.User.displayName }}
-                            </div>
-                          </div>
-                          <hr>
-                          <!-- <small>評級</small>
+                      <hr>
+                      <!-- <small>評級</small>
             							<i class="fa fa-star fa-2x text-primary"></i>
             							<i class="fa fa-star fa-2x text-primary"></i>
             							<i class="fa fa-star fa-2x text-primary"></i>
@@ -93,28 +81,25 @@
             							<i class="fa fa-star fa-2x text-muted"></i>
             							<span class="fa fa-2x"><h5>(109) Votes</h5></span>
                           <hr> -->
-            						</h2>
-                        <!-- <h2 class="name">
-                          <small>配方描述</small>
-                          <h4 class="padding-5">{{ data.item.formulaLogs }}</h4>
-                          <hr>
-                        </h2> -->
-                        <h2 class="name">
-                          <small>配方成份</small>
-                          <h4 class="padding-5">
-                            <div class="row" v-for="formula in data.item.formula">
-                              <div v-if="formula.scent">
-                                <div class="col col-xs-2"><string>・</string>{{ formula.scent }}</div>
-                                <div class="col col-xs-1"> : </div>
-                                <div class="col col-xs-2">{{ formula.drops }}</div>
-                              </div>
-                            </div>
-                          </h4>
-                          <hr>
-                        </h2>
+                      <h2 class="name"><small>配方成份</small></h2>
+                      <div class="row" v-for="item in data.item.formula" track-by="$index">
+                        <div v-if="item.drops > 0">
+                          <div class="col col-xs-5 col-sm-4 col-md-4 col-lg-2">
+                            <stronge>・</stronge>
+                            <label class="scent" style="background:{{ item.color }};">
+                              <h4>{{ item.scent }}</h4></label>
+                          </div>
+                          <div class="drops col col-xs-1"> : </div>
+                          <div class="drops col col-xs-2">{{ item.drops }}</div>
+                        </div>
+                      </div>
+                      <hr>
+                      <h4 class="name" v-if="data.item.message"><small>其他訊息</small>{{ data.item.message }}</h4>
+                      <h4 class="name" v-else><small>其他訊息</small>沒有資料</h4>
+                      <hr>
 
 
-                        <!-- <div class="description description-tabs">
+                      <!-- <div class="description description-tabs">
 <ul id="myTab" class="nav nav-pills">
   <li class="active"><a href="#formulaLogs" data-toggle="tab" class="no-margin">配方描述</a></li>
   <li class=""><a href="#formula" data-toggle="tab">配方成份</a></li>
@@ -127,7 +112,7 @@
     <p>Integer egestas, orci id condimentum eleifend, nibh nisi pulvinar eros, vitae ornare massa neque ut orci. Nam aliquet lectus sed odio eleifend, at iaculis dolor egestas. Nunc elementum pellentesque augue sodales porta. Etiam aliquet rutrum turpis,
       feugiat sodales ipsum consectetur nec. </p>
   </div> -->
-                            <!-- <div class="tab-pane fade" id="formula">
+                      <!-- <div class="tab-pane fade" id="formula">
                               <br>
                               <dl class="">
                                 <dt>Gravina</dt>
@@ -144,7 +129,7 @@
                                 <dd>Vestibulum id ligula porta felis euismod semper</dd>
                               </dl>
                             </div> -->
-                            <!-- <div class="tab-pane fade" id="reviews">
+                      <!-- <div class="tab-pane fade" id="reviews">
                               <br>
                               <form method="post" class="well padding-bottom-10" onsubmit="return false;">
                                 <textarea rows="2" class="form-control" placeholder="Write a review"></textarea>
@@ -218,26 +203,24 @@
                                 </ul>
                               </div>
                             </div> -->
-                          </div>
-
-
-                        </div>
-                      </div>
                     </div>
                   </div>
-                  <!-- end product -->
-                  <!-- </div> -->
-                  <!-- new -->
                 </div>
-                <!-- end row -->
               </div>
             </div>
+            <!-- end product -->
+            <!-- </div> -->
+            <!-- new -->
           </div>
           <!-- end row -->
         </div>
       </div>
     </div>
     <!-- end row -->
+  </div>
+  </div>
+  </div>
+  <!-- end row -->
 
 </section>
 <!-- end widget grid -->
@@ -283,8 +266,8 @@
   // pagefunction
   var pagefunction = function() {
     <%- include vue.ejs %>
-    userApp.$mount("#labfnp-recipe-show");
-    userApp.loadItem();
+    userApp.$mount("#main-show");
+    userApp.loadItem(userApp.onEnterPageShow);
   };
 
   // var pagedestroy = function() {
@@ -296,5 +279,9 @@
   // end pagefunction
 
   // Load form valisation dependency
-  loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
+  loadScript("/assets/admin/js/plugin/jquery-form/jquery-form.min.js", function() {
+    loadScript("/assets/admin/js/plugin/moment/moment.min.js", function() {
+      loadScript("/assets/admin/js/plugin/chartjs/chart.min.js", pagefunction)
+    });
+  });
 </script>

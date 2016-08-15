@@ -12,6 +12,7 @@ module.exports = {
     formulaLogs,
     authorName,
     perfumeName,
+    message,
     UserId
   }) => {
     try {
@@ -20,9 +21,10 @@ module.exports = {
         formulaLogs,
         authorName,
         perfumeName,
+        message,
         UserId,
       });
-      return await Recipe.create({ formula, formulaLogs, authorName, perfumeName, UserId });
+      return await Recipe.create({ formula, formulaLogs, authorName, perfumeName, message, UserId });
     } catch (e) {
       sails.log.error(e);
       throw e;
@@ -35,6 +37,7 @@ module.exports = {
     formulaLogs,
     authorName,
     perfumeName,
+    message
   }) => {
     try {
       sails.log.info('update recipe service=>', recipe);
@@ -48,6 +51,7 @@ module.exports = {
         updatedRecipe.formulaLogs = recipe.formulaLogs;
         updatedRecipe.authorName = recipe.authorName;
         updatedRecipe.perfumeName = recipe.perfumeName;
+        updatedRecipe.message = recipe.message;
 
         updatedRecipe = await updatedRecipe.save();
       }

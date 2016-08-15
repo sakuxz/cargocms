@@ -15,7 +15,7 @@
 </div>
 
 <!-- widget grid -->
-<section id="labfnp-recipe-edit" class="">
+<section id="main-edit" class="">
 
 
 	<!-- START ROW -->
@@ -63,7 +63,7 @@
 					<!-- widget content -->
 					<div class="widget-body no-padding">
 
-						<form id="labfnp-recipe-form" class="smart-form">
+						<form id="main-form" class="smart-form">
 							<input type="text" name="id" id="id" v-model="data.item.id" hidden="hidden" value="<%= req.params.id %>">
 
 							<%- include form.ejs %>
@@ -142,10 +142,8 @@
 	// pagefunction
 	var pagefunction = function() {
 		<%- include vue.ejs %>
-		userApp.$mount("#labfnp-recipe-edit");
-    userApp.loadSelectOptions();
-		userApp.loadItem(userApp.onEnterPageEdit);
-		userApp.setupForm("edit");
+		userApp.$mount("#main-edit");
+    userApp.onEnterPageEdit();
 	};
 
 	// var pagedestroy = function() {
@@ -157,6 +155,6 @@
 	// end pagefunction
 
 	// Load form valisation dependency
-	loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
+	loadScript("/assets/admin/js/plugin/jquery-form/jquery-form.min.js", pagefunction);
 
 </script>

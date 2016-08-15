@@ -82,7 +82,7 @@ module.exports = {
     await passport.callback(req, res, function(err, user, challenges, statuses) {
       console.info('=== callback user ===', user);
       console.info('=== passport.callback ===', err);
-      
+
       if (err || !user) {
         return tryAgain(err);
       }
@@ -91,7 +91,13 @@ module.exports = {
         if (err) {
           return tryAgain(err);
         }
+
         req.session.authenticated = true;
+
+        // update user lastLogin status
+        const userAgent = req.headers['user-agent'];
+        user.loginSuccess({ userAgent });
+
         return res.redirect(req.query.url || sails.config.urls.afterSignIn);
       });
     });

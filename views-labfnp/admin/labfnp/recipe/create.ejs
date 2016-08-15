@@ -14,7 +14,7 @@
 </div>
 
 <!-- widget grid -->
-<section id="labfnp-recipe-create" class="">
+<section id="main-create" class="">
 
 
   <!-- START ROW -->
@@ -61,19 +61,17 @@
 
           <!-- widget content -->
           <div class="widget-body no-padding">
-           <!-- <validator name="validation1"> -->
-              <form id="labfnp-recipe-form" class="smart-form">
-  						  <%- include form.ejs %>
-                <footer>
-                  <button type="button" v-on:click="cancel" class="btn btn-default">
-                    取消
-                  </button>
-                  <button type="submit" class="btn btn-primary">
-                    送出
-                  </button>
-                </footer>
-              </form>
-            <!-- </validator> -->
+            <form id="main-form" class="smart-form">
+						  <%- include form.ejs %>
+              <footer>
+                <button type="button" v-on:click="cancel" class="btn btn-default">
+                  取消
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  送出
+                </button>
+              </footer>
+            </form>
           </div>
           <!-- end widget content -->
 
@@ -132,15 +130,16 @@
 
   // pagefunction
   var pagefunction = function() {
-
     <%- include vue.ejs %>
-    userApp.$mount("#labfnp-recipe-create");
-    userApp.loadSelectOptions();
-    userApp.setupForm("create");
+    userApp.$mount("#main-create");
+    userApp.onEnterPageCreare();
   };
 
   // end pagefunction
 
   // Load form valisation dependency
-  loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
+  loadScript("/assets/admin/js/plugin/jquery-form/jquery-form.min.js", function () {
+    loadScript("/assets/admin/js/libs/vue-validator.min.js", pagefunction);
+  });
+
 </script>
