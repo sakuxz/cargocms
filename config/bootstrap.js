@@ -14,7 +14,8 @@ module.exports.bootstrap = async (cb) => {
   // 這個已經用 config/urls.js 定義預設值
   //if(!sails.config.urls) sails.config.urls = {afterSignIn: "/"};
 
-  console.log("=== Setup express-helpers ===");
+
+
   _.extend(sails.hooks.http.app.locals, sails.config.http.locals);
 
   let porductionInitDb = async () => {
@@ -44,6 +45,12 @@ module.exports.bootstrap = async (cb) => {
     sails.services.passport.loadStrategies();
 
     await porductionInitDb();
+
+    if (!sails.config.hasOwnProperty('offAuth'))
+      sails.config.offAuth = false;
+
+    if(environment == 'production')
+      sails.config.offAuth = false;
 
     let adminRole = await Role.findOrCreate({
       where: {authority: 'admin'},
@@ -95,7 +102,7 @@ module.exports.bootstrap = async (cb) => {
           UserId: adminUsers[0].id
         }
       });
-      //adminUsers[0].addRole(adminRole[0]);
+      adminUsers[0].addRole(adminRole[0]);
     });
 
     const {environment} = sails.config;

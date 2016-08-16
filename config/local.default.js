@@ -5,6 +5,7 @@ module.exports = {
   urls: {
     afterSignIn: '/lab'
   },
+  offAuth: false,
   passport: {
     local: {
       strategy: require('passport-local').Strategy
@@ -27,5 +28,18 @@ module.exports = {
   },
   session: {
     secret: '',
+  },
+  connections: {
+
+    sqlite: {
+      database: 'sequelize',
+      dialect: 'sqlite',
+      options: {
+        'dialect': 'sqlite',
+        // 'storage': './sqlite.db',
+        storage: ':memory:',
+        pool: false,
+      }
+    }
   }
 }

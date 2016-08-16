@@ -45,9 +45,7 @@ module.exports.policies = {
     'index': ['nocache']
   },
   'AdminController': {
-    'index': ['nocache'
-      // 'passport', 'sessionAuth', 'isAdmin'
-    ],
+    'index': ['passport', 'sessionAuth', 'isAdmin']
   },
   'UserController': {
     'find': ['nocache'],

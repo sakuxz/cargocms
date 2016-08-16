@@ -55,8 +55,8 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "test": "grunt test",
-    "test-junit": "mocha test --reporter mocha-junit-reporter",
+    "test-ci": "grunt test",
+    "test": "mocha test --reporter spec",
     "build": "npm i && node_modules/grunt-cli/bin/grunt build",
     "start": "node app.js",
     "pm2-start": "pm2 start -f app.js --name 'cargocms'",

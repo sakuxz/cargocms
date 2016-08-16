@@ -1,5 +1,5 @@
 -t 500000
 --require chai
 --recursive test/bootstrap.test.js
---reporter spec
+--reporter mocha-junit-reporter
 --require babel-core/register

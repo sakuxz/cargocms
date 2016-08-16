@@ -53,6 +53,16 @@ cors.origin: 'http://cargo.trunksys.com, https://cargo.trunksys.com',
 
 ## Project Layout
 
+### View Usages
+
+```
+// date only
+<%=: row.createdAt | formatDate %>
+
+// date time
+<%=| row.createdAt | formatDateTime %>
+```
+
 ### Controller
 
 ```

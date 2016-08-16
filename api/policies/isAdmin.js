@@ -9,7 +9,7 @@
  */
 module.exports = function(req, res, next) {
 
-  if (AuthService.isAdmin(req)) {
+  if (sails.config.offAuth || AuthService.isAdmin(req)) {
     return next();
   }
 

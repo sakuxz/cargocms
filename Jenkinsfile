@@ -4,6 +4,7 @@ node {
     // slackSend message: "started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
 
     stage 'checkout project'
+    // git url: 'https://github.com/trunk-studio/cargocms.git', branch: 'develop'
     checkout scm
 
     stage 'check env'
@@ -16,8 +17,9 @@ node {
     sh "npm install"
 
     stage 'test project'
-    sh "npm run test-junit"
+    sh "npm run test-ci"
     step([$class: 'JUnitResultArchiver', testResults: 'test-results.xml'])
+    step([$class: 'CloverPublisher', cloverReportDir: 'coverage', cloverReportFileName: 'clover.xml'])
 
     // stage 'run project'
     // sh "npm run pm2-start"
@@ -40,9 +42,9 @@ node {
     // stage 'restart production'
     // sh "make restart-production"
 
-    slackSend color: 'good', message: "success ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+    // slackSend color: 'good', message: "success ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
   }catch(e){
-    slackSend color: 'danger', message: "fail ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+    // slackSend color: 'danger', message: "fail ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
     throw e;
   }
 

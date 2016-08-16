@@ -13,9 +13,15 @@
     <div class="news-v3-in">
       <ul class="list-inline posted-info">
         <% if (post.UserId) { %>
-          <li>By <a href="#"><%= post.User.displayName %></a></li>
+          <li>
+            <i class="fa fa-user"></i>
+            <a href="#"><%= post.User.displayName %></a>
+          </li>
         <% } %>
-        <li><%= post.createdAtFormat %></li>
+        <li>
+          <i class="fa fa-clock-o"></i>
+          <%=: post.createdAt | formatDate %>
+        </li>
       </ul>
       <h2><a href="/blog/show/<%= post.id %>"><%= post.title %></a></h2>
 

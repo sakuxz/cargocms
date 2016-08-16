@@ -56,6 +56,7 @@
 							<thead>
 								<tr>
 									<th class="" data-class="expand"><i class="text-muted hidden-md hidden-sm hidden-xs"></i>ID</th>
+									<th class="" >分類</th>
 									<th class="" >名稱</th>
 									<th class="" >名稱2</th>
 									<th class="" >顏色</th>
@@ -65,6 +66,7 @@
 							<tbody>
 								<tr v-for="scentNote in data.items" v-on:click="selection($index)" >
 									<td><a href="/admin/#/admin/labfnp/scentnote/show/{{scentNote.id}}">{{ scentNote.id }}</a></td>
+									<td>{{ scentNote.notes }}</td>
 									<td>{{ scentNote.title }}</td>
 									<td>{{ scentNote.title2 }}</td>
 									<td ><span class="color" style="background: {{ scentNote.color }};">{{ scentNote.color }}</span></td>
