@@ -6,7 +6,7 @@ describe('about Slogan Controller operation.', function() {
     };
     try {
       const res = await request(sails.hooks.http.app)
-      .post(`/api/slogan`)
+      .post(`/api/admin/slogan`)
       .send(data);
       res.status.should.be.eq(200);
       res.body.should.be.Object;
@@ -37,7 +37,7 @@ describe('about Slogan Controller operation.', function() {
     it('find all slogan should success.', async (done) => {
       try {
         const res = await request(sails.hooks.http.app)
-        .get(`/api/slogan`);
+        .get(`/api/admin/slogan`);
         res.status.should.be.eq(200);
         res.body.success.should.be.true;
         res.body.should.be.Object;
@@ -53,7 +53,7 @@ describe('about Slogan Controller operation.', function() {
     it('find one slogan should success.', async (done) => {
       try {
         const res = await request(sails.hooks.http.app)
-        .get(`/api/slogan/${newSlogan.id}`);
+        .get(`/api/admin/slogan/${newSlogan.id}`);
         res.status.should.be.eq(200);
         res.body.success.should.be.true;
         res.body.should.be.Object;
@@ -86,7 +86,7 @@ describe('about Slogan Controller operation.', function() {
           content: '123'
         }
         const res = await request(sails.hooks.http.app)
-        .put(`/api/slogan/${newSlogan.id}`)
+        .put(`/api/admin/slogan/${newSlogan.id}`)
         .send(updataData);
         res.status.should.be.eq(200);
         res.body.success.should.be.true;
@@ -117,7 +117,7 @@ describe('about Slogan Controller operation.', function() {
     it('delete slogan should success.', async (done) => {
       try {
         const res = await request(sails.hooks.http.app)
-        .delete(`/api/slogan/${newSlogan.id}`);
+        .delete(`/api/admin/slogan/${newSlogan.id}`);
         res.status.should.be.eq(200);
         res.body.success.should.be.true;
         res.body.data.should.be.Number;
