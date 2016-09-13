@@ -20,9 +20,10 @@ var pieFooter = {
   "font": "open sans",
   "location": "bottom-left"
 };
+var pieWidth = $('.col.col-md-12').width()*0.7 > 230 ? $('.col.col-md-12').width()*0.7 : 230;
 var pieSize = {
-  "canvasWidth": 230,
-  "canvasHeight": 230,
+  "canvasWidth": pieWidth,//230,
+  "canvasHeight": pieWidth,//230,
   "pieOuterRadius": "75%"
 };
 var pieDate = {

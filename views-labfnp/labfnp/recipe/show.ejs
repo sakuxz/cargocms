@@ -103,6 +103,13 @@
               <%= recipe.UserLikeRecipes.length %></li>
           </ul>
           <hr/>
+          
+          <!-- <label for="description">描述</label> -->
+          <ul class="list-unstyled list-inline description">
+            <li>
+              <p class="padding-5"><%= recipe.description %></p>
+            </li>
+          </ul>
 
           <div class="row">
             <div id="wordCloudContainer" class="col col-md-12">
@@ -113,12 +120,6 @@
             </div>
           </div>
 
-          <!-- <label for="description">描述</label> -->
-          <ul class="list-unstyled list-inline description">
-            <li>
-              <p class="padding-5"><%= recipe.description %></p>
-            </li>
-          </ul>
           <hr/>
 
           <!-- <label for="message">備註</label> -->
