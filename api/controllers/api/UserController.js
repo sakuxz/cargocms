@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 module.exports = {
   follow: async (req, res) => {
     try {
@@ -72,5 +74,36 @@ module.exports = {
       res.serverError(e);
     }
   },
+
+  forgotPassword: async (req, res) => {
+    try {
+      sails.log.debug(req.wantsJSON);
+      sails.log.debug(req.body);
+      const { email } = req.body;
+      let user = await User.findOne({
+        where: { email }
+      })
+      if (!user) throw Error('請確認 Email，該 Email 尚未註冊過');
+
+      const token = crypto.randomBytes(32).toString('hex').substr(0, 32);
+      console.log("!!!!!!!", token);
+      user.resetPasswordToken = token;
+      await user.save();
+
+      if (req.wantsJSON) {
+        res.ok({ message: `forgot success. send email`, data: {} });
+      } else {
+        req.flash('info', '已給您發送重置密碼的連結，請至信箱確認');
+        res.redirect('/login');
+      }
+    } catch (e) {
+      if (req.wantsJSON) {
+        res.serverError(e);
+      } else {
+        req.flash('error', e.message);
+        res.redirect('/forgot');
+      }
+    }
+  }
 
 }

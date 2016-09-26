@@ -140,6 +140,9 @@ module.exports = {
         }
       }
     },
+    resetPasswordToken: {
+      type: Sequelize.STRING(32),
+    }
   },
   associations: function() {
     User.hasMany(Image, {

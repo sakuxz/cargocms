@@ -119,6 +119,14 @@ module.exports = {
 
   disconnect: function(req, res) {
     passport.disconnect(req, res);
+  },
+
+  forgot: function(req, res) {
+    try {
+      res.ok({ view: true });
+    } catch (e) {
+      res.serverError(e);
+    }
   }
 
 };
