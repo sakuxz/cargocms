@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
 module.exports = {
   follow: async (req, res) => {
@@ -85,10 +86,15 @@ module.exports = {
       })
       if (!user) throw Error('請確認 Email，該 Email 尚未註冊過');
 
-      const token = crypto.randomBytes(32).toString('hex').substr(0, 32);
-      console.log("!!!!!!!", token);
-      user.resetPasswordToken = token;
+      const resetPasswordToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
+      console.log("!!!!!!!", resetPasswordToken);
+      user.resetPasswordToken = resetPasswordToken;
       await user.save();
+      const token = jwt.sign({ resetPasswordToken, time: new Date().toString(), email: user.email  }, 'labfnp');
+      console.log("!!!!!!!", token);
+      // TODO  寄信含  url
+      // var decoded = jwt.verify(token, 'labfnp');
+      // console.log("!!!!!!!", decoded);
 
       if (req.wantsJSON) {
         res.ok({ message: `forgot success. send email`, data: {} });
