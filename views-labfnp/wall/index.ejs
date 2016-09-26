@@ -2,14 +2,16 @@
 <div class="blog_masonry_3col">
 	<div class="container content grid-boxes">
 
-	  <% var c = 0; feeds.forEach(function(feed) { c++; %>
+	  <% var c = 0; feeds.forEach(function(feed, index) { c++; %>
 
 			<div class="grid-boxes-in">
 
 				<% if (feed.fullPicture) { %>
-					<a href="/wall/<%= feed.sourceId %>" title="<%= feed.name %>">
-						<img class="img-responsive" src="<%= feed.fullPicture %>" alt="<%= feed.name %>" />
-					</a>
+					<% if (index < 30) { %>
+						<a href="/wall/<%= feed.sourceId %>" title="<%= feed.name %>">
+							<img class="img-responsive" src="<%= feed.fullPicture %>" alt="<%= feed.name %>" />
+						</a>
+					<% } %>
 				<% } %>
 
 				<div class="grid-boxes-caption">
