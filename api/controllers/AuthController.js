@@ -135,7 +135,7 @@ module.exports = {
 
   forgot: function(req, res) {
     try {
-      res.ok({ view: true });
+      res.ok({ view: true, reCAPTCHAKey: sails.config.reCAPTCHA.key });
     } catch (e) {
       res.serverError(e);
     }
