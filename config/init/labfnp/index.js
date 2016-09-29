@@ -7,9 +7,8 @@ const FeelingData = require('./data/Feeling');
 module.exports.init = async () => {
   try {
     const {environment} = sails.config;
-    console.log('>>>> config/init/labfnp >>>>');
 
-
+    sails.log.debug('>>>> config/init/labfnp >>>>');
 
     let newMenuItems = [
       { icon: 'home', href: '/admin/dashboard', title: '控制台', sequence: 0},
@@ -25,9 +24,7 @@ module.exports.init = async () => {
       { href: '/admin/slogan', title: '口號', sequence: 80, ParentMenuItemId: 2},
       { href: '/admin/allpay', title: '訂單', sequence: 90, ParentMenuItemId: 2},
       { href: '/admin/message', title: '訊息', sequence: 100, ParentMenuItemId: 2},
-
       { href: '/admin/mock', title: '隨機資料表', sequence: 20, ParentMenuItemId: 3},
-
       { href: '/admin/facebook/feed', title: '動態', sequence: 110, ParentMenuItemId: 2}
 
     ]
@@ -35,8 +32,6 @@ module.exports.init = async () => {
     let title = newMenuItems.map(item => item.title)
     let findMenuItems = await MenuItem.findAll({where:{title}})
     let findTitle = findMenuItems.map(item => item.title)
-
-
 
     let createMenuItems = title.reduce((result, title, index) => {
       if(findTitle.indexOf(title) == -1){

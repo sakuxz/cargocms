@@ -232,7 +232,13 @@ label.error{
 
     $("#registerForm").submit( function( event ) {
       if( $("#registerForm").valid() ){
-        swal("註冊","資料傳送中...","info");
+        swal({
+          type: "info",
+          title: "註冊",
+          text: "資料傳送中...",
+          showConfirmButton: false,
+          timer: 5000,
+        });
       }else{
         event.preventDefault();
       }
