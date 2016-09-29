@@ -68,6 +68,7 @@ var defaultConfig = {
   'post /api/user/edit/:id':      'api/UserController.update',
 
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
+  'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
 
   //----- Admin -----
   '/admin':           'AdminController.index',

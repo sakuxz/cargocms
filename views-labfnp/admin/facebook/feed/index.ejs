@@ -8,14 +8,14 @@
 				ID
 			</th>
 
-			<th class="">name</th>
+			<th data-class="expand">name</th>
 			<th data-hide="always">description</th>
 			<th data-hide="always">message</th>
-			<th>story</th>
-			<th width="100" class="">type</th>
+			<th data-hide="phone,tablet">story</th>
+			<th width="100" class="" >type</th>
 			<th data-hide="always">link</th>
 			<th data-hide="always">sourceId</th>
-			<th width="150">createdAt</th>
+			<th width="150" data-hide="phone,tablet">createdAt</th>
 			<th width="80" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
@@ -71,7 +71,20 @@
 				"sExtends": "text",
 				"sButtonText": "重新匯入",
 				"fnClick": function (nButton, oConfig, oFlash) {
-					location.href = '/admin/#/admin/' + modelName + '/create';
+					var that = this;
+					$.ajax({
+						url: "/api/admin/facebook/import",
+						method: "get",
+						dataType: 'json',
+						cache: false
+					}).done(function (result) {
+						messageApp.show({
+							desc: '匯入完成',
+							type: 'success'
+						});
+						defaultTable.api().ajax.reload()
+
+					});
 				}
 			}
 		];

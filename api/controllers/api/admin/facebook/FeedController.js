@@ -15,5 +15,14 @@ module.exports = {
     } catch (e) {
       res.serverError(e);
     }
+  },
+  import: async (req, res) => {
+    try {
+      await FacebookService.feedsImport();
+      let data = {success: true}
+      res.ok({data});
+    } catch (e) {
+      res.serverError(e);
+    }
   }
 }

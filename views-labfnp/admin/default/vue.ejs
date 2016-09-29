@@ -1,3 +1,4 @@
+var defaultTable = {};
 var defaultVueMathod = {
 	cancel: function (event) {
 		appMain.onLeavePageEdit(function() {
@@ -288,7 +289,7 @@ var defaultVueMathod = {
 			}
 		}
 
-		if (tableButtons) {
+		if (typeof tableButtons !== 'undefined') {
 
 			tableButtons.push(excelExportButton)
 			tableButtons = tableButtons.reverse()
@@ -311,7 +312,7 @@ var defaultVueMathod = {
 			defaultTableConfig.initComplete = appMain.DataTableInitComplete
 		}
 
-		var defaultTable = $('#main-table').dataTable(defaultTableConfig);
+		defaultTable = $('#main-table').dataTable(defaultTableConfig);
 
 		if (!appModel.data.option.exportCSV) {
 			$('#ToolTables_main-table_0').hide()
