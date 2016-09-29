@@ -15,7 +15,8 @@
 			<th width="100" class="" >type</th>
 			<th data-hide="always">link</th>
 			<th data-hide="always">sourceId</th>
-			<th width="150" data-hide="phone,tablet">createdAt</th>
+			<th width="150" data-hide="phone,tablet">createdTime</th>
+			<th width="80" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
 	<!-- client only -->
@@ -36,7 +37,8 @@
 			{ "data": "type" },
 			{ "data": "link" },
 			{ "data": "sourceId" },
-			{ "data": "createdAt" }
+			{ "data": "createdTime" },
+			{ "data": "publish" }
 		]
 
 		// server only
@@ -44,9 +46,20 @@
       {
         "targets": 'no-sort',
         "orderable": false,
-      }
+      },
+			{
+				"targets"  : 9,
+				"orderable": false,
+				"searchable": false,
+				"render": function ( data, type, row ) {
+					var colBody =
+					'<div class="row-action-buttons hidden-xs hidden-sm">'+
+						'<input type="checkbox" name="publish" checked>'+
+					'</div>';
+					return colBody;
+				}
+			},
 		]
-
 		var tableButtons = [
 			{
 				"sExtends": "text",
