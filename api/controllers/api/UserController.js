@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import moment from 'moment';
 
 module.exports = {
   follow: async (req, res) => {
@@ -90,11 +91,17 @@ module.exports = {
       console.log("!!!!!!!", resetPasswordToken);
       user.resetPasswordToken = resetPasswordToken;
       await user.save();
-      const token = jwt.sign({ resetPasswordToken, time: new Date().toString(), email: user.email  }, 'labfnp');
+
+      const token = jwt.sign({
+        exp: moment(new Date()).add(1, 'h').valueOf(),
+        email: user.email
+      }, resetPasswordToken);
+
       console.log("!!!!!!!", token);
+
       // TODO  寄信含  url
-      // var decoded = jwt.verify(token, 'labfnp');
-      // console.log("!!!!!!!", decoded);
+      // var decoded = jwt.verify(token, resetPasswordToken);
+      // console.log("???????", decoded);
 
       if (req.wantsJSON) {
         res.ok({ message: `forgot success. send email`, data: {} });
