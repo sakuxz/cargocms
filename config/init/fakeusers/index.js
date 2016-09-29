@@ -23,6 +23,11 @@ module.exports.init = async () => {
               lastName: randomuser.name.last,
               avatar: randomuser.picture.large,
               avatarThumb: randomuser.picture.thumbnail,
+              phone1: randomuser.phone,
+              phone2: randomuser.cell,
+              address: randomuser.location.street,
+              address2: randomuser.location.city + ', ' + randomuser.location.state,
+              birthday: randomuser.dob,
 //              score: Math.round(Math.random() * 100),
             }).then(function(user) {
               Passport.create({
