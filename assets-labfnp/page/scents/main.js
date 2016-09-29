@@ -358,7 +358,7 @@ $(document).ready(function () {
 
 		var totalDrops = parseInt($('#total-drops').text(), 10);
 		if (totalDrops > 50) {
-			alert('單一配方請勿超過 50 滴！')
+			swal('提示','單一配方請勿超過 50 滴！', 'warning');
 			return false;
 		}
 

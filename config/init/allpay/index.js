@@ -1,6 +1,7 @@
+import path from 'path';
 module.exports.init = async () => {
   try {
-
+    const {environment} = sails.config;
     let allpayConfig = sails.config.allpay;
     if (!allpayConfig) {
       allpayConfig = {
@@ -22,7 +23,8 @@ module.exports.init = async () => {
         ]
       }
     }
-    let AllpayClass = require('../api/services/libraries/Allpay');
+    var appRoot = path.dirname(require.main.filename);
+    let AllpayClass = require(`${appRoot}/api/services/libraries/Allpay`);
     global.AllpayService = new AllpayClass.default({
       domain: allpayConfig.domain,
       merchantID: allpayConfig.merchantID,
