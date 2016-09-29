@@ -7,41 +7,20 @@
 				<i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/>
 				ID
 			</th>
-			<th width="150" data-class="expand">
-				<i class="fa fa-fw fa-user text-muted hidden-sm hidden-xs"/>
-				使用者名稱
-			</th>
-			<th width="150" class="">全名</th>
-			<th width="250" class="" name="email">
-				<i class="fa fa-fw fa-envelope text-muted hidden-sm hidden-xs"/>
-				Email
-			</th>
-			<th data-hide="phone,tablet">
-				<i class="fa fa-fw fa-clock-o text-muted hidden-sm hidden-xs"/>
-				最近登入時間
-			</th>
+
+			<th class="">name</th>
+			<th data-hide="always">description</th>
+			<th data-hide="always">message</th>
+			<th>story</th>
+			<th width="100" class="">type</th>
+			<th data-hide="always">link</th>
+			<th data-hide="always">sourceId</th>
+			<th width="150">createdAt</th>
 			<th width="80" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
 	<!-- client only -->
 	<tbody>
-		<tr v-for="item in data.items">
-			<td>{{ item.id }}</td>
-			<td><a href="/admin/#/admin/{{modelName}}/show/{{item.id}}">{{ item.username }}</a></td>
-			<td>{{ item.displayName }}</td>
-			<td>{{ item.email }}</td>
-			<td><small>{{ item.lastLogin }}</small></td>
-			<td align="center" style="cursor: pointer;">
-				<div class="row">
-					<a class="btn btn-default btn-xs" role="button" v-on:click="show(item.id)">
-						<i class="fa-fw fa fa-eye text-muted" />
-					</a>
-					<a class="btn btn-default btn-xs" role="button" v-on:click="edit(item.id)">
-						<i class="fa-fw fa fa-pencil-square-o text-muted"/>
-					</a>
-				</div>
-			</td>
-		</tr>
 	</tbody>
 </table>
 
@@ -51,10 +30,14 @@
 		// server only
 		var columns = [
 			{ "data": "id" },
-			{ "data": "username" },
-			{ "data": "displayName" },
-			{ "data": "email" },
-			{ "data": "lastLogin" },
+			{ "data": "name" },
+			{ "data": "description" },
+			{ "data": "message" },
+			{ "data": "story" },
+			{ "data": "type" },
+			{ "data": "link" },
+			{ "data": "sourceId" },
+			{ "data": "createdAt" },
 			{ "data": null }
 		]
 
@@ -65,17 +48,7 @@
         "orderable": false,
       },
 			{
-        "searchable": false,
-        "targets": 2
-      },
-			{
-				"targets" : 1,
-				"render": function(data, type, row) {
-					return '<img width="20" src="' + row.avatarThumb + '" class="img-circle" /> ' + row.username;
-				},
-			},
-			{
-				"targets"  : 5,
+				"targets"  : 9,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
@@ -92,6 +65,17 @@
 				}
 			},
 		]
+
+		var tableButtons = [
+			{
+				"sExtends": "text",
+				"sButtonText": "重新匯入",
+				"fnClick": function (nButton, oConfig, oFlash) {
+					location.href = '/admin/#/admin/' + modelName + '/create';
+				}
+			}
+		];
+
 		var serverSidePaging = <%= (data.serverSidePaging != null)?data.serverSidePaging:false %>;
 		<%- include vue.ejs %>
 		appMain.$mount("#main-index");

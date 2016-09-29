@@ -67,6 +67,8 @@ var defaultConfig = {
   'post /api/user/unfollow/:id':  'api/UserController.unfollow',
   'post /api/user/edit/:id':      'api/UserController.update',
 
+  'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
+
   //----- Admin -----
   '/admin':           'AdminController.index',
   '/admin/config.js': 'AdminController.config',

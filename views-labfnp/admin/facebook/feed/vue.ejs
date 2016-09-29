@@ -6,26 +6,23 @@ var COMMON = {
 
 var itemBeforeEdit = {};
 var prefix = 'admin/';
-var modelName = "user";
+var modelName = "facebook/feed";
+
+
 var appModel = {
   modelName: modelName,
   prefix: prefix,
   data: {
     item: {
-      avatar: '',
-      displayName: '',
-      username: '',
-      email: '',
-      firstName: '',
-      lastName: '',
-      password: '',
-      Roles: [],
-      RolesArray: [],
-      Passports: [
-        {
-          password: ""
-        }
-      ]
+      fullPicture: '',
+      name: '',
+      description: '',
+      message: '',
+      story: '',
+      type: '',
+      link: '',
+      sourceId: '',
+      updatedAt: '',
     },
     items: [],
     option: {
