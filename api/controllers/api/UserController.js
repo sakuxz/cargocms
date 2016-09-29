@@ -88,7 +88,6 @@ module.exports = {
       if (!user) throw Error('請確認 Email，該 Email 尚未註冊過');
 
       const resetPasswordToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
-      console.log("!!!!!!!", resetPasswordToken);
       user.resetPasswordToken = resetPasswordToken;
       await user.save();
 
@@ -97,11 +96,13 @@ module.exports = {
         email: user.email
       }, resetPasswordToken);
 
-      console.log("!!!!!!!", token);
-
-      // TODO  寄信含  url
-      // var decoded = jwt.verify(token, resetPasswordToken);
-      // console.log("???????", decoded);
+      let messageConfig = await MessageService.forgotPassword({
+        email: user.email,
+        api: `/update/password?token=${token}`,
+        username: user.displayName,
+      });
+      let message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
 
       if (req.wantsJSON) {
         res.ok({ message: `forgot success. send email`, data: {} });
@@ -117,6 +118,51 @@ module.exports = {
         res.redirect('/forgot');
       }
     }
-  }
+  },
+
+
+  updatePassword: async (req, res) => {
+    try {
+      const { token, password } = req.body;
+      sails.log.debug("!!!!!!!!!!!!", token)
+      if (!token) throw Error('請點擊 Email 連結以更新密碼');
+
+      const decoded = jwt.decode(token);
+      const timeout = moment(new Date()).valueOf() > decoded.exp;
+      if (timeout) throw Error('更新密碼連結已逾時');
+
+      let user = await User.findOne({
+        where: {
+          email : decoded.email
+        },
+        include: Passport,
+      });
+      if (!user) throw Error('請確認 Email，該 Email 尚未註冊過');
+      if (!user.resetPasswordToken) throw Error('請點擊 Email 連結以更新密碼');
+      
+      jwt.verify(token, user.resetPasswordToken);
+
+      let passport = await Passport.findById(user.Passports[0].id);
+      passport.password = password;
+      await passport.save();
+
+      user.resetPasswordToken = '';
+      await user.save();
+
+      if (req.wantsJSON) {
+        res.ok({ message: `update password success. send email`, data: {} });
+      } else {
+        req.flash('info', '密碼已更新成功');
+        res.redirect('/login');
+      }
+    } catch (e) {
+      if (req.wantsJSON) {
+        res.serverError(e);
+      } else {
+        req.flash('error', e.message);
+        res.redirect(`/update/password`);
+      }
+    }
+  },
 
 }

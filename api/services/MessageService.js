@@ -166,6 +166,26 @@ module.exports = {
     }
 
   },
+  forgotPassword: ({username, api, email}) => {
+    try {
+      let forgotPasswordTemplete = sails.config.mail.templete.forgotPassword;
+      let mailSendConfig = {...forgotPasswordTemplete, to: email};
+      const DOMAIN_HOST = process.env.DOMAIN_HOST || 'localhost:5001';
+      const url = `http://${DOMAIN_HOST}${api}`
+
+      mailSendConfig.subject = sprintf(mailSendConfig.subject, { username });
+      mailSendConfig.html = sprintf(mailSendConfig.html, {
+        username,
+        url,
+        storeName: 'LFP',
+      });
+
+      mailSendConfig.type = 'forgotPassword';
+      return mailSendConfig;
+    } catch (e) {
+      throw e;
+    }
+  },
   sendMail: async (message) => {
 
     try {

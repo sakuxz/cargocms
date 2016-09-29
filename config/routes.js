@@ -112,7 +112,8 @@ module.exports.routes = {
   'post /api/user/follow/:id':    'api/UserController.follow',
   'post /api/user/unfollow/:id':  'api/UserController.unfollow',
   'post /api/user/edit/:id':      'api/UserController.update',
-  'post /api/user/forgotPassword':         'api/UserController.forgotPassword',
+  'post /api/user/forgotPassword':'api/UserController.forgotPassword',
+  'post /api/user/password':       'api/UserController.updatePassword',
 
   //----- custom -----
 
@@ -129,6 +130,8 @@ module.exports.routes = {
   '/lab':             'labfnp/MainController.explore',
   '/me/:id?':         'labfnp/MainController.portfolio',
   '/edit/me':         'labfnp/MainController.editPofile',
+  '/update/password': 'labfnp/MainController.updatePassword',
+
 
 
   //----- AuthController -----
