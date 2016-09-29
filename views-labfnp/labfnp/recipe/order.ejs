@@ -52,9 +52,17 @@
     padding-bottom: 10px;
   }
 
+  #gotoShop {
+    margin-top: 13px;
+    margin-left: 5px;
+  }
+  label.error {
+    color: red;
+  }
 </style>
 
 <div class="container content profile">
+  <% var error = req.flash('error'); %>
   <input type="hidden" name="id" class="hidden" value="<%= recipe.id %>" disabled>
 
   <!-- begin row -->
@@ -91,7 +99,7 @@
               <%=: recipe.createdAt | formatDate %>
             </li>
             <li>
-              <i class="fa fa-thumbs-o-up"></i>
+              <i class="fa fa-heart-o"></i>
               <%= recipe.UserLikeRecipes.length %></li>
           </ul>
           <hr/>
@@ -108,15 +116,18 @@
               <p class="padding-5"><%= recipe.description %></p>
             </li>
           </ul>
-          <hr/>
 
-          <!-- <label for="message">備註</label> -->
-          <ul class="list-unstyled list-inline message">
-            <li>
-              <p class="padding-5"><%= recipe.message %></p>
-            </li>
-          </ul>
-        </h4>
+          <!--
+          <% if(recipe.message.length >0){ %>
+            <hr/>
+            <label for="message">備註</label>
+            <ul class="list-unstyled list-inline message">
+              <li>
+                <p class="padding-5"><%= recipe.message %></p>
+              </li>
+            </ul>
+          <% } %>
+        -->
       </div>
 
       <br/>
@@ -144,7 +155,7 @@
           <section class="col">
             <label for="phone">收件人聯絡電話<span class="required">*</span>
             </label>
-            <input type="tel" id="phone" class="form-control" name="phone" value="" placeholder="請輸入手機號碼或市話含區碼..." pattern="0\d{8,11}" required>
+            <input type="tel" id="phone" class="form-control" name="phone" value="" placeholder="請輸入手機號碼或市話含區碼..." required>
           </section>
 
           <section class="col">
@@ -164,16 +175,32 @@
           </section>
 
           <section class="col">
+            <label for="invoiceNo">發票號碼</label>
+            <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="請輸入發票號碼...">
+          </section>
+
+          <section class="col paymentMethod">
             <label for="paymentMethod">付款方式<span class="required">*</span>
             </label>
             <select class="form-control" id="paymentMethod" class="form-control" name="paymentMethod" required>
               <option value="Credit">信用卡</option>
               <option value="ATM">ATM轉帳</option>
+              <option value="gotoShop">到店購買</option>
             </select>
           </section>
 
         </form>
       </div>
+
+      <section class="col">
+        <% if (error.length > 0) { %>
+          <div class="margin-bottom-20 has-error">
+            <label class="col-md-6 control-label" for="password">
+              <span class="glyphicon glyphicon-remove"></span><%= error %>
+            </label>
+          </div>
+        <% } %>
+      </section>
 
       <div class="text-center">
         <button form="orderForm" id="submitOrder" type="sumbit" class="btn-u btn-u-green" data-id="<%= recipe.id %>">
@@ -201,6 +228,61 @@
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
 
+    $.fn.preventDoubleSubmission = function() {
+      $(this).on("submit", function(event){
+        var $form = $(this);
+
+        if( $(this).valid() ) {
+          if ($form.data("submitted") === true){
+            event.preventDefault();
+          } else {
+            $form.data("submitted", true);
+            swal('訊息', '訂單處理中...！', 'info');
+          }
+        } else {
+          event.preventDefault();
+        }
+
+      });
+
+      return this;
+    }
+
+    $("#orderForm").validate({
+      rules: {
+        recipient: {
+          required: true
+        },
+        phone: {
+          required: true
+        },
+        address: {
+          required: true
+        },
+        email: {
+          required: true,
+          email: true
+        },
+
+      },
+      messages: {
+        recipient: {
+          required: "請輸入 收件人"
+        },
+        phone: {
+          required: "請輸入 收件人電話"
+        },
+        address: {
+          required: "請輸入 地址"
+        },
+        email: {
+          required: "請輸入 Email",
+          email: "請輸入正確格式Email"
+        },
+      }
+    });
+
+    $("#orderForm").preventDoubleSubmission();
 
   });
 `); %>

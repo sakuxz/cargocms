@@ -1,14 +1,6 @@
 <div class="container content">
-  <!--
-  <div class="text-center margin-bottom-40">
-    <a href="/wall" class="btn-u btn-u-default">
-      <i class="fa fa-angle-double-left"></i>
-      最新動態
-    </a>
-  </div>
-  -->
 
-  <div class="row">
+  <div class="row margin-bottom-40">
 
     <div class="col-md-5 col-md-offset-1">
       <img src="<%= feed.fullPicture %>" alt="" class="img-responsive img-thumbnail" />
@@ -30,15 +22,15 @@
       <div class="blog-content margin-bottom-20">
 
         <% if (feed.message) { %>
-          <p class="feed-message margin-bottom-20"><%-: feed.message | nl2br %></p>
+          <p class="feed-message margin-bottom-20"><%-: feed.message | linkifyjs | nl2br %></p>
         <% } %>
 
         <% if (feed.story) { %>
-          <p class="feed-story margin-bottom-20"><%-: feed.story | nl2br %></p>
+          <p class="feed-story margin-bottom-20"><%-: feed.story | linkifyjs | nl2br %></p>
         <% } %>
 
         <% if (feed.description) { %>
-          <p class="feed-description margin-bottom-20"><%-: feed.description | nl2br %></p>
+          <p class="feed-description margin-bottom-20"><%-: feed.description | linkifyjs | nl2br %></p>
         <% } %>
 
       </div>
@@ -50,5 +42,16 @@
       <% } %>
 
     </div>
+
   </div>
+
+  <div class="text-center">
+
+    <a href="/wall" class="btn-u btn-u-dark-blue">
+      <!--<i class="fa fa-chevron-left" aria-hidden="true"></i>-->
+      所有最新動態
+    </a>
+
+  </div>
+
 </div>

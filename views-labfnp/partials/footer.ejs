@@ -1,3 +1,10 @@
+<style>
+#newRecipe > li{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
 
 <!--=== Footer Version 1 ===-->
 <div class="footer-v1">
@@ -5,14 +12,16 @@
   <div class="container">
     <div class="row">
       <!-- About -->
-      <div class="col-md-3 md-margin-bottom-40">
-        <a href="index.html"><img id="logo-footer" class="footer-logo" src="/assets/labfnp/img/lfp.png" width="120" alt=""></a>
-        <p>LFP : 香料香水實驗室，自己的香水自己創造，由你創作專屬個人化香水。</p>
+      <div class="col-md-3 md-margin-bottom-40 text-center">
+        <a href="/"><img id="logo-footer" class="footer-logo" src="/assets/labfnp/img/lfp.png" width="120" alt=""></a>
+        <div class=" text-left">
+          <p>LFP : 香料香水實驗室，自己的香水自己創造，由你創作專屬個人化香水。</p>
+        </div>
       </div><!--/col-md-3-->
       <!-- End About -->
 
       <!-- Latest -->
-      <div class="col-md-3 md-margin-bottom-40">
+      <!-- <div class="col-md-3 md-margin-bottom-40">
         <div class="posts">
           <div class="headline"><h2>近期活動</h2></div>
           <ul class="list-unstyled latest-list">
@@ -30,7 +39,15 @@
             </li>
           </ul>
         </div>
-      </div><!--/col-md-3-->
+      </div> -->
+      <!-- End Latest -->
+      <!-- Latest -->
+      <div class="col-md-3 md-margin-bottom-40">
+        <div class="posts">
+          <div class="headline"><h2>最新配方</h2></div>
+          <ul id="newRecipe" class="list-unstyled latest-list"></ul>
+        </div>
+      </div>
       <!-- End Latest -->
 
       <!-- Link List -->
@@ -65,7 +82,7 @@
     <div class="row">
       <div class="col-md-6">
         <p>
-          Copyright © Laboratory of Fragrance & Perfume Co. 2015. All Rights Reserved
+          Copyright © Laboratory of Fragrance &amp; Perfume Co. 2015.<br/> All Rights Reserved
           <!--<a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>-->
         </p>
       </div>
@@ -86,3 +103,21 @@
 </div><!--/copyright-->
 </div>
 <!--=== End Footer Version 1 ===-->
+
+<% LayoutUtils.addScriptBlock(`
+$(document).ready(function(){
+  $.get('/api/labfnp/recipe/new', function(result){
+    console.log(result);
+    var ul = $('#newRecipe');
+    result.data.recipes.forEach(function(recipe){
+      ul.append(
+      '<li>' +
+        '<a href=/recipe/'+ recipe.hashId +'>' +
+          recipe.perfumeName + ' - ' + recipe.authorName +
+        '</a>' +
+      '</li>'
+      );
+    });
+  });
+});
+`); %>

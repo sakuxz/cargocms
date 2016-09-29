@@ -43,8 +43,10 @@ module.exports.routes = {
   'post /api/admin/upload': 'api/admin/ImageController.upload',
   'delete /api/admin/upload/:id': 'api/admin/ImageController.destroy',
 
+  'get /api/labfnp/recipe/findForLab': 'api/labfnp/RecipeController.findForLab',
   'get /api/labfnp/recipe': 'api/labfnp/RecipeController.find',
   'post /api/labfnp/recipe': 'api/labfnp/RecipeController.create',
+  'get /api/labfnp/recipe/new': 'api/labfnp/RecipeController.topNew',
   'get /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.findOne',
   'put /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.update',
   'delete /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.destroy',
@@ -59,6 +61,7 @@ module.exports.routes = {
 
   'get /api/labfnp/recipe/like/:id': 'api/labfnp/RecipeController.like',
   'get /api/labfnp/recipe/unlike/:id': 'api/labfnp/RecipeController.unlike',
+  'post /api/labfnp/recipe/feedback': 'api/labfnp/RecipeController.saveFeedback',
 
   'get /api/labfnp/scent/simpleList': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scent': 'api/labfnp/ScentController.find',
@@ -76,19 +79,39 @@ module.exports.routes = {
   'put /api/admin/post/:id': 'api/admin/PostController.update',
   'delete /api/admin/post/:id': 'api/admin/PostController.destroy',
 
-  'post /api/allpay/paid': 'api/AllpayController.paid',
-  'post /api/allpay/paymentinfo': 'api/AllpayController.paymentinfo',
 
   'get /api/admin/slogan': 'api/admin/SloganController.find',
   'get /api/admin/slogan/:id': 'api/admin/SloganController.findOne',
   'post /api/admin/slogan': 'api/admin/SloganController.create',
   'put /api/admin/slogan/:id': 'api/admin/SloganController.update',
   'delete /api/admin/slogan/:id': 'api/admin/SloganController.destroy',
+
+  'get /api/admin/allpay':        'api/admin/AllpayController.find',
+  'get /api/admin/allpay/export': 'api/admin/AllpayController.export',
+  'get /api/admin/allpay/:id':    'api/admin/AllpayController.findOne',
+  'post /api/admin/allpay':       'api/admin/AllpayController.create',
+  'put /api/admin/allpay/:id':    'api/admin/AllpayController.update',
+  'delete /api/admin/allpay/:id': 'api/admin/AllpayController.destroy',
+  'post /api/allpay/paid':        'api/admin/AllpayController.paid',
+  'post /api/allpay/paymentinfo': 'api/admin/AllpayController.paymentinfo',
+
+  'get /api/admin/message':        'api/admin/MessageController.find',
+  'get /api/admin/message/:id':    'api/admin/MessageController.findOne',
+  'post /api/admin/message':       'api/admin/MessageController.create',
+  'put /api/admin/message/:id':    'api/admin/MessageController.update',
+  'delete /api/admin/message/:id': 'api/admin/MessageController.destroy',
+
+  'get /api/admin/labfnp/recipe/export': 'api/admin/labfnp/RecipeController.export',
+
   // 'get /api/admin/Default': 'api/admin/DefaultController.find',
   // 'get /api/admin/Default/:id': 'api/admin/DefaultController.findOne',
   // 'post /api/admin/Default': 'api/admin/DefaultController.create',
   // 'put /api/admin/Default/:id': 'api/admin/DefaultController.update',
   // 'delete /api/admin/Default/:id': 'api/admin/DefaultController.destroy',
+
+  'post /api/user/follow/:id':    'api/UserController.follow',
+  'post /api/user/unfollow/:id':  'api/UserController.unfollow',
+  'post /api/user/edit/:id':      'api/UserController.update',
 
   //----- custom -----
 
@@ -96,15 +119,16 @@ module.exports.routes = {
   '/admin/config.js': 'AdminController.config',
 
   '/recipe/:id':      'labfnp/RecipeController.show',
-  '/recipe/preview/:id': 'labfnp/RecipeController.preview',
+  // '/recipe/preview/:id': 'labfnp/RecipeController.preview',
   '/recipe/order/:id': 'labfnp/RecipeController.order',
-  // '/recipe/feedback/:id': 'labfnp/RecipeController.feedback',
+  '/recipe/feedback/:id': 'labfnp/RecipeController.feedback',
   '/recipe/edit/:id': 'labfnp/RecipeController.edit',
   '/recipe/allpay/:id':  'labfnp/RecipeController.allpay',
   '/creator':         'labfnp/RecipeController.create',
   '/lab':             'labfnp/MainController.explore',
-  '/me':              'labfnp/MainController.portfolio',
-  '/me/:id':          'labfnp/MainController.portfolio',
+  '/me/:id?':         'labfnp/MainController.portfolio',
+  '/edit/me':         'labfnp/MainController.editPofile',
+
 
   //----- AuthController -----
   'get /login': 'AuthController.login',
@@ -121,6 +145,7 @@ module.exports.routes = {
   //----- view -----
   "/labfnp/:controller/:action/:id?": {},
   "/admin/:controller/:action/:id?": {},
+
   "/:controller/:action/:id?": {},
 
   //----- WallController -----

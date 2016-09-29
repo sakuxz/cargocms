@@ -43,6 +43,9 @@
 		.sticky-footer {
 			padding: 15px 15px 25px;
 		}
+		.equal-height-column img {
+			height: 42px;
+		}
 	</style>
 </head>
 
@@ -54,7 +57,7 @@
 
 			<div class="col-md-6 col-sm-6 form-block equal-height-column">
 				<a href="index.html">
-					<img src="/assets/labfnp/img/lfp-logo.png" alt="">
+					<img src="/assets/labfnp/img/lfp-logo.png" alt="" style="max-width:100px">
 				</a>
 				<h2 class="margin-bottom-50">網站管理系統</h2>
 				<form action="/auth/local?url=/admin/" method="post">
@@ -69,11 +72,13 @@
 							<input type="password" name="password" class="form-control rounded-right" placeholder="Password">
 						</div>
 
+						<input id='backUrl' type="hidden" name="url" value='/admin/'>
+
 						<div class="checkbox">
 							<ul class="list-inline">
 								<li>
 									<label>
-										<input type="checkbox"> Remember me
+										<!-- <input type="checkbox"> Remember me -->
 									</label>
 								</li>
 

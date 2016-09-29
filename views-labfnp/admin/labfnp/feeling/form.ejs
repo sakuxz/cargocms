@@ -1,26 +1,30 @@
 <fieldset>
 
   <section>
+    <label class="label">感覺</label>
     <label class="input state-disabled">
-      <input type="text" name="title" placeholder="感覺" v-model="data.item.title" disabled>
+      <input type="text" name="title" placeholder="" v-model="data.item.title" disabled>
       <b class="tooltip tooltip-bottom-right">請輸入感覺</b></label>
   </section>
 
   <section>
+    <label class="label">香味分子名稱</label>
     <label class="input state-disabled">
-      <input type="scentName" name="scentName" placeholder="香味分子名稱" v-model="data.item.scentName" disabled>
+      <input type="scentName" name="scentName" placeholder="" v-model="data.item.scentName" disabled>
       <b class="tooltip tooltip-bottom-right">請輸入香味分子名稱</b></label>
   </section>
 
   <div class="row">
     <section class="col col-xs-12 col-sm-6">
+      <label class="label">totalRepeat</label>
       <label class="input state-disabled">
-        <input type="text" name="totalRepeat" placeholder="totalRepeat" v-model="data.item.totalRepeat" disabled>
+        <input type="text" name="totalRepeat" placeholder="" v-model="data.item.totalRepeat" disabled>
       </label>
     </section>
     <section class="col col-6">
+      <label class="label">score</label>
       <label class="input state-disabled">
-        <input type="text" name="score" placeholder="score" v-model="data.item.score" disabled>
+        <input type="text" name="score" placeholder="" v-model="data.item.score" disabled>
       </label>
     </section>
   </div>

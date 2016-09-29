@@ -18,12 +18,17 @@
 							<i class="fa fa-clock-o"></i>
 							<%=: feed.createdAt %>
 						</li>
-						<!--<li>|</li>
-						<li><a href="#"><i class="fa fa-comments-o"></i> 06</a></li>-->
+						<li>|</li>
+						<li>
+							<a href="/wall/<%= feed.sourceId %>">
+								<i class="fa fa-link" aria-hidden="true"></i>
+							  檢視
+							</a>
+						</li>
 					</ul>
 					<div class="blog-content">
 						<% if (feed.message) { %>
-							<p class="dont-break-out"><%-: feed.message | nl2br %></p>
+							<p class="dont-break-out"><%-: feed.message | linkifyjs | nl2br %></p>
 						<% } %>
 					</div>
 				</div>
@@ -34,6 +39,12 @@
 					<div class="grid-boxes-caption grid-boxes-quote">
 						<p>香水和每個人的氣味，都應該是具有獨特性並具有標誌性的，而唯有透過每個人感受與創造氣味，才能追尋出每個不同自我。</p>
 						<span>- Laboratory of Fragrance &amp; Perfume -</span>
+					</div>
+				</div>
+			<% } else if (c == 3) { %>
+				<div class="grid-boxes-in">
+					<div style="width:240px;height:80px;padding:20px;">
+				    <div class="fb-follow" data-href="https://www.facebook.com/labfnp/" data-width="200" data-height="40" data-layout="standard" data-size="large" data-show-faces="true"></div>
 					</div>
 				</div>
 			<% } %>

@@ -18,6 +18,11 @@ var appModel = {
       email: '',
       firstName: '',
       lastName: '',
+      birthday: '',
+      phone1: '',
+      phone2: '',
+      address: '',
+      address2: '',
       password: '',
       Roles: [],
       RolesArray: [],
@@ -29,7 +34,7 @@ var appModel = {
     },
     items: [],
     option: {
-      passwordConfirm: ''
+      passwordConfirm: '',
     }
   },
   view: {
@@ -44,3 +49,10 @@ var appModel = {
 <%- include ../default/vue.ejs %>
 // 需要新增函式可以對 appMain 進行定義，如：
 // appMain.log = function () {console.log("123")}
+appMain.DateOfBirthday = function () {
+  $('input[name="birthday"]').datepicker({
+    dateFormat: 'yy-mm-dd',
+    prevText: '<i class="fa fa-angle-left"></i>',
+    nextText: '<i class="fa fa-angle-right"></i>'
+  });
+}

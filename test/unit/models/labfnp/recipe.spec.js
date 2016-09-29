@@ -8,7 +8,6 @@ describe('test Recipe model operation', function() {
       // message: '沒有備註',
       // description: '沒有描述',
       // visibilityDesc: '公開',
-      // productionStatusDesc: 'NEW',
       // updatedAt: '2016/08/26 11:18:45',
       // createdAt: '2016/08/26 11:18:45',
       // authorName: '',
@@ -16,7 +15,6 @@ describe('test Recipe model operation', function() {
       // totalDrops: 0,
       // coverPhoto: '',
       // visibility: 'PUBLIC',
-      // productionStatus: 'NEW',
       // id: null }
       done();
     } catch (e) {
@@ -55,12 +53,19 @@ describe('test Recipe model operation', function() {
     let recipeLoveTest, testUser, likeUser, testUser2;
     before(async (done) => {
       try {
+
         testUser = await User.create({
           username: 'testUserLike',
           email: 'testUserLike@gmail.com',
           password: ''
         });
 
+        Passport.create({
+          provider: 'facebook',
+          identfier: '123',
+          password: 'user',
+          UserId: testUser.id
+        });
 
         likeUser = await User.create({
           username: 'likeUser',
@@ -77,6 +82,7 @@ describe('test Recipe model operation', function() {
           perfumeName: 'love test',
           message: 'this is love test',
           UserId: testUser.id,
+          visibility: 'PUBLIC',
         };
 
         recipeLoveTest = await Recipe.create(newRecipeLoveTest);
@@ -105,9 +111,25 @@ describe('test Recipe model operation', function() {
           perfumeName: 'love test',
           message: 'this is love test',
           UserId: testUser.id,
+          visibility: 'PUBLIC',
         };
         await Recipe.create(newRecipeLoveTest2);
 
+        let time = '01234567890'
+        for(let index of [...time]) {
+          await Recipe.create({
+            formula:[
+              {"drops":"1","scent":"BA69","color":"#E87728"},
+              {"drops":"2","scent":"BA70","color":"#B35721"}
+            ],
+            formulaLogs: '',
+            authorName: '王大明',
+            perfumeName: 'love test',
+            message: 'this is love test',
+            UserId: testUser.id,
+            visibility: 'PUBLIC'
+          });
+        }
         done()
 
       } catch (e) {
@@ -117,8 +139,7 @@ describe('test Recipe model operation', function() {
     it('find by likeUser should be success.', async (done) => {
       try {
         let user = likeUser;
-        let result = await Recipe.findAndIncludeUserLike({currentUser: user});
-        console.log("=== result.length ===", result.length, result[0].toJSON(), result[1].toJSON());
+        let result = await Recipe.findAndIncludeUserLike({currentUser: user, start: 0, length: 5});
         done();
       } catch (e) {
         done(e);
@@ -127,8 +148,13 @@ describe('test Recipe model operation', function() {
     it('find by testUser should be success.', async (done) => {
       try {
         let user = testUser;
-        let result = await Recipe.findAndIncludeUserLike({currentUser: user});
+        let result = await Recipe.findAndIncludeUserLike({
+          currentUser: user,
+          start: 0,
+          length: 5,
+        });
         console.log("=== result.length ===", result.length);
+        result.length.should.be.eq(5);
         console.log(JSON.stringify(result, null, 2));
         done();
       } catch (e) {

@@ -12,11 +12,26 @@ $("#likeButton").on("click", function (event) {
 	}
 	var failCatch = function (error) {
 		if (error.responseJSON.message === 'permission denied') {
-      swal({
-        title: '請先登入',
-        text: '如果要使用收藏功能，請先進行登入。',
-      	type: 'warning',
-      });
+			swal({
+				title: '請先登入',
+				text: '如果要使用收藏功能，請先進行登入。',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: "#e6caa8",
+				confirmButtonText: "登入",
+				cancelButtonText: "註冊",
+				closeOnConfirm: false,
+				closeOnCancel: false,
+			},function(isConform){
+				if(isConform){
+					open('/login', '_self');
+				}else{
+					open('/register', '_self');
+				}
+			});
+			document.querySelector('.sweet-overlay').onclick = function(event) {
+				swal.close();
+			};
 		}
 	}
 	if (isLike) {
@@ -25,3 +40,5 @@ $("#likeButton").on("click", function (event) {
 		$.get('/api/labfnp/recipe/like/' + id).done(successCatch).fail(failCatch);
 	}
 })
+
+$('#fb-comments').append('<div class="fb-comments" data-href="' + location.href + '" data-numposts="5"></div>');

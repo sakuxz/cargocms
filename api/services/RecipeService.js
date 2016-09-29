@@ -15,13 +15,15 @@ module.exports = {
     message,
     description,
     visibility,
-    productionStatus,
     UserId,
     coverPhotoId,
+    authorFbPage,
+    createdBy,
   }) => {
     try {
-      recipe.formula = RecipeService.sortFormulaByScentName({formula: recipe.formula});
-      sails.log.info(recipe);
+
+      recipe.formula = RecipeService.sortFormulaByScentName({ formula: recipe.formula });
+      recipe.coverPhotoId = recipe.coverPhotoId == "" ? null : recipe.coverPhotoId;
 
       return await Recipe.create(recipe);
     } catch (e) {
@@ -52,7 +54,7 @@ module.exports = {
     message,
     description,
     visibility,
-    productionStatus,
+    coverPhotoId,
   }) => {
     try {
       const bubble = (a,b) => a.scent.match(/(\d+)/g)[0]-b.scent.match(/(\d+)/g)[0];
@@ -70,8 +72,8 @@ module.exports = {
         updatedRecipe.perfumeName = recipe.perfumeName;
         updatedRecipe.message = recipe.message;
         updatedRecipe.visibility = recipe.visibility;
-        updatedRecipe.productionStatus = recipe.productionStatus
         updatedRecipe.description = recipe.description;
+        updatedRecipe.coverPhotoId = recipe.coverPhotoId == "" ? updatedRecipe.coverPhotoId : recipe.coverPhotoId;
 
         updatedRecipe = await updatedRecipe.save();
       }
@@ -83,23 +85,48 @@ module.exports = {
 
   loadRecipe: async function(recipeId, currentUser) {
     try {
+      const find = await Recipe.findOne({
+        where: {
+          hashId: recipeId,
+        }
+      })
+      recipeId = find.id;
       const recipe = await Recipe.findOneAndIncludeUserLike({
         findByRecipeId: recipeId,
         currentUser
       });
       if (!recipe) {
-        const error = new Error('can not find recipe');
+        let error = new Error('can not find recipe');
         error.type = 'notFound';
         throw error;
       }
 
       let editable = false;
-      const belongUser = recipe.UserId === currentUser.id;
+      let userId = null;
+      if(currentUser != null && currentUser.id) userId = currentUser.id;
+
+      const belongUser = recipe.UserId === userId;
       if (currentUser && belongUser) editable = true;
 
       const social = SocialService.forRecipe({ recipes: [recipe] });
 
-      return { recipe, editable, social };
+      const RecipeId = recipe.id
+      const UserId = userId
+      let recipeFeedback = await RecipeFeedback.findOne({where: {RecipeId, UserId}})
+      if(recipeFeedback == null)
+        recipeFeedback = RecipeFeedback.build();
+
+      let recipeOrder = await RecipeOrder.findOne({where: {RecipeId, UserId}})
+
+      if(recipeOrder != null){
+        recipeFeedback.invoiceNo = recipeOrder.invoiceNo;
+        let RecipeOrderId = recipeOrder.id;
+        let allpay = await Allpay.findOne({where: {RecipeOrderId}})
+        if(allpay != null)
+          recipeFeedback.tradeNo = allpay.TradeNo
+      }
+
+      return { recipe, editable, social, recipeFeedback};
     } catch (e) {
       throw e;
     }

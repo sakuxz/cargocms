@@ -1,24 +1,3 @@
-<style media="screen">
-.color {
-	color:white;
-	padding: 2px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	border: none;
-	font-family: monospace;
-}
-@media screen and (max-width: 768px){
-  #main-table_filter input {
-    width: 160px;
-  }
-}
-@media screen and (min-width: 768px){
-  #main-table_filter input {
-    width: 500px;
-  }
-}
-</style>
 
 <!-- widget grid -->
 <section id="main-index" class="">
@@ -65,15 +44,15 @@
 						<table id="main-table" class="table table-striped table-bordered table-hover" width="100%">
 							<thead>
 								<tr>
-									<th class="" data-class="expand"><i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/> ID</th>
+									<th width="10%" class=""><i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/> ID</th>
 									<th class="">排序</th>
-									<th class="">香味分子名稱</th>
-									<th class="" data-hide="phone,tablet">香味分子標題</th>
-									<th class="" data-hide="phone,tablet">香味分子描述</th>
-									<th class="" data-hide="phone,tablet">分類</th>
-									<th class=""><i class="fa fa-fw fa-sticky-note text-muted hidden-sm hidden-xs"/> 名稱</th>
-									<th class="">顏色</th>
-									<th class="" data-hide="phone,tablet">香味感受</th>
+									<th width="15%" class="" data-class="expand">名稱</th>
+									<th width="30%" class="" data-hide="phone,tablet">標題</th>
+									<th class="" data-hide="always">描述</th>
+									<th width="15%" class="" data-hide="phone,tablet">分類</th>
+									<th width="20%" class=""><i class="fa fa-fw fa-sticky-note text-muted hidden-sm hidden-xs"/> 香調</th>
+									<th width="10%" class="">顏色</th>
+									<th class=""  data-hide="always">感受</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -88,7 +67,7 @@
 									<td><span class="color" style="background: {{ scent.color }};">{{ scent.color }}</span></td>
 									<td>
 										<div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:280px;">
-											<span title="{{ scent.feelings.join(', ') }}">{{ scent.feelings.join(', ') }}</span>
+											<span title="{{ scent.displayFeeling.join(', ') }}">{{ scent.displayFeeling.join(', ') }}</span>
 										</div>
 									</td>
 									<!-- <td align="center" style="cursor: pointer;">

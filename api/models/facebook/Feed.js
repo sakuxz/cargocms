@@ -25,6 +25,7 @@ module.exports = {
     },
     sourceId: {
       type: Sequelize.STRING,
+      unique: true,
     },
     updatedAt: {
       type: Sequelize.DATE,

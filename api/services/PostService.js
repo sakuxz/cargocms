@@ -34,7 +34,7 @@ module.exports = {
         if (!location) {
           location = await Location.create({ longitude, latitude });
         }
-        location.addPost(post.id);
+        await location.addPost(post.id);
       }
       return post;
     } catch (e) {

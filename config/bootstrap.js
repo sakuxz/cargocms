@@ -9,104 +9,25 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
+import fs from 'fs';
+import shortid from 'shortid';
+import MailerService from 'sails-service-mailer';
 module.exports.bootstrap = async (cb) => {
-
+  if(!sails.config.shareUrl) sails.config.shareUrl = "localhost:"+ sails.config.port
   // 這個已經用 config/urls.js 定義預設值
   //if(!sails.config.urls) sails.config.urls = {afterSignIn: "/"};
-
-
-
   _.extend(sails.hooks.http.app.locals, sails.config.http.locals);
 
-  let porductionInitDb = async () => {
-    let {connection} = sails.config.models;
-    let {environment} = sails.config;
+  const {environment} = sails.config;
 
-    if(connection == 'mysql' && environment == 'production'){
-
-      let {database} = sails.config.connections.mysql;
-
-      let tableList = await sequelize.query(`
-        select table_name
-        from information_schema.tables
-        where table_schema='${database}';
-      `);
-
-      if(tableList[0].length == 0){
-        sails.log.info("=== porduction init database ===");
-        await sequelize.sync({ force: 'drop' });
-      }
-    }
-  }
 
   try {
 
     sails.log.info("=== start bootstrap ===");
     sails.services.passport.loadStrategies();
 
-    await porductionInitDb();
-
-    if (!sails.config.hasOwnProperty('offAuth'))
-      sails.config.offAuth = false;
-
-    if(environment == 'production')
-      sails.config.offAuth = false;
-
-    let adminRole = await Role.findOrCreate({
-      where: {authority: 'admin'},
-      defaults: {authority: 'admin'}
-    });
-
-    let userRole = await Role.findOrCreate({
-      where: {authority: 'user'},
-      defaults: {authority: 'user'}
-    });
-
-    User.create({
-      username: 'user',
-      email: 'user@example.com',
-      firstName: '王',
-      lastName: '大明'
-    }).then(function(user) {
-      Passport.create({
-        provider: 'local',
-        password: 'user',
-        UserId: user.id
-      });
-
-
-
-    });
-
-
-
-    User.findOrCreate({
-      where: {
-        username: 'admin'
-      },
-      defaults: {
-        username: 'admin',
-        email: 'admin@example.com',
-        firstName: '管',
-        lastName: '李仁'
-      }
-    }).then(function(adminUsers) {
-      Passport.findOrCreate({
-        where: {
-          provider: 'local',
-          UserId: adminUsers[0].id
-        },
-        defaults: {
-          provider: 'local',
-          password: 'admin',
-          UserId: adminUsers[0].id
-        }
-      });
-      adminUsers[0].addRole(adminRole[0]);
-    });
-    const {environment} = sails.config;
     let allpayConfig = sails.config.allpay;
-    if (allpayConfig) {
+    if (!allpayConfig) {
       allpayConfig = {
         merchantID: '2000132',
         hashKey: '5294y06JbISpM5x9',
@@ -140,12 +61,93 @@ module.exports.bootstrap = async (cb) => {
       allpayModel: Allpay,
     });
 
+    let {environment} = sails.config;
+    let {connection} = sails.config.models;
+
+    if (!sails.config.hasOwnProperty('offAuth'))
+      sails.config.offAuth = false;
+
+    if(environment == 'production'){
+      sails.config.offAuth = false;
+      let recipes = await Recipe.findAll({where: {hashId:{$eq: null}}})
+      let updateRecipes = recipes.map((recipe) => {
+        recipe.hashId = shortid.generate();
+        return recipe.save();
+      })
+
+      await Promise.all(updateRecipes);
+
+    }
+
+    let adminRole = await Role.findOrCreate({
+      where: {authority: 'admin'},
+      defaults: {authority: 'admin'}
+    });
+
+    let userRole = await Role.findOrCreate({
+      where: {authority: 'user'},
+      defaults: {authority: 'user'}
+    });
+
+    User.findOrCreate({
+      where: {
+        username: 'admin'
+      },
+      defaults: {
+        username: 'admin',
+        email: 'admin@example.com',
+        firstName: '李仁',
+        lastName: '管'
+      }
+    }).then(function(adminUsers) {
+      Passport.findOrCreate({
+        where: {
+          provider: 'local',
+          UserId: adminUsers[0].id
+        },
+        defaults: {
+          provider: 'local',
+          password: 'admin',
+          UserId: adminUsers[0].id
+        }
+      });
+      adminUsers[0].addRole(adminRole[0]);
+    });
+
+
+    /*
+     * 是否要匯入的判斷必須交給 init 定義的程式負責
+     */
+
+    if (environment !== 'test') {
+      // 自動掃描 init 底下的 module 資料夾後執行資料初始化
+      fs.readdir('./config/init/', function(err, files) {
+        for (var i in files) {
+          let dirName = files[i];
+          let isDir = fs.statSync('./config/init/' + dirName).isDirectory();
+          if (isDir) {
+            let hasIndexFile = fs.statSync('./config/init/' + dirName + '/index.js').isFile();
+            require('./init/' + dirName).init();
+          }
+        }
+      });
+    }
+
     if (environment === 'development' && sails.config.models.migrate == 'drop') {
       sails.log.info("init Dev data", environment);
 
-
-      // 大量假帳號
-      require('./init/fakeusers').init();
+      User.create({
+        username: 'user',
+        email: 'user@example.com',
+        firstName: '大明',
+        lastName: '王'
+      }).then(function(user) {
+        Passport.create({
+          provider: 'local',
+          password: 'user',
+          UserId: user.id
+        });
+      });
 
       await Post.create({
         title: '自造者世代（MAKERS）與第三次工業革命',
@@ -201,6 +203,7 @@ module.exports.bootstrap = async (cb) => {
           {"drops":"1","scent":"BA69","color":"#E87728"},
           {"drops":"2","scent":"BA70","color":"#B35721"}
         ],
+        visibility: "PUBLIC" ,
         formulaLogs: '',
         authorName: '王大明',
         perfumeName: 'love again',
@@ -211,23 +214,89 @@ module.exports.bootstrap = async (cb) => {
 
       let testRecipe = await Recipe.create(recipeLoveAgain);
 
+      //建立一筆 Allpay 資料，使用上方 testRecipe資料
+      let recipeOrder = await RecipeOrder.create({
+        remark: '123',
+        UserId: 1,
+        RecipeId: testRecipe.id,
+      });
+      let data = {
+        relatedKeyValue: {
+          //RecipeId: recipe.id,
+          RecipeOrderId: recipeOrder.id,
+        },
+        "TradeNo": "1608301610017019",
+        "MerchantTradeNo": "57feb73f",
+        "RtnCode": 1,
+        "RtnMsg": "付款成功",
+        "PaymentDate": "2016-08-30 16:11:59",
+        "TradeDate": "2016-08-30 16:10:21",
+        "PaymentType": "ATM_TAISHIN",
+        "ShouldTradeAmt": 999,
+        "TradeAmt": 999,
+        "BankCode": "812",
+        "vAccount": "9966627013152469",
+        "ExpireDate": "2016/09/02",
+        "PaymentNo": null,
+        "Barcode1": null,
+        "Barcode2": null,
+        "Barcode3": null,
+        "CheckMacValue": null,
+        "MerchantTradeDate": null,
+        "RecipeOrderId": recipeOrder.id,
+      }
+      await Allpay.create(data);
 
-      // const execSync = require('child_process').execSync;
-      // execSync(`sqlite3 ${__dirname}/../sqlite.db < ${__dirname}/../import/scentNote.sql`);
-      // execSync(`sqlite3 ${__dirname}/../sqlite.db < ${__dirname}/../import/scent.sql`);
-      // execSync(`sqlite3 ${__dirname}/../sqlite.db < ${__dirname}/../import/feeling.sql`);
+      recipeOrder = await RecipeOrder.create({
+        remark: '456',
+        UserId: 1,
+        RecipeId: testRecipe.id,
+      });
 
-      // let path = "";
-      // await ScentNote.importFeelingFromFile({path});
+      data = {
+        relatedKeyValue: {
+          //RecipeId: recipe.id,
+          RecipeOrderId: recipeOrder.id,
+        },
+        "TradeNo": "1608301605202918",
+        "MerchantTradeNo": "301ea83b",
+        "RtnCode": 1,
+        "RtnMsg": "交易成功",
+        "PaymentDate": "2016-08-30 16:07:23",
+        "TradeDate": null,
+        "PaymentType": "Credit_CreditCard",
+        "ShouldTradeAmt": null,
+        "TradeAmt": 999,
+        "BankCode": null,
+        "vAccount": null,
+        "ExpireDate": null,
+        "PaymentNo": null,
+        "Barcode1": null,
+        "Barcode2": null,
+        "Barcode3": null,
+        "CheckMacValue": null,
+        "MerchantTradeDate": null,
+        "RecipeOrderId": recipeOrder.id,
+      }
+      await Allpay.create(data);
+
+      // == Message ==
+      let order = {
+        serialNumber: 'test',
+        User: {
+          username: 'testUser',
+          email: 'smlsun@gmail.com'
+        }
+      }
+      let messageConfig = await MessageService.paymentConfirm(order);
+      let message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
+      // == Message done. ==
     }
-
-    // import site-specified data
-    require('./init/labfnp').init();
-    require('./init/facebook').init();
 
     cb();
   } catch (e) {
-    console.error(e);
+    console.error(e.stack);
     cb(e);
   }
 };

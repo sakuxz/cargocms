@@ -1,22 +1,30 @@
 module.exports = {
 
   find: async (req, res) => {
-    try {
-      const { query } = req;
-      const { serverSidePaging } = query;
-      const modelName = req.options.controller.split("/").reverse()[0];
-      let result;
-      if (serverSidePaging) {
-        result = await PagingService.process({query, modelName});
-      } else {
-        const items = await sails.models[modelName].findAll();
-        result = { data: { items } };
+      try {
+        let {query} = req
+        let {serverSidePaging} = query
+
+        if(serverSidePaging){
+
+          const findQuery = FormatService.getQueryObj(query);
+          let result = await Feeling.findAndCountAll(findQuery)
+          let data = result.rows
+          let recordsTotal = data.length
+          let recordsFiltered =  result.count
+          let draw = parseInt(req.draw) + 1
+          res.ok({draw, recordsTotal, recordsFiltered, data});
+        }else {
+          const feelings = await Feeling.findAll();
+          res.ok({
+            data: {
+              items: feelings
+          }});
+        }
+      } catch (e) {
+        res.serverError({ message: e, data: {}});
       }
-      res.ok(result);
-    } catch (e) {
-      res.serverError(e);
-    }
-  },
+    },
 
   findOne: async (req, res) => {
     try {

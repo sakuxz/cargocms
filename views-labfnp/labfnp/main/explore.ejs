@@ -1,7 +1,14 @@
+<% LayoutUtils.addMeta({ property:"og:image", content:SocialService.getShareUrl() + "/assets/labfnp/img/fb-og-image.jpg" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:url", content:SocialService.getShareUrl() + "/assets/labfnp/img/fb-og-image.jpg"  }); %>
+<% LayoutUtils.addMeta({ property:"og:image:type", content:"image/jpeg" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:width", content:"1200" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:height", content:"630" }); %>
+<% LayoutUtils.addMeta({ property:"og:title", content:"LFP: 香料香水實驗室，客製專屬香水 | 香料實驗室" }); %>
+<% LayoutUtils.addMeta({ property:"og:description", content:"每個人身上的氣味與所使用的香水，都應該是獨特而具有標誌性。而唯有透過每個人各自的感受來創造專屬的氣味，才能真正展現出獨一無二、不同的自我。" }); %>
+<% LayoutUtils.addMeta({ property:"og:type", content:"website" }); %>
 
 <!-- CSS Page Style -->
 <% LayoutUtils.addStylesheets('/assets/unify/css/pages/blog_masonry_3col.css'); %>
-
 <style type="text/css">
 #recipeImageContainer{
   /*position: relative;*/
@@ -51,8 +58,7 @@
 }
 .shareSticker {
   max-width: 360px;
-  margin-bottom: 10px;
-  margin-left: 0px;
+  padding-top: 10px;
 }
 .rrssb-buttons a {
   -webkit-filter: saturate(0.5);
@@ -68,6 +74,40 @@
   -o-filter: saturate(1);
   filter: saturate(1);
 }
+.grid-boxes-in {
+  animation: slidein 0.3s 0.1s backwards;
+  animation-timing-function: ease-in-out;
+  float: left;
+}
+@keyframes slidein {
+  from {
+    opacity: 0;
+    transform: translateY(8em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.grid-boxes {
+  min-height: 500px;
+}
+.list-inline {
+  width: 95%;
+  line-height: 14px;
+}
+.author-name {
+  max-width: 30%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-overflow {
+  max-width: 99%;
+  overflow: hidden;
+  text-overflow: ellipsis;;
+  white-space: nowrap;
+}
 </style>
 
 
@@ -79,7 +119,8 @@
 	<!-- Creator -->
 	<% if (req.session.authenticated) { %>
 		<div class="text-center">
-		  <a href="/creator" class="btn btn-primary">
+		  <!-- <a href="/creator" class="btn btn-primary"> -->
+		  <a href="#" class="btn btn-primary btn-create-recipe">
 		    <i class="fa fa-flask fa-fw"></i>
 		    創作一個新配方
 		  </a>
@@ -111,29 +152,26 @@
 
 			<hr class="soften" />
 
-			<div class="grid-boxes">
-
-				<% recipes.forEach(function(recipe, index) { %>
-
-					<div class="grid-boxes-in">
-
-
-						<a href="/recipe/<%= recipe.id %>" id="recipeImageContainer" class="easy-block-v1">
+			<div class="grid-boxes" >
+        <% recipes.forEach(function(recipe, index) { %>
+					<div class="grid-boxes-in col-xs-12 col-sm-6 col-md-4">
+						<a href="/recipe/<%= recipe.hashId %>" id="recipeImageContainer" class="easy-block-v1">
               <% if (recipe.visibility == 'PROTECTED') { %>
                 <div class="easy-block-v1-badge rgba-red"><%= recipe.visibilityDesc %></div>
               <% } %>
 							<!--<img id="recipeImage" class="img-responsive lazy" src="http://placehold.it/640x480?text=LOADING" data-src="http://loremflickr.com/640/480/perfume<%= ([',girl', ',boy', ''])[parseInt(Math.random() * 3)] %>/all?<%= Math.random() * Date.now() %>" alt="">-->
-							<img id="recipeImage" class="img-responsive lazy" src="<%= recipe.coverPhoto %>" data-src="<%= recipe.coverPhoto %>" alt="">
-							<div class="recipeLikeContainer" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
+							<img id="recipeImage" class="img-responsive lazy" src="<%= recipe.coverPhoto %>" data-src="<%= recipe.coverPhoto %>" alt="" onerror="this.onerror=null;this.src='/assets/labfnp/img/recipe-default-cover.<%= recipe.id % 7 %>.jpg';">
+							<!--<div class="recipeLikeContainer" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
                 <i id="recipeLikeIcon" class="fa <%= recipe.currentUserLike ? 'fa-heart': 'fa-heart-o' %> fa-sm"></i>
-              </div>
+              </div>-->
 						</a>
 						<div class="grid-boxes-caption">
-							<h3><a href="/recipe/<%= recipe.id %>"><%= recipe.perfumeName %></a></h3>
+							<h3><a href="/recipe/<%= recipe.hashId %>"><%= recipe.perfumeName %></a></h3>
 							<ul class="list-inline grid-boxes-news">
 								<li>
 									<i class="fa fa-user"></i>
-									<a href="/lab?userId=<%= recipe.UserId %>">
+									<!-- <a href="/lab?userId=<%= recipe.UserId %>"> -->
+									<a href="/me/<%= recipe.UserId %>">
 										<%= recipe.authorName %>
 									</a>
 								</li>
@@ -147,6 +185,7 @@
 							</ul>
 							<% if (recipe.description) { %><p><%= recipe.description %></p><% } %>
 						</div>
+            <!--
             <% if(social.targets.length > 0){ %>
               <div class="row shareSticker" >
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -155,78 +194,52 @@
                 </div>
               </div>
             <% } %>
+            -->
 					</div>
-
-
 				<% }); %>
-
-			</div><!--/container-->
+      </div><!--/container-->
 		</div>
 
 	<% } %>
 	<!--=== End Content Part ===-->
+  <script id="recipeTmpl" type="text/x-jquery-tmpl">
+    <div class="grid-boxes-in col-xs-12 col-sm-6 col-md-4">
+      <a href="/recipe/${recipe.hashId}" id="recipeImageContainer" class="easy-block-v1">
+        {{if recipe.visibility == 'PROTECTED'}}
+          <div class="easy-block-v1-badge rgba-red">${recipe.visibilityDesc}</div>
+        {{/if}}
+        <img id="recipeImage" class="img-responsive lazy" src="${recipe.coverPhoto}" data-src="${recipe.coverPhoto}" alt="" onerror="this.onerror=null;this.src='/assets/labfnp/img/recipe-default-cover.${recipe.id % 7}.jpg';">
+        <!-- <div class="recipeLikeContainer" data-id="${recipe.id}" data-like="${recipe.currentUserLike}">
+           <i id="recipeLikeIcon" class="fa {{if recipe.currentUserLike }} fa-heart {{else}} fa-heart-o {{/if}} fa-sm"></i>
+        </div> --!>
+      </a>
+      <div class="grid-boxes-caption">
+        <h3 class="text-overflow"><a href="/recipe/${recipe.id}">${recipe.perfumeName}</a></h3>
+        <ul class="list-inline grid-boxes-news">
+          <li class="text-overflow author-name">
+            <i class="fa fa-user"></i>
+            <a href="/me/${recipe.UserId}">
+              ${recipe.authorName}
+            </a>
+          </li>
+          <li>|</li>
+          <li>
+            <i class="fa fa-clock-o"></i>
+            ${recipe.createdAt.split(' ')[0]}
+          </li>
+          <li>|</li>
+          <li><i class="fa fa-heart-o"></i> ${recipe.UserLikeRecipes.length}</li>
+        </ul>
+        {{if recipe.description}}
+          <p>${recipe.description}</p>
+        {{/if}}
+      </div>
+    </div>
+    <!-- <%- include ../../lib/rrssbbtmpl.ejs %> -->
+  </script>
 
 </div>
 
+<%- include recipeCreateBox.inc.ejs %>
 
-<% LayoutUtils.addScriptBlock(`
-$(document).ready(function(){
-  var $container = $('.grid-boxes');
-
-  var gutter = 30;
-  var min_width = 240;
-  $container.imagesLoaded( function(){
-		$(function() {
-      $("img.lazy").unveil(screen.height);
-    });
-    $container.masonry({
-      itemSelector : '.grid-boxes-in',
-      gutterWidth: gutter,
-      isAnimated: true,
-      columnWidth: function( containerWidth ) {
-        var box_width = (((containerWidth - 2*gutter)/3) | 0) ;
-
-        if (box_width < min_width) {
-            box_width = (((containerWidth - gutter)/2) | 0);
-        }
-
-        if (box_width < min_width) {
-            box_width = containerWidth;
-        }
-
-        $('.grid-boxes-in').width(box_width);
-
-        return box_width;
-      }
-    });
-  });
-
-  $(".recipeLikeContainer").on("click", function(event){
-    event.preventDefault()
-    var id = $(this).data('id');
-    var that = $(this);
-    var isLike = that.data('like');
-    var successCatch = function(result) {
-      var like = that.data('like');
-      that.data('like', !like);
-      that.find("i").toggleClass("fa-heart");
-      that.find("i").toggleClass("fa-heart-o");
-    }
-    var failCatch = function(error) {
-      if (error.responseJSON.message === 'permission denied') {
-        swal({
-          title: '請先登入',
-          text: '如果要使用收藏功能，請先進行登入。',
-        	type: 'warning',
-        });
-      }
-    }
-    if (isLike) {
-      $.get('/api/labfnp/recipe/unlike/'+id).done(successCatch).fail(failCatch);
-    } else {
-      $.get('/api/labfnp/recipe/like/'+id).done(successCatch).fail(failCatch);
-    }
-  })
-
-});
-`); %>
+<% LayoutUtils.addScripts('/assets/labfnp/page/explore/index.js'); %>

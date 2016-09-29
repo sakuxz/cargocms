@@ -31,8 +31,8 @@ describe('about Post model operation.', function() {
         user = await User.create({
           username: 'postModelTest',
           email: 'postModelTest@gmail.com',
-          firstName: '王',
-          lastName: '大明'
+          firstName: '大明',
+          lastName: '王'
         });
         const image = await Image.create({
           filePath: 'http://www.labfnp.com/modules/core/img/update1.jpg',
@@ -63,8 +63,7 @@ describe('about Post model operation.', function() {
           longitude: 10,
           latitude: 10,
         });
-        location.addPost(post.id);
-
+        await location.addPost(post.id);
         let checkPost = await Post.findById(post.id);
         checkPost.LocationId.should.be.eq(location.id)
         done();
@@ -125,8 +124,8 @@ describe('about Post model operation.', function() {
         user = await User.create({
           username: 'postLocationModelTest',
           email: 'postLocationModelTest@gmail.com',
-          firstName: '王',
-          lastName: '大明'
+          firstName: '大明',
+          lastName: '王'
         });
         const image = await Image.create({
           filePath: 'http://www.labfnp.com/modules/core/img/update1.jpg',
@@ -149,7 +148,7 @@ describe('about Post model operation.', function() {
           longitude: 10,
           latitude: 10,
         });
-        location.addPost(post.id);
+        await location.addPost(post.id);
         done();
       } catch (e) {
         done(e)

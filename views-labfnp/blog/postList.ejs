@@ -1,3 +1,23 @@
+<style>
+  .shareSticker {
+    max-width: 360px;
+    padding-top: 10px;
+  }
+  .rrssb-buttons a {
+    -webkit-filter: saturate(0.5);
+    -moz-filter: saturate(0.5);
+    -ms-filter: saturate(0.5);
+    -o-filter: saturate(0.5);
+    filter: saturate(0.5);
+  }
+  .rrssb-buttons a:hover {
+    -webkit-filter: saturate(1);
+    -moz-filter: saturate(1);
+    -ms-filter: saturate(1);
+    -o-filter: saturate(1);
+    filter: saturate(1);
+  }
+</style>
 <% data.items.forEach(function(post, index){ %>
   <div class="news-v3 bg-color-white margin-bottom-60">
     <% if (post.coverUrl) { %>
@@ -60,7 +80,7 @@
         <% }); %>
       </div>
       <% if(social.targets.length > 0){ %>
-        <div class="row">
+        <div class="row shareSticker">
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <% var socialData = social.data[index] %>
             <%- include ../lib/rrssbb.ejs %>

@@ -12,8 +12,8 @@
 }
 
 .header .logo img {
-  margin: 20px 15px;
-  height: 30px;
+  margin: 20px 0 15px 0;
+  height: 20px;
   opacity: .8;
 }
 
@@ -21,8 +21,27 @@
   font-size: 13px;
 }
 
+.header .navbar-nav > li > a:hover, .header .navbar-nav > .active > a {
+  border-bottom-width: 4px;
+}
+
 .header .navbar-nav > li > a {
   text-transform: none;
+}
+
+.header .navbar-nav > li.base{
+  width: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 991px) {
+  .header .navbar-nav > li.base{
+    display: none;
+  }
+}
+
+.header .navbar-toggle {
+  margin-top: 1em;
 }
 
 body {

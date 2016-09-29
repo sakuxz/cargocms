@@ -1,14 +1,40 @@
 module.exports = {
 
-  find: async (req, res) => {
-
+  findForLab: async (req, res) => {
+    console.log("=== findForLab ===");
     try {
       let user = AuthService.getSessionUser(req);
-      const recipes = await Recipe.findAndIncludeUserLike({currentUser: user});
+      const recipes = await Recipe.findAndIncludeUserLike({
+        currentUser: user,
+        start: parseInt(req.query.start, 10) || 0,
+        length: parseInt(req.query.length, 10) || 5,
+      });
+      console.log();
+      let social = SocialService.forRecipe({recipes});
       res.ok({
         data: {
-          items: recipes
-      }});
+          items: recipes,
+          social,
+        }
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+
+  find: async (req, res) => {
+    try {
+      const { query } = req;
+      const { serverSidePaging } = query;
+      const modelName = req.options.controller.split("/").reverse()[0];
+      let result;
+      if (serverSidePaging) {
+        result = await PagingService.process({query, modelName});
+      } else {
+        const items = await sails.models[modelName].findAll();
+        result = { data: { items } };
+      }
+      res.ok(result);
     } catch (e) {
       res.serverError(e);
     }
@@ -21,7 +47,7 @@ module.exports = {
       sails.log.info('get recipe =>', recipe);
       res.ok({
         message: 'Get recipe success.',
-        data: recipe,
+        data: {item: recipe},
       });
     } catch (e) {
       res.serverError(e);
@@ -100,7 +126,7 @@ module.exports = {
       res.serverError(e);
     }
   },
-  
+
   unlike: async (req, res) => {
     try {
       const { id } = req.params;
@@ -129,7 +155,7 @@ module.exports = {
       const feelings = await Recipe.getFeelings({id});
 
       res.ok({
-        message: 'success dislike recipe',
+        message: 'success get recipe\'s feelings',
         data: {feelings},
       });
 
@@ -137,6 +163,50 @@ module.exports = {
       sails.log.error(e);
       res.serverError(e);
     }
-  }
+  },
+
+  topNew: async (req, res) => {
+    try {
+      const recipes = await Recipe.findAll({
+        where: { visibility: { $not: 'PRIVATE' } },
+        offset: 0,
+        limit: 3,
+      });
+      res.ok({
+        message: 'success get new recipe',
+        data: { recipes },
+      });
+    } catch (e) {
+      sails.log.error(e);
+      res.serverError(e);
+    }
+  },
+
+  saveFeedback: async (req, res) => {
+    const data = req.body;
+    try {
+      if (typeof data.feeling === 'string'){
+        data.feeling = [data.feeling];
+      }
+      let {UserId, RecipeId} = data;
+      let feedback = await RecipeFeedback.findOne({where: {UserId, RecipeId}});
+
+      if(feedback != null){
+        feedback.invoiceNo = data.invoiceNo
+        feedback.tradeNo = data.tradeNo
+        feedback.feeling = data.feeling
+        feedback = await feedback.save(data);
+      }else {
+        feedback = await RecipeFeedback.create(data);
+      }
+
+      res.ok({
+        message: 'save feedback success.',
+        data: feedback,
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
 
 }

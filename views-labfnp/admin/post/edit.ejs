@@ -143,9 +143,11 @@
 	var pagefunction = function() {
 		<%- include vue.ejs %>
 		postApp.$mount("#post-edit");
-		postApp.loadItem(postApp.onEnterPageEdit);
+		postApp.loadItem(function() {
+			postApp.setupForm("edit");
+			postApp.onEnterPageEdit();
+		});
 
-		postApp.setupForm("edit");
 	};
 
 	// var pagedestroy = function() {

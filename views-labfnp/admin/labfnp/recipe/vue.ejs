@@ -1,23 +1,22 @@
-<%- include ../metadata.js.ejs %>
+var COMMON = {
+	DOUBLE_CLICK_TIME_PERIOD: 250,
+	DEFAULT_INDEX: -1,
+	DEFAULT_AVATAR: "/assets/admin/img/avatars/default.png",
+};
 
+var itemBeforeEdit = {};
+var prefix = '';
+var modelName = "labfnp/recipe";
 var appModel = {
+	modelName: modelName,
+	prefix: prefix,
 	data: {
+    common: {
+    	DROPS_MAX: 50,
+    	DROPS_MIN: 1,
+    },
 		link: {
-			PAGE_INDEX: '/admin/#/admin/labfnp/recipe',
-			PAGE_CREATE: '/admin/#/admin/labfnp/recipe/create',
-			PAGE_EDIT: '/admin/#/admin/labfnp/recipe/edit/',
-			PAGE_SHOW: '/admin/#/admin/labfnp/recipe/show/',
 			API_LIST_SCENT: '/api/labfnp/scent',
-			API_LIST: '/api/labfnp/recipe',
-			API_ITEM: '/api/labfnp/recipe/',
-			API_CREATE: '/api/labfnp/recipe',
-			API_UPDATE: '/api/labfnp/recipe/',
-		},
-		common: {
-			DEFAULT_AVATAR: '/assets/admin/img/avatars/default.png',
-			DROPS_MAX: 50,
-			DROPS_MIN: 1,
-			DEFAULT_INDEX: -1,
 		},
 		status: {
 			itemBeforeEdit: {},
@@ -33,616 +32,427 @@ var appModel = {
 			message: '',
 			User: {},
 			visibility: '',
-			productionStatus: '',
+			// productionStatus: '',
 		},
 		items: [],
 		scentData: {},
 		scentColor: {},
-		option: {}
+		option: {
+			exportCSV: true,
+			defaultSort: [[ 3, 'desc' ]]
+		}
 	},
 	view: {
 		table: {
 			selectIndex: -1,
 		},
 	},
+}
+
+/* TABLETOOLS */
+
+<%- include ../../default/vue.ejs %>
+// 需要新增函式可以對 appMain 進行定義，如：
+// appMain.log = function () {console.log("123")}
+appMain.enableSelect = function () {
+	$('select').attr('disabled', false);
+	$('.select').removeClass('state-disabled');
+}
+
+appMain.insertEmptyFormulaItem = function () {
+	var thisFormula = [];
+	for (var i = 0; i < 6; i++) {
+		var indexFormula = appModel.data.item.formula[i];
+		var checkFormula = typeof indexFormula === 'undefined';
+		if (checkFormula) {
+			indexFormula = {
+				'scent': '',
+				'drops': '0',
+			};
+		} else {
+			var checkScent = typeof indexFormula.scent === 'undefined';
+			var checkDropsValue = indexFormula.drops === '0';
+			if (checkScent || checkDropsValue) indexFormula.scent = '';
+		}
+		thisFormula.push(indexFormula);
+	}
+	appModel.data.item.formula = thisFormula;
+},
+
+appMain.loadSelectOptions = function (cb) {
+	var ajaxSuccess = function (result) {
+		appModel.data.scentData = result.data.items;
+		appModel.data.scentColor = new Object();
+		var scentData = appModel.data.scentData;
+		for (var i = 0; i < scentData.length; i++) {
+			appModel.data.scentColor[scentData[i].name] = scentData[i].color;
+		}
+		if (typeof cb !== 'undefined') setTimeout(cb, 0);
+	};
+
+	$.ajax({
+		url: appModel.data.link.API_LIST_SCENT,
+		// async: false,
+		success: ajaxSuccess,
+		// error: ajaxError,
+	});
 };
 
-var mainApp = new Vue({
-	data: appModel,
-	methods: {
-		cancel: function (event) {
-			mainApp.onLeavePage(function () {
-				location.href = appModel.data.link.PAGE_INDEX;
-			});
+appMain.onEnterPageShow = function () {
+	appMain.loadItem(appMain.drawD3PieFroAdmin);
+};
+
+appMain.onEnterPageCreare = function () {
+	appMain.insertEmptyFormulaItem();
+	appMain.loadSelectOptions();
+	appMain.setupForm("create");
+	appMain.data.status.itemBeforeEdit = null;
+};
+
+appMain.onEnterPageEdit = function () {
+	appMain.loadItem(appMain.insertEmptyFormulaItem);
+	appMain.loadSelectOptions();
+	appMain.setupForm("edit");
+	appMain.saveItemStatusBeforeEdit();
+};
+
+appMain.update = function (event) {
+	var ajaxSuccess = function (result) {
+		window.onbeforeunload = null;
+		location.href = '/admin/#/admin/' + modelName;
+		messageApp.show({
+			desc: '更新資料成功！',
+			type: 'success'
+		});
+	};
+
+	var ajaxError = function (result) {
+		messageApp.show({
+			desc: '更新資料失敗！errorMessage: ' + result.responseJSON.message,
+			type: 'error'
+		});
+	};
+
+	$.ajax({
+		url: '/api/' + prefix + modelName + '/' + appModel.data.item.id,
+		type: 'PUT',
+		dataType: 'json',
+		data: appMain.verifySendData(),
+		xhrFields: {
+			withCredentials: true,
 		},
-		verifySendData: function () {
-			var scentColor = appModel.data.scentColor;
-			var dataJson = JSON.parse(JSON.stringify(appModel.data.item));
-			var newFormula = [];
-			for (var i = 0; i < dataJson.formula.length; i++) {
-				var checkDropsType = typeof dataJson.formula[i].drops === 'string';
-				var checkDropsZero = dataJson.formula[i].drops !== 0;
-				var checkDrops = checkDropsType && checkDropsZero;
-				var checkScentType = typeof dataJson.formula[i].scent === 'string';
-				var checkScentEmpty = dataJson.formula[i].scent !== '';
-				var checkScent = checkScentType && checkScentEmpty;
-				if (checkDrops && checkScent) newFormula.push(dataJson.formula[i]);
+		success: ajaxSuccess,
+		error: ajaxError,
+	});
+};
+
+appMain.save = function(e) {
+	var ajaxSuccess = function (result) {
+		location.href = '/admin/#/admin/' + modelName;
+		messageApp.show({
+			desc: '新增資料成功！',
+			type: 'success'
+		});
+	};
+
+	var ajaxError = function (result) {
+		messageApp.show({
+			desc: '新增資料失敗！errorMessage: ' + result.responseJSON.message,
+			type: 'error'
+		});
+	};
+
+	$.ajax({
+		url: '/api/' + prefix + modelName,
+		type: 'POST',
+		dataType: 'json',
+		data: appMain.verifySendData(),
+		xhrFields: {
+			withCredentials: true,
+		},
+		success: ajaxSuccess,
+		error: ajaxError,
+	});
+};
+
+appMain.verifySendData = function () {
+	var scentColor = appModel.data.scentColor;
+	var dataJson = JSON.parse(JSON.stringify(appModel.data.item));
+	var newFormula = [];
+	for (var i = 0; i < dataJson.formula.length; i++) {
+		var checkDropsType = typeof dataJson.formula[i].drops === 'string';
+		var checkDropsZero = dataJson.formula[i].drops !== 0;
+		var checkDrops = checkDropsType && checkDropsZero;
+		var checkScentType = typeof dataJson.formula[i].scent === 'string';
+		var checkScentEmpty = dataJson.formula[i].scent !== '';
+		var checkScent = checkScentType && checkScentEmpty;
+		if (checkDrops && checkScent) newFormula.push(dataJson.formula[i]);
+	}
+	for (var i = 0; i < newFormula.length; i++) {
+		newFormula[i].color = scentColor[newFormula[i].scent];
+	}
+	dataJson.formula = newFormula;
+	return dataJson;
+};
+
+appMain.isPageEditDataModified = function () {
+	var isDataModified = false;
+	var itemBeforeEdit = appModel.data.status.itemBeforeEdit;
+	if (itemBeforeEdit) {
+		var itemBeforeLeave = JSON.stringify(appModel.data.item);
+		isDataModified = itemBeforeEdit !== itemBeforeLeave;
+	} else window.onbeforeunload = null;
+	return isDataModified;
+};
+
+appMain.saveItemStatusBeforeEdit = function () {
+	appModel.data.status.itemBeforeEdit = JSON.stringify(appModel.data.item);
+	window.onbeforeunload = function (e) {
+		if (appMain.isPageEditDataModified()) {
+			var message = '您已經修改過資料，是否確定要放棄本次的修改？';
+			e.returnValue = message;
+			return message;
+		}
+	};
+};
+
+appMain.onSelectChange = function (e) {
+	var targetId = e.target.id.split("-")[1];
+	var selectedScent = $("select#scent-" + targetId).select(0).val();
+	var duplicated = -1;
+
+	for (var formula of appModel.data.item.formula) {
+		if (selectedScent === formula.scent) {
+			duplicated += 1;
+		}
+	}
+
+	if (duplicated > 0) {
+		messageApp.show({
+			desc: '香味分子 ' + selectedScent + ' 重複！請選取其他香味分子！',
+			type: 'error'
+		});
+		$("select#scent-" + targetId).select(0).val('');
+		return false;
+	} else {
+		appModel.data.item.formula[targetId].drops = '1';
+	}
+};
+
+appMain.onDropsChange = function (e) {
+	var totalDrops = 0;
+	for (var i = 0; i < appModel.data.item.formula.length; i++) {
+		var drops = parseInt(appModel.data.item.formula[i].drops);
+		totalDrops += drops;
+	}
+	appModel.data.item.totalDrops = totalDrops;
+  // console.log('appModel.data.item.totalDrops =>',appModel.data.item.totalDrops );
+};
+
+appMain.onBtnCleanClick = function (e) {
+	var targetId = e.target.id.split("-")[1];
+	appModel.data.item.formula[targetId].drops = '0';
+	appModel.data.item.formula[targetId].scent = '';
+	$("select#scent-" + targetId).select(0).val('');
+};
+
+appMain.renderTable = function () {
+	/* BASIC ;*/
+	var responsiveHelper_datatable_tabletools = undefined;
+
+	var breakpointDefinition = {
+		tablet: 1024,
+		phone: 480
+	};
+	/* TABLETOOLS */
+	//var table = $('#main-table').dataTable({
+	// Tabletools options:
+	//   https://datatables.net/extensions/tabletools/button_options
+	// var ajax = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
+	var url = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
+	var ajax = {
+		"url": url,
+		"data": function(data) {
+			appModel.pagingQuery = data;
+			appModel.pagingQuery.startDate = $("#yadcf-filter--main-table-from-date-3").val() || '';
+			appModel.pagingQuery.endDate = $("#yadcf-filter--main-table-to-date-3").val() || '';
+			// console.log(appModel.pagingQuery);
+			return data
+		}
+	}
+	var defaultTableConfig = {
+		"processing": false,
+		"serverSide": serverSidePaging,
+		"sDom": "<'dt-toolbar'<'row'r<'col-xs-12 col-md-7 col-sm-7'f><'col-xs-12 col-md-4 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
+			"t" +
+			"<'dt-toolbar-footer'<'row'<'col-md-6 col-xs-12 hidden-xs'i><'col-md-6 col-xs-12'p>>>",
+		"oLanguage": {
+			"sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>',
+			"sInfo": "顯示 _START_ 到 _END_ 總共 _TOTAL_ 筆紀錄",
+			"sInfoPostFix": "",
+			"sInfoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+			"sInfoFiltered": "(從 _MAX_ 項結果中過濾)",
+			"sProcessing": "處理中...",
+			"sLoadingRecords": "載入中...",
+			"sLengthMenu": "_MENU_",
+			"sZeroRecords": "沒有符合的結果",
+			"oPaginate": {
+				"sFirst": "第一頁",
+				"sPrevious": "<i class='fa fa-chevron-left' aria-hidden='true'></i>",
+				"sNext": "<i class='fa fa-chevron-right' aria-hidden='true'></i>",
+				"sLast": "最後一頁"
+			},
+			"sAria": {
+				"sortAscending": ": 升冪排列",
+				"sortDescending": ": 降冪排列"
 			}
-			for (var i = 0; i < newFormula.length; i++) {
-				newFormula[i].color = scentColor[newFormula[i].scent];
+		},
+		"columnDefs": [
+			{
+				"targets": 'no-sort',
+				"orderable": false,
+    	},
+			{
+				"width": "20%",
+				"targets": 6
+			},
+			{
+				"width": "20%",
+				"targets": 7
 			}
-			dataJson.formula = newFormula;
-			return dataJson;
-		},
-		save: function (event) {
-			var ajaxSuccess = function (result) {
-				location.href = appModel.data.link.PAGE_INDEX;
-				messageApp.show({
-					desc: '新增資料成功！',
-					type: 'success'
-				});
-			};
-
-			var ajaxError = function (result) {
-				messageApp.show({
-					desc: '新增資料失敗！errorMessage: ' + result.responseJSON.message,
-					type: 'error'
-				});
-			};
-
-			$.ajax({
-				url: appModel.data.link.API_CREATE,
-				type: 'POST',
-				dataType: 'json',
-				data: mainApp.verifySendData(),
-				xhrFields: {
-					withCredentials: true,
-				},
-				success: ajaxSuccess,
-				error: ajaxError,
-			});
-		},
-		update: function (event) {
-			var ajaxSuccess = function (result) {
-				location.href = appModel.data.link.PAGE_INDEX;
-				messageApp.show({
-					desc: '更新資料成功！',
-					type: 'success'
-				});
-			};
-
-			var ajaxError = function (result) {
-				messageApp.show({
-					desc: '更新資料失敗！errorMessage: ' + result.responseJSON.message,
-					type: 'error'
-				});
-			};
-
-			$.ajax({
-				url: appModel.data.link.API_UPDATE + appModel.data.item.id,
-				type: 'PUT',
-				dataType: 'json',
-				data: mainApp.verifySendData(),
-				xhrFields: {
-					withCredentials: true,
-				},
-				success: ajaxSuccess,
-				error: ajaxError,
-			});
-		},
-		loadSelectOptions: function (cb) {
-			var ajaxSuccess = function (result) {
-				appModel.data.scentData = result.data.items;
-				appModel.data.scentColor = new Object();
-				var scentData = appModel.data.scentData;
-				for (var i = 0; i < scentData.length; i++) {
-					appModel.data.scentColor[scentData[i].name] = scentData[i].color;
-				}
-				if (typeof cb !== 'undefined') setTimeout(cb, 0);
-			};
-
-			$.ajax({
-				url: appModel.data.link.API_LIST_SCENT,
-				// async: false,
-				success: ajaxSuccess,
-				// error: ajaxError,
-			});
-		},
-		saveItemStatusBeforeEdit: function () {
-			this.data.status.itemBeforeEdit = JSON.stringify(this.data.item);
-			window.onbeforeunload = function (e) {
-				if (mainApp.isPageEditDataModified()) {
-					var message = '您已經修改過資料，是否確定要放棄本次的修改？';
-					e.returnValue = message;
-					return message;
-				}
-			};
-		},
-		insertEmptyFormulaItem: function () {
-			var thisFormula = [];
-			for (var i = 0; i < 6; i++) {
-				var indexFormula = appModel.data.item.formula[i];
-				var checkFormula = typeof indexFormula === 'undefined';
-
-				if (checkFormula) {
-					indexFormula = {
-						'scent': '',
-						'drops': '0',
-					};
-				} else {
-					var checkDrops = typeof indexFormula.drops === 'string';
-					var checkDropsValue = indexFormula.drops === '0';
-					if (!checkDrops || checkDropsValue) indexFormula.scent = '';
-				}
-				thisFormula.push(indexFormula);
-			}
-			appModel.data.item.formula = thisFormula;
-		},
-		loadItem: function (cb) {
-			var ajaxSuccess = function (result) {
-				appModel.data.item = result.data;
-				var hasAvatar = typeof result.data.avatar === 'string';
-				if (!hasAvatar) {
-					appModel.data.item.avatar = appModel.data.common.DEFAULT_AVATAR;
-				}
-				if (typeof cb !== 'undefined') setTimeout(cb, 0);
-			};
-
-			$.ajax({
-				url: appModel.data.link.API_ITEM + appModel.data.item.id,
-				async: false,
-				success: ajaxSuccess,
-				// error: ajaxError,
-			});
-		},
-		setupForm: function (type) {
-			this.onDropsChange();
-			var registerForm = $('#main-form');
-			var min = appModel.data.common.DROPS_MIN;
-			var max = appModel.data.common.DROPS_MAX;
-			registerForm.validate({
-				// Rules for form validation
-				rules: {
-					authorName: {
-						required: true
-					},
-					perfumeName: {
-						required: true
-					},
-					'scent[]': {
-						required: true,
-						minlength: 1,
-					},
-					'drops[]': {
-						required: true,
-						minlength: 1,
-						min: min,
-						max: max,
-					},
-					totalDrops: {
-						max: max,
-					},
-				},
-
-				// Messages for form validation
-				messages: {
-					authorName: {
-						required: '請輸入作者名稱'
-					},
-					perfumeName: {
-						required: '請輸入香水名稱'
-					},
-					'scent[]': {
-						required: '請至少選擇一種香味分子',
-						minlength: '請至少選擇一種香味分子',
-					},
-					'drops[]': {
-						required: '請至少給予 1 滴香味分子',
-						minlength: '請至少選擇一種香味分子',
-						min: '請至少給予 1 滴香味分子',
-						max: '單一成分請至多只給予 ' + max + ' 滴',
-					},
-					totalDrops: {
-						max: '全部成分加總最多為 ' + max + ' 滴！',
-					},
-				},
-
-				// Do not change code below
-				errorPlacement: function (error, element) {
-					error.insertAfter(element.parent());
-				},
-
-				submitHandler: function (form) {
-					if (type == 'create') {
-						mainApp.save();
-						return false;
-					} else if (type == 'edit') {
-						mainApp.update();
-						return false;
-					}
-				}
-			});
-		},
-		onDropsChange: function (e) {
-			var totalDrops = 0;
-			for (var i = 0; i < appModel.data.item.formula.length; i++) {
-				var drops = parseInt(appModel.data.item.formula[i].drops);
-				totalDrops += drops;
-			}
-			appModel.data.item.totalDrops = totalDrops;
-		},
-		onSelectChange: function (e) {
-			var targetId = e.target.id.split("-")[1];
-			appModel.data.item.formula[targetId].drops = '1';
-		},
-		onBtnCleanClick: function (e) {
-			var targetId = e.target.id.split("-")[1];
-			appModel.data.item.formula[targetId].drops = '0';
-			appModel.data.item.formula[targetId].scent = '';
-			$("select#scent-" + targetId).select(0).val('');
-		},
-		isPageEditDataModified: function () {
-			var isDataModified = false;
-			var itemBeforeEdit = appModel.data.status.itemBeforeEdit;
-			if (itemBeforeEdit) {
-				var itemBeforeLeave = JSON.stringify(appModel.data.item);
-				isDataModified = itemBeforeEdit !== itemBeforeLeave;
-			} else window.onbeforeunload = null;
-			return isDataModified;
-		},
-		onEnterPageCreare: function () {
-			this.insertEmptyFormulaItem();
-			this.loadSelectOptions();
-			this.setupForm("create");
-			this.data.status.itemBeforeEdit = null;
-		},
-		onEnterPageEdit: function () {
-			this.loadItem();
-			this.insertEmptyFormulaItem();
-			this.loadSelectOptions();
-			this.setupForm("edit");
-			this.saveItemStatusBeforeEdit();
-		},
-		onEnterPageShow: function () {
-			var pieHeader = {
-				"title": {
-					"text": "",
-					"fontSize": 24,
-					"font": "open sans"
-				},
-				"subtitle": {
-					"text": "",
-					"color": "#999999",
-					"fontSize": 12,
-					"font": "open sans"
-				},
-				"titleSubtitlePadding": 9
-			};
-			var pieFooter = {
-				"color": "#999999",
-				"fontSize": 10,
-				"font": "open sans",
-				"location": "bottom-left"
-			};
-			var pieSize = {
-				"canvasWidth": 300,
-				"canvasHeight": 400,
-				"pieOuterRadius": "70%"
-			};
-			var pieDate = {
-				"sortOrder": "value-desc",
-				"content": [],
-				"labels": {
-					"outer": {
-						"pieDistance": 32
-					},
-					"inner": {
-						"hideWhenLessThanPercentage": 3
-					},
-					"mainLabel": {
-						"fontSize": 11
-					},
-					"percentage": {
-						"color": "#ffffff",
-						"decimalPlaces": 0
-					},
-					"value": {
-						"color": "#adadad",
-						"fontSize": 11
-					},
-					"lines": {
-						"enabled": true
-					},
-					"truncation": {
-						"enabled": true
-					},
-				},
-				"effects": {
-					"pullOutSegmentOnClick": {
-						"effect": "elastic",
-						"speed": 400,
-						"size": 8
-					}
-				},
-				"misc": {
-					"gradient": {
-						"enabled": true,
-						"percentage": 100
-					}
-				},
-			};
-			var formula = appModel.data.item.formula;
-			for (var i = 0; i < formula.length; i++) {
-				if (formula[i].drops > 0) {
-					pieDate.content.push({
-						label: formula[i].scent,
-						value: parseInt(formula[i].drops),
-						color: formula[i].color,
-					});
-				}
-			}
-			var pie = new d3pie("pieChart", {
-				"header": pieHeader,
-				"footer": pieFooter,
-				"size": pieSize,
-				"data": pieDate,
-			});
-			// var perfumePieConfig = {
-			//     type: 'pie',
-			//     data: {
-			//       datasets: [{
-			//         data: dropsArray,
-			//         backgroundColor: scentColorArray,
-			//       }],
-			//       labels: labelArray,
-			//     },
-			//     animation:{
-			//         animateScale:true,
-			//     },
-			//     options: {
-			//       title: {
-			//           display: true,
-			//           text: ''
-			//       },
-			//       legend: {
-			//           display: false,
-			//       },
-			//       circumference: 1.5 * Math.PI,
-			//       responsive: true,
-			//       hover: {
-			//         mode: 'label',
-			//       }
-			//     }
-			// };
-			// var perfumePie = new Chart(document.getElementById("pieChart"), perfumePieConfig);
-		},
-		onLeavePage: function (cb) {
-			if (mainApp.isPageEditDataModified()) {
-				var msgInfo = {
-					title: '注意',
-					content: '您已經修改過資料，是否確定要放棄本次的修改？',
-					btnArray: ['放棄', '取消'],
-				};
-				var action = function (ButtonPressed) {
-					if (ButtonPressed === '放棄') {
-						setTimeout(function () {
-							return cb();
-						}, 500);
-					}
-				};
-				messageApp.confirm(msgInfo, action);
-			} else {
-				return cb();
-			};
-		},
-		loadItems: function (cb) {
-			var ajaxSuccess = function (result) {
-				appModel.data.items = result.data.items;
-				if (typeof cb !== 'undefined') setTimeout(cb, 0);
-			};
-			$.get(appModel.data.link.API_LIST, ajaxSuccess);
-		},
-		renderTable: function () {
-			/* BASIC ;*/
-			var responsiveHelper_user_table = undefined;
-			var responsiveHelper_datatable_fixed_column = undefined;
-			var responsiveHelper_datatable_col_reorder = undefined;
-			var responsiveHelper_datatable_tabletools = undefined;
-
-			var breakpointDefinition = {
-				tablet: 1024,
-				phone: 480
-			};
-			/* TABLETOOLS */
-			var table = $('#main-table').dataTable({
-				// Tabletools options:
-				//   https://datatables.net/extensions/tabletools/button_options
-				"sDom": "<'dt-toolbar'<'row'r<'col-xs-7 col-md-7 col-sm-7'f><'col-xs-5 col-md-4 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
-					"t" +
-					"<'dt-toolbar-footer'<'row'<'col-md-6 col-xs-12 hidden-xs'i><'col-md-6 col-xs-12'p>>>",
-				"oLanguage": {
-					"sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>',
-					"sInfo": "顯示 _START_ 到 _END_ 總共 _TOTAL_ 筆紀錄",
-					"sInfoPostFix": "",
-					"sInfoEmpty": "顯示第 0 至 0 項結果，共 0 項",
-					"sInfoFiltered": "(從 _MAX_ 項結果中過濾)",
-					"sProcessing": "處理中...",
-					"sLoadingRecords": "載入中...",
-					"sLengthMenu": "_MENU_",
-					"sZeroRecords": "沒有符合的結果",
-					"oPaginate": {
-						"sFirst": "第一頁",
-						"sPrevious": "<i class='fa fa-chevron-left' aria-hidden='true'></i>",
-						"sNext": "<i class='fa fa-chevron-right' aria-hidden='true'></i>",
-						"sLast": "最後一頁"
-					},
-					"sAria": {
-						"sortAscending": ": 升冪排列",
-						"sortDescending": ": 降冪排列"
-					}
-				},
-				"columnDefs": [
-					{
-						"targets": 'no-sort',
-						"orderable": false,
+  ],
+		"oTableTools": {
+			"sSwfPath": "/assets/admin/js/plugin/datatables/swf/copy_csv_xls_pdf.swf",
+			"aButtons": [
+        // "copy",
+        // "xls",
+        // {
+        //   "sExtends": "pdf",
+        //   "sTitle": "SmartAdmin_PDF",
+        //   "sPdfMessage": "SmartAdmin PDF Export",
+        //   "sPdfSize": "letter"
+        // },
+        // {
+        //   "sExtends": "print",
+        //   "sMessage": "Generated by SmartAdmin <i>(press Esc to close)</i>"
+        // },
+  			{
+  				"sExtends": "text",
+  				"sButtonText": "匯出",
+  				"sToolTip": "把全部資料匯出成CSV",
+          "fnClick": function (nButton, oConfig, oFlash) {
+            var serialize = function(obj, prefix) {
+              var str = [];
+              for(var p in obj) {
+                if (obj.hasOwnProperty(p)) {
+                  var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+                  str.push(typeof v == "object" ?
+                    serialize(v, k) :
+                    encodeURIComponent(k) + "=" + encodeURIComponent(v));
+                }
+              }
+              return str.join("&");
+            }
+            location.href = '/api/admin/labfnp/recipe/export?' + serialize(appModel.pagingQuery)
+  				}
         },
-      ],
-				"oTableTools": {
-					"sSwfPath": "/assets/admin/js/plugin/datatables/swf/copy_csv_xls_pdf.swf",
-					"aButtons": [
-            // "copy",
-            // "xls",
-            // {
-            //   "sExtends": "pdf",
-            //   "sTitle": "SmartAdmin_PDF",
-            //   "sPdfMessage": "SmartAdmin PDF Export",
-            //   "sPdfSize": "letter"
-            // },
-            // {
-            //   "sExtends": "print",
-            //   "sMessage": "Generated by SmartAdmin <i>(press Esc to close)</i>"
-            // },
-						{
-							"sExtends": "csv",
-							"sButtonText": "匯出",
-							"sToolTip": "把全部資料匯出成CSV",
-							"sCharSet": "UTF8",
-							"bBomInc": true,
-            },
-						{
-							"sExtends": "text",
-							"sButtonText": "檢視",
-							"fnClick": function (nButton, oConfig, oFlash) {
-								var isSelected = appModel.view.table.selectIndex !== appModel.data.common.DEFAULT_INDEX;
-								if (isSelected) {
-									var index = appModel.view.table.selectIndex;
-									var id = appModel.data.items[index].id;
-									location.href = appModel.data.link.PAGE_SHOW + id;
-								} else {
-									messageApp.show({
-										desc: '請選擇一筆資料',
-										type: 'warning'
-									});
-								}
-							}
-           },
-						{
-							"sExtends": "text",
-							"sButtonText": "新增",
-							"fnClick": function (nButton, oConfig, oFlash) {
-								location.href = appModel.data.link.PAGE_CREATE;
-							}
-           },
-						{
-							"sExtends": "text",
-							"sButtonText": "編輯",
-							"fnClick": function (nButton, oConfig, oFlash) {
-								var isSelected = appModel.view.table.selectIndex !== appModel.data.common.DEFAULT_INDEX;
-								if (isSelected) {
-									var index = appModel.view.table.selectIndex;
-									var id = appModel.data.items[index].id;
-									location.href = appModel.data.link.PAGE_EDIT + id;
-								} else {
-									messageApp.show({
-										desc: '請選擇一筆資料',
-										type: 'warning'
-									});
-								}
-							}
-           },
-         ]
-				},
-				"autoWidth": true,
-				"preDrawCallback": function () {
-					// Initialize the responsive datatables helper once.
-					if (!responsiveHelper_datatable_tabletools) {
-						responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#main-table'), breakpointDefinition);
-					}
-				},
-				"rowCallback": function (nRow) {
-					responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
-				},
-				"drawCallback": function (oSettings) {
-					responsiveHelper_datatable_tabletools.respond();
-				}
-			}).yadcf([
-				{        
-					column_number: 3,
-					filter_type: "range_date",
-	        filter_container_id: "external_filter_container",
-					date_format: 'yy/mm/dd',
-  			},
-      ]);
-
-			// selection
-			table.on('click', 'tr', function () {
-				if ($(this).hasClass('selected')) {
-					$(this).removeClass('selected');
-				} else {
-					$('#main-table tbody tr').removeClass('selected');
-					$(this).addClass('selected');
-				}
-			});
-
-			// animate table
-			$('#main-table-widget').fadeIn();
-		},
-		dblclick: function (index) {
-			var id = appModel.data.items[index].id;
-			this.show(id);
-		},
-		selection: function (index) {
-			if (index !== appModel.view.table.selectIndex) {
-				appModel.view.table.selectIndex = index;
-				console.log("appModel.view.table.selectIndex", appModel.view.table.selectIndex);
-			} else {
-				appModel.view.table.selectIndex = appModel.data.common.DEFAULT_INDEX;
-			}
-		},
-		show: function (id) {
-			location.href = appModel.data.link.PAGE_SHOW + id;
-		},
-		edit: function (id) {
-			location.href = appModel.data.link.PAGE_EDIT + id;
-		},
-		delete: function () {
-			messageApp.confirm({
-					title: '刪除',
-					content: '確認刪除此筆資料？',
-					btnArray: ['刪除', '取消'],
-				},
-				function (ButtonPressed) {
-					if (ButtonPressed === '刪除') {
-						var ajaxSuccess = function (result) {
-								appModel.view.table.selectIndex = appModel.data.common.DEFAULT_INDEX;
-								messageApp.show({
-									desc: `刪除資料成功！`,
-									type: 'success'
-								});
-								setTimeout(function () {
-									location.href = appModel.data.link.PAGE_INDEX;
-								}, 500);
-							} // end ajaxSuccess
-
-						var ajaxError = function (result) {
+				{
+					"sExtends": "text",
+					"sButtonText": "檢視",
+					"fnClick": function (nButton, oConfig, oFlash) {
+						// var isSelected = appModel.view.table.selectIndex !== appModel.data.common.DEFAULT_INDEX;
+						var isSelected = appModel.view.table.selectIndex !== COMMON.DEFAULT_INDEX;
+						if (isSelected) {
+							var id = appModel.view.table.selectIndex;
+							location.href = '/admin/#/admin/' + modelName + '/show/' + id;
+						} else {
 							messageApp.show({
-								desc: '刪除資料失敗！errorMessage: ' + result.responseJSON.message,
-								type: 'error'
+								desc: '請選擇一筆資料',
+								type: 'warning'
 							});
 						}
-
-						$.ajax({
-							url: appModel.data.link.API_UPDATE + appModel.data.item.id,
-							type: 'DELETE',
-							dataType: 'json',
-							xhrFields: {
-								withCredentials: true
-							},
-							success: ajaxSuccess,
-							error: ajaxError,
-						});
 					}
-				});
+       },
+				{
+					"sExtends": "text",
+					"sButtonText": "新增",
+					"fnClick": function (nButton, oConfig, oFlash) {
+						location.href = '/admin/#/admin/' + modelName + '/create';
+					}
+       },
+				{
+					"sExtends": "text",
+					"sButtonText": "編輯",
+					"fnClick": function (nButton, oConfig, oFlash) {
+						// var isSelected = appModel.view.table.selectIndex !== appModel.data.common.DEFAULT_INDEX;
+						//appModel.view.table.selectIndex 沒變更到
+						var isSelected = appModel.view.table.selectIndex !== COMMON.DEFAULT_INDEX;
+						if (isSelected) {
+							var id = appModel.view.table.selectIndex;
+							location.href = '/admin/#/admin/' + modelName + '/edit/' + id;
+						} else {
+							messageApp.show({
+								desc: '請選擇一筆資料',
+								type: 'warning'
+							});
+						}
+					}
+       },
+     ]
+		},
+		"autoWidth": true,
+		"preDrawCallback": function () {
+			// Initialize the responsive datatables helper once.
+			if (!responsiveHelper_datatable_tabletools) {
+				responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#main-table'), breakpointDefinition);
+			}
+		},
+		"rowCallback": function (nRow) {
+			responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
+		},
+		"drawCallback": function (oSettings) {
+			responsiveHelper_datatable_tabletools.respond();
 		}
-	},
-});
+	};
+
+	if (serverSidePaging) {
+		defaultTableConfig.columns = columns;
+		defaultTableConfig.columnDefs = columnDefs;
+		defaultTableConfig.ajax = ajax;
+	}
+
+	if (appModel.data.option.defaultSort) {
+		defaultTableConfig.order = appModel.data.option.defaultSort
+	}
+
+	var defaultTable = $('#main-table').dataTable(defaultTableConfig).yadcf([
+		{        
+			column_number: 3,
+			filter_type: "range_date",
+			        filter_container_id: "external_filter_container",
+			date_format: 'yy/mm/dd',
+  	},
+  ]);
+
+	// selection
+	defaultTable.on('click', 'tr', function () {
+
+		if ($(this).hasClass('selected')) {
+			$(this).removeClass('selected');
+
+		} else {
+			var data = defaultTable.fnGetData(this);
+			$('#main-table tbody tr').removeClass('selected');
+			$(this).addClass('selected');
+			var id = data.id || data[0];
+			appMain.selection(id);
+		}
+	}).on('dblclick', 'tr', function () {
+		var data = defaultTable.fnGetData(this);
+		var id = data.id || data[0];
+		appMain.show(id);
+	});
+
+	// animate table
+	$('#main-table-widget').fadeIn();
+};

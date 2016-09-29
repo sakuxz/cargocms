@@ -43,13 +43,14 @@ module.exports = {
     }
   },
   allpay: {
+    domain: 'http://localhost:5001',
     merchantID: '2000132',
     hashKey: '5294y06JbISpM5x9',
     hashIV: 'v77hoKGq4kWxNNIS',
     debug: true,
     ReturnURL:'/api/allpay/paid',
     ClientBackURL:'/shop/done',
-    PaymentInfoURL:'/allpay/paymentinfo',
+    PaymentInfoURL:'/api/allpay/paymentinfo',
     paymentMethod:[
       {
         code: 'ATM',

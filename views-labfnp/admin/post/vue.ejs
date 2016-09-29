@@ -31,23 +31,6 @@ var postAppModel = {
   }
 }
 
-var newSummernote = function() {
-  $('.summernote').summernote({
-    height: 300,
-    placeholder: '請輸入內容',
-    toolbar: [
-      ['style', ['style']],
-      ['font', ['bold', 'italic', 'underline', 'clear']],
-      ['fontname', ['fontname']],
-      ['color', ['color']],
-      ['para', ['ul', 'ol', 'paragraph']],
-      ['height', ['height']],
-      ['table', ['table']],
-      ['view', ['fullscreen', 'codeview', 'help']]
-    ]
-  });
-};
-
 var postApp = new Vue({
   data: postAppModel,
   methods: {
@@ -136,59 +119,29 @@ var postApp = new Vue({
         tagClass: 'tagsInputLabel',
       });
       if(type == 'create') {
-        this.newSummernote();
+        postApp.newSummernote();
       }
-      var registerForm = $("#main-form");
+      var registerForm = $("#post-form");
       registerForm.validate({
 
         // Rules for form validation
         rules : {
-          postname : {
+          title : {
             required : true
           },
-          email : {
-            required : true,
-            email : true
-          },
-          firstname : {
+          abstract: {
             required : true
-          },
-          lastname : {
-            required : true
-          },
-          password : {
-            required : true,
-            minlength : 3,
-          },
-          passwordConfirm : {
-            required : true,
-            minlength : 3,
-            equalTo : '#password'
-          },
+          }
         },
 
         // Messages for form validation
         messages : {
-          postname : {
-            required : '請輸入使用者帳號'
+          title : {
+            required : '請輸入標題'
           },
-          email : {
-            required : '請輸入 Email',
-            email : '請確認輸入的 Email 格式'
-          },
-          firstname : {
-            required : '請輸入使用者姓'
-          },
-          lastname : {
-            required : '請輸入使用者名'
-          },
-          password : {
-            required : '請輸入密碼'
-          },
-          passwordConfirm : {
-            required : '請再次輸入密碼以便確認',
-            equalTo : '請輸入相同的密碼'
-          },
+          abstract: {
+            required : '請輸入描述'
+          }
         },
 
         // Do not change code below
@@ -221,7 +174,7 @@ var postApp = new Vue({
       itemBeforeEdit = JSON.stringify(postAppModel.data.item);
       console.log("itemBeforeEdit=>", JSON.parse(itemBeforeEdit));
       window.onbeforeunload = function(e) {
-        if (this.isPageEditDataModified()) {
+        if (postApp.isPageEditDataModified()) {
           var message = '您已經修改過資料，是否確定要放棄本次的修改？';
           e.returnValue = message;
           return message;
@@ -229,7 +182,7 @@ var postApp = new Vue({
       };
     },
     onLeavePageEdit: function(cb) {
-      if (this.isPageEditDataModified()) {
+      if (postApp.isPageEditDataModified()) {
         var msgInfo = {
           title: '注意',
           content: '您已經修改過資料，是否確定要放棄本次的修改？',
@@ -250,7 +203,6 @@ var postApp = new Vue({
       $.get('/api/admin/post', ajaxSuccess);
 
       function ajaxSuccess(result) {
-        console.log(result);
         postAppModel.data.items = result.data.items;
         if (typeof cb !== 'undefined') setTimeout(cb, 0);
       } // end ajaxSuccess
@@ -270,7 +222,7 @@ var postApp = new Vue({
      var table = $('#main-table').dataTable({
        // Tabletools options:
        //   https://datatables.net/extensions/tabletools/button_options
-       "sDom": "<'dt-toolbar'<'row'r<'col-xs-7 col-md-7 col-sm-7'f><'col-xs-5 col-md-4 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
+       "sDom": "<'dt-toolbar'<'row'r<'col-xs-12 col-md-7 col-sm-7'f><'col-xs-12 col-md-4 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
            "t"+
            "<'dt-toolbar-footer'<'row'<'col-md-6 col-xs-12 hidden-xs'i><'col-md-6 col-xs-12'p>>>",
        "oLanguage": {
@@ -429,6 +381,7 @@ var postApp = new Vue({
           ['para', ['ul', 'ol', 'paragraph']],
           ['height', ['height']],
           ['table', ['table']],
+          // ['insert', ['link', 'picture', 'hr']],
           ['view', ['fullscreen', 'codeview', 'help']]
         ]
       });

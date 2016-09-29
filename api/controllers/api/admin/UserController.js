@@ -38,10 +38,18 @@ module.exports = {
     try {
       sails.log.info('create user controller=>', data);
       const user = await UserService.create(data);
-      res.ok({
-        message: 'Create user success.',
-        data: user,
-      });
+
+      const checkCreatedResult = user.username === data.username;
+      if (checkCreatedResult) {
+
+        res.ok({
+          message: 'Create user success.',
+          data: user,
+        });
+      } else {
+        
+        req.flash('新增使用者失敗，請檢查使用者名稱/信箱是否重複！');
+      }
     } catch (e) {
       res.serverError(e);
     }

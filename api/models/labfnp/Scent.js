@@ -38,6 +38,31 @@ module.exports = {
         }
       }
     },
+    displayFeeling: {
+      type: Sequelize.VIRTUAL,
+      get: function () {
+        try {
+          const feelings = this.getDataValue('feelings');
+
+          if (feelings) {
+            let dataJson = JSON.parse(feelings);
+            let NumOfData = dataJson.length;
+            let displayFeeling = [];
+            for(var i=0 ; i<NumOfData ; i++){
+              displayFeeling.push(dataJson[i]["key"]);
+            }
+            return displayFeeling;
+          }
+          else {
+            return [];
+          }
+        }
+        catch (e) {
+          console.log(e);
+          return [];
+        }
+      }
+    },
   },
   associations: function() {
     Scent.belongsTo(ScentNote);
@@ -67,7 +92,7 @@ module.exports = {
       formatForApp: async function({scents}) {
 
         let result = scents.map((scent) => {
-          let {id, name, sequence, feelings, title, description } = scent
+          const {id, name, sequence, feelings, title, description, displayFeeling } = scent
           let color = ""
           let scentNote = ""
           if (scent.ScentNote) {
@@ -80,7 +105,7 @@ module.exports = {
           //   return {id, title}
           // });
 
-          return {id, sequence, name, color, feelings, title, description, scentNote}
+          return {id, sequence, name, color, feelings, title, description, scentNote, displayFeeling}
         });
 
         return result

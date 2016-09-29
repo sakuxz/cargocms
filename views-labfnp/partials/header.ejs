@@ -10,23 +10,10 @@
     <!-- End Logo -->
 
     <!-- Topbar -->
-    <div class="topbar">
+    <!-- <div class="topbar">
       <ul class="loginbar pull-right">
-        <% if (!req.session.authenticated) { %>
-          <li><a href="/register">註冊</a></li>
-          <li class="topbar-devider"></li>
-          <li><a id="login" href="/login">登入</a></li>
-        <% } else { %>
-          <li><a id="logout-link" href="/logout">登出</a></li>
-          <li class="topbar-devider"></li>
-          <li>
-            <a href="/me">
-              <%= req.session.passport.user.displayName %>
-            </a>
-          </li>
-        <% } %>
       </ul>
-    </div>
+    </div> -->
     <!-- End Topbar -->
 
     <!-- Toggle get grouped for better mobile display -->
@@ -53,13 +40,51 @@
         <li class="<%= (req.path=='/blog')?'active':'' %>">
           <a href="/blog">網誌</a>
         </li>
+        <li class="base active">
+          <a>1</a>
+        </li>
         <!--
         <li class="<%= (req.path=='/shop')?'active':'' %>">
           <a href="/shop">活動報名</a>
         </li>
         -->
+        <% if (!req.session.authenticated) { %>
+          <li class="<%= (req.path=='/register')?'active':'' %>"><a href="/register">註冊</a></li>
+          <li class="topbar-devider"></li>
+          <li class="<%= (req.path=='/login')?'active':'' %>"><a id="login" href="/login">登入</a></li>
+        <% } else { %>
+          <li><a id="logout-link" href="#" >登出</a></li>
+          <li class="topbar-devider"></li>
+          <li class="<%= (req.path=='/me')?'active':'' %>" >
+            <a href="/me">
+              <%= req.session.passport.user.displayName %>
+            </a>
+          </li>
+        <% } %>
       </ul>
     </div><!--/end container-->
   </div><!--/navbar-collapse-->
 </div>
 <!--=== End Header ===-->
+
+<% LayoutUtils.addScriptBlock(`
+  $('#logout-link').click(function(){
+    swal({
+      title: '確認',
+      text: '您確定要登出了嗎？',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: "#e6caa8",
+      confirmButtonText: "登出",
+      cancelButtonText: "取消",
+      closeOnConfirm: true,
+      closeOnCancel: true,
+    },function(isConform){
+      if(isConform){
+        open('/logout', '_self');
+      }else{
+        swal.close();
+      }
+    });
+  });
+`); %>

@@ -17,6 +17,32 @@ module.exports = {
     lastName: {
       type: Sequelize.STRING
     },
+    birthday:{
+      type: Sequelize.DATE,
+      get: function () {
+        try {
+          if(this.getDataValue('birthday'))
+            return moment(this.getDataValue('birthday')).format("YYYY-MM-DD");
+          else{
+            return "";
+          }
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    phone1:{
+      type: Sequelize.STRING
+    },
+    phone2:{
+      type: Sequelize.STRING
+    },
+    address:{
+      type: Sequelize.STRING
+    },
+    address2:{
+      type: Sequelize.STRING
+    },
     locale: {
       type: Sequelize.STRING,
       defaultValues: 'zh_TW'
@@ -28,8 +54,21 @@ module.exports = {
         const firstName = this.getDataValue('firstName');
         const lastName = this.getDataValue('lastName');
 
-        let displayName = firstName + lastName;
-        if (locale === 'zh_TW') displayName = lastName + firstName;
+        let displayName = firstName + ' ' + lastName;
+        const isTw = locale === 'zh_TW';
+
+        var regExp = /^[\d|a-zA-Z]+$/;
+        var checkEng = regExp.test(displayName);
+
+        if (isTw || !checkEng) displayName = lastName + firstName;
+
+        if (displayName === '') {
+          if (this.getDataValue('username') === ''){
+            displayName = this.getDataValue('email');
+          } else {
+            displayName = this.getDataValue('username');
+          }
+        }
 
         return displayName;
       }
@@ -54,13 +93,16 @@ module.exports = {
       get: function () {
         try {
           let lastLogin = this.getDataValue("lastLogin");
-          if(lastLogin == null) lastLogin = "從未登入";
-          return lastLogin;
+
+          if (lastLogin == null) {
+            return "N/A";
+          }
+
+          return moment(this.getDataValue('lastLogin')).format("YYYY/MM/DD HH:mm:SS");
 
         } catch (e) {
           throw e;
         }
-
       }
     },
     facebookId: {
@@ -73,6 +115,10 @@ module.exports = {
     avatarThumb: {
       type: Sequelize.STRING,
       defaultValue: '/assets/admin/img/avatars/default.png'
+    },
+    score: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0
     },
     updatedAt: {
       type: Sequelize.DATE,
@@ -135,7 +181,8 @@ module.exports = {
           },
           include: [ Role, {
               model: Passport,
-              where: { provider: 'local' }
+              where: { provider: 'local' },
+              required: false
           }],
         });
       },
@@ -159,7 +206,6 @@ module.exports = {
     hooks: {
       afterCreate: async function(user, options) {
         const userRole = await Role.findOne({where: {authority: 'user'}});
-        sails.log.info(userRole.toJSON());
         await user.addRole(userRole);
       }
     }

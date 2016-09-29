@@ -1,17 +1,22 @@
-<header>新香水配方</header>
+<% if (recipe.createdBy === 'scent') { %>
+  <header>新香水配方 - 自訂香味分子</header>
+<% } else { %>
+  <header>新香水配方 - 由感覺選取</header>
+<% } %>
+<input type="text" class="hidden" name="createdBy" value="<%= recipe.createdBy %>" />
 
 <fieldset>
   <section>
     <label class="label">創作者姓名（必填）</label>
     <label class="input">
-      <input type="text" name="authorName" placeholder="Enter Name" value="<%= user.username %>" required />
+      <input type="text" name="authorName" placeholder="Enter Name" value="<%= user.displayName %>" />
     </label>
   </section>
 
   <section>
     <label class="label">香水品名（必填）</label>
     <label class="input">
-      <input type="text" name="perfumeName" value="<%= recipe.perfumeName %>" placeholder="Enter Perfume Name" required />
+      <input type="text" name="perfumeName" value="<%= recipe.perfumeName %>" placeholder="Enter Perfume Name" />
     </label>
   </section>
 
@@ -20,16 +25,16 @@
     <label class="select">
       <select name="visibility" class="scents-categories">
         <option <%= recipe.visibility == 'PUBLIC'?'selected':'' %> value="PUBLIC" selected>公開</option>
-        <option <%= recipe.visibility == 'PROTECTED'?'selected':'' %> value="PROTECTED">半公開</option>
         <option <%= recipe.visibility == 'PRIVATE'?'selected':'' %> value="PRIVATE">私密</option>
+        <!--option <%= recipe.visibility == 'PROTECTED'?'selected':'' %> value="PROTECTED">半公開</option-->
       </select>
       <i></i>
   </section>
-  
+
   <section>
     <label class="label">香水描述</label>
     <label class="textarea textarea-resizable">
-      <textarea name="description" value="<%= recipe.description %>" rows="3"></textarea>
+      <textarea name="description" value="<%= recipe.description %>" rows="3"><%= recipe.description %></textarea>
     </label>
   </section>
 
@@ -41,70 +46,22 @@
 
 </fieldset>
 
-<fieldset>
-  <% recipe.formula.forEach(function(formula) { %>
-    <div class="row">
-      <section class="col col-3">
-        <label class="label">分類</label>
-        <label class="select">
-          <select class="scents-categories" data-index="<%= formula.index %>">
-            <option></option>
-            <option value="T" <%= formula.scentCategory == 'T'?'selected':'' %> >T - 前位</option>
-            <option value="M" <%= formula.scentCategory == 'M'?'selected':'' %> >M - 中位</option>
-            <option value="B" <%= formula.scentCategory == 'B'?'selected':'' %> >B - 後位</option>
-          </select>
-          <i></i>
-        </label>
-      </section>
-      <section class="col col-7">
-        <label class="label">所選之香味分子<%= formula.num %></label>
-        <label class="select">
-          <select name="formulaScents[<%= formula.index %>]" class="scents-dropdown" data-index="<%= formula.index %>">
-            <option value=""></option>
-            <% scents.forEach(function(scent) { %>
-              <option
-                <%= formula.scentName == scent.name ?'selected':'' %>
-                value="<%= scent.name %>"
-                data-color="<%= scent.color %>"
-                data-title="<%= scent.title %>"
-                data-description="<%= scent.description %>"
-              >
-                <%= scent.name +" - "+ scent.description.split("，")[0].split("。")[0] %>
-              </option>
-            <% }); %>
-          </select>
-          <i></i>
-        </label>
-      </section>
-      <section class="col col-2">
-        <label class="label">滴數</label>
-        <label class="input">
-          <input type="number" name="formulaDrops[<%= formula.index %>]" value="<%= formula.drops %>" class="scents-drops" data-index="<%= formula.index %>">
-        </label>
-      </section>
-    </div>
-    <div class="row hidden scent-detail" data-index="<%= formula.index %>">
-      <div class="col-md-12">
-        <div id="scent-content" class="funny-boxes bg-color-white">
-          <h2 id="scent-title">AAA</h2>
-          <p id="scent-description">BBB</p>
-        </div>
-      </div>
-    </div>
+<% if (recipe.createdBy === 'scent') { %>
+  <%- include form-scent.ejs %>
+<% } else { %>
+  <%- include form-feeling.ejs %>
+<% } %>
 
-  <% }); %>
-</fieldset>
-
-<fieldset>
+<!-- <fieldset>
 
   <section>
     <label class="label">備註</label>
     <label class="textarea textarea-resizable">
-      <textarea name="message" rows="3"></textarea>
+      <textarea name="message" rows="3" value="<%= recipe.message %>"><%= recipe.message %></textarea>
     </label>
   </section>
 
-</fieldset>
+</fieldset> -->
 
 <footer>
   <button type="submit" class="btn-u">送出資料</button>

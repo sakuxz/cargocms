@@ -1,3 +1,12 @@
+<% LayoutUtils.addMeta({ property:"og:image", content:SocialService.getShareUrl() + "/assets/labfnp/img/fb-og-image.jpg" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:url", content:SocialService.getShareUrl() + "/assets/labfnp/img/fb-og-image.jpg"  }); %>
+<% LayoutUtils.addMeta({ property:"og:image:type", content:"image/jpeg" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:width", content:"1200" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:height", content:"630" }); %>
+<% LayoutUtils.addMeta({ property:"og:title", content:"LFP: 香料香水實驗室，客製專屬香水 | 我的配方" }); %>
+<% LayoutUtils.addMeta({ property:"og:description", content:"我的配方管理" }); %>
+<% LayoutUtils.addMeta({ property:"og:type", content:"website" }); %>
+
 <!-- CSS Page Style -->
 <% LayoutUtils.addStylesheets('/assets/unify/css/pages/shortcode_timeline1.css'); %>
 <% LayoutUtils.addStylesheetBlock(`
@@ -32,6 +41,16 @@
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
+.heart {
+	color: red;
+}
+
+.icon-weight {
+	width: 15px;
+	display:inline-block;
+	text-align: center;
+ // vertical-align: bottom;
+}
 `); %>
 
 <div class="container content">
@@ -46,31 +65,36 @@
 
 			<div class="user-profile-block margin-bottom-20">
 				<div style="float:right">
-					<button class="btn btn-primary" onclick="$(this).toggleClass('btn-primary').toggleClass('btn-default').text($(this).text()=='追蹤'?'取消追蹤':'追蹤').blur()">追蹤</button>
+					<% if(isMe) {%>
+						<a id="edit-profile-button" data-user-id="<%= user.id %>" class="btn btn-primary" href="/edit/me">修改個人資料</a>
+					<% } else { %>
+						<button id="follow-button" data-user-id="<%= user.id %>" class="btn <%= isFollowing ? 'btn-default' : 'btn-primary' %>"><%= isFollowing ? '取消追蹤' : '追蹤' %></button>
+					<% } %>
 				</div>
 				<h1>
-					<div><%= user.username %></div>
+					<div><%= user.displayName %></div>
 					<div><small>創作者</small></div>
 				</h1>
 				<hr />
 				<div>
-					<i class="fa fa-map-marker"></i><span> Taiwan</span><br/>
-					<i class="fa fa-clock-o" aria-hidden="true"></i> Joined on 29 Apr 2012
+					<i class="fa fa-heart icon-weight"></i><span> <%= score %></span><br/>
+					<i class="fa fa-map-marker icon-weight "></i><span> Taiwan</span><br/>
+					<i class="fa fa-clock-o icon-weight " aria-hidden="true"></i> <%= user.createdAt %>
 				</div>
 				<hr />
 				<ul class="list-inline">
 					<li class="text-center">
-						<strong>12</strong>
+						<strong><%= followers %></strong>
 						<br/>
 						Followers
 					</li>
 					<li class="text-center">
-						<strong>25</strong>
+						<strong><%= favorited %></strong>
 						<br/>
-						Starred
+						Favorited
 					</li>
 					<li class="text-center">
-						<strong>7</strong>
+						<strong><%= following %></strong>
 						<br/>
 						Following
 					</li>
@@ -79,10 +103,13 @@
 
 			<ul class="list-group sidebar-nav-v1 margin-bottom-40" id="sidebar-nav-1">
 				<li class="list-group-item">
-					<a href="/me"><i class="fa fa-bar-chart-o"></i> 我的配方</a>
+					<a href="/me"><i class="fa fa-bar-chart-o icon-weight"></i> 我的配方</a>
 				</li>
 				<li class="list-group-item">
-					<a href="/creator"><i class="fa fa-flask"></i> 創作新配方</a>
+				  <a href="#" class="btn-create-recipe">
+				    <i class="fa fa-flask icon-weight"></i>
+				    創作一個新配方
+				  </a>
 				</li>
 				<!-- <li class="list-group-item">
 					<a href="page_profile_users.html"><i class="fa fa-group"></i> 粉絲</a>
@@ -98,30 +125,31 @@
 
 			<% if (recipes && recipes.length > 0) { %>
 
-	    	<ul class="timeline-v1">
-
-	    		<li class="timeline">
-	    			<div class="timeline-badge primary"><i class="glyphicon glyphicon-record<%= i%2?' invert':'' %>"></i></div>
-	    			<div class="timeline-panel">
-	    				<div class="timeline-body text-justify">
-	    					<h2>新配方？</h2>
-	    					<p><span class="brand-font">LFP</span> 香料香水實驗室的好友們，正在關注您的創作。</p>
-	    					<a class="btn-u btn-u-sm" href="/creator">繼續創作</a>
-	    				</div>
-	    			</div>
-	    		</li>
+  	    <ul class="timeline-v1">
+          <% if(isMe) {%>
+  	    		<li class="timeline">
+  	    			<div class="timeline-badge primary"><i class="glyphicon glyphicon-record<%= i%2?' invert':'' %>"></i></div>
+  	    			<div class="timeline-panel">
+  	    				<div class="timeline-body text-justify">
+  	    					<h2>新配方？</h2>
+  	    					<p><span class="brand-font">LFP</span> 香料香水實驗室的好友們，正在關注您的創作。</p>
+  								<a href="#" class="btn-create-recipe btn-u btn-u-sm">繼續創作</a>
+  	    				</div>
+  	    			</div>
+            <% } %>
+  	    	</li>
 
 	        <% var i = 0; recipes.forEach(function(recipe) { %>
 		    		<li class="timeline<%= i%2?'':'-inverted' %>">
 		    			<div class="timeline-badge primary"><i class="glyphicon glyphicon-record<%= i%2?' invert':'' %>"></i></div>
 		    			<div class="timeline-panel">
 		    				<div class="timeline-heading">
-      						<a href="/recipe/<%= recipe.id %>">
-    				        <img class="img-responsive" src="<%= recipe.coverPhoto %>" alt=""/>
+									<a href="/recipe/<%= recipe.hashId %>">
+    				        <img class="img-responsive" src="<%= recipe.coverPhoto %>" alt="" onerror="this.onerror=null;this.src='/assets/labfnp/img/recipe-default-cover.<%= recipe.id % 7 %>.jpg';"/>
                   </a>
                 </div>
 		    				<div class="timeline-body text-justify">
-		    					<h2><a href="/recipe/<%= recipe.id %>"><%= recipe.perfumeName %></a></h2>
+		    					<h2><a href="/recipe/<%= recipe.hashId %>"><%= recipe.perfumeName %></a></h2>
 		    					<% if (recipe.description) { %>
 		    						<p><%= recipe.description %></p>
 	    						<% } %>
@@ -155,3 +183,44 @@
 
   </div>
 </div>
+
+<%- include recipeCreateBox.inc.ejs %>
+
+<% LayoutUtils.addScriptBlock(`
+jQuery(document).ready(function() {
+
+
+	var userId = $("#follow-button").data("user-id");
+
+	$("#follow-button").on('click', function() {
+		var status = $(this).text();
+		var that = $(this);
+		if(status == '追蹤'){
+			$.ajax({
+				url: "/api/user/follow/" + userId,
+				method: 'get',
+				dataType: 'json',
+				cache: false
+			}).done(function(result) {
+				console.log(result)
+				that.toggleClass('btn-primary')
+				.toggleClass('btn-default')
+				.text('取消追蹤').blur()
+			});
+		}
+
+		if(status == '取消追蹤'){
+			$.ajax({
+				url: "/api/user/unfollow/" + userId,
+				method: 'get',
+				dataType: 'json',
+				cache: false
+			}).done(function(result) {
+				that.toggleClass('btn-primary')
+				.toggleClass('btn-default')
+				.text('追蹤').blur()
+			});
+		}
+	})
+});
+`); %>

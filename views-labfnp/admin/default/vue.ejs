@@ -64,10 +64,12 @@ var defaultVueMathod = {
 		window.onbeforeunload = null;
 
 		var ajaxSuccess = function (result) {
-			console.log('result=>', result);
+			console.log('loadItem result=>', result);
 			if (modelName === 'user') {
 				appModel.data.item = result.data;
-				appModel.data.option.passwordConfirm = result.data.Passports[0].password;
+				if(result.data.Passports && result.data.Passports[0])
+					appModel.data.option.passwordConfirm = result.data.Passports[0].password;
+
 				var hasAvatar = typeof result.data.avatar === 'string';
 				if (!hasAvatar) appModel.data.item.avatar = COMMON.DEFAULT_AVATAR;
 			} else {
@@ -103,6 +105,12 @@ var defaultVueMathod = {
 				$('.checkbox').removeClass('state-disabled');
 				$('checkbox').removeAttr('disabled');
 			})() : false;
+
+			var existSelect = $('.select') ? (function () {
+				$('.select').removeClass('state-disabled');
+				$('select').removeAttr('disabled');
+			})() : false;
+
 		})();
 	},
 	onLeavePageEdit: function (cb) {
@@ -146,11 +154,26 @@ var defaultVueMathod = {
 			phone: 480
 		};
 
-		var ajax = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
+		// var ajax = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
+		var url = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
+		var ajax = {
+	    "url": url,
+	    "data": function(data) {
+				// TODO: 這裡可以新增 startDate, endDate
+				appModel.pagingQuery = data;
+	      appModel.pagingQuery.startDate = $("#yadcf-filter--main-table-from-date-3").val() || '';
+	      appModel.pagingQuery.endDate = $("#yadcf-filter--main-table-to-date-3").val() || '';
+				if (appMain.customSearch) {
+					appMain.customSearch();
+				}
+				console.log(appModel.pagingQuery);
+	      return data
+	    }
+	  }
 		var defaultTableConfig = {
 			"processing": false,
 			"serverSide": serverSidePaging,
-			"sDom": "<'dt-toolbar'<'row'r<'col-xs-7 col-md-7 col-sm-7'f><'col-xs-5 col-md-4 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
+			"sDom": "<'dt-toolbar'<'row'r<'col-xs-12 col-md-7 col-sm-7'f><'col-xs-12 col-md-4 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
 				"t" +
 				"<'dt-toolbar-footer'<'row'<'col-md-6 col-xs-12 hidden-xs'i><'col-md-6 col-xs-12'p>>>",
 			"oLanguage": {
@@ -196,6 +219,30 @@ var defaultVueMathod = {
           //   "sCharSet": "UTF8",
           //   "bBomInc": true,
           // },
+					{
+	  				"sExtends": "text",
+	  				"sButtonText": "匯出",
+	  				"sToolTip": "把全部資料匯出成CSV",
+	          "fnClick": function (nButton, oConfig, oFlash) {
+	            var serialize = function(obj, prefix) {
+	              var str = [];
+	              for(var p in obj) {
+	                if (obj.hasOwnProperty(p)) {
+	                  var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+	                  str.push(typeof v == "object" ?
+	                    serialize(v, k) :
+	                    encodeURIComponent(k) + "=" + encodeURIComponent(v));
+	                }
+	              }
+	              return str.join("&");
+	            }
+							if (appMain.customSearch) {
+								appMain.customSearch();
+							}
+	  					console.log(serialize(appModel.pagingQuery));
+	            location.href = '/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery)
+	  				}
+	        },
 					{
 						"sExtends": "text",
 						"sButtonText": "檢視",
@@ -256,9 +303,18 @@ var defaultVueMathod = {
 			defaultTableConfig.columnDefs = columnDefs;
 			defaultTableConfig.ajax = ajax;
 		}
+		if (appModel.data.option.defaultSort) {
+			defaultTableConfig.order = appModel.data.option.defaultSort
+		}
+		if (appMain.DataTableInitComplete) {
+			defaultTableConfig.initComplete = appMain.DataTableInitComplete
+		}
 
 		var defaultTable = $('#main-table').dataTable(defaultTableConfig);
 
+		if (!appModel.data.option.exportCSV) {
+			$('#ToolTables_main-table_0').hide()
+		}
 		// selection
 		defaultTable.on('click', 'tr', function () {
 

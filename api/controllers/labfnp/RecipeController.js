@@ -1,16 +1,22 @@
 import crypto from 'crypto';
+import moment from 'moment';
+
 module.exports = {
   create: async function(req, res) {
+    let user, recipe, scents, totalDrops, feelings
+    let {from} = req.query
+    if(!from) from = "scent";
     try {
-      let user = AuthService.getSessionUser(req);
-
+      user = AuthService.getSessionUser(req);
       if (!user) {
         return res.redirect('/login');
       }
 
-      let recipe = Recipe.build().toJSON();
-      recipe.message = ""
-      recipe.description = ""
+      scents = await Scent.findAllWithRelationFormatForApp();
+      recipe = Recipe.build().toJSON();
+      recipe.message = "";
+      recipe.description = "";
+      recipe.createdBy = from;
 
       for (var i = 0; i < 6; i++) {
         let formula = {
@@ -18,16 +24,27 @@ module.exports = {
           num: i + 1,
           scentCategory: '',
           scentName: '',
+          feeling: '',
           drops: 0
         };
         recipe.formula.push(formula);
       }
 
-      let scents = await Scent.findAllWithRelationFormatForApp()
+      if (from == 'scent') {
+        return res.view({ user, recipe, scents });
+      }
 
-      let totalDrops = 0;
+      if (from == 'feeling') {
+        feelings = await Feeling.findRamdomFeelings();
 
-      return res.view({user, recipe, scents, totalDrops});
+        let feelingArray = [];
+        for (const feeling of feelings) {
+          feelingArray.push(feeling.title);
+        }
+
+        return res.view({ user, recipe, scents, feelings: feelingArray });
+      }
+
     }
     catch (e) {
       res.serverError(e);
@@ -38,11 +55,32 @@ module.exports = {
     const { id } = req.params;
     try {
       const currentUser = AuthService.getSessionUser(req);
+      const { recipe, editable, social, recipeFeedback} = await RecipeService.loadRecipe(id, currentUser);
+
+      return res.view({ recipe, editable, social, recipeFeedback});
+    } catch (e) {
+      if (e.type === 'notFound') return res.notFound();
+      return res.serverError(e);
+    }
+  },
+
+  feedback: async function(req, res) {
+    const { id } = req.params;
+    try {
+      const currentUser = AuthService.getSessionUser(req);
       if (!currentUser) return res.redirect('/login');
+      const { recipe, editable, social, recipeFeedback} = await RecipeService.loadRecipe(id, currentUser);
+      console.log("=== recipeFeedback ===", recipeFeedback);
+      let feelings = await Feeling.findRamdomFeelings();
+      let feelingArray = [];
+      for (const feeling of feelings) {
+        feelingArray.push(feeling.title);
+      }
 
-      const { recipe, editable, social } = await RecipeService.loadRecipe(id, currentUser);
+      recipeFeedback.invoiceNo = recipeFeedback.invoiceNo ? recipeFeedback.invoiceNo : '';
+      recipeFeedback.tradeNo = recipeFeedback.tradeNo ? recipeFeedback.tradeNo : '';
 
-      return res.view({ recipe, editable, social });
+      return res.view({ recipe, editable, social, recipeFeedback,feelings:feelingArray , user: currentUser});
     } catch (e) {
       if (e.type === 'notFound') return res.notFound();
       return res.serverError(e);
@@ -86,6 +124,8 @@ module.exports = {
   },
 
   edit: async function(req, res) {
+    let { from } = req.query
+    if (!from || from === null) from = 'scent';
     try {
       let user = AuthService.getSessionUser(req);
       if (!user) {
@@ -95,11 +135,12 @@ module.exports = {
       const { id } = req.params;
       const scents = await Scent.findAllWithRelationFormatForApp()
       let recipe = await Recipe.findOne({
-        where:{id},
+        where: { $or: [{ id }, {hashId: id}] },
         include: User
       });
 
       recipe = recipe.toJSON();
+      recipe.createdBy = from;
 
       if(recipe.User.id != user.id){
         const message = "只可維護自己的配方";
@@ -110,6 +151,7 @@ module.exports = {
       let recipeFormula = recipe.formula;
       let formatFormula = [];
       let totalDrops = 0;
+      let feelings = {};
 
       for (var i = 0; i < 6; i++) {
         let formula = {
@@ -119,21 +161,32 @@ module.exports = {
           scentName: '',
           drops: 0
         };
-        if(recipeFormula[i] != null){
+        if (recipeFormula[i] != null) {
           formula.drops = recipeFormula[i].drops;
           formula.scentName = recipeFormula[i].scent;
           formula.scentCategory = recipeFormula[i].scent.charAt(0);
+          formula.feeling = recipeFormula[i].feeling;
         }
 
         totalDrops += parseInt(formula.drops, 10);
-
         formatFormula.push(formula);
-
       }
       recipe.formula = formatFormula;
 
-      return res.view({user, recipe, scents, totalDrops});
+      if (from === 'scent') {
+        return res.view({ user, recipe, scents, totalDrops });
+      }
 
+      if (from === 'feeling') {
+        feelings = await Feeling.findRamdomFeelings();
+
+        let feelingArray = [];
+        for (const feeling of feelings) {
+          feelingArray.push(feeling.title);
+        }
+
+        return res.view({ user, recipe, scents, feelings: feelingArray, totalDrops });
+      }
     } catch (e) {
       return res.serverError(e);
     }
@@ -147,36 +200,7 @@ module.exports = {
       if (!user) return res.redirect('/login');
 
       const { recipient, phone, address, paymentMethod } = req.body;
-      const verifyInputs = (() => {
-        let verifyInputExists = 0;
-        const hasRecipient = typeof recipient === 'string';
-        const hasPhone = typeof phone === 'string';
-        const hasAddress = typeof address === 'string';
-        const hasPaymentMethod = typeof paymentMethod === 'string';
-
-        const checkArray = [ hasRecipient, hasPhone, hasAddress, hasPaymentMethod ];
-        for (var result of checkArray) {
-          if (result) verifyInputExists += 1;
-        }
-        verifyInputExists = verifyInputExists === checkArray.length;
-        if (!verifyInputExists) return res.forbidden('訂單資料缺失或不正確！');
-
-        let verifyPaymentMethodValid = 0;
-        const validPaymentMethods = [ 'ATM', 'Credit' ];
-        for (var method of validPaymentMethods) {
-          if (paymentMethod === method) verifyPaymentMethodValid += 1;
-        }
-        verifyPaymentMethodValid = verifyPaymentMethodValid > 0;;
-        if (!verifyPaymentMethodValid) return res.forbidden('付款方式錯誤！');
-
-        if (phone.indexOf(0) !== 0) return res.forbidden('收件人電話格式錯誤！');
-
-        return true;
-      })();
-      if (!verifyInputs) return res.forbidden('訂單資料錯誤！');
-
-      const { email, note, perfumeName, description, message } = req.body;
-
+      const { email, note, perfumeName, description, message, invoiceNo } = req.body;
       let recipeOrder = await RecipeOrder.create({
         UserId: user.id,
         RecipeId: id,
@@ -185,26 +209,69 @@ module.exports = {
         address,
         email,
         note,
+        invoiceNo,
       });
       recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
-
+      const formatName = recipeOrder.ItemNameArray.map((name) => {
+        return name + ' 100 ml';
+      });
       const allPayData = await AllpayService.getAllpayConfig({
         relatedKeyValue: {
           RecipeOrderId: recipeOrder.id,
         },
         MerchantTradeNo: crypto.randomBytes(32).toString('hex').substr(0, 8),
-        tradeDesc: `配方名稱：${perfumeName}, (備註：${message})`,
-        totalAmount: 999,
+        tradeDesc: `配方名稱：${perfumeName} 100 ml, (備註：${message})`,
+        totalAmount: 1550,
         paymentMethod: paymentMethod,
-        itemArray: recipeOrder.ItemNameArray,
+        itemArray: formatName,
       });
+      if (paymentMethod == 'gotoShop') {
+        const item = await Allpay.findOne({
+          where:{
+            MerchantTradeNo: allPayData.MerchantTradeNo
+          },
+          include:{
+            model: RecipeOrder,
+            include: [User, Recipe]
+          }
+        });
+        item.RtnMsg = '到店購買';
+        item.ShouldTradeAmt = 1550;
+        item.TradeAmt = 1550;
+        item.TradeNo = item.MerchantTradeNo;
+        item.PaymentType = '到店購買';
+        item.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
+        await item.save();
 
-      return res.view({
-        AioCheckOut: AllpayService.getPostUrl(),
-        ...allPayData
-      });
+        let messageConfig = {};
+        messageConfig.serialNumber = item.MerchantTradeNo;
+        messageConfig.paymentTotalAmount = 1550;
+        messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
+        messageConfig.email = recipeOrder.email;
+        messageConfig.username = recipeOrder.User.displayName;
+        messageConfig.shipmentUsername = recipeOrder.recipient;
+        messageConfig.shipmentAddress = recipeOrder.address;
+        messageConfig.note = recipeOrder.note;
+        messageConfig.phone = recipeOrder.phone;
+        messageConfig.invoiceNo = recipeOrder.invoiceNo;
+        messageConfig = await MessageService.orderToShopConfirm(messageConfig);
+        const message = await Message.create(messageConfig);
+        await MessageService.sendMail(message);
+
+        res.view('shop/done', {
+          item
+        });
+      } else {
+        return res.view({
+          AioCheckOut: AllpayService.getPostUrl(),
+          ...allPayData
+        });
+      }
     } catch (e) {
-      res.serverError(e);
+      if (e.type === 'flash') {
+        req.flash('error', e.toString());
+        res.redirect('/recipe/order/' + req.body.id);
+      } else res.serverError(e);
     }
   }
 }

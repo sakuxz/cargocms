@@ -1,7 +1,7 @@
 var restrictedUploader = new qq.FineUploader({
   element: document.getElementById("fine-uploader-validation"),
   template: 'qq-template-validation',
-  autoUpload: false,
+  autoUpload: true,
   request: {
     endpoint: '/api/admin/upload',
     inputName: 'uploadPic'
@@ -19,16 +19,11 @@ var restrictedUploader = new qq.FineUploader({
   validation: {
     allowedExtensions: ['jpeg', 'jpg', 'png'],
     itemLimit: 1,
-    sizeLimit: 10240 * 1024 // 50 kB = 50 * 1024 bytes
+    sizeLimit: 3 * 1024 * 1024 // 50 kB = 50 * 1024 bytes
   },
   callbacks: {
     onError: function(id, name, isError) {
       console.log(id, name, isError);
-      swal({
-        title: '注意',
-        text: isError,
-        type: 'warning',
-      });
     },
     onComplete: function(id, name, response) {
       console.log(id, name, response);
@@ -38,6 +33,13 @@ var restrictedUploader = new qq.FineUploader({
       console.log(id, name, response);
       $('input[name=coverPhotoId]').val(null);
     },
+  },
+  showMessage: function(message) {
+    swal({
+      title: '注意',
+      text: message,
+      type: 'warning',
+    });
   },
   messages: {
     emptyError: '{file} 檔案是空的, 請選擇其他檔案',

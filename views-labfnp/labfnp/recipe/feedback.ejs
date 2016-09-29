@@ -1,4 +1,5 @@
 <% LayoutUtils.addStylesheets('/assets/unify/css/pages/profile.css'); %>
+<% LayoutUtils.addStylesheets('/assets/labfnp/css/chosen/chosen.css'); %>
 <!--<div class="container">-->
 <!--<pre><%= JSON.stringify(recipe, null, 2) %></pre>-->
 <!--</div>-->
@@ -51,6 +52,24 @@
   section {
     padding-bottom: 10px;
   }
+  .chosen-container-multi .chosen-choices {
+    background: white;
+    border-radius: 0;
+    min-height: 34px;
+    border: 1px solid #ccc;
+    padding-top: 2px;
+  }
+  .error-text {
+    color: #fc1a1a;
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: 0.2s all;
+  }
+  .error-text.show {
+    opacity: 1;
+    transform: translateY(0);
+    transition: 0.2s all;
+  }
 
 </style>
 
@@ -65,7 +84,7 @@
       <div class="panel-heading overflow-h">
 
         <h2 class="pull-left">
-          <i class="fa fa-shopping-cart " aria-hidden="true"></i>確認訂單</h2>
+          <i class="fa fa-comment-o" aria-hidden="true"></i>感覺回饋</h2>
         <a href="#!" onclick="window.history.back()" class="btn-u btn-u-dark pull-right">返回</a>
 
       </div>
@@ -108,14 +127,17 @@
               <p class="padding-5"><%= recipe.description %></p>
             </li>
           </ul>
-          <hr/>
 
-          <!-- <label for="message">備註</label> -->
-          <ul class="list-unstyled list-inline message">
-            <li>
-              <p class="padding-5"><%= recipe.message %></p>
-            </li>
-          </ul>
+
+		  <% if(recipe.message.length >0){ %>
+            <hr/>
+            <!-- <label for="message">備註</label> -->
+            <ul class="list-unstyled list-inline message">
+              <li>
+                <p class="padding-5"><%= recipe.message %></p>
+              </li>
+            </ul>
+     	  <% } %>
         </h4>
       </div>
 
@@ -124,40 +146,37 @@
       <div class="text-center">
         <h3>
           <i class="fa fa-info-circle" aria-hidden="true"></i>
-          <label>配送資料</label>
+          <label>回饋內容</label>
         </h3>
       </div>
 
       <div class="projects form-group" id="orderFormWrapper">
-        <form class="orderForm" id="orderForm" action="" method="post">
-
+        <form class="orderForm" id="orderForm" action="/" method="post">
+          <input type="hidden" class="form-control" name="UserId" value="<%= user.id %>" >
+          <input type="hidden" class="form-control" name="RecipeId" value="<%= recipe.id %>" >
           <section class="col">
-            <label for="reciverName">收件人姓名<span class="required">*</span>
+            <label for="reciverName">發票號碼
             </label>
-            <input type="text" id="reciverName" class="form-control" name="reciverName" value="" placeholder="請輸入姓名..." required>
+            <input type="text" value="<%= recipeFeedback.invoiceNo %>" class="form-control" name="invoiceNo" placeholder="選填，有發票號碼請填寫" >
           </section>
 
           <section class="col">
-            <label for="phone">收件人電話<span class="required">*</span>
+            <label for="phone">交易序號
             </label>
-            <input type="text" id="phone" class="form-control" name="phone" value="" placeholder="請輸入電話..." required>
+            <input type="text" value="<%= recipeFeedback.tradeNo %>" class="form-control" name="tradeNo" placeholder="選填，有交易序號請填寫" >
           </section>
 
           <section class="col">
-            <label for="address">收件地址<span class="required">*</span>
+            <label for="payment">感覺<span class="required">*</span>
             </label>
-            <input type="text" id="address" class="form-control" name="address" value="" placeholder="請輸入地址..." required>
-          </section>
-
-          <section class="col">
-            <label for="payment">付款方式<span class="required">*</span>
-            </label>
-            <select class="form-control" id="payment" class="form-control" name="payment" required>
-              <option value="creditCard">信用卡</option>
-              <option value="atm">ATM轉帳</option>
-              <option value="shop">到店付款</option>
+            <select multiple name="feeling" class="form-control chosen-select chosen-select-no-results" data-placeholder="請填寫您的感覺（可填寫多個）">
+              <option></option>
+              <% feelings.forEach(function(feeling) { %>
+                <option <%= recipeFeedback.feeling.indexOf(feeling)>=0 ? 'selected' : '' %> value="<%= feeling %>" ><%= feeling %></option>
+              <% }); %>
             </select>
           </section>
+          <label class="error-text">請填寫您的感覺</label>
 
         </form>
 
@@ -184,3 +203,5 @@
 <% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3pie.min.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/pieChart.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/favorite.js'); %>
+<% LayoutUtils.addScripts('/assets/labfnp/lib/chosen/chosen.jquery.min.js'); %>
+<% LayoutUtils.addScripts('/assets/labfnp/page/recipe/feedback.js'); %>

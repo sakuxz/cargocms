@@ -8,7 +8,7 @@
 <script type="text/javascript">
 	pageSetUp();
   var uploadImageAppModel = {
-    itemLimit: 3,
+    itemLimit: 1,
     onError: function(){},
     onComplete: function(){},
     onDeleteComplete: function(){},
@@ -24,7 +24,7 @@
         var restrictedUploader = new qq.FineUploader({
           element: document.getElementById("fine-uploader-validation"),
           template: 'qq-template-validation',
-          autoUpload: false,
+          autoUpload: true,
           request: {
             endpoint: '/api/admin/upload',
             inputName: 'uploadPic'
@@ -46,7 +46,6 @@
           },
           callbacks: {
             onError: function(id, name, isError) {
-              messageApp.show({desc: isError, type: 'error'});
               uploadImageAppModel.onError(id, name, isError);
             },
             onComplete: function(id, name, response) {
@@ -57,6 +56,9 @@
               console.log(id, name, response);
               uploadImageAppModel.onDeleteComplete(id, name, response);
             },
+          },
+          showMessage: function(message) {
+            messageApp.show({desc: message, type: 'error'});
           },
           messages: {
             emptyError: '{file} 檔案是空的, 請選擇其他檔案',
@@ -74,9 +76,9 @@
             unsupportedBrowserIos8Safari: '不可恢復的錯誤 - 這個瀏覽器不允許任何形式的文件上傳，由於iOS8上的Safari嚴重錯誤，請使用iOS8上的Chrome直到蘋果修復了這些問題。',
           }
         });
-        qq(document.getElementById("trigger-upload")).attach("click", function() {
-          restrictedUploader.uploadStoredFiles();
-        });
+        // qq(document.getElementById("trigger-upload")).attach("click", function() {
+        //   restrictedUploader.uploadStoredFiles();
+        // });
       },
     },
   });

@@ -26,10 +26,21 @@ module.exports = {
     classMethods: {
       findAllWithSubMenu: async function () {
         try {
+          const {environment} = sails.config;
+          let where = {
+            ParentMenuItemId: null
+          };
+
+          if(environment == 'production'){
+            where.title = {
+              $ne: "實驗室"
+            }
+          }
+
+
+
           let menuItems = await MenuItem.findAll({
-            where: {
-              ParentMenuItemId: null
-            },
+            where,
             include: {model: MenuItem, as: 'SubMenuItems'},
             order: ['MenuItem.sequence', 'SubMenuItems.sequence']
           });

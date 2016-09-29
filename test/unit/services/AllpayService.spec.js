@@ -1,5 +1,5 @@
 
-describe('about Allpay service', () => {
+describe.skip('about Allpay service', () => {
   let allpay;
   let recipe;
   before(async(done) => {

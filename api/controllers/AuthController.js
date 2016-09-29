@@ -8,7 +8,15 @@
 const url = require('url');
 module.exports = {
   login: function(req, res) {
-    res.view({}, "auth/login");
+    if(req.session.authenticated) return res.redirect('/');
+    let user = {
+      identifier: '',
+      password: ''
+    }
+    let form = req.flash('form')[0];
+    if(form) user = form;
+
+    res.ok({user, errors: req.flash('error')[0]});
   },
   logout: function(req, res) {
     req.session.authenticated = false;
@@ -24,12 +32,18 @@ module.exports = {
     }
   },
   register: async (req, res) => {
+    if(req.session.authenticated) return res.redirect('/');
     try {
       let user = {
         username: '',
         email: '',
         lastName: '',
         firstName: '',
+        birthday: '',
+        phone1: '',
+        phone2: '',
+        address: '',
+        address2: ''
       }
       let form = req.flash('form')[0];
       if(form) user = form;
@@ -98,7 +112,12 @@ module.exports = {
         const userAgent = req.headers['user-agent'];
         user.loginSuccess({ userAgent });
 
-        return res.redirect(req.query.url || sails.config.urls.afterSignIn);
+        // const noEmail = !user.email;
+        // if (noEmail || user.email === '') {
+        //   return res.redirect('/edit/me');
+        // }
+
+        return res.redirect(req.body.url || sails.config.urls.afterSignIn);
       });
     });
   },

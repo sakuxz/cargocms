@@ -1,6 +1,12 @@
 import moment from 'moment';
+import shortid from 'shortid';
+
 module.exports = {
   attributes: {
+    hashId: {
+      type: Sequelize.STRING(32),
+      unique: true,
+    },
     //TODO authorAvatar
     formula: {
       // from `full_picture`
@@ -8,8 +14,7 @@ module.exports = {
       set: function (val) {
         if (val) {
           this.setDataValue('formula', JSON.stringify(val));
-        }
-        else {
+        } else {
           this.setDataValue('formula', "[]");
         }
       },
@@ -18,14 +23,33 @@ module.exports = {
           var formula = this.getDataValue('formula');
           if (formula) {
             return JSON.parse(formula);
-          }
-          else {
+          } else {
             return [];
           }
         }
         catch (e) {
-          console.log(e);
+          sails.log.error(e);
           return [];
+        }
+      }
+    },
+
+    formulaTotalDrops: {
+      type: Sequelize.VIRTUAL,
+      get: function () {
+        try {
+          var formula = this.getDataValue('formula');
+          let formulaTotalDrops = 0;
+          if (formula) {
+            JSON.parse(formula).forEach((element, index, array) => {
+              formulaTotalDrops += Number(element.drops);
+            })
+          }
+          return formulaTotalDrops;
+        }
+        catch (e) {
+          sails.log.error(e);
+          return 0;
         }
       }
     },
@@ -39,6 +63,30 @@ module.exports = {
       defaultValue: ''
     },
 
+    authorFbPage: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          const thisUser = this.getDataValue('User');
+          let fbId = 'https://www.facebook.com/LabFnP';
+          if (thisUser) {
+            if (thisUser.Passports) {
+              thisUser.Passports.forEach((passport) => {
+                const existProvider = typeof passport.dataValues.provider === 'string';
+                const checkProviderType = passport.dataValues.provider === 'facebook';
+                if (existProvider && checkProviderType) {
+                  fbId = passport.dataValues.identifier;
+                }
+              });
+            }
+          }
+          return fbId;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+
     perfumeName: {
       type: Sequelize.STRING,
       defaultValue: ''
@@ -48,7 +96,7 @@ module.exports = {
       type: Sequelize.STRING,
       get: function() {
         const val = this.getDataValue('message');
-        if (typeof val !== 'string' || val === null) return '沒有備註';
+        if (typeof val !== 'string' || val === null) return '';
         return val;
       }
     },
@@ -57,14 +105,14 @@ module.exports = {
       type: Sequelize.STRING,
       get: function() {
         const val = this.getDataValue('description');
-        if (typeof val !== 'string' || val === null) return '沒有描述';
+        if (typeof val !== 'string' || val === null) return '';
         return val;
       }
     },
 
-    totalDrops: {
-      type: Sequelize.INTEGER,
-      defaultValue: 0
+    createdBy: {
+      type: Sequelize.ENUM('scent', 'feeling'),
+      defaultValue: "scent"
     },
 
     coverPhoto: {
@@ -73,7 +121,8 @@ module.exports = {
       get: function() {
         try {
           const thisImage = this.getDataValue('Image');
-          return thisImage ? thisImage.url : '/assets/labfnp/img/recipe-default-cover.png';
+          const thisId = this.getDataValue('id');
+          return thisImage ? thisImage.url : `/assets/labfnp/img/recipe-default-cover.${thisId % 7}.jpg`;
         } catch (e) {
           sails.log.error(e);
         }
@@ -82,7 +131,7 @@ module.exports = {
 
     visibility: {
       type: Sequelize.ENUM('PUBLIC', 'PRIVATE', 'PROTECTED'),
-      defaultValue: 'PUBLIC',
+      defaultValue: 'PRIVATE',
     },
 
     visibilityDesc: {
@@ -101,47 +150,6 @@ module.exports = {
             break;
           default:
             desc = '公開';
-        }
-        return desc;
-      }
-    },
-
-    productionStatus: {
-      type: Sequelize.ENUM("NEW", "RECEIVED", "REQUESTED", "SUBMITTED", "PAID", "PROCESSING", "CANCELLED", "SHIPPED", "DELIVERED", "COMPLETED"),
-      defaultValue: 'NEW',
-    },
-
-    productionStatusDesc: {
-      type: Sequelize.VIRTUAL,
-      get: function() {
-        let desc = '';
-        switch (this.productionStatus) {
-          case 'NEW':
-            desc = 'NEW';
-            break;
-          case 'SUBMITTED':
-            desc = '下訂單';
-            break;
-          case 'PAID':
-            desc = '已付款';
-            break;
-          case 'PROCESSING':
-            desc = '製作中';
-            break;
-          case 'CANCELLED':
-            desc = '取消';
-            break;
-          case 'SHIPPED':
-            desc = '已寄出';
-            break;
-          case 'DELIVERED':
-            desc = '已交付';
-            break;
-          case 'COMPLETED':
-            desc = '完成';
-            break;
-          default:
-            desc = 'NEW';
         }
         return desc;
       }
@@ -169,6 +177,71 @@ module.exports = {
       }
     },
 
+    createdAtIso: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          return moment(this.getDataValue('createdAt'), moment.ISO_8601);
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+
+    updatedAtIso: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          return moment(this.getDataValue('updatedAt'), moment.ISO_8601);
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+
+    displayFormula: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          let dpFormulaArray = [];
+
+          if (typeof this.getDataValue('formula') !== 'undefined') {
+            const formulaTotalDrops = this.get('formulaTotalDrops');
+            const formulaJson = JSON.parse(this.getDataValue('formula'));
+            let index = 0;
+
+            for (const formula of formulaJson) {
+              const value = Math.round(( formula.drops / formulaTotalDrops * 100 ) * 10000) / 10000;
+              dpFormulaArray.push({
+                index: index,
+                value: `${formula.scent} - ${formula.drops}滴(${value}%)`
+              });
+              index += 1;
+            }
+          }
+
+          return dpFormulaArray;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    invoicenum: {
+      type: Sequelize.STRING
+    },
+    address: {
+      type: Sequelize.STRING
+    },
+    phonenum: {
+      type: Sequelize.STRING
+    },
+    created: {
+      type: Sequelize.STRING
+    },
+    sourceId: {
+      type: Sequelize.STRING
+    }
+
   },
   associations: function() {
     Recipe.hasMany(UserLikeRecipe);
@@ -185,9 +258,7 @@ module.exports = {
         sails.log.info("findOneWithUser id=>", id);
         let recipeWithScent = '';
         const recipes = await Recipe.findOne({
-          where: {
-            id
-          },
+          where: { $or: [{ id }, {hashId: id}] },
           include: [User, Image],
         });
         return recipes;
@@ -201,13 +272,17 @@ module.exports = {
           throw e;
         }
       },
-      getFindAndIncludeUserLikeParam: ({findByRecipeId, findByUserId, currentUser }) => {
+      getFindAndIncludeUserLikeParam: ({findByRecipeId, findByUserId, currentUser, start, length }) => {
         try {
           let whereParam = { where: {} };
           if (findByUserId) {
             whereParam.where.UserId = findByUserId;
           } else if (findByRecipeId) {
             whereParam.where.id = findByRecipeId;
+            // whereParam.where.$or = [
+            //   { id: parseInt(findByRecipeId, 10) },
+            //   { hashId: findByRecipeId },
+            // ]
           }
           let notAdmin = true;
           let ownUserId = {};
@@ -221,23 +296,44 @@ module.exports = {
               ownUserId
             ];
           }
+          let paging = {};
+          if (start != null && length != null) {
+            paging = {
+              offset: start,
+              limit: length,
+            };
+          }
           const currentUserId = currentUser ? currentUser.id : -1;
           return {
             ...whereParam,
+            ...paging,
+            order: [['createdAt', 'DESC']],
             include: [{
               model: UserLikeRecipe,
               required: false
             }, {
               model: Image,
+            }, {
+              model: User,
+              include: {
+                model: Passport,
+                attributes: ['provider', 'identifier']
+              },
             }]
           };
         } catch (e) {
           throw e;
         }
       },
-      findAndIncludeUserLike: async function({findByRecipeId, findByUserId, currentUser }){
+      findAndIncludeUserLike: async function({findByRecipeId, findByUserId, currentUser, start, length }){
         try {
-          const findParam = this.getFindAndIncludeUserLikeParam({findByRecipeId, findByUserId, currentUser });
+          const findParam = this.getFindAndIncludeUserLikeParam({
+            findByRecipeId,
+            findByUserId,
+            currentUser,
+            start,
+            length
+          });
           let recipes = await Recipe.findAll(findParam);
           recipes.map((recipe) => recipe.checkCurrentUserLike({currentUser}));
           return recipes;
@@ -249,6 +345,9 @@ module.exports = {
         try {
           const findParam = this.getFindAndIncludeUserLikeParam({findByRecipeId, findByUserId, currentUser });
           const recipe = await Recipe.findOne(findParam);
+
+          if(!recipe)return recipe;
+
           await recipe.checkCurrentUserLike({currentUser})
           return recipe;
         } catch (e) {
@@ -257,18 +356,72 @@ module.exports = {
       },
       getFeelings: async function({id}){
         try {
-          const recipe = await Recipe.findOne({where: {id}});
+          const recipe = await Recipe.findOne({
+            where: { $or: [{ id }, {hashId: id}] }
+          });
           const {formula} = recipe;
 
           const secntNames = formula.map(oneFormula => oneFormula.scent)
           const where = {name: secntNames}
 
+          // lookup data
           const scents = await Scent.findAll({where});
-          let feelings = scents.reduce((result, scent) => result.concat(scent.feelings), []);
+
+          // get data like
+          // [ {key: f1, scent:s1, value:10},{key: f1, scent:s2, value:3} ]
+          let ungroupfeelings = []
+          scents.forEach(function(scent) {
+            let currentScent = scent.name;
+            scent.feelings.forEach((feel) => {
+              ungroupfeelings.push({
+                key: feel.key,
+                value: feel.value,
+                scent: currentScent
+              })
+            });
+          });
+
+          // grouping data like
+          // [ {key: f1, value:13, scent: [{name: s1, value: 10},{name: s2, value: 3}] } ]
+          let feelings = [];
+          ungroupfeelings.forEach((item) => {
+            // check this feel already in feelings or not
+            let findIDX = undefined;
+            feelings.forEach((inListFeel,inListFeelIndex) => {
+              if (item.key === inListFeel.key) {
+                findIDX = inListFeelIndex;
+              }
+            })
+            let strength = parseInt(item.value)
+
+            if (findIDX === undefined) {
+              feelings.push({
+                key: item.key,
+                value: strength,
+                scent: [{name: item.scent, value: item.value}],
+              })
+            } else {
+              feelings[findIDX].value+=strength;
+              feelings[findIDX].scent.push({name: item.scent, value: strength});
+            }
+
+          })
           feelings = RecipeService.sortFeelingsByValue({feelings});
 
+          /*
+          feelings = scents.reduce((result, scent) => result.concat(scent.feelings), []);
+          feelings = RecipeService.sortFeelingsByValue({feelings});
+          sails.log("leagcy-feeling")
+          sails.log(feelings);
+          */
+
+          /*
+          let feelings = scents.reduce((result, scent) => result.concat(scent.feelings), []);
+          feelings = RecipeService.sortFeelingsByValue({feelings});
+          */
 
           return feelings;
+
         } catch (e) {
           throw e;
         }
@@ -293,6 +446,10 @@ module.exports = {
         }
       }
     },
-    hooks: {}
+    hooks: {
+      beforeCreate: async (recipe) => {
+        recipe.hashId = shortid.generate();
+      },
+    }
   }
 };

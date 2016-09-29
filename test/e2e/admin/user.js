@@ -121,6 +121,8 @@ describe('test user', () => {
       try{
         browser.url('/admin/#/admin/user');
         browser.waitForExist('#main-table_filter input[type="search"]');
+        browser.setValue('#main-table_filter input[type="search"]', 'brooklynBay@email.com');
+        browser.pause(1000);
 
         const userEmail = browser.element('#main-table-widget tbody tr:nth-child(1) td:nth-child(4)')
                           .getText();
@@ -214,7 +216,7 @@ describe('test user', () => {
         done(e)
       }
     });
-    
+
     it('delete @watch', async (done) => {
 
       try {
@@ -223,13 +225,13 @@ describe('test user', () => {
         //搜尋該user 進入編輯user頁面
         browser.waitForExist('#main-table_filter input[type="search"]');
         browser.setValue('#main-table_filter input[type="search"]', deleteThisUser.username);
-        
+
         browser.pause(2000);
         browser.waitForExist('#ToolTables_main-table_2');
         browser
         .click('#main-table tbody')
         .click('#ToolTables_main-table_2');
-          
+
         browser.waitForExist('[name="username"]');
         //點擊刪除user
         browser.click('.btn.btn-danger');

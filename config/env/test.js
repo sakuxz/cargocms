@@ -12,6 +12,7 @@
 
 module.exports = {
   port: 1338,
+  socials: ["facebook", "googleplus", "twitter"],
   models: {
     connection: 'sqlite',
     migrate: 'drop'

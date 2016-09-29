@@ -128,11 +128,47 @@ $(function() {
 
 
     $("#wordCloud-svg").find("text").on("click", function(){
-      alert($(this).html());
+      var clickedFeel=$(this).html();
+
+      var foundPosition;
+      tags.forEach(function(item,index) {
+        if (item.key==clickedFeel) {
+          foundPosition = index;
+        }
+      })
+
+      var foundScents=tags[foundPosition].scent;
+      //console.log(foundScents);
+
+      // if need all Scent's Name, using this
+      /*
+      var sourceScent=foundScents.map((item) => {
+        return item.name;
+      })
+      console.log("feeling "+clickedFeel+" comes from "+sourceScent);
+      */
+
+      var mostStrength = undefined;
+      tags[foundPosition].scent.forEach(function (item){
+        if (mostStrength === undefined || item.value > mostStrength.value )  {
+          mostStrength=item;
+        }
+      });
+      console.log("most of "+clickedFeel+" come from "+mostStrength.name)
+
+      var targetPiePart = undefined;
+      for (var pieDataIndex in pieParam.data.content) {
+        if (pieParam.data.content[pieDataIndex].label===mostStrength.name) {
+          console.log('found at '+pieDataIndex);
+          targetPiePart = pieDataIndex;
+          break;
+        }
+      }
+
+      pieChart.openSegment(targetPiePart);
+
     })
   });
-
-
 
   window.onresize = function(event) {
     update();

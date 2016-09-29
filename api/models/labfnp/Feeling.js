@@ -47,7 +47,23 @@ module.exports = {
     //Feeling.belongsTo(Scent);
   },
   options: {
-    classMethods: {},
+    classMethods: {
+      findDistinctFeelings: async function() {
+        const feelings = await Feeling.findAll({
+          attributes: ['title'],
+          group: ['Feeling.title']
+        });
+        return feelings;
+      },
+      findRamdomFeelings: async function() {
+        const feelings = await Feeling.findDistinctFeelings()
+        const ramdomFeelings = feelings.sort(function() {
+          return .5 - Math.random();
+        });
+        return ramdomFeelings;
+      },
+
+    },
     instanceMethods: {},
     hooks: {}
   }

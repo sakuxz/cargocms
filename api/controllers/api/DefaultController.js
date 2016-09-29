@@ -30,7 +30,7 @@ module.exports = {
   findOne: async (req, res) => {
     try {
       const { id } = req.params;
-      const item = await Model.findOne({ id });
+      const item = await Model.findById(id);
       res.ok({ data: { item } });
     } catch (e) {
       res.serverError(e);
