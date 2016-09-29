@@ -206,17 +206,24 @@ module.exports = {
         UserName: "訂購人",
         RecipeId: "配方編號",
         productionStatusDesc: "訂單狀態",
+        note: "備註",
         scent0: '香味分子 1',
+        scentml0: '香味分子 1 滴數',
         scentPercent0: '香味分子 1 比例',
         scent1: '香味分子 2',
+        scentml1: '香味分子 2 滴數',
         scentPercent1: '香味分子 2 比例',
         scent2: '香味分子 3',
+        scentml2: '香味分子 3 滴數',
         scentPercent2: '香味分子 3 比例',
         scent3: '香味分子 4',
+        scentml3: '香味分子 4 滴數',
         scentPercent3: '香味分子 4 比例',
         scent4: '香味分子 5',
+        scentml4: '香味分子 5 滴數',
         scentPercent4: '香味分子 5 比例',
         scent5: '香味分子 6',
+        scentml5: '香味分子 6 滴數',
         scentPercent5: '香味分子 6 比例',
         Email: "Email",
         Phone: "電話",
@@ -240,6 +247,7 @@ module.exports = {
             UserName: data.UserName,
             RecipeId: data.RecipeOrder.RecipeId,
             productionStatusDesc: data.RecipeOrder.productionStatusDesc,
+            note: data.Note,
             Email: data.Email,
             Phone: `="${data.Phone || ''}"`,
             Address: data.Address,
@@ -248,8 +256,9 @@ module.exports = {
           if (data.RecipeOrder && data.RecipeOrder.Recipe) {
             data.RecipeOrder.Recipe.formula.forEach((formula, index) => {
               if (formula.scent && formula.drops > 0) {
-                formatted[`scent${index}`] = `${formula.scent}, ${formula.drops} 滴`,
-                formatted[`scentPercent${index}`] = Math.ceil(formula.drops / data.RecipeOrder.Recipe.formulaTotalDrops * 1000000)/10000;
+                formatted[`scent${index}`] = `${formula.scent}`,
+                formatted[`scentml${index}`] = `${formula.drops}`,
+                formatted[`scentPercent${index}`] = Math.ceil(formula.drops / data.RecipeOrder.Recipe.formulaTotalDrops * 10000)/10000;
               }
             });
           }
