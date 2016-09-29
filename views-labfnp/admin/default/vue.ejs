@@ -155,7 +155,6 @@ var defaultVueMathod = {
 			phone: 480
 		};
 
-		// var ajax = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
 		var url = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
 		var ajax = {
 	    "url": url,
@@ -191,7 +190,6 @@ var defaultVueMathod = {
 				if (appMain.customSearch) {
 					appMain.customSearch();
 				}
-				console.log(serialize(appModel.pagingQuery));
 				location.href = '/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery)
 			}
 		}
@@ -266,13 +264,7 @@ var defaultVueMathod = {
 								});
 							}
 						}
-          },
-					{
-						"sExtends": "text",
-						"sButtonText": "重新匯入",
-						"fnClick": function (nButton, oConfig, oFlash) {
-						}
-					}
+          }
         ]
 			},
 			"autoWidth": true,
@@ -287,14 +279,33 @@ var defaultVueMathod = {
 			"drawCallback": function (oSettings) {
 				responsiveHelper_datatable.respond();
 				$("[name='publish']").bootstrapSwitch();
+				$("[name='publish']").on('switchChange.bootstrapSwitch', function(event, state) {
+					var id = $(this).data("id")
+
+					var publish = state;
+
+					$.ajax({
+						url: "/api/admin/facebook/feed/update/"+id,
+						method: "put",
+						dataType: 'json',
+						cache: false,
+						data:{
+							publish: publish
+						}
+
+					}).done(function (result) {
+						messageApp.show({
+							desc: result.message,
+							type: 'success'
+						});
+					});
+				});
 			}
 		}
 
 		if (typeof tableButtons !== 'undefined') {
-
 			tableButtons.push(excelExportButton)
 			tableButtons = tableButtons.reverse()
-
 			defaultTableConfig.oTableTools.aButtons = tableButtons;
 		}
 

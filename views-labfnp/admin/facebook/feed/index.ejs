@@ -52,9 +52,13 @@
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
+					var checked = ""
+					if (row.publish) {
+						checked = "checked";
+					}
 					var colBody =
 					'<div class="row-action-buttons hidden-xs hidden-sm">'+
-						'<input type="checkbox" name="publish" checked>'+
+						'<input type="checkbox" data-id="'+row.id+'" name="publish" '+checked+'>'+
 					'</div>';
 					return colBody;
 				}

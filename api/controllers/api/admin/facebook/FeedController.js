@@ -28,5 +28,23 @@ module.exports = {
     } catch (e) {
       res.serverError(e);
     }
+  },
+  update: async (req, res) => {
+    const { id } = req.params;
+    const data = req.body;
+
+    try {
+
+      let feed = await Feed.findById(id);
+      feed.publish = data.publish;
+      await feed.save();
+
+      res.ok({
+        message: 'update success.',
+        data: feed,
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
   }
 }
