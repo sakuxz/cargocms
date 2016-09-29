@@ -87,6 +87,32 @@
 			}
 		];
 
+		var tableDrawCallback = function(){
+			$("[name='publish']").bootstrapSwitch();
+			$("[name='publish']").on('switchChange.bootstrapSwitch', function(event, state) {
+				var id = $(this).data("id")
+
+				var publish = state;
+
+				$.ajax({
+					url: "/api/admin/facebook/feed/update/"+id,
+					method: "put",
+					dataType: 'json',
+					cache: false,
+					data:{
+						publish: publish
+					}
+
+				}).done(function (result) {
+					messageApp.show({
+						desc: result.message,
+						type: 'success'
+					});
+				});
+			});
+
+		}
+
 
 
 		var serverSidePaging = <%= (data.serverSidePaging != null)?data.serverSidePaging:false %>;
