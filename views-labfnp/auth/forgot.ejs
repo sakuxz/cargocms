@@ -43,7 +43,7 @@
 <div class="container content">
   <div class="row">
     <div class="login-block col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-      <form class="reg-page" method="post" action="/api/user/forgotPassword">
+      <form class="reg-page" id="form" method="post" action="/api/user/forgotPassword">
 
         <div class="reg-header">
           <h2>重設密碼</h2>
@@ -79,6 +79,27 @@
 
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
+
+    $.fn.preventDoubleSubmission = function() {
+      $(this).on("submit", function(event){
+        var $form = $(this);
+
+        if( $(this).valid() ) {
+          if ($form.data("submitted") === true){
+            event.preventDefault();
+          } else {
+            $form.data("submitted", true);
+          }
+        } else {
+          event.preventDefault();
+        }
+
+      });
+
+      return this;
+    }
+
+    $("#form").preventDoubleSubmission();
 
     $(".reg-page").validate({
       rules: {

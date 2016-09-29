@@ -13,6 +13,7 @@
       <th class="" data-hide="always"> Html</th>
       <th width="10%" class=""><i class="fa fa-fw fa-share hidden-md hidden-lg" /> <span class="hidden-sm hidden-xs">發送成功</span></th>
       <th class="" data-hide="always"> 異常訊息</th>
+			<th data-hide="always" class="asc">發送日期</th>
 			<th width="10%" class="" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
@@ -29,6 +30,7 @@
       <td>{{ item.html }}</td>
       <td>{{ item.success }}</td>
       <td>{{ item.error }}</td>
+			<td>{{ item.createdAt }}</td>
 			<td align="center" style="cursor: pointer;">
 				<div class="row">
 					<a class="btn btn-default btn-xs" role="button" v-on:click="show(item.id)">
@@ -59,6 +61,7 @@
       { "data": "html" },
       { "data": "success" },
       { "data": "error" },
+			{ "data": "createdAt" },
 			{ "data": null }
 		]
 

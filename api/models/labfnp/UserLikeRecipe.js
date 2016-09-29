@@ -4,6 +4,7 @@ module.exports = {
   associations: function() {
     UserLikeRecipe.belongsTo(User)
     UserLikeRecipe.belongsTo(Recipe)
+    User.hasMany(UserLikeRecipe);
   },
   options: {
     classMethods: {

@@ -168,8 +168,7 @@ module.exports = {
         as: 'Roles'
       }
     });
-    User.hasMany(UserLikeRecipe);
-    User.hasMany(Recipe);
+    
 
 
   },

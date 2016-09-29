@@ -16,7 +16,11 @@ module.exports = {
     let form = req.flash('form')[0];
     if(form) user = form;
 
-    res.ok({user, errors: req.flash('error')[0]});
+    res.ok({
+      //layout: false,
+      user,
+      errors: req.flash('error')[0]
+    });
   },
   logout: function(req, res) {
     req.session.authenticated = false;

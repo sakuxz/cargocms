@@ -251,6 +251,7 @@ module.exports = {
         name: 'coverPhotoId'
       }
     });
+    User.hasMany(Recipe);
   },
   options: {
     classMethods: {

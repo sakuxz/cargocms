@@ -33,7 +33,7 @@
         <% } %>
         <label class="select">
           <select class="feeling-dropdown chosen-select" data-placeholder="選擇一種你喜歡的感覺" data-index="<%= formula.index %>">
-            <option></option>
+            <option>選擇一種你喜歡的感覺</option>
             <% feelings.forEach(function(feeling) { %>
               <option value="<%= feeling %>" <%= formula.feeling === feeling?'selected':'' %> ><%= feeling %></option>
             <% }); %>

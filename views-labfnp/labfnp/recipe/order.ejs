@@ -232,6 +232,26 @@
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
 
+    $.fn.preventDoubleSubmission = function() {
+      $(this).on("submit", function(event){
+        var $form = $(this);
+
+        if( $(this).valid() ) {
+          if ($form.data("submitted") === true){
+            event.preventDefault();
+          } else {
+            $form.data("submitted", true);
+            swal('訊息', '訂單處理中...！', 'info');
+          }
+        } else {
+          event.preventDefault();
+        }
+
+      });
+
+      return this;
+    }
+
     $("#orderForm").validate({
       rules: {
         recipient: {
@@ -266,13 +286,7 @@
       }
     });
 
-    $("#orderForm").submit(function( event ){
-      if( $("#orderForm").valid() ){
-        swal('訊息', '訂單處理中...！', 'info');
-      }else{
-        event.preventDefault();
-      }
-    });
+    $("#orderForm").preventDoubleSubmission();
 
   });
 `); %>
