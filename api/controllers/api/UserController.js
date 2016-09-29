@@ -79,8 +79,6 @@ module.exports = {
 
   forgotPassword: async (req, res) => {
     try {
-      sails.log.debug(req.wantsJSON);
-      sails.log.debug(req.body);
       const { email } = req.body;
       let user = await User.findOne({
         where: { email }
@@ -124,7 +122,6 @@ module.exports = {
   updatePassword: async (req, res) => {
     try {
       const { token, password } = req.body;
-      sails.log.debug("!!!!!!!!!!!!", token)
       if (!token) throw Error('請點擊 Email 連結以更新密碼');
 
       const decoded = jwt.decode(token);
@@ -139,7 +136,7 @@ module.exports = {
       });
       if (!user) throw Error('請確認 Email，該 Email 尚未註冊過');
       if (!user.resetPasswordToken) throw Error('請點擊 Email 連結以更新密碼');
-      
+
       jwt.verify(token, user.resetPasswordToken);
 
       let passport = await Passport.findById(user.Passports[0].id);
