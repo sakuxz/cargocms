@@ -85,6 +85,9 @@ var defaultConfig = {
 
   //----- WallController -----
   'get /wall/:id': 'WallController.show',
+
+  //----- Facebook -----
+  'get /admin/facebook/:controller/:action/:id?': {},
 };
 
 module.exports.routes = {
