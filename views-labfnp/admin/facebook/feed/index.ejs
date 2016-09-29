@@ -16,7 +16,6 @@
 			<th data-hide="always">link</th>
 			<th data-hide="always">sourceId</th>
 			<th width="150" data-hide="phone,tablet">createdAt</th>
-			<th width="80" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
 	<!-- client only -->
@@ -37,8 +36,7 @@
 			{ "data": "type" },
 			{ "data": "link" },
 			{ "data": "sourceId" },
-			{ "data": "createdAt" },
-			{ "data": null }
+			{ "data": "createdAt" }
 		]
 
 		// server only
@@ -46,24 +44,7 @@
       {
         "targets": 'no-sort',
         "orderable": false,
-      },
-			{
-				"targets"  : 9,
-				"orderable": false,
-				"searchable": false,
-				"render": function ( data, type, row ) {
-					var colBody =
-					'<div class="row-action-buttons hidden-xs hidden-sm">'+
-						'<a class="btn btn-default btn-xs" role="button" onclick="window.appMain.show('+row.id+')">'+
-							'<i class="fa-fw fa fa-eye text-muted" />'+
-						'</a>'+
-						'<a class="btn btn-default btn-xs" role="button" onclick="window.appMain.edit('+row.id+')">'+
-							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
-						'</a>'+
-					'</div>';
-					return colBody;
-				}
-			},
+      }
 		]
 
 		var tableButtons = [
@@ -89,9 +70,13 @@
 			}
 		];
 
+
+
 		var serverSidePaging = <%= (data.serverSidePaging != null)?data.serverSidePaging:false %>;
+		var supportDblclickShow = false;
 		<%- include vue.ejs %>
 		appMain.$mount("#main-index");
 		appMain.loadItems(appMain.renderTable);
+
 	};
 </script>

@@ -330,11 +330,16 @@ var defaultVueMathod = {
 				var id = data.id || data[0];
 				appMain.selection(id);
 			}
-		}).on('dblclick', 'tr', function () {
-			var data = defaultTable.fnGetData(this);
-			var id = data.id || data[0];
-			appMain.show(id);
-		});
+		})
+
+		if(typeof supportDblclickShow === 'undefined' || supportDblclickShow){
+			defaultTable.on('dblclick', 'tr', function () {
+				var data = defaultTable.fnGetData(this);
+				var id = data.id || data[0];
+				appMain.show(id);
+			});
+
+		}
 
 		$('#main-table-widget').fadeIn();
 	},

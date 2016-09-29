@@ -8,7 +8,11 @@ module.exports = {
       if (serverSidePaging) {
         result = await PagingService.process({ query, modelName });
       } else {
-        const items = await sails.models[modelName].findAll();
+        const items = await sails.models[modelName].findAll({where: {
+          type: {
+            "$ne": "status"
+          }
+        }});
         result = { data: { items } };
       }
       res.ok(result);
