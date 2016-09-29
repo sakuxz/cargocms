@@ -38,7 +38,7 @@
 }
 
 </style>
-
+<script src="https://www.google.com/recaptcha/api.js?hl=zh-TW" async defer></script>
 <!--=== Content Part ===-->
 <div class="container content">
   <div class="row">
@@ -58,6 +58,8 @@
         </div>
 
         <input id='backUrl' type="hidden" name="url" value='/'>
+
+        <div class="margin-top-20 g-recaptcha" data-sitekey="6LeS9wcUAAAAALrRGqCffbJaPBUz_MVFOqdfVfyU"></div>
 
         <div class="row margin-top-20 margin-bottom-25">
           <div class="col-md-6 checkbox">
@@ -132,6 +134,7 @@
       }
     });
 
+    grecaptcha.hl(zh-TW);
   });
 `); %>
 <!--=== End Content Part ===-->

@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
+import axios from 'axios';
 
 module.exports = {
   follow: async (req, res) => {
@@ -80,6 +81,12 @@ module.exports = {
   forgotPassword: async (req, res) => {
     try {
       const { email } = req.body;
+
+      const secret = '6LeS9wcUAAAAAITL5APRyq2usDNimioBdB852hTi';
+      const response = req.body['g-recaptcha-response'];
+      const recaptcha = await axios.get(`https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${response}`);
+      if (!recaptcha.data.success) throw Error('請稍候再試');
+
       let user = await User.findOne({
         where: { email }
       })

@@ -160,7 +160,7 @@
                 <div class="easy-block-v1-badge rgba-red"><%= recipe.visibilityDesc %></div>
               <% } %>
 							<!--<img id="recipeImage" class="img-responsive lazy" src="http://placehold.it/640x480?text=LOADING" data-src="http://loremflickr.com/640/480/perfume<%= ([',girl', ',boy', ''])[parseInt(Math.random() * 3)] %>/all?<%= Math.random() * Date.now() %>" alt="">-->
-							<img id="recipeImage" class="img-responsive lazy" src="<%= recipe.coverPhoto %>" data-src="<%= recipe.coverPhoto %>" alt="" onerror="this.onerror=null;this.src='/assets/labfnp/img/recipe-default-cover.<%= recipe.id % 7 %>.jpg';">
+							<img id="recipeImage" class="img-responsive lazy" src="<%= recipe.coverPhoto %>" data-src="<%= recipe.coverPhoto %>" alt="" onerror="this.src='/assets/labfnp/img/recipe-default-cover.<%= recipe.id % 7 %>.jpg';">
 							<!--<div class="recipeLikeContainer" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
                 <i id="recipeLikeIcon" class="fa <%= recipe.currentUserLike ? 'fa-heart': 'fa-heart-o' %> fa-sm"></i>
               </div>-->
