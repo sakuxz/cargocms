@@ -1,5 +1,5 @@
 var sinon = require('sinon');
-describe.only('about LikeRecipe Controller operation.', function() {
+describe('about LikeRecipe Controller operation.', function() {
 
   let recipe;
   before(async (done) => {

@@ -190,8 +190,8 @@ module.exports = {
       let feedback = await RecipeFeedback.findOne({where: {UserId, RecipeId}});
 
       if(feedback != null){
-        feedback.invoiceNo = data.invoiceNo
-        feedback.tradeNo = data.tradeNo
+        feedback.invoiceNo = data.invoiceNo;
+        feedback.tradeNo = data.tradeNo;
         feedback.feeling = data.feeling;
         feedback = await feedback.save(data);
       }else {
