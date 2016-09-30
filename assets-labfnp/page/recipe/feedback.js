@@ -16,34 +16,19 @@ $.fn.serializeObject = function () {
 
 $(document).ready(function () {
 
-  var chosenTimeout = null;
-
-	$('.chosen-select').chosen({
-		allow_single_deselect: false,
-		no_results_text: '按 Enter 新增感覺',
-	});
-
-	$('.chosen-choices .search-field input').keydown(function (event) {
-		event.stopPropagation();
-		var feeling = $('.chosen-choices .search-field input').val().trim();
-		var IsNoResult = $('.chosen-results').has('.no-results').length > 0;
-
-		if (event.keyCode === 13 && feeling && IsNoResult) { //press ENTER
-
-      var newItem = '<option value="' + feeling + '" selected >' + feeling + '</option>';
-			$('.chosen-select').append(newItem);
-
-      if (chosenTimeout === null) {
-  			chosenTimeout = setTimeout(function () {
-  				$('.chosen-select').trigger("chosen:updated");
-          chosenTimeout = null;
-  			}, 250);
-      }
-		}
-	});
+	$('input[name="feeling"]').tagEditor({
+    autocomplete: {
+        delay: 0, // show suggestions immediately
+        position: { collision: 'flip' }, // automatic menu position up/down
+        source: feelingData,
+    },
+		initialTags: initialTags,
+    forceLowercase: false,
+    placeholder: '請填寫您的感覺（可填寫多個）'
+  });
 
 	$('#orderForm').submit(function (event) {
-		if ($('.chosen-select').val() === null) {
+		if ($('input[name="feeling"]').val() === '') {
 			$('.error-text').addClass('show');
 		} else {
 			$('.error-text').removeClass('show');
