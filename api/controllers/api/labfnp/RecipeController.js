@@ -4,10 +4,12 @@ module.exports = {
     console.log("=== findForLab ===");
     try {
       let user = AuthService.getSessionUser(req);
+      console.log(user);
       const recipes = await Recipe.findAndIncludeUserLike({
         currentUser: user,
         start: parseInt(req.query.start, 10) || 0,
         length: parseInt(req.query.length, 10) || 5,
+        userId: req.query.type === 'like' ? AuthService.getSessionUser(req).id : null,
       });
       console.log();
       let social = SocialService.forRecipe({recipes});

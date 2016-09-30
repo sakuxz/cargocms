@@ -101,8 +101,11 @@ $(document).ready(function(){
   var getRecipe = function(config){
     start = config.start;
     length = config.length;
+    var type = 'all';
+    if(location.search.search('like') !== -1)
+      type = 'like';
     $.ajax({
-      url: '/api/labfnp/recipe/findForLab?start='+ start +'&length='+ length,
+      url: '/api/labfnp/recipe/findForLab?start='+ start +'&length='+ length + '&type=' + type,
       type: 'GET',
       dataType: 'json',
       success: ajaxSuccess,
