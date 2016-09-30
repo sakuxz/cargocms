@@ -36,7 +36,11 @@
   color: #a94442;
   font-weight: bolder;
 }
+option:first {
+    color: #999;
+}
 </style>
+<script src="https://www.google.com/recaptcha/api.js?hl=zh-TW" async defer></script>
 
 <!--=== Content Part ===-->
 <div class="container content">
@@ -50,33 +54,30 @@
 
         <div class="input-group margin-top-20">
           <span class="input-group-addon"><i class="fa fa-user"></i></span>
-          <input type="text" placeholder="請輸入姓名" value="" id="name" name="name" class="form-control">
+          <input type="text" placeholder="請輸入姓名" value="<%= data.user.displayName || '' %>" id="name" name="name" class="form-control">
         </div>
 
         <div class="input-group margin-top-20">
           <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-          <input type="text" placeholder="請輸入 Email" value="" id="email" name="email" class="form-control">
+          <input type="text" placeholder="請輸入 Email" value="<%= data.user.email || '' %>" id="email" name="email" class="form-control">
         </div>
 
         <div class="input-group margin-top-20">
           <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-          <input type="number" placeholder="請輸入電話" value="" id="phone" name="phone" class="form-control">
+          <input type="number" placeholder="請輸入電話" value="<%= data.user.phone1 || '' %>" id="phone" name="phone" class="form-control">
+        </div>
+
+        <div class="input-group margin-top-20">
+          <span class="input-group-addon"><i class="fa fa-comment-o"></i></span>
+          <input type="text" placeholder="請輸入聯繫主旨" value="" id="subject" name="subject" class="form-control">
         </div>
 
         <div class="margin-top-20">
-          <section>
-            <label class="label">公開狀態</label>
-            <label class="select">
-              <select name="visibility" class="scents-categories">
-                <option value="帳號無法登入">帳號無法登入</option>
-                <option value="無法顯示書籍清單">無法顯示書籍清單</option>
-                <option value="無法瀏覽電子書內容">無法瀏覽電子書內容</option>
-                <option value="讀取速度緩慢">讀取速度緩慢</option>
-                <option value="其他">其他</option>
-              </select>
-              <i></i>
-          </section>
+          <label>聯繫內容</label>
+          <textarea class="form-control" id="content" name="content" placeholder="聯繫內容" rows="3"></textarea>
         </div>
+
+        <div class="margin-top-20 g-recaptcha" data-sitekey="<%= data.reCAPTCHAKey %>"></div>
 
         <div class="row margin-top-20 margin-bottom-25">
           <div class="col-md-6 checkbox">
@@ -101,31 +102,62 @@
     $.fn.preventDoubleSubmission = function() {
       $(this).on("submit", function(event){
         var $form = $(this);
-        if( $(this).valid() ) {
-          if ($form.data("submitted") === true){
-            event.preventDefault();
-          } else {
-            $form.data("submitted", true);
-          }
-        } else {
+
+        if (grecaptcha.getResponse() === "") {
+          swal('錯誤', '請勾選我不是機器人', 'warning');
           event.preventDefault();
+        } else {
+          if( $(this).valid()) {
+            if ($form.data("submitted") === true){
+              event.preventDefault();
+            } else {
+              $form.data("submitted", true);
+            }
+          } else {
+            event.preventDefault();
+          }
         }
       });
       return this;
     }
     $("#form").preventDoubleSubmission();
+
     $(".reg-page").validate({
       rules: {
+        name: {
+          required: true,
+        },
         email: {
           required: true,
           email: true
         },
+        phone: {
+          required: true,
+        },
+        subject: {
+          required: true,
+        },
+        content: {
+          required: true,
+        }
       },
       messages: {
+        name: {
+          required: "請輸入姓名",
+        },
         email: {
           required: "請輸入 Email",
           email: "請輸入 Email 格式",
         },
+        phone: {
+          required: "請輸入電話",
+        },
+        subject: {
+          required: "請輸入聯繫主旨",
+        },
+        content: {
+          required: "請輸入聯繫內容",
+        }
       },
       highlight: function(element) {
           $(element).closest('.form-group').addClass('has-error');
