@@ -176,6 +176,11 @@ label.error{
       nextText: '<i class="fa fa-angle-right"></i>'
     });
 
+    $('html, body').keydown(function(e){
+      // press Esc to close modal
+      if (e.keyCode === 27) $('.modal-footer button')[0].click();
+    })
+
     $("#registerForm").validate({
       rules: {
         firstName: {
