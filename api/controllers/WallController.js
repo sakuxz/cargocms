@@ -3,6 +3,9 @@ module.exports = {
     try {
 
       let feeds = await Feed.findAll({
+        where: {
+          publish: true
+        },
         order: [['createdAt', 'DESC']],
       });
 

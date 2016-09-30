@@ -4,7 +4,7 @@
 	<thead>
 		<tr>
 			<th width="5%" data-hide="phone">
-        <i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/>
+        <i class="fa fa-fw text-muted fa-hashtag hidden-xs hidden-sm hidden-md"/>
          ID
       </th>
       <th width="15%" data-class="expand">
@@ -21,11 +21,11 @@
       <th class="" data-hide="always"> 市話</th>
       <th class="" data-hide="always"> 收件地址1</th>
       <th class="" data-hide="always"> 收件地址2</th>
-      <th width="15%" data-hide="phone,tablet">
+      <th width="12%" data-hide="phone,tablet">
 				<i class="fa fa-fw fa-clock-o text-muted hidden-sm hidden-xs"/>
 				最近登入時間
 			</th>
-			<th width="10%" data-hide="phone,tablet"></th>
+			<th width="8%" data-hide="phone,tablet">操作</th>
 		</tr>
 	</thead>
 	<!-- client only -->
@@ -82,7 +82,9 @@
       {
         "targets" : 1,
         "render": function(data, type, row) {
-          return '<img width="20" src="' + row.avatarThumb + '" class="img-circle" /> ' + row.username;
+          var html = '<img width="15" src="' + row.avatarThumb + '" class="img-circle" /> ';
+					html += '<small>' + row.username + '</small>';
+					return html;
         },
       },
 			{
@@ -90,16 +92,25 @@
         "targets": 2
       },
 			{
+				"targets" : 9,
+				"render": function(data, type, row) {
+					if (!data) {
+						return '<span class="text-muted"><small>沒有記錄</small></span>';
+					}
+					return '<span class="txt-color-blueDark"><small>' + data + '</small></span>';
+				}
+			},
+			{
 				"targets"  : 10,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
 					var colBody =
 					'<div class="row-action-buttons hidden-xs hidden-sm">'+
-						'<a class="btn btn-default btn-xs" role="button" onclick="window.appMain.show('+row.id+')">'+
+						'<a name="showDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-eye text-muted" />'+
 						'</a>'+
-						'<a class="btn btn-default btn-xs" role="button" onclick="window.appMain.edit('+row.id+')">'+
+						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
 						'</a>'+
 					'</div>';
@@ -107,6 +118,8 @@
 				}
 			},
 		]
+
+
 		var serverSidePaging = <%= (data.serverSidePaging != null)?data.serverSidePaging:false %>;
 		<%- include vue.ejs %>
 		appMain.$mount("#main-index");

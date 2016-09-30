@@ -54,11 +54,11 @@ label.error{
         <div class="row">
           <div class="col-sm-6">
             <label>姓氏 <span class="color-red">*</span></label>
-            <input type="text" name="firstName" value="<%= data.user.firstName %>" class="form-control margin-bottom-20">
+            <input type="text" name="lastName" value="<%= data.user.lastName %>" class="form-control margin-bottom-20">
           </div>
           <div class="col-sm-6">
             <label>名字 <span class="color-red">*</span></label>
-            <input type="text" name="lastName" value="<%= data.user.lastName %>" class="form-control margin-bottom-20">
+            <input type="text" name="firstName" value="<%= data.user.firstName %>" class="form-control margin-bottom-20">
           </div>
         </div>
 
@@ -175,6 +175,11 @@ label.error{
       prevText: '<i class="fa fa-angle-left"></i>',
       nextText: '<i class="fa fa-angle-right"></i>'
     });
+
+    $('html, body').keydown(function(e){
+      // press Esc to close modal
+      if (e.keyCode === 27) $('.modal-footer button')[0].click();
+    })
 
     $("#registerForm").validate({
       rules: {
