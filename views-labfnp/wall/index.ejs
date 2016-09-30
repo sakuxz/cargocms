@@ -6,12 +6,10 @@
 
 			<div class="grid-boxes-in">
 
-				<% if (feed.fullPicture) { %>
-					<% if (index < 30) { %>
-						<a href="/wall/<%= feed.sourceId %>" title="<%= feed.name %>">
-							<img class="img-responsive" src="<%= feed.fullPicture %>" alt="<%= feed.name %>" />
-						</a>
-					<% } %>
+				<% if (feed.fullPicture && index < 30) { %>
+					<a href="/wall/<%= feed.sourceId %>" title="<%= feed.name %>">
+						<img class="img-responsive" src="<%= feed.fullPicture %>" alt="<%= feed.name %>" />
+					</a>
 				<% } %>
 
 				<div class="grid-boxes-caption">
