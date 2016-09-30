@@ -20,8 +20,9 @@ $(document).ready(function () {
     autocomplete: {
         delay: 0, // show suggestions immediately
         position: { collision: 'flip' }, // automatic menu position up/down
-        source: feelingData
+        source: feelingData,
     },
+		initialTags: initialTags,
     forceLowercase: false,
     placeholder: '請填寫您的感覺（可填寫多個）'
   });
