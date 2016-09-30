@@ -106,18 +106,20 @@
 				"searchable": false,
 				"render": function ( data, type, row ) {
 					var colBody =
-					'<div class="btn-group btn-group-xs hidden-xs hidden-sm">'+
-						'<button class="btn btn-default" title="檢視" onclick="window.appMain.show('+row.id+')">'+
-							'<i class="fa-fw fa fa-file-o"></i>'+
-						'</button>'+
-						'<button class="btn btn-default" title="編輯" onclick="window.appMain.edit('+row.id+')">'+
-							'<i class="fa-fw fa fa-edit"></i>'+
-						'</button>'+
+					'<div class="row-action-buttons hidden-xs hidden-sm">'+
+						'<a name="showDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
+							'<i class="fa-fw fa fa-eye text-muted" />'+
+						'</a>'+
+						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
+							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
+						'</a>'+
 					'</div>';
 					return colBody;
 				}
 			},
 		]
+
+
 		var serverSidePaging = <%= (data.serverSidePaging != null)?data.serverSidePaging:false %>;
 		<%- include vue.ejs %>
 		appMain.$mount("#main-index");

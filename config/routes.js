@@ -67,6 +67,10 @@ var defaultConfig = {
   'post /api/user/unfollow/:id':  'api/UserController.unfollow',
   'post /api/user/edit/:id':      'api/UserController.update',
 
+  'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
+  'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
+  'put /api/admin/facebook/update':        'api/admin/facebook/FeedController.update',
+
   //----- Admin -----
   '/admin':           'AdminController.index',
   '/admin/config.js': 'AdminController.config',
@@ -85,6 +89,9 @@ var defaultConfig = {
 
   //----- WallController -----
   'get /wall/:id': 'WallController.show',
+
+  //----- Facebook -----
+  'get /admin/facebook/:controller/:action/:id?': {},
 };
 
 module.exports.routes = {
