@@ -208,13 +208,13 @@
         {{if recipe.visibility == 'PROTECTED'}}
           <div class="easy-block-v1-badge rgba-red">${recipe.visibilityDesc}</div>
         {{/if}}
-        <img id="recipeImage" class="img-responsive lazy" src="${recipe.coverPhoto}" data-src="${recipe.coverPhoto}" alt="" onerror="this.onerror=null;this.src='/assets/labfnp/img/recipe-default-cover.${recipe.id % 7}.jpg';">
+        <img id="recipeImage" class="img-responsive lazy" src="${recipe.coverPhoto}" data-src="${recipe.coverPhoto}" alt="" onerror="this.src='/assets/labfnp/img/recipe-default-cover.${ recipe.id % 7 }.jpg';">
         <!-- <div class="recipeLikeContainer" data-id="${recipe.id}" data-like="${recipe.currentUserLike}">
            <i id="recipeLikeIcon" class="fa {{if recipe.currentUserLike }} fa-heart {{else}} fa-heart-o {{/if}} fa-sm"></i>
         </div> --!>
       </a>
       <div class="grid-boxes-caption">
-        <h3 class="text-overflow"><a href="/recipe/${recipe.id}">${recipe.perfumeName}</a></h3>
+        <h3 class="text-overflow"><a href="/recipe/${recipe.hashId}">${recipe.perfumeName}</a></h3>
         <ul class="list-inline grid-boxes-news">
           <li class="text-overflow author-name">
             <i class="fa fa-user"></i>

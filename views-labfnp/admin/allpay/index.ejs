@@ -40,6 +40,7 @@
       <th data-hide="always">電話</th>
       <th data-hide="always">住址</th>
       <th width="15%" data-hide="phone,tablet">訂單建立時間</th>
+			<th data-hide="always">備註</th>
       <th width="10%" data-hide="phone,tablet"></th>
 
 		</tr>
@@ -119,7 +120,8 @@
       { "data": "Email" },
       { "data": "Phone" },
       { "data": "Address" },
-      { "data": "createdAt" },
+      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 22, 'desc' ]]
+			{ "data": "Note" },
 			{ "data": null },
 
 		]
@@ -241,16 +243,20 @@
         "targets": 21
       },
 			{
-				"targets"  : 23,
+        "searchable": false,
+        "targets": 23,
+      },
+			{
+				"targets"  : 24,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
 					var colBody =
 					'<div class="row-action-buttons hidden-xs hidden-sm">'+
-						'<a class="btn btn-default btn-xs" role="button" onclick="window.appMain.show('+row.id+')">'+
+						'<a name="showDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-eye text-muted" />'+
 						'</a>'+
-						'<a class="btn btn-default btn-xs" role="button" onclick="window.appMain.edit('+row.id+')">'+
+						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
 						'</a>'+
 					'</div>';

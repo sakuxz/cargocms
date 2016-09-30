@@ -89,7 +89,13 @@ module.exports.bootstrap = async (cb) => {
           let isDir = fs.statSync('./config/init/' + dirName).isDirectory();
           if (isDir) {
             let hasIndexFile = fs.statSync('./config/init/' + dirName + '/index.js').isFile();
-            require('./init/' + dirName).init();
+
+            try {
+              require('./init/' + dirName).init();
+            }
+            catch (e) {
+              sails.log.error(e);
+            }
           }
         }
       });
@@ -98,7 +104,7 @@ module.exports.bootstrap = async (cb) => {
 
     cb();
   } catch (e) {
-    console.error(e.stack);
+    sails.log.error(e.stack);
     cb(e);
   }
 };

@@ -23,7 +23,7 @@ module.exports = {
 
       FB.setAccessToken(sails.config.facebook.accessToken);
 
-      const feedUrl = "/"+sails.config.facebook.pageId+"/feed?limit=100&fields=full_picture,name,message,story,description,type,link";
+      const feedUrl = "/"+sails.config.facebook.pageId+"/feed?limit=100&fields=full_picture,name,message,story,description,type,link,created_time";
       //?fields=full_picture,name,message,story,description,type
 
       sails.log.debug('Feed URL: ' + feedUrl);
@@ -58,7 +58,7 @@ module.exports = {
             description: feeds[index].description,
             type: feeds[index].type,
             link: feeds[index].link,
-            createdAt: feeds[index].created_time,
+            createdTime: feeds[index].created_time,
             sourceId: feeds[index].id
           };
           results.push(row)
