@@ -61,5 +61,9 @@ module.exports = {
     cookie: {
       maxAge: 2 * 60 * 60 * 1000
     }
+  },
+  reCAPTCHA: {
+    key: '',
+    secret: ''
   }
 };

@@ -66,4 +66,21 @@ describe("about Mailer service", () => {
 
   });
 
+  it('send forgotPassword', async (done) => {
+
+    try {
+      let messageConfig = await MessageService.forgotPassword({
+        email: 'user@gmail.com',
+        api: '/update/password?token=AAAA',
+        username: 'Allen',
+      });
+      let message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
+      done();
+    } catch (e) {
+      done(e);
+    }
+
+  });
+
 });

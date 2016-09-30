@@ -66,6 +66,8 @@ var defaultConfig = {
   'post /api/user/follow/:id':    'api/UserController.follow',
   'post /api/user/unfollow/:id':  'api/UserController.unfollow',
   'post /api/user/edit/:id':      'api/UserController.update',
+  'post /api/user/forgotPassword':'api/UserController.forgotPassword',
+  'post /api/user/password':       'api/UserController.updatePassword',
 
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
@@ -79,6 +81,7 @@ var defaultConfig = {
   'get /login': 'AuthController.login',
   'get /logout': 'AuthController.logout',
   'get /register': 'AuthController.register',
+  'get /forgot': 'AuthController.forgot',
 
   'post /auth/local': 'AuthController.callback',
   'post /auth/local/:action': 'AuthController.callback',

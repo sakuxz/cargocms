@@ -40,5 +40,9 @@ module.exports = {
         ]
       }
     }
+  },
+  reCAPTCHA: {
+    key: '',
+    secret: ''
   }
 };
