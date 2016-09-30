@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	var diameter = 0, //parseInt(d3.select('#d3-container').style('width')),
-		format = d3.format(",d"),
-		color = d3.scale.category20c();
+			format = d3.format(",d"),
+			color = d3.scale.category20c();
 
 
 	var bubble = d3.layout.pack()
@@ -358,7 +358,7 @@ $(document).ready(function () {
 
 		var totalDrops = parseInt($('#total-drops').text(), 10);
 		if (totalDrops > 50) {
-			alert('單一配方請勿超過 50 滴！')
+			swal('提示','單一配方請勿超過 50 滴！', 'warning');
 			return false;
 		}
 
@@ -392,7 +392,7 @@ $(document).ready(function () {
 
 		if (formula.length == 0) {
 			swal('提示','未選定任一配方', 'warning')
-			formIsValid = true;
+			formIsValid = false;
 		};
 
 		formula.forEach(function (oneFormula) {
@@ -403,6 +403,18 @@ $(document).ready(function () {
 		});
 
 		if (!formIsValid) return false;
+
+    var $form = $(this);
+    if ($form.data('submitted') === true) {
+      // Previously submitted - don't submit again
+      event.preventDefault();
+      return false;
+    } else {
+      // Mark it so that the next submit can be ignored
+      $form.data('submitted', true);
+      $('.submittedInfo').fadeIn();
+    }
+
 		$.ajax({
 			url: endpoint,
 			method: method, //create

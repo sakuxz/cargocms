@@ -105,11 +105,11 @@ label.error{
         <div class="row">
           <div class="col-sm-6">
             <label>手機 </label>
-            <input type="text" name="phone1" value="<%= data.user.phone1 %>" class="form-control margin-bottom-20">
+            <input type="number" name="phone1" value="<%= data.user.phone1 %>" class="form-control margin-bottom-20">
           </div>
           <div class="col-sm-6">
             <label>市話 </label>
-            <input type="text" name="phone2" value="<%= data.user.phone2 %>" class="form-control margin-bottom-20">
+            <input type="number" name="phone2" value="<%= data.user.phone2 %>" class="form-control margin-bottom-20">
           </div>
         </div>
         <div class="row">
@@ -232,7 +232,13 @@ label.error{
 
     $("#registerForm").submit( function( event ) {
       if( $("#registerForm").valid() ){
-        swal("註冊","資料傳送中...","info");
+        swal({
+          type: "info",
+          title: "註冊",
+          text: "資料傳送中...",
+          showConfirmButton: false,
+          timer: 5000,
+        });
       }else{
         event.preventDefault();
       }

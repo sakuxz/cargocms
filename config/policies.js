@@ -15,9 +15,10 @@
  * For more information on configuring policies, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.policies.html
  */
+import customConfigLoader from './util/customConfigLoader.js';
+var customConfig = customConfigLoader('mail.js');
 
-
-module.exports.policies = {
+var defaultConfig = {
   '*': ['nocache', 'passport', 'sessionAuth'],
   'AuthController': {
     '*': ['passport'],
@@ -30,17 +31,7 @@ module.exports.policies = {
     'update': ['nocache'],
     'delete': ['nocache']
   },
-  'api/labfnp/RecipeController': {
-    'index': ['nocache'],
-    'findOne': ['nocache'],
-    'create': ['nocache'],
-    'update': ['nocache'],
-    'delete': ['nocache'],
-  },
-  'labfnp/RecipeController': {
-    'create': ['passport', 'sessionAuth'],
-    'update': ['nocache']
-  },
+  ...customConfig,
   'BlogController': {
     'index': true
   },
@@ -87,4 +78,10 @@ module.exports.policies = {
     // before letting any users feed our rabbits
     // feed : ['isNiceToAnimals', 'hasRabbitFood']
   // }
+
+}
+
+
+module.exports.policies = {
+  ...defaultConfig
 };

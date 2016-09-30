@@ -8,15 +8,27 @@
 const url = require('url');
 module.exports = {
   login: function(req, res) {
-    if(req.session.authenticated) return res.redirect('/');
-    let user = {
-      identifier: '',
-      password: ''
-    }
-    let form = req.flash('form')[0];
-    if(form) user = form;
+    try{
+      if(req.session.authenticated) return res.redirect('/');
+      let user = {
+        identifier: '',
+        password: ''
+      }
+      let form = req.flash('form')[0];
+      if(form) user = form;
 
-    res.ok({user, errors: req.flash('error')[0]});
+      let url = req.query.url || '/';
+
+      res.ok({
+        //layout: false,
+        user,
+        errors: req.flash('error')[0],
+        url
+      });
+    } catch (e){
+      sails.log.error(e);
+      res.serverError(e);
+    }
   },
   logout: function(req, res) {
     req.session.authenticated = false;
@@ -112,7 +124,7 @@ module.exports = {
         const userAgent = req.headers['user-agent'];
         user.loginSuccess({ userAgent });
 
-        return res.redirect(req.body.url || sails.config.urls.afterSignIn);
+        return res.redirect(req.query.url || req.body.url || sails.config.urls.afterSignIn);
       });
     });
   },

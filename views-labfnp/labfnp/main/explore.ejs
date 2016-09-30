@@ -131,7 +131,7 @@
 	  </div>
 	<% } else { %>
 		<div class="text-center">
-			<p>請先<a href="/login">登入</a>或<a href="/register">立即註冊</a>一組帳號，才能開始創作自己的香水配方。</p>
+			<p>請先<a href="/login?url=/lab">登入</a>或<a href="/register">立即註冊</a>一組帳號，才能開始創作自己的香水配方。</p>
 		</div>
 	<% } %>
 
@@ -166,7 +166,7 @@
               </div>-->
 						</a>
 						<div class="grid-boxes-caption">
-							<h3><a href="/recipe/<%= recipe.id %>"><%= recipe.perfumeName %></a></h3>
+							<h3><a href="/recipe/<%= recipe.hashId %>"><%= recipe.perfumeName %></a></h3>
 							<ul class="list-inline grid-boxes-news">
 								<li>
 									<i class="fa fa-user"></i>

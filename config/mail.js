@@ -1,5 +1,7 @@
+import customConfigLoader from './util/customConfigLoader.js';
+var customConfig = customConfigLoader('mail.js');
 
-module.exports.mail = {
+var defaultConfig = {
   type: 'smtp',
   config: {
     from: '',
@@ -101,4 +103,9 @@ module.exports.mail = {
       `
     }
   }
+}
+
+module.exports.mail = {
+  ...defaultConfig,
+  ...customConfig
 }
