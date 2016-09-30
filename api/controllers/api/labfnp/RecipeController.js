@@ -4,7 +4,6 @@ module.exports = {
     console.log("=== findForLab ===");
     try {
       let user = AuthService.getSessionUser(req);
-      console.log(user);
       const recipes = await Recipe.findAndIncludeUserLike({
         currentUser: user,
         start: parseInt(req.query.start, 10) || 0,

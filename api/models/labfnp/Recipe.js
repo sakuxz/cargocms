@@ -305,8 +305,6 @@ module.exports = {
             };
           }
           const currentUserId = currentUser ? currentUser.id : -1;
-          console.log('userid>>>>');
-          console.log(userId);
           const likeWhere = userId ? {
             UserId: userId
           } : {};
