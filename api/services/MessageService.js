@@ -170,8 +170,9 @@ module.exports = {
     try {
       let forgotPasswordTemplete = sails.config.mail.templete.forgotPassword;
       let mailSendConfig = {...forgotPasswordTemplete, to: email};
-      const DOMAIN_HOST = process.env.DOMAIN_HOST || 'localhost:5001';
-      const url = `http://${DOMAIN_HOST}${api}`
+      let DOMAIN_HOST = sails.config.appUrl;
+      DOMAIN_HOST = DOMAIN_HOST.endsWith('/') ? DOMAIN_HOST.substr(0, DOMAIN_HOST.length - 1) : DOMAIN_HOST;
+      const url = `${DOMAIN_HOST}${api}`
 
       mailSendConfig.subject = sprintf(mailSendConfig.subject, { username });
       mailSendConfig.html = sprintf(mailSendConfig.html, {
