@@ -17,7 +17,7 @@
 * 新增 publish 紀錄 feed 是否發布
 
 
-## 2016/9/30
+## v3
 
 [#748](https://github.com/trunk-studio/cargocms/pull/748)
 
