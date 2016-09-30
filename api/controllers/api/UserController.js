@@ -109,19 +109,17 @@ module.exports = {
       let message = await Message.create(messageConfig);
       await MessageService.sendMail(message);
 
-      if (req.wantsJSON) {
-        res.ok({ message: `forgot success. send email`, data: {} });
-      } else {
-        req.flash('info', '已給您發送重置密碼的連結，請至信箱確認');
-        res.redirect('/login');
-      }
+
+      req.flash('info', '已給您發送重置密碼的連結，請至信箱確認');
+      res.ok({
+        message: `forgot success. send email`,
+        data: {},
+      }, {
+        redirect: '/login'
+      });
     } catch (e) {
-      if (req.wantsJSON) {
-        res.serverError(e);
-      } else {
-        req.flash('error', e.message);
-        res.redirect('/forgot');
-      }
+      req.flash('error', e.message);
+      res.serverError(e, { redirect: '/forgot'});
     }
   },
 
@@ -153,19 +151,16 @@ module.exports = {
       user.resetPasswordToken = '';
       await user.save();
 
-      if (req.wantsJSON) {
-        res.ok({ message: `update password success. send email`, data: {} });
-      } else {
-        req.flash('info', '密碼已更新成功');
-        res.redirect('/login');
-      }
+      req.flash('info', '密碼已更新成功');
+      res.ok({
+        message:`update password success. send email`,
+        data: {},
+      }, {
+        redirect: '/login',
+      });
     } catch (e) {
-      if (req.wantsJSON) {
-        res.serverError(e);
-      } else {
-        req.flash('error', e.message);
-        res.redirect(`/update/password`);
-      }
+      req.flash('error', e.message);
+      res.serverError(e, { redirect: '/update/password'});
     }
   },
 

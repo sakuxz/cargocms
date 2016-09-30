@@ -86,15 +86,21 @@
       $(this).on("submit", function(event){
         var $form = $(this);
 
-        if( $(this).valid() ) {
-          if ($form.data("submitted") === true){
-            event.preventDefault();
-          } else {
-            $form.data("submitted", true);
-          }
-        } else {
+        if (grecaptcha.getResponse() === "") {
+          swal('錯誤', '請勾選我不是機器人', 'warning');
           event.preventDefault();
+        } else {
+          if( $(this).valid()) {
+            if ($form.data("submitted") === true){
+              event.preventDefault();
+            } else {
+              $form.data("submitted", true);
+            }
+          } else {
+            event.preventDefault();
+          }
         }
+
 
       });
 
@@ -109,7 +115,6 @@
           required: true,
           email: true
         },
-
       },
       messages: {
         email: {
@@ -134,7 +139,6 @@
       }
     });
 
-    grecaptcha.hl(zh-TW);
   });
 `); %>
 <!--=== End Content Part ===-->

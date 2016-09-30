@@ -67,6 +67,8 @@ module.exports = function sendOK (data, options) {
 
   if (options.view) {
     return res.view(options.view, params);
+  } else if (options.redirect) {
+    return res.redirect(options.redirect);
   }
 
   // If no second argument provided, try to serve the implied view,
