@@ -1,5 +1,5 @@
 var sinon = require('sinon');
-describe('about LikeRecipe Controller operation.', function() {
+describe.only('about LikeRecipe Controller operation.', function() {
 
   let recipe;
   before(async (done) => {
@@ -60,16 +60,16 @@ describe('about LikeRecipe Controller operation.', function() {
     try {
       const res = await request(sails.hooks.http.app)
       .post(`/api/labfnp/recipe/feedback`)
-      .data({
+      .send({
         invoiceNo: '123',
         tradeNo: 1608301610017019,
-        feeling: [ '清香的植物味', '123' ],
+        feeling: '清香的植物味,123',
       });
       res.status.should.be.eq(200);
 
       sails.log(res.body.data);
       res.body.data.invoiceNo.should.be.eq('123');
-      res.body.data.tradeNo.should.be.eq('1608301610017019');
+      res.body.data.tradeNo.should.be.eq(1608301610017019);
 
       done();
     } catch (e) {
