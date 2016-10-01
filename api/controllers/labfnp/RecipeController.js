@@ -213,12 +213,8 @@ module.exports = {
       });
 
       let updateUserPhone = await User.findById(user.id);
-      if( !updateUserPhone.phone1 ) {
+      if( !updateUserPhone.phone1 && !updateUserPhone.phone2 ) {
         updateUserPhone.phone1 = phone;
-      } else if( !updateUserPhone.phone2 ) {
-        if( updateUserPhone.phone1 !== phone ){
-          updateUserPhone.phone2 = phone;
-        }
       }
       updateUserPhone = await updateUserPhone.save();
 
