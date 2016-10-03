@@ -241,6 +241,13 @@ module.exports.init = async () => {
         email: 'smlsun@gmail.com'
       }
     }
+
+    const eventPostImage = await Image.create({
+      filePath: 'http://az796311.vo.msecnd.net/userupload/3e8830ec21754f39bb4785e18da8d1bb.jpg',
+      type: 'image/jpeg',
+      storage: 'url',
+    });
+
     let messageConfig = await MessageService.paymentConfirm(order);
     let message = await Message.create(messageConfig);
     await MessageService.sendMail(message);
@@ -254,9 +261,10 @@ module.exports.init = async () => {
 『我們每個人都是獨一無二的，喜好也不一樣，我們是不是思考為什麼我們要用大量化生產的香水？』
 
 香水和每個人的香味，都應該是具有獨特性並具有標誌性的，我們總不會希望從男朋友口中吐出『你擦得香水的味道跟我前女友得味道蠻像的耶！』之類的白目話語，更不想告訴另外一位八卦同事：用的是哪一瓶得香水，免得他下班後，立馬去買了一模一樣的….`,
-      coverUrl: 'https://az796311.vo.msecnd.net/userupload/3e8830ec21754f39bb4785e18da8d1bb.jpg',
+      cover: eventPostImage.id,
       url: 'http://localhost:5001/blog/flower',
-      abstract: '我們提供您不同香調的香味分子，由您創作並決定香型組成，由我們製作並把關品質。'
+      abstract: '我們提供您不同香調的香味分子，由您創作並決定香型組成，由我們製作並把關品質。',
+      type: 'internal-event'
     });
 
     const eventPostTag = await Tag.create({

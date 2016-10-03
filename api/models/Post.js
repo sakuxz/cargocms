@@ -18,6 +18,11 @@ module.exports = {
       type: Sequelize.ENUM('img', 'video'),
       defaultValue: 'img',
     },
+    type: {
+      type: Sequelize.ENUM('blog', 'internal-event', 'external-event'),
+      defaultValue: 'blog',
+    },
+
     coverUrl: {
       type: Sequelize.STRING,
       get: function() {
@@ -88,9 +93,11 @@ module.exports = {
   },
   options: {
     classMethods: {
-      findAllHasJoin: async (order, offset, limit) => {
+      findAllHasJoin: async ({order, offset, limit, where}) => {
         try {
+          if(where == undefined) where = {};
           return await Post.findAll({
+            where,
             offset,
             limit,
             order: [['createdAt', order || 'DESC']],
@@ -101,7 +108,7 @@ module.exports = {
           throw e;
         }
       },
-      findByIdHasJoin: async (id) => {
+      findByIdHasJoin: async ({id}) => {
         try {
           return await Post.findOne({
             where: { id },
@@ -112,6 +119,18 @@ module.exports = {
           throw e;
         }
       },
+      findByIdHasJoinByEvent: async ({id}) => {
+        try {
+          return await Post.findOne({
+            where: { id },
+            include: [ Tag, Image, User, Location, Event]
+          });
+        } catch (e) {
+          sails.log.error(e);
+          throw e;
+        }
+      },
+
       findByTagId: async (id) => {
         try {
           return await Post.findAll({

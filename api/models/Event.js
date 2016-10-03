@@ -13,7 +13,7 @@ module.exports = {
       defaultValue: 0
     },
     title: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: false,
     },
     description: Sequelize.STRING,
