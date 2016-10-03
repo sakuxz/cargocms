@@ -70,6 +70,11 @@ var defaultConfig = {
   'post /api/user/password':       'api/UserController.updatePassword',
 
   'post /api/contact':       'api/ContactController.create',
+  'get /api/admin/contact':        'api/admin/ContactController.find',
+  'get /api/admin/contact/:id':    'api/admin/ContactController.findOne',
+  // 'post /api/admin/contact':       'api/admin/ContactController.create',
+  // 'put /api/admin/contact/:id':    'api/admin/ContactController.update',
+  'delete /api/admin/contact/:id': 'api/admin/ContactController.destroy',
 
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
