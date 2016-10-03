@@ -41,7 +41,6 @@
 						<tr>
 							<th>票券名稱</th>
 							<th class="hidden-sm">發售狀態</th>
-              <th></th>
 							<th>票價</th>
 							<th>訂購</th>
 						</tr>
@@ -51,7 +50,6 @@
   						<tr data-toggle="collapse" data-target="#event<%= Event.id %>" class="accordion-toggle">
   							<td><%= Event.title %></td>
   							<td><%= Event.signupCount + "/" + Event.limit %></td>
-                <td><button class="btn btn-success btn-xs">詳細資料</button></td>
   							<td class="hidden-sm"><%= Event.price %></td>
   							<td><button data-id="<%= Event.id %>" class="btn btn-success btn-xs">訂購</button></td>
   						</tr>
