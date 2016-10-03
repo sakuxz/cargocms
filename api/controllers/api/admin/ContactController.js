@@ -22,11 +22,11 @@ module.exports = {
     console.log("=== findOne ===");
     const { id } = req.params;
     try {
-      const contact = await Contact.findOneWithPassport({id})
+      const contact = await Contact.findById(id);
       sails.log.info('get contact =>', contact);
       res.ok({
         message: 'Get contact success.',
-        data: contact,
+        data: {item: contact},
       });
     } catch (e) {
       res.serverError(e);
