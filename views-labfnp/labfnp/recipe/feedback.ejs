@@ -1,5 +1,5 @@
 <% LayoutUtils.addStylesheets('/assets/unify/css/pages/profile.css'); %>
-<% LayoutUtils.addStylesheets('/assets/labfnp/css/chosen/chosen.css'); %>
+<% LayoutUtils.addStylesheets('/assets/labfnp/css/tag-editor/jquery.tag-editor.css'); %>
 <!--<div class="container">-->
 <!--<pre><%= JSON.stringify(recipe, null, 2) %></pre>-->
 <!--</div>-->
@@ -52,12 +52,15 @@
   section {
     padding-bottom: 10px;
   }
-  .chosen-container-multi .chosen-choices {
+  .tag-editor {
     background: white;
     border-radius: 0;
     min-height: 34px;
     border: 1px solid #ccc;
     padding-top: 2px;
+  }
+  .tag-editor div {
+    color: #999999;
   }
   .error-text {
     color: #fc1a1a;
@@ -169,12 +172,7 @@
           <section class="col">
             <label for="payment">感覺<span class="required">*</span>
             </label>
-            <select multiple name="feeling" class="form-control chosen-select chosen-select-no-results" data-placeholder="請填寫您的感覺（可填寫多個）">
-              <option></option>
-              <% feelings.forEach(function(feeling) { %>
-                <option <%= recipeFeedback.feeling.indexOf(feeling)>=0 ? 'selected' : '' %> value="<%= feeling %>" ><%= feeling %></option>
-              <% }); %>
-            </select>
+            <input type="text" class="form-control" name="feeling" >
           </section>
           <label class="error-text">請填寫您的感覺</label>
 
@@ -199,9 +197,15 @@
 </div>
 <!-- end row -->
 </div>
+<% LayoutUtils.addScriptBlock(`
+  var feelingData = ${JSON.stringify(feelings)};
+  var initialTags = ${JSON.stringify(recipeFeedback.feeling)};
+  `); %>
 <% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3.min.js'); %>
 <% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3pie.min.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/pieChart.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/favorite.js'); %>
-<% LayoutUtils.addScripts('/assets/labfnp/lib/chosen/chosen.jquery.min.js'); %>
+<% LayoutUtils.addScripts('/assets/admin/js/libs/jquery-ui-1.10.3.min.js'); %>
+<% LayoutUtils.addScripts('/assets/labfnp/lib/tag-editor/jquery.caret.min.js'); %>
+<% LayoutUtils.addScripts('/assets/labfnp/lib/tag-editor/jquery.tag-editor.min.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/feedback.js'); %>
