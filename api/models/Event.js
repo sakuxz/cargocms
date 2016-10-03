@@ -1,14 +1,38 @@
 module.exports = {
   attributes: {
-    limit: Sequelize.INTEGER,
-    signupCount: Sequelize.INTEGER,
-    price: Sequelize.STRING,
-    title: Sequelize.STRING,
+    limit: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0
+    },
+    signupCount: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0
+    },
+    price: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0
+    },
+    title: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
     description: Sequelize.STRING,
-    sellStartDate: Sequelize.DATE,
-    sellEndDate: Sequelize.DATE,
-    eventStartDate: Sequelize.DATE,
-    eventEndDate: Sequelize.DATE
+    sellStartDate: {
+      type: Sequelize.DATE,
+      allowNull: false
+    },
+    sellEndDate: {
+      type: Sequelize.DATE,
+      allowNull: false
+    },
+    eventStartDate: {
+      type: Sequelize.DATE,
+      allowNull: false
+    },
+    eventEndDate: {
+      type: Sequelize.DATE,
+      allowNull: false
+    }
 
   },
 
