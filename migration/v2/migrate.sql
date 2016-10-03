@@ -1,1 +1,1 @@
-UPDATE Allpays SET TradeNo=NULL WHERE TradeNo LIKE MerchantTradeNo
+UPDATE Allpays SET TradeNo=NULL WHERE TradeNo=MerchantTradeNo
