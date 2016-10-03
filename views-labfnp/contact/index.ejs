@@ -46,7 +46,7 @@ option:first {
 <div class="container content">
   <div class="row">
     <div class="login-block col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-      <form class="reg-page" id="form" method="post" action="/api/user/forgotPassword">
+      <form class="reg-page" id="form" method="post" action="/api/contact">
 
         <div class="reg-header">
           <h2>聯絡我們</h2>
@@ -87,9 +87,9 @@ option:first {
           </div>
         </div>
 
-        <% var error = req.flash('error')[0]; %>
-        <% if (error) { %>
-          <div class="alert alert-warning" role="alert"><%= error %></div>
+        <% var info = req.flash('error')[0] ||  req.flash('info')[0]; %>
+        <% if (info) { %>
+          <div class="alert alert-warning" role="alert"><%= info %></div>
         <% } %>
 
       </form>

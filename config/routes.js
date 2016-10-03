@@ -69,6 +69,8 @@ var defaultConfig = {
   'post /api/user/forgotPassword':'api/UserController.forgotPassword',
   'post /api/user/password':       'api/UserController.updatePassword',
 
+  'post /api/contact':       'api/ContactController.create',
+
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
   'put /api/admin/facebook/update':        'api/admin/facebook/FeedController.update',
