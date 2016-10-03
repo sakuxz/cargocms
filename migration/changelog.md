@@ -21,5 +21,9 @@
 *  type 新增 forgotPassword enum
 
 ### User 欄位變動
-s
+
 * 新增 resetPasswordToken 紀錄忘記密碼的 token
+
+### 新增 Contacts Table
+
+* 新增 Contacts Table 用於聯繫表單
