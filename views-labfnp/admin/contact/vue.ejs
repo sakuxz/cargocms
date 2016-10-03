@@ -41,3 +41,12 @@ var appModel = {
 appMain.enableText = function () {
   $('textarea').attr('disabled', false);
 }
+
+appMain.DataTableInitComplete = function() {
+  $('#ToolTables_main-table_2').hide();
+  $('#ToolTables_main-table_3').hide();
+}
+
+appMain.hideSubmit = function() {
+  $('button[type="submit"]').hide();
+}
