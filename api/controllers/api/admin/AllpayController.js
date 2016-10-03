@@ -194,8 +194,8 @@ module.exports = {
       const content = await ExportService.query({ query, modelName, include });
       const columns = {
         id: "ID",
-        TradeNo: "交易編號",
-        MerchantTradeNo: "廠商交易編號",
+        TradeNo: "金流交易編號",
+        MerchantTradeNo: "訂單編號",
         RtnMsg: "交易訊息",
         PaymentDate: "付款時間",
         PaymentTypeDesc: "付款方式",
@@ -235,7 +235,7 @@ module.exports = {
           sails.log.debug(data);
           let formatted = {
             id: data.id,
-            TradeNo: data.TradeNo ? `="${data.TradeNo}"` : '訂單尚未成立',
+            TradeNo: data.TradeNo ? `="${data.TradeNo}"` : '',
             MerchantTradeNo: data.MerchantTradeNo,
             RtnMsg: data.RtnMsg,
             PaymentDate: data.PaymentDate == "Invalid date" ? '' : data.PaymentDate,
