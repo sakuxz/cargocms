@@ -5,8 +5,8 @@
 	<thead>
 		<tr>
 			<th width="8%" data-hide="phone"><i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/> ID</th>
-			<th width="15%" data-class="expand"><i class="fa fa-fw text-muted hidden-sm hidden-xs"/> 金流交易編號 </th>
-      <th width="15%" >訂單編號</th>
+			<th width="15%" data-class="expand">訂單編號</th>
+			<th width="15%" ><i class="fa fa-fw text-muted hidden-sm hidden-xs"/> 金流交易編號 </th>
       <th data-hide="always">交易訊息</th>
       <th width="15%">付款時間</th>
       <th width="10%" class="no-sort" data-hide="phone,tablet">付款方式</th>
@@ -99,8 +99,8 @@
 		// server only
 		var columns = [
 			{ "data": "id" },  // row0
-			{ "data": "TradeNo"}, //TradeNo
 			{ "data": "MerchantTradeNo" },
+			{ "data": "TradeNo"}, //TradeNo
       { "data": "RtnMsg" },
       { "data": "PaymentDate" }, //PaymentDate
       { "data": "PaymentTypeDesc" },
@@ -132,8 +132,12 @@
         "targets": 'no-sort',
         "orderable": false,
       },
+			{
+				"searchable": true,
+				"targets": 1
+			},
       {
-        "targets": 1,
+        "targets": 2,
         "render": function(data, type, row) {
 					console.log(data, type, row);
           if (data) {
@@ -146,10 +150,6 @@
 						}
           }
         }
-      },
-			{
-        "searchable": true,
-        "targets": 2
       },
       {
         "targets": 4,

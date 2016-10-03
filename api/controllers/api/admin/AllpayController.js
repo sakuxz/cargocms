@@ -194,8 +194,8 @@ module.exports = {
       const content = await ExportService.query({ query, modelName, include });
       const columns = {
         id: "ID",
-        TradeNo: "金流交易編號",
         MerchantTradeNo: "訂單編號",
+        TradeNo: "金流交易編號",
         RtnMsg: "交易訊息",
         PaymentDate: "付款時間",
         PaymentTypeDesc: "付款方式",
