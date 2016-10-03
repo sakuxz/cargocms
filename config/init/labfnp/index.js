@@ -246,6 +246,55 @@ module.exports.init = async () => {
     await MessageService.sendMail(message);
     // == Message done. ==
 
+    let eventPost = await Post.create({
+      title: 'LFP:個人化香水調香工作坊（高雄場）',
+      content: `為什麼? 為什麼是客製化香水？
+
+每當被問到這個問題，都會想要反問：
+『我們每個人都是獨一無二的，喜好也不一樣，我們是不是思考為什麼我們要用大量化生產的香水？』
+
+香水和每個人的香味，都應該是具有獨特性並具有標誌性的，我們總不會希望從男朋友口中吐出『你擦得香水的味道跟我前女友得味道蠻像的耶！』之類的白目話語，更不想告訴另外一位八卦同事：用的是哪一瓶得香水，免得他下班後，立馬去買了一模一樣的….`,
+      coverUrl: 'https://az796311.vo.msecnd.net/userupload/3e8830ec21754f39bb4785e18da8d1bb.jpg',
+      url: 'http://localhost:5001/blog/flower',
+      abstract: '我們提供您不同香調的香味分子，由您創作並決定香型組成，由我們製作並把關品質。'
+    });
+
+    const eventPostTag = await Tag.create({
+      title: 'Event'
+    });
+
+    await eventPost.addTag(eventPostTag.id);
+
+
+    let events = [
+      {
+        limit: 2,
+        price: 600,
+        title: "調香工作坊個人票(只有參加工作坊）",
+        sellStartDate: new Date() ,
+        sellEndDate: new Date(),
+        eventStartDate: new Date(),
+        eventEndDate:new Date(),
+        description: "早鳥個人票：不含個人化香水服務。",
+        PostId: eventPost.id
+
+      },{
+        limit: 5,
+        price: 1780,
+        title: "早鳥單人工作坊＋客製化香水服務",
+        sellStartDate: new Date() ,
+        sellEndDate: new Date(),
+        eventStartDate: new Date(),
+        eventEndDate:new Date(),
+        description: "包含製作你的第一瓶個人化香水製作服務 （含運）與調香工作坊Workshop門票一張",
+        PostId: eventPost.id
+
+      }
+    ]
+
+    await Event.bulkCreate(events);
+
+
 
 
 

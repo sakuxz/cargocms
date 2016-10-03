@@ -1,15 +1,20 @@
 module.exports = {
   attributes: {
-    limit: Sequelize.STRING,
+    limit: Sequelize.INTEGER,
+    signupCount: Sequelize.INTEGER,
     price: Sequelize.STRING,
     title: Sequelize.STRING,
-    saleStartDate: Sequelize.STRING,
-    saleEndDate: Sequelize.STRING,
-    eventStartDate: Sequelize.STRING,
-    eventEndDate: Sequelize.STRING
+    description: Sequelize.STRING,
+    sellStartDate: Sequelize.DATE,
+    sellEndDate: Sequelize.DATE,
+    eventStartDate: Sequelize.DATE,
+    eventEndDate: Sequelize.DATE
+
   },
 
-  associate: (models) => {
+  associations: function() {
+    Post.hasMany(Event);
+
     // Event.belongsToMany(User, {
     //
     //   through: 'UserEvent',
