@@ -352,6 +352,40 @@ $(document).ready(function () {
 
 	});
 
+	$("#imageInput").change(function() {
+
+	    var base_url = '/api/admin/upload';
+
+	    var file_data = $("#imageInput").prop("files")[0];
+	    var form_data = new FormData();
+	    form_data.append("uploadPic", file_data);
+	    $.ajax({
+	        type: "POST",
+	        url: base_url,
+	        datatype: 'script',
+	        cache: false,
+	        contentType: false,
+	        processData: false,
+	        data: form_data,
+	        success: function(result) {
+	          console.log("success", result);
+						alert(result.data.id);
+						$('input[name=coverPhotoId]').val(result.data.id);
+	        },
+	        error: function(result) {
+            $('input[name=coverPhotoId]').val(null);
+	        }
+	    });
+	    // $("#imageInput").val('');
+	})
+
+	var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	if (isMobile) {
+		$('#fine-uploader-validation').remove()
+	} else {
+		$("#imageInput").remove()
+	}
+
 	$('#main-form').on('submit', function (event) {
 
 		event.preventDefault();
@@ -375,7 +409,6 @@ $(document).ready(function () {
 		var description = $('textarea[name=description]').val();
 		var coverPhotoId = $('input[name=coverPhotoId]').val();
 		var createdBy = $('input[name=createdBy]').val();
-
 		var formula = getFormulaData(createdBy);
 		// console.log("=== formula ===", formula);
 		var formIsValid = true;
@@ -403,6 +436,9 @@ $(document).ready(function () {
 		});
 
 		if (!formIsValid) return false;
+
+		$("#imageInput").val('');
+
 		$.ajax({
 			url: endpoint,
 			method: method, //create
