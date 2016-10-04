@@ -63,7 +63,8 @@ module.exports = function forbidden (data, options) {
   // but fall back to sending JSON(P) if any errors occur.
   else {
     if (req.path.split('/')[1] === 'admin') {
-      sails.log.info('Forbidden redirect /admin/login')
+      sails.log.info('Forbidden redirect /admin/login');
+      req.flash('error', 'Error.NoPermitted');
       return res.redirect('/admin/login');
     } else {
 

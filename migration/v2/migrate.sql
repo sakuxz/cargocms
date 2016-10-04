@@ -1,3 +1,4 @@
+UPDATE Allpays SET TradeNo=NULL WHERE TradeNo=MerchantTradeNo
 ALTER TABLE Feeds add createdTime DATETIME DEFAULT NULL;
 ALTER TABLE Feeds add publish TINYINT DEFAULT 1;
 

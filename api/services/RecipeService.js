@@ -85,6 +85,12 @@ module.exports = {
 
   loadRecipe: async function(recipeId, currentUser) {
     try {
+      const find = await Recipe.findOne({
+        where: {
+          hashId: recipeId,
+        }
+      })
+      recipeId = find.id;
       const recipe = await Recipe.findOneAndIncludeUserLike({
         findByRecipeId: recipeId,
         currentUser
