@@ -1,5 +1,4 @@
 
-
 module.exports = {
   attributes: {
     sendBy: Sequelize.ENUM(
@@ -11,7 +10,8 @@ module.exports = {
       'orderConfirm',
       'paymentConfirm',
       'deliveryConfirm',
-      'orderSync'
+      'orderSync',
+      'forgotPassword'
     ),
     from: Sequelize.STRING,
     to: Sequelize.STRING,

@@ -186,16 +186,14 @@ module.exports = {
   saveFeedback: async (req, res) => {
     const data = req.body;
     try {
-      if (typeof data.feeling === 'string'){
-        data.feeling = [data.feeling];
-      }
+      data.feeling = data.feeling.split(',');
       let {UserId, RecipeId} = data;
       let feedback = await RecipeFeedback.findOne({where: {UserId, RecipeId}});
 
       if(feedback != null){
-        feedback.invoiceNo = data.invoiceNo
-        feedback.tradeNo = data.tradeNo
-        feedback.feeling = data.feeling
+        feedback.invoiceNo = data.invoiceNo;
+        feedback.tradeNo = data.tradeNo;
+        feedback.feeling = data.feeling;
         feedback = await feedback.save(data);
       }else {
         feedback = await RecipeFeedback.create(data);

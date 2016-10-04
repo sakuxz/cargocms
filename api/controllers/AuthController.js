@@ -131,6 +131,14 @@ module.exports = {
 
   disconnect: function(req, res) {
     passport.disconnect(req, res);
+  },
+
+  forgot: function(req, res) {
+    try {
+      res.ok({ view: true, reCAPTCHAKey: sails.config.reCAPTCHA.key });
+    } catch (e) {
+      res.serverError(e);
+    }
   }
 
 };

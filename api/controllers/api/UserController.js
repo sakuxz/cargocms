@@ -1,3 +1,8 @@
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import moment from 'moment';
+import axios from 'axios';
+
 module.exports = {
   follow: async (req, res) => {
     try {
@@ -70,6 +75,92 @@ module.exports = {
       }
     } catch (e) {
       res.serverError(e);
+    }
+  },
+
+  forgotPassword: async (req, res) => {
+    try {
+      const { email } = req.body;
+
+      const secret = sails.config.reCAPTCHA.secret;
+      const response = req.body['g-recaptcha-response'];
+      const recaptcha = await axios.get(`https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${response}`);
+      if (!recaptcha.data.success) throw Error('請稍候再試');
+
+      let user = await User.findOne({
+        where: { email }
+      })
+      if (!user) throw Error('請確認 Email，該 Email 尚未註冊過');
+
+      const resetPasswordToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
+      user.resetPasswordToken = resetPasswordToken;
+      await user.save();
+
+      const token = jwt.sign({
+        exp: moment(new Date()).add(1, 'h').valueOf(),
+        email: user.email
+      }, resetPasswordToken);
+
+      let messageConfig = await MessageService.forgotPassword({
+        email: user.email,
+        api: `/update/password?token=${token}`,
+        username: user.displayName,
+      });
+      let message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
+
+
+      req.flash('info', '已給您發送重置密碼的連結，請至信箱確認');
+      res.ok({
+        message: `forgot success. send email`,
+        data: {},
+      }, {
+        redirect: '/login'
+      });
+    } catch (e) {
+      req.flash('error', e.message);
+      res.serverError(e, { redirect: '/forgot'});
+    }
+  },
+
+
+  updatePassword: async (req, res) => {
+    try {
+      const { token, password } = req.body;
+      if (!token) throw Error('請點擊 Email 連結以更新密碼');
+
+      const decoded = jwt.decode(token);
+      const timeout = moment(new Date()).valueOf() > decoded.exp;
+      if (timeout) throw Error('更新密碼連結已逾時');
+
+      let user = await User.findOne({
+        where: {
+          email : decoded.email
+        },
+        include: Passport,
+      });
+      if (!user) throw Error('請確認 Email，該 Email 尚未註冊過');
+      if (!user.resetPasswordToken) throw Error('請點擊 Email 連結以更新密碼');
+
+      jwt.verify(token, user.resetPasswordToken);
+
+      let passport = await Passport.findById(user.Passports[0].id);
+      passport.password = password;
+      await passport.save();
+
+      user.resetPasswordToken = '';
+      await user.save();
+
+      req.flash('info', '密碼已更新成功');
+      res.ok({
+        message:`update password success. send email`,
+        data: {},
+      }, {
+        redirect: '/login',
+      });
+    } catch (e) {
+      req.flash('error', e.message);
+      res.serverError(e, { redirect: '/update/password'});
     }
   },
 

@@ -11,7 +11,7 @@
  */
 
 module.exports = {
-  appUrl: 'http://cargo-dev.trunksys.com/',
+  appUrl: 'cargo-dev.trunksys.com',
   port: 5001,
   socials: ["facebook", "googleplus", "twitter"],
   models: {
@@ -40,5 +40,9 @@ module.exports = {
         ]
       }
     }
+  },
+  reCAPTCHA: {
+    key: '',
+    secret: ''
   }
 };

@@ -82,7 +82,7 @@ label.error{
         </div>
 
         <% if(error === 'username must be unique' ){ %>
-            <div class="alert alert-warning" role="alert">此 帳號 已有人使用</div>
+            <div class="alert alert-warning" role="alert">此 帳號 已被使用，請更換帳號</div>
         <% }%>
 
         <div class="row">
@@ -99,7 +99,7 @@ label.error{
         <div class="row">
           <div class="col-sm-12">
             <label>生日 </label>
-            <input type="date" name="birthday" value="<%= data.user.birthday %>" class="form-control margin-bottom-20" placeholder="例：1970-01-01">
+            <input type="text" name="birthday" value="<%= data.user.birthday %>" class="form-control margin-bottom-20" placeholder="例：1970-01-01">
           </div>
         </div>
         <div class="row">

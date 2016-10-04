@@ -99,4 +99,13 @@ module.exports = {
       res.serverError(e);
     }
   },
+
+  updatePassword: async function(req, res) {
+    try {
+      const { token } = req.query;
+      res.ok({ token });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
 }

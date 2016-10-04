@@ -60,5 +60,9 @@ module.exports = {
         name: '信用卡'
       }
     ]
+  },
+  reCAPTCHA: {
+    key: '',
+    secret: ''
   }
 }

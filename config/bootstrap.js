@@ -13,14 +13,16 @@ import fs from 'fs';
 import shortid from 'shortid';
 import MailerService from 'sails-service-mailer';
 module.exports.bootstrap = async (cb) => {
-  if(!sails.config.shareUrl) sails.config.shareUrl = "localhost:"+ sails.config.port
-  // 這個已經用 config/urls.js 定義預設值
-  //if(!sails.config.urls) sails.config.urls = {afterSignIn: "/"};
-  _.extend(sails.hooks.http.app.locals, sails.config.http.locals);
-  const {environment} = sails.config;
 
 
   try {
+    if(!sails.config.appUrl) sails.config.appUrl = "localhost:"+ sails.config.port
+    if(sails.config.appUrl.endsWith('/'))
+    sails.config.appUrl = sails.config.appUrl.substr(0, sails.config.appUrl.length - 1)
+    // 這個已經用 config/urls.js 定義預設值
+    //if(!sails.config.urls) sails.config.urls = {afterSignIn: "/"};
+    _.extend(sails.hooks.http.app.locals, sails.config.http.locals);
+    const {environment} = sails.config;
 
     sails.services.passport.loadStrategies();
 
