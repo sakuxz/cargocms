@@ -215,8 +215,8 @@ module.exports = {
       let updateUserPhone = await User.findById(user.id);
       if( !updateUserPhone.phone1 && !updateUserPhone.phone2 ) {
         updateUserPhone.phone1 = phone;
+        updateUserPhone = await updateUserPhone.save();
       }
-      updateUserPhone = await updateUserPhone.save();
 
 
       recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);

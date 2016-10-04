@@ -49,6 +49,9 @@ var defaultConfig = {
     'update': ['nocache'],
     'delete': ['nocache'],
   },
+  'EventController': {
+    'allpay': ['passport', 'sessionAuth'],
+  },
   /***************************************************************************
   *                                                                          *
   * Default policy for all controllers and actions (`true` allows public     *
