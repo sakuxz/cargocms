@@ -8,6 +8,7 @@ module.exports = {
         currentUser: user,
         start: parseInt(req.query.start, 10) || 0,
         length: parseInt(req.query.length, 10) || 5,
+        likeUser: req.query.type === 'like' ? user : null,
       });
       console.log();
       let social = SocialService.forRecipe({recipes});

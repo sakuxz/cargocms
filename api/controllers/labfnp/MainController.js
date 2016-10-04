@@ -10,6 +10,7 @@ module.exports = {
         currentUser,
         start: 0,
         length: 100,
+        likeUser: req.query.type === 'like' ? currentUser : null
       });
 
       let social = SocialService.forRecipe({recipes});

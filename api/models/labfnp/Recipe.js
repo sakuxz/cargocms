@@ -273,7 +273,7 @@ module.exports = {
           throw e;
         }
       },
-      getFindAndIncludeUserLikeParam: ({findByRecipeId, findByUserId, currentUser, start, length }) => {
+      getFindAndIncludeUserLikeParam: ({findByRecipeId, findByUserId, currentUser, start, length, likeUser }) => {
         try {
           let whereParam = { where: {} };
           if (findByUserId) {
@@ -305,13 +305,18 @@ module.exports = {
             };
           }
           const currentUserId = currentUser ? currentUser.id : -1;
+          const likeWhere = likeUser ? {
+            UserId: likeUser.id
+          } : {};
+          const likeRequired = likeUser ? true : false;
           return {
             ...whereParam,
             ...paging,
             order: [['createdAt', 'DESC']],
             include: [{
               model: UserLikeRecipe,
-              required: false
+              where: likeWhere,
+              required: likeRequired
             }, {
               model: Image,
             }, {
@@ -326,14 +331,15 @@ module.exports = {
           throw e;
         }
       },
-      findAndIncludeUserLike: async function({findByRecipeId, findByUserId, currentUser, start, length }){
+      findAndIncludeUserLike: async function({findByRecipeId, findByUserId, currentUser, start, length, likeUser }){
         try {
           const findParam = this.getFindAndIncludeUserLikeParam({
             findByRecipeId,
             findByUserId,
             currentUser,
             start,
-            length
+            length,
+            likeUser
           });
           let recipes = await Recipe.findAll(findParam);
           recipes.map((recipe) => recipe.checkCurrentUserLike({currentUser}));
