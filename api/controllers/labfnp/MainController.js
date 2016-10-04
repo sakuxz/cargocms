@@ -10,7 +10,7 @@ module.exports = {
         currentUser,
         start: 0,
         length: 100,
-        userId: req.query.type === 'like' ? AuthService.getSessionUser(req).id : null
+        likeUser: req.query.type === 'like' ? currentUser : null
       });
 
       let social = SocialService.forRecipe({recipes});

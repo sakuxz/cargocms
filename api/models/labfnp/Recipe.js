@@ -273,7 +273,7 @@ module.exports = {
           throw e;
         }
       },
-      getFindAndIncludeUserLikeParam: ({findByRecipeId, findByUserId, currentUser, start, length, userId }) => {
+      getFindAndIncludeUserLikeParam: ({findByRecipeId, findByUserId, currentUser, start, length, likeUser }) => {
         try {
           let whereParam = { where: {} };
           if (findByUserId) {
@@ -305,10 +305,10 @@ module.exports = {
             };
           }
           const currentUserId = currentUser ? currentUser.id : -1;
-          const likeWhere = userId ? {
-            UserId: userId
+          const likeWhere = likeUser ? {
+            UserId: likeUser.id
           } : {};
-          const likeRequired = userId ? true : false;
+          const likeRequired = likeUser ? true : false;
           return {
             ...whereParam,
             ...paging,
@@ -331,7 +331,7 @@ module.exports = {
           throw e;
         }
       },
-      findAndIncludeUserLike: async function({findByRecipeId, findByUserId, currentUser, start, length, userId }){
+      findAndIncludeUserLike: async function({findByRecipeId, findByUserId, currentUser, start, length, likeUser }){
         try {
           const findParam = this.getFindAndIncludeUserLikeParam({
             findByRecipeId,
@@ -339,7 +339,7 @@ module.exports = {
             currentUser,
             start,
             length,
-            userId
+            likeUser
           });
           let recipes = await Recipe.findAll(findParam);
           recipes.map((recipe) => recipe.checkCurrentUserLike({currentUser}));
