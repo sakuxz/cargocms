@@ -25,12 +25,17 @@
 .rounded-x {
     border-radius: 50% !important;
 }
-.input-group label.error {
+.input-group label.error, .input-group em.invalid {
   position: absolute;
   bottom: -2em;
   width: 100%;
   left: 0;
   color: red;
+}
+
+.help-block {
+  color: #a94442;
+  font-weight: bolder;
 }
 </style>
 
@@ -38,7 +43,7 @@
 <div class="container content">
   <div class="row">
     <div class="login-block col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-      <form class="reg-page" method="post" action="/auth/local?url=/">
+      <form class="reg-page" method="post" action="/auth/local?url=<%= data.url %>">
         <!--
         <div class="reg-header">
           <h2>使用 Facebook 帳號登入</h2>
@@ -60,23 +65,23 @@
           <h2>輸入帳號及密碼</h2>
         </div>
 
-        <div class="input-group margin-bottom-25">
+        <div class="input-group margin-top-20">
           <span class="input-group-addon"><i class="fa fa-user"></i></span>
           <input type="text" placeholder="Username" value="<%= data.user.identifier %>" id="identifier" name="identifier" class="form-control">
         </div>
-        <div class="input-group margin-bottom-25">
+        <div class="input-group margin-top-20">
           <span class="input-group-addon"><i class="fa fa-lock"></i></span>
           <input type="password" placeholder="Password" value="<%= data.user.password %>" id="password" name="password" class="form-control">
         </div>
 
-        <input id='backUrl' type="hidden" name="url" value='/'>
 
-        <div class="row">
+
+        <div class="row margin-top-20">
           <div class="col-md-6 checkbox">
             <!--<label><input type="checkbox"> 保持登入狀態</label>-->
 
             <div class="margin-top-20">
-              還沒有帳號嗎？<a href="/register">註冊新帳號</a>
+              還不是會員嗎？<a href="/register">立即註冊</a>
             </div>
           </div>
           <div class="col-md-6">
@@ -88,8 +93,13 @@
         <% } %>
         <hr>
 
-        <!--<h4>忘記密碼？</h4>
-        <p>別擔心，<a class="color-green" href="#">點擊這裡</a>重新設定密碼！</p>-->
+        <h4>忘記密碼？</h4>
+        <p>別擔心，<a class="color-green" href="/forgot">點擊這裡</a>重新設定密碼！</p>
+
+        <% var info = req.flash('info')[0]; %>
+        <% if (info) { %>
+          <div class="alert alert-warning" role="alert"><%= info %></div>
+        <% } %>
       </form>
     </div>
   </div><!--/row-->
@@ -115,10 +125,25 @@
         password:{
           required: "請輸入密碼"
         },
+      },
+      highlight: function(element) {
+          $(element).closest('.form-group').addClass('has-error');
+      },
+      unhighlight: function(element) {
+          $(element).closest('.form-group').removeClass('has-error');
+      },
+      errorElement: 'span',
+      errorClass: 'help-block',
+      errorPlacement: function(error, element) {
+          if(element.parent('.input-group').length) {
+              error.insertAfter(element.parent());
+          } else {
+              error.insertAfter(element);
+          }
       }
     });
 
-    document.referrer && $('#backUrl').val(document.referrer);
+  
 
   });
 `); %>

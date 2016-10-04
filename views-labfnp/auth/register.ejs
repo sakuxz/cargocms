@@ -54,11 +54,11 @@ label.error{
         <div class="row">
           <div class="col-sm-6">
             <label>姓氏 <span class="color-red">*</span></label>
-            <input type="text" name="firstName" value="<%= data.user.firstName %>" class="form-control margin-bottom-20">
+            <input type="text" name="lastName" value="<%= data.user.lastName %>" class="form-control margin-bottom-20">
           </div>
           <div class="col-sm-6">
             <label>名字 <span class="color-red">*</span></label>
-            <input type="text" name="lastName" value="<%= data.user.lastName %>" class="form-control margin-bottom-20">
+            <input type="text" name="firstName" value="<%= data.user.firstName %>" class="form-control margin-bottom-20">
           </div>
         </div>
 
@@ -99,17 +99,17 @@ label.error{
         <div class="row">
           <div class="col-sm-12">
             <label>生日 </label>
-            <input type="date" name="birthday" value="<%= data.user.birthday %>" class="form-control margin-bottom-20" placeholder="例：1970-01-01">
+            <input type="text" name="birthday" value="<%= data.user.birthday %>" class="form-control margin-bottom-20" placeholder="例：1970-01-01">
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
             <label>手機 </label>
-            <input type="text" name="phone1" value="<%= data.user.phone1 %>" class="form-control margin-bottom-20">
+            <input type="number" name="phone1" value="<%= data.user.phone1 %>" class="form-control margin-bottom-20">
           </div>
           <div class="col-sm-6">
             <label>市話 </label>
-            <input type="text" name="phone2" value="<%= data.user.phone2 %>" class="form-control margin-bottom-20">
+            <input type="number" name="phone2" value="<%= data.user.phone2 %>" class="form-control margin-bottom-20">
           </div>
         </div>
         <div class="row">
@@ -135,7 +135,7 @@ label.error{
             </label>
           </div>
           <div class="col-lg-6 text-right">
-            <button class="btn-u" type="submit">註冊</button>
+            <button id="submit-button" class="btn-u" type="submit">註冊</button>
           </div>
         </div>
       </form>
@@ -170,11 +170,49 @@ label.error{
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
 
+    $.fn.preventDoubleSubmission = function() {
+      $(this).on("submit", function(event){
+        var $form = $(this);
+
+        if( $(this).valid()) {
+          if ($form.data("submitted") === true){
+            event.preventDefault();
+          } else {
+            $form.data("submitted", true);
+
+            $("#submit-button").prop("disabled", true);
+            $("#submit-button").text("處理中...");
+
+            setTimeout(function (){
+              $("#submit-button").prop("disabled", false);
+              $("#submit-button").text("註冊");
+            }, 1000);
+
+            swal({
+              type: "info",
+              title: "註冊",
+              text: "資料傳送中...",
+              showConfirmButton: false,
+              timer: 5000,
+            });
+          }
+        } else {
+          event.preventDefault();
+        }
+      });
+      return this;
+    }
+
     $('input[name="birthday"]').datepicker({
       dateFormat: 'yy-mm-dd',
       prevText: '<i class="fa fa-angle-left"></i>',
       nextText: '<i class="fa fa-angle-right"></i>'
     });
+
+    $('html, body').keydown(function(e){
+      // press Esc to close modal
+      if (e.keyCode === 27) $('.modal-footer button')[0].click();
+    })
 
     $("#registerForm").validate({
       rules: {
@@ -230,12 +268,6 @@ label.error{
       }
     });
 
-    $("#registerForm").submit( function( event ) {
-      if( $("#registerForm").valid() ){
-        swal("註冊","資料傳送中...","info");
-      }else{
-        event.preventDefault();
-      }
-    });
+    $("#registerForm").preventDoubleSubmission();
   });
 `); %>

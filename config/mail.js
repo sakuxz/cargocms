@@ -1,5 +1,7 @@
+import customConfigLoader from './util/customConfigLoader.js';
+var customConfig = customConfigLoader('mail.js');
 
-module.exports.mail = {
+var defaultConfig = {
   type: 'smtp',
   config: {
     from: '',
@@ -99,6 +101,26 @@ module.exports.mail = {
       html: `
       <p>歡迎 %(username)s 註冊 %(storeName)s ！</p>
       `
+    },
+    forgotPassword: {
+      sendBy: 'email',
+      subject: '%(username)s - 忘記密碼通知信',
+      html: `
+      <br />Hi %(username)s:
+      <br />
+      <br />是您在我們的系統中忘記密碼了嗎??
+      <br />若是您忘記了密碼，點選以下連結即可重置密碼
+      <br /><a href='%(url)s'>Click Me</a>
+      <br />若不是您，您可以選擇忽略此封郵件。
+      <br />
+      <br />此為系統信件，請勿直接回覆此信件
+      <br />From %(storeName)s
+      `
     }
   }
+}
+
+module.exports.mail = {
+  ...defaultConfig,
+  ...customConfig
 }

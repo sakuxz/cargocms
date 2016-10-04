@@ -213,15 +213,45 @@ module.exports.http = {
   locals: {
     filters: {
       formatDate: function(date) {
-        return moment(date).format('YYYY/MM/DD');
+        if  (!date) {
+          return null;
+        }
+        if (!(date instanceof Date)) {
+          return date;
+        }
+
+        try {
+          return moment(date).format('YYYY/MM/DD');
+        }
+        catch (e) {
+          return date;
+        }
       },
       formatDateTime: function(dateTime) {
-        return moment(dateTime).format('YYYY/MM/DD hh:mm:ss');
+        if (!dateTime) {
+          return null;
+        }
+        if (!(dateTime instanceof Date)) {
+          return dateTime;
+        }
+
+        try {
+          return moment(dateTime).format('YYYY/MM/DD hh:mm:ss');
+        }
+        catch (e) {
+          return dateTime;
+        }
       },
       nl2br: function(text) {
+        if (!text) {
+          return text;
+        }
         return text.replace(/(?:\r\n|\r|\n)/g, '<br />');
       },
       linkifyjs: function(text) {
+        if (!text) {
+          return text;
+        }
         return linkifyStr(text);
       },
     }

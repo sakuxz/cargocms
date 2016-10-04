@@ -51,7 +51,14 @@
         <% if (!req.session.authenticated) { %>
           <li class="<%= (req.path=='/register')?'active':'' %>"><a href="/register">註冊</a></li>
           <li class="topbar-devider"></li>
-          <li class="<%= (req.path=='/login')?'active':'' %>"><a id="login" href="/login">登入</a></li>
+
+          <% var loginBackUrl = req.url;%>
+          <% if(loginBackUrl === '/register' || loginBackUrl === '/') { %>
+          <%   loginBackUrl = '' %>
+          <% } else { %>
+          <%   loginBackUrl = '?url=' + loginBackUrl %>
+          <% } %>
+          <li class="<%= (req.path=='/login')?'active':'' %>"><a id="login" href="/login<%= loginBackUrl %>">登入</a></li>
         <% } else { %>
           <li><a id="logout-link" href="#" >登出</a></li>
           <li class="topbar-devider"></li>
