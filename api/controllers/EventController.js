@@ -40,7 +40,9 @@ module.exports = {
       const currentUser = AuthService.getSessionUser(req);
       if (!currentUser) return res.redirect('/login');
 
-      const event = await Event.findById(id);
+      const event = await Event.findOne({
+        where: { id },
+      });
 
 
       return res.view({ event, user: currentUser });

@@ -14,10 +14,12 @@
               <td>訂購商品</td>
               <td><%= item.RecipeOrder.Recipe.perfumeName + " 100 ml" %></td>
             </tr>
-            <tr>
-              <td>交易編號</td>
-              <td><%= item.TradeNo %></td>
-            </tr>
+						<% if(item.TradeNo){ %>
+	            <tr>
+	              <td>交易編號</td>
+	              <td><%= item.TradeNo %></td>
+	            </tr>
+						<% } %>
             <tr>
               <td>應付金額</td>
               <td><%= item.ShouldTradeAmt %></td>
