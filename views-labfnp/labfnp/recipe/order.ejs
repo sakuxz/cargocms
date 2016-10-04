@@ -241,6 +241,15 @@
             event.preventDefault();
           } else {
             $form.data("submitted", true);
+
+            $("#submitOrder").prop("disabled", true);
+            $("#submitOrder").text("處理中...");
+
+            setTimeout(function (){
+              $("#submitOrder").prop("disabled", false);
+              $("#submitOrder").text("送出");
+            }, 1000);
+
             swal({
               type: "info",
               title: "訊息",
