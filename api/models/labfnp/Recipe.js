@@ -279,11 +279,11 @@ module.exports = {
           if (findByUserId) {
             whereParam.where.UserId = findByUserId;
           } else if (findByRecipeId) {
-            // whereParam.where.id = findByRecipeId;
-            whereParam.where.$or = [
-              { id: findByRecipeId },
-              { hashId: findByRecipeId },
-            ]
+            whereParam.where.id = findByRecipeId;
+            // whereParam.where.$or = [
+            //   { id: parseInt(findByRecipeId, 10) },
+            //   { hashId: findByRecipeId },
+            // ]
           }
           let notAdmin = true;
           let ownUserId = {};

@@ -24,6 +24,7 @@ module.exports.init = async () => {
       { href: '/admin/slogan', title: '口號', sequence: 80, ParentMenuItemId: 2},
       { href: '/admin/allpay', title: '訂單', sequence: 90, ParentMenuItemId: 2},
       { href: '/admin/message', title: '訊息', sequence: 100, ParentMenuItemId: 2},
+      { href: '/admin/contact', title: '聯繫訊息', sequence: 110, ParentMenuItemId: 2},
       { href: '/admin/mock', title: '隨機資料表', sequence: 20, ParentMenuItemId: 3},
       { href: '/admin/facebook/feed', title: '動態', sequence: 110, ParentMenuItemId: 2}
 
@@ -302,9 +303,23 @@ module.exports.init = async () => {
 
     await Event.bulkCreate(events);
 
+    let testContact = {
+      name: '大中天',
+      email: 'loserForever@example.com',
+      subject: '你好我是大中天',
+      content: '緣起是在網路上無意間發現一個名叫「大中天」的帳號，經其為媒介，尋找到這位玩起遊戲的實況對話，十分有討論題材的魯蛋先生。',
+      phone: '0987654321',
+    }
+    await Contact.create(testContact);
 
-
-
+    testContact = {
+      name: '葉佩雯',
+      email: 'poster@gmail.com',
+      subject: '測試聯絡訊息',
+      content: '這是測試聯絡訊息、測試聯絡訊息、測試聯絡訊息，很重要所以重複三遍。',
+      phone: '0987654321',
+    }
+    await Contact.create(testContact);
 
   } catch (e) {
     console.error(e);

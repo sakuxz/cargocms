@@ -88,7 +88,7 @@
             <button id="submit-button" class="btn-u pull-right" type="submit">登入</button>
           </div>
         </div>
-        <% if (data.errors) { %>
+        <% if (data.errors === 'Error.Passport.BadUserPassword') { %>
           <div class="alert alert-warning" role="alert">帳號或密碼錯誤！</div>
         <% } %>
         <hr>

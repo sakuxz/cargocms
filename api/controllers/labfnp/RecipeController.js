@@ -211,6 +211,14 @@ module.exports = {
         note,
         invoiceNo,
       });
+
+      let updateUserPhone = await User.findById(user.id);
+      if( !updateUserPhone.phone1 && !updateUserPhone.phone2 ) {
+        updateUserPhone.phone1 = phone;
+      }
+      updateUserPhone = await updateUserPhone.save();
+
+
       recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
       const formatName = recipeOrder.ItemNameArray.map((name) => {
         return name + ' 100 ml';
@@ -238,7 +246,7 @@ module.exports = {
         item.RtnMsg = '到店購買';
         item.ShouldTradeAmt = 1550;
         item.TradeAmt = 1550;
-        item.TradeNo = item.MerchantTradeNo;
+        // item.TradeNo = item.MerchantTradeNo;
         item.PaymentType = '到店購買';
         item.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
         await item.save();
