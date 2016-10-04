@@ -41,9 +41,7 @@ module.exports = {
     },
   }
   google: {
-    name: 'GoogleMapAPIKey',
-    options: {
-      key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
-    }
+    name: 'GoogleAPIKey',
+    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
   }
 };
