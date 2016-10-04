@@ -93,6 +93,13 @@
               event.preventDefault();
             } else {
               $form.data("submitted", true);
+              $("#submit-button").prop("disabled", true);
+              $("#submit-button").text("處理中...");
+
+              setTimeout(function (){
+                $("#submit-button").prop("disabled", false);
+                $("#submit-button").text("送出");
+              }, 1000);
             }
           } else {
             event.preventDefault();
