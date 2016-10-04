@@ -27,6 +27,20 @@ module.exports = {
       type: Sequelize.STRING,
       unique: true,
     },
+    createdTime: {
+      type: Sequelize.DATE,
+      get: function() {
+        try {
+          return moment(this.getDataValue('createdTime')).format("YYYY/MM/DD HH:mm:SS");
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    publish: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true
+    },
     updatedAt: {
       type: Sequelize.DATE,
       get: function() {

@@ -258,10 +258,10 @@
 				"render": function ( data, type, row ) {
 					var colBody =
 					'<div class="row-action-buttons hidden-xs hidden-sm">'+
-						'<a class="btn btn-default btn-xs" role="button" onclick="window.appMain.show('+row.id+')">'+
+						'<a name="showDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-eye text-muted" />'+
 						'</a>'+
-						'<a class="btn btn-default btn-xs" role="button" onclick="window.appMain.edit('+row.id+')">'+
+						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
 						'</a>'+
 					'</div>';

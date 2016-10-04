@@ -411,6 +411,15 @@ appMain.renderTable = function () {
 			responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
 		},
 		"drawCallback": function (oSettings) {
+			$("[name=showDataButton]").on("click", function() {
+				var id = $(this).data("id")
+				appMain.show(id)
+			})
+
+			$("[name=editDataButton]").on("click", function() {
+				var id = $(this).data("id")
+				appMain.edit(id)
+			})
 			responsiveHelper_datatable_tabletools.respond();
 		}
 	};

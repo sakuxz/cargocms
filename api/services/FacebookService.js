@@ -14,19 +14,19 @@ module.exports = {
   feedsImport: async () => {
     try {
 
-      console.log('>>>> config/init/facebook >>>>');
+      sails.log.debug('>>> Import feeds from Facebook page');
 
       if (!sails.config.facebook || !sails.config.facebook.accessToken) {
-        console.log('<<< error: config/init/facebook => facebook.accessToken config undefined');
+        sails.log.warn('<<< facebook.accessToken config undefined');
         return;
       }
 
       FB.setAccessToken(sails.config.facebook.accessToken);
 
-      const feedUrl = "/"+sails.config.facebook.pageId+"/feed?limit=100&fields=full_picture,name,message,story,description,type,link";
+      const feedUrl = "/"+sails.config.facebook.pageId+"/feed?limit=100&fields=full_picture,name,message,story,description,type,link,created_time";
       //?fields=full_picture,name,message,story,description,type
 
-      console.log('Feed URL: ' + feedUrl);
+      sails.log.debug('Feed URL: ' + feedUrl);
 
       let feeds = await new Promise(function(resolve, reject) {
         FB.api(feedUrl, (response) => {
@@ -58,7 +58,7 @@ module.exports = {
             description: feeds[index].description,
             type: feeds[index].type,
             link: feeds[index].link,
-            createdAt: feeds[index].created_time,
+            createdTime: feeds[index].created_time,
             sourceId: feeds[index].id
           };
           results.push(row)
@@ -71,7 +71,7 @@ module.exports = {
 
       Feed.bulkCreate(createFeeds);
 
-      console.log('<<< done: config/init/facebook <<<');
+      sails.log.debug('<<< done: config/init/facebook <<<');
 
     } catch (e) {
       throw e;

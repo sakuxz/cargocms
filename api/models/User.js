@@ -19,13 +19,16 @@ module.exports = {
     },
     birthday:{
       type: Sequelize.DATE,
-      get: function () {
+      get: function() {
         try {
-          if(this.getDataValue('birthday'))
-            return moment(this.getDataValue('birthday')).format("YYYY-MM-DD");
-          else{
-            return "";
+          let birthday = this.getDataValue('birthday');
+
+          if (!birthday) {
+            return null;
           }
+
+          return moment(birthday).format("YYYY/MM/DD");
+
         } catch (e) {
           sails.log.error(e);
         }
@@ -57,10 +60,14 @@ module.exports = {
         let displayName = firstName + ' ' + lastName;
         const isTw = locale === 'zh_TW';
 
-        var regExp = /^[\d|a-zA-Z]+$/;
+        var regExp = /^[\d|a-zA-Z| ]+$/;
         var checkEng = regExp.test(displayName);
 
-        if (isTw || !checkEng) displayName = lastName + firstName;
+        if (!checkEng) {
+          displayName = lastName + firstName;
+        } else if(isTw){
+          displayName = lastName + firstName;
+        }
 
         if (displayName === '') {
           if (this.getDataValue('username') === ''){
@@ -94,16 +101,25 @@ module.exports = {
         try {
           let lastLogin = this.getDataValue("lastLogin");
 
-          if (lastLogin == null) {
-            return "N/A";
+          if (!lastLogin) {
+            return lastLogin;
           }
 
-          return moment(this.getDataValue('lastLogin')).format("YYYY/MM/DD HH:mm:SS");
-
-        } catch (e) {
+          return moment(lastLogin).format("YYYY/MM/DD HH:mm:SS");
+        }
+        catch (e) {
           throw e;
         }
       }
+    },
+    lastLoginIP: {
+      type: Sequelize.STRING,
+    },
+    lastLoginLat: {
+      type: Sequelize.DOUBLE,
+    },
+    lastLoginLng: {
+      type: Sequelize.DOUBLE,
     },
     facebookId: {
       type: Sequelize.STRING,
@@ -140,6 +156,9 @@ module.exports = {
         }
       }
     },
+    resetPasswordToken: {
+      type: Sequelize.STRING(32),
+    }
   },
   associations: function() {
     User.hasMany(Image, {
@@ -165,8 +184,7 @@ module.exports = {
         as: 'Roles'
       }
     });
-    User.hasMany(UserLikeRecipe);
-    User.hasMany(Recipe);
+
 
 
   },

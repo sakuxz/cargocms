@@ -133,10 +133,17 @@ p.lead {
         </p>
 			</div>
 			<div class="col-md-3 btn-buy animated bounce">
-				<a href="/login" class="btn-u btn-u-lg">
-          <i class="fa fa-eyedropper"></i>
-          登入配方創作系統
-        </a>
+        <% if (!req.session.authenticated) { %>
+  				<a href="/login?url=/lab" class="btn-u btn-u-lg">
+            <i class="fa fa-eyedropper"></i>
+            登入配方創作系統
+          </a>
+        <% } else { %>
+          <a href="/lab" class="btn-u btn-u-lg">
+            <i class="fa fa-eyedropper"></i>
+            前往配方創作系統
+          </a>
+        <% } %>
 			</div>
 		</div>
 	</div>
