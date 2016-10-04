@@ -38,6 +38,12 @@ module.exports = {
           'displayName', 'photos'
         ]
       }
+    },
+  }
+  google: {
+    name: 'GoogleMapAPIKey',
+    options: {
+      key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
     }
   }
 };
