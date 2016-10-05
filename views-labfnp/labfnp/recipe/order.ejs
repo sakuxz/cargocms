@@ -174,19 +174,20 @@
             <input type="text" id="note" class="form-control" name="note" value="" placeholder="請輸入送件備註...">
           </section>
 
-          <section class="col">
-            <label for="invoiceNo">發票號碼</label>
-            <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="請輸入發票號碼...">
-          </section>
-
           <section class="col paymentMethod">
             <label for="paymentMethod">付款方式<span class="required">*</span>
             </label>
             <select class="form-control" id="paymentMethod" class="form-control" name="paymentMethod" required>
+              <option value=""></option>
               <option value="Credit">信用卡</option>
               <option value="ATM">ATM轉帳</option>
               <option value="gotoShop">到店購買</option>
             </select>
+          </section>
+
+          <section class="col" id="invoiceSection" style="display: none;">
+            <label for="invoiceNo">發票號碼<span class="required">*</span></label>
+            <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="請輸入發票號碼...">
           </section>
 
         </form>
@@ -248,7 +249,7 @@
       return this;
     }
 
-    $("#orderForm").validate({
+    var validateFields = {
       rules: {
         recipient: {
           required: true
@@ -263,7 +264,12 @@
           required: true,
           email: true
         },
-
+        paymentMethod: {
+          required: true
+        },
+        invoiceNo: {
+          required: true
+        }
       },
       messages: {
         recipient: {
@@ -279,8 +285,32 @@
           required: "請輸入 Email",
           email: "請輸入正確格式Email"
         },
+        paymentMethod: {
+          required: "請選擇付款方式"
+        },
+        invoiceNo: {
+          required: "請輸入發票號碼"
+        }
       }
+    }
+
+    $("#paymentMethod").change(function() {
+      var selected = $("#paymentMethod").val();
+      
+      if (selected=="gotoShop") {
+        var invoiceDisplay = "";
+        var invoiceNeed = true;
+      } else {
+        var invoiceDisplay = "None";
+        var invoiceNeed = false;
+      }
+      $("#invoiceSection").css("display",invoiceDisplay);
+      validateFields.rules.invoiceNo.required = invoiceNeed;
+      $("#orderForm").validate(validateFields);
+      $("#orderForm").validate().resetForm();
     });
+    
+    $("#orderForm").validate(validateFields);
 
     $("#orderForm").preventDoubleSubmission();
 
