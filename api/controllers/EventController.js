@@ -77,7 +77,6 @@ module.exports = {
       }
 
       const event = await Event.findById(id);
-
       const allPayData = await AllpayService.getAllpayConfig({
         relatedKeyValue: {
           EventOrderId: eventOrder.id,
@@ -87,6 +86,7 @@ module.exports = {
         totalAmount: event.price,
         paymentMethod: paymentMethod,
         itemArray: [ event.title ],
+        clientBackURL: `/event/done`
       });
 
       if (paymentMethod == 'gotoShop') {
@@ -126,9 +126,8 @@ module.exports = {
         }
         await event.save();
 
-        res.view('event/done', {
-          item
-        });
+        res.redirect(`/event/done?t=${allPayData.MerchantTradeNo}`);
+
       } else {
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
@@ -139,5 +138,28 @@ module.exports = {
       req.flash('error', e.toString());
       res.serverError(e, {redirect: '/event/order/' + req.body.id});
     }
-  }
+  },
+
+  done: async function(req, res) {
+    try {
+      const merchantTradeNo = req.query.t;
+      const item = await Allpay.findOne({
+        where:{
+          MerchantTradeNo: merchantTradeNo
+        },
+        include:{
+          model: EventOrder,
+          include: [User, Event]
+        }
+      });
+
+      if(!item){
+        throw Error(`找不到 ${merchantTradeNo} 編號的交易`);
+      }
+      res.view('event/done', {item} );
+
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
 }

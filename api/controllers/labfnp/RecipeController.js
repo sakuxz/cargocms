@@ -232,6 +232,7 @@ module.exports = {
         totalAmount: 1550,
         paymentMethod: paymentMethod,
         itemArray: formatName,
+        clientBackURL: `/recipe/done`
       });
       if (paymentMethod == 'gotoShop') {
         const item = await Allpay.findOne({
@@ -266,9 +267,8 @@ module.exports = {
         const message = await Message.create(messageConfig);
         await MessageService.sendMail(message);
 
-        res.view('shop/done', {
-          item
-        });
+        res.redirect(`/recipe/done?t=${allPayData.MerchantTradeNo}`);
+
       } else {
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
@@ -280,6 +280,30 @@ module.exports = {
         req.flash('error', e.toString());
         res.redirect('/recipe/order/' + req.body.id);
       } else res.serverError(e);
+    }
+  },
+
+  done: async (req, res) => {
+    try {
+      const merchantTradeNo = req.query.t;
+      const item = await Allpay.findOne({
+        where:{
+          MerchantTradeNo: merchantTradeNo
+        },
+        include:{
+          model: RecipeOrder,
+          include: [User, Recipe]
+        }
+      });
+
+      if(!item){
+        throw Error(`找不到 ${merchantTradeNo} 編號的交易`);
+      }
+      res.view('labfnp/recipe/done', {item} );
+
+
+    } catch (e) {
+      res.serverError(e);
     }
   }
 }

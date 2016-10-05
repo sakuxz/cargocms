@@ -26,6 +26,7 @@ module.exports = {
 
   'get /api/admin/labfnp/recipe/export': 'api/admin/labfnp/RecipeController.export',
 
+  '/recipe/done':     'labfnp/RecipeController.done',
   '/recipe/:id':      'labfnp/RecipeController.show',
   // '/recipe/preview/:id': 'labfnp/RecipeController.preview',
   '/recipe/order/:id': 'labfnp/RecipeController.order',
