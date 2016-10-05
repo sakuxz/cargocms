@@ -16,8 +16,13 @@ module.exports = {
     fileName: {
       type: Sequelize.VIRTUAL,
       get: function() {
+        // storage to local
         const thisFilePath = this.getDataValue('filePath');
         return thisFilePath.split('/uploads/')[1];
+
+        // storage to S3
+        console.log(thisFilePath);
+        return thisFilePath;
       }
     },
     url: {
@@ -28,6 +33,8 @@ module.exports = {
           if (this.storage === 'local') {
             return thisFilePath.split('/public')[1];
           } else if (this.storage ==='url') {
+            return thisFilePath;
+          } else if (this.storage ==='s3') {
             return thisFilePath;
           } else {
             throw Error('Not implemented');
