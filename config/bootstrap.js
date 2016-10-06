@@ -103,6 +103,10 @@ module.exports.bootstrap = async (cb) => {
       });
     }
 
+    /* 檢查Google API Key是否存在 */
+    if (sails.config.google===undefined || sails.config.google.key===undefined) {
+      throw('google api Key not exist!!');
+    }
 
     cb();
   } catch (e) {
