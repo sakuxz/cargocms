@@ -2,40 +2,41 @@ module.exports = {
   upload: async(req, res) => {
     console.log("=== file upload ===");
     try {
+      let storage = sails.config.storage;
+      let storageLocate;
+      if (storage) {
+        storageLocate = storage.locate;
+        let isS3 = storageLocate=="s3";
+        let isLocal = storageLocate=="local";
+        if ( isS3 || isLocal) {
+          sails.log('storage config corrently');
+        } else {
+          sails.log.warn('storage config only accept "s3" and "local", please check config');
+          storageLocate = 'local';
+        }
+      } else {
+        sails.log.warn("storage config not defined, please check config");
+        storageLocate = 'local';
+      }
 
-      /*
-      // local storage
-      const dirname = '../../.tmp/public/uploads/';
-      let promise = new Promise((resolve, reject) => {
-        req.file('uploadPic').upload({ dirname }, async(err, files) => {
-          resolve(files);
-        });
-      });
-      let files = await promise.then();
-
-      const { size, type, fd } = files[0];
-      const user = AuthService.getSessionUser(req);
-      const UserId = user ? user.id : null;
-      const upload = await Image.create({ filePath: fd, size, type, UserId });
-      */
-
-      // aws S3 Upload
-      let info;
-      let promise = new Promise((resolve, reject) => {
-        req.file('uploadPic').upload({
+      let uploadParam;
+      if (storageLocate=='local') {
+        // local storage
+        uploadParam = {
+          dirname: '../../.tmp/public/uploads/'
+        };
+      } else if (storageLocate=='s3') {
+        // s3 storage
+        uploadParam = {
           adapter: require('skipper-s3'),
-          key: 'api key',
-          secret: 'api key secret',
-          // Bucket must on US Standard, or settting at region
-          // or EXPLOSION with TypeError / InvalidRequest
-          bucket: 'dd-han-hello-us'
-        }, (err, filesUploaded) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(filesUploaded);
-          }
-        
+          ...sails.config.storage.s3
+        };
+      } else {
+        throw('unknown storageLocation');
+      }
+      let promise = new Promise((resolve, reject) => {
+        req.file('uploadPic').upload(uploadParam, async(err, files) => {
+          resolve(files);
         });
       });
       let files = await promise.then();
@@ -43,10 +44,19 @@ module.exports = {
       const { size, type, fd, extra } = files[0];
       const user = AuthService.getSessionUser(req);
       const UserId = user ? user.id : null;
-      const upload = await Image.create({ filePath: extra.Location, size, type, UserId, storage:'s3' });
 
-      console.log(files[0]);
-      console.log(upload);
+      let filePath;
+      if (storageLocate=='local') {
+        filePath = 'file://'+fd;
+      } else {
+        filePath = 's3://'+extra.Bucket+'/'+extra.Key;
+      }
+      
+      const upload = await Image.create(
+        { filePath: filePath, 
+          size, type, UserId, 
+          storage: storageLocate 
+        });
 
       res.ok({
         message: 'Upload Success',
