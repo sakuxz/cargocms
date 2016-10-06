@@ -186,6 +186,56 @@ module.exports = {
       throw e;
     }
   },
+  eventOrderConfirm: (result = {
+    productName, serialNumber, email, username, bankId, bankName, bankName,
+    accountId, accountName, paymentTotalAmount, shipmentUsername, shipmentAddress,
+    note, phone
+  }) => {
+
+    try {
+
+      let orderConfirmTemplete = sails.config.mail.templete.event.orderConfirm;
+      let mailSendConfig = {...orderConfirmTemplete, to: result.email};
+      let orderSerialNumber = result.serialNumber;
+
+      mailSendConfig.subject = sprintf(mailSendConfig.subject, { orderSerialNumber });
+      mailSendConfig.html = sprintf(mailSendConfig.html, {
+        ...result,
+        orderSerialNumber,
+        storeName: 'LFP',
+      });
+
+      mailSendConfig.type = 'orderConfirm';
+
+      return mailSendConfig;
+
+    } catch (error) {
+      throw error;
+    }
+
+  },
+  eventPaymentConfirm: (order = {
+    email, serialNumber, username
+  }) => {
+    try {
+
+      var paymentConfirmTemplete = sails.config.mail.templete.event.paymentConfirm;
+      var mailSendConfig = {...paymentConfirmTemplete, to: order.email};
+
+      mailSendConfig.subject = sprintf(mailSendConfig.subject, {orderSerialNumber: order.serialNumber});
+      mailSendConfig.text = sprintf(mailSendConfig.text, {
+        storeName: 'LFP',
+        username: order.username,
+        orderSerialNumber: order.serialNumber
+      });
+
+      mailSendConfig.type = 'paymentConfirm';
+
+      return mailSendConfig;
+    } catch (e) {
+      throw e;
+    }
+  },
   sendMail: async (message) => {
 
     try {

@@ -92,6 +92,7 @@ module.exports = {
       });
 
       if (paymentMethod == 'gotoShop') {
+        // 目前 Event 沒有現場付款選項，先保留
         const item = await Allpay.findOne({
           where:{
             MerchantTradeNo: allPayData.MerchantTradeNo
@@ -125,7 +126,7 @@ module.exports = {
         }
         await event.save();
 
-        // messageConfig = await MessageService.orderToShopConfirm(messageConfig);
+        // messageConfig = await MessageService.eventOrderConfirm(messageConfig);
         // const message = await Message.create(messageConfig);
         // await MessageService.sendMail(message);
 

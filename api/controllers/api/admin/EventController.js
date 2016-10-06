@@ -21,10 +21,10 @@ module.exports = {
         messageConfig.email = eventOrder.email;
         messageConfig.username = eventOrder.User.displayName;
       }
-
-      // messageConfig = await MessageService.paymentConfirm(messageConfig);
-      // const message = await Message.create(messageConfig);
-      // await MessageService.sendMail(message);
+      sails.log.debug(messageConfig);
+      messageConfig = await MessageService.eventPaymentConfirm(messageConfig);
+      const message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
 
       res.send('1|OK');
     } catch (e) {
@@ -62,9 +62,9 @@ module.exports = {
         messageConfig.phone = eventOrder.phone;
       }
       sails.log.debug(messageConfig);
-      // messageConfig = await MessageService.orderConfirm(messageConfig);
-      // const message = await Message.create(messageConfig);
-      // await MessageService.sendMail(message);
+      messageConfig = await MessageService.eventOrderConfirm(messageConfig);
+      const message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
 
       res.send('1|OK');
     } catch (e) {
