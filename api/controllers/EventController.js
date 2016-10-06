@@ -26,7 +26,9 @@ module.exports = {
     try {
       const {id, name} = req.params
       let data = await Post.findByIdHasJoinByEvent({id, name});
-      console.log("==== data ====", data);
+      if (data.url) {
+        return res.redirect(data.url)
+      }
       const social = SocialService.forPost({posts: [data]});
       res.view('event/show', {data, social});
     } catch (e) {

@@ -8,8 +8,14 @@ module.exports = {
     content: {
       type: Sequelize.TEXT,
     },
+    url: {
+      type: Sequelize.STRING,
+    },
     alias: {
       type: Sequelize.STRING,
+      unique: true,
+      // 只允許 數字、英文、'-'符號
+      is: /^[a-zA-Z0-9-]+$/i,
     },
     abstract: {
       type: Sequelize.STRING,
