@@ -39,5 +39,17 @@ module.exports = {
         ]
       }
     }
+  },
+  storage: {
+    // locate can be s3 or local
+    locate: 's3',
+    s3: {
+      key: 'Access Key Id at local.js',
+      secret: 'Secret Access Key',
+      // region can skip if region is us-standard
+      // if not in us-standard and skip region, except will come
+      region: 'region of bucket',
+      bucket: 'bucket name'
+    }
   }
 };
