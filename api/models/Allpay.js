@@ -1,5 +1,4 @@
 import moment from 'moment';
-import allPayPaymentTypeJson from '../../config/allpayPaymentType.json';
 
 module.exports = {
   attributes: {
@@ -233,7 +232,10 @@ module.exports = {
       get: function() {
         try{
           const payDesc = this.getDataValue('PaymentType');
-          let PaymentTypeDesc = allPayPaymentTypeJson[payDesc] || payDesc;
+          let PaymentTypeDesc = sails.__({
+            phrase: payDesc,
+            locale: 'zh'
+          });
 
           return PaymentTypeDesc;
         }

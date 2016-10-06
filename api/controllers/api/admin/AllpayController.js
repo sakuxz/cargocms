@@ -1,4 +1,3 @@
-import allPayPaymentTypeJson from '../../../../config/allpayPaymentType.json';
 
 module.exports = {
 

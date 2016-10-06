@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 describe('about admin api event Controller operation.', function() {
 
-  describe('about Event Allpay Controller operation.', function() {
+  describe.only('about Event Allpay Controller operation.', function() {
     let event, allpay1, allpay2, allpay3;
     before(async(done) => {
       try {

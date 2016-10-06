@@ -1,4 +1,3 @@
-import allPayPaymentTypeJson from '../../../../../config/allpayPaymentType.json';
 
 module.exports = {
 
@@ -38,7 +37,10 @@ module.exports = {
       let messageConfig = {};
       messageConfig.serialNumber = allpay.TradeNo;
       messageConfig.paymentTotalAmount = allpay.ShouldTradeAmt;
-      messageConfig.bankName = allPayPaymentTypeJson[allpay.PaymentType] || allpay.PaymentType;
+      messageConfig.bankName = sails.__({
+        phrase: allpay.PaymentType,
+        locale: 'zh'
+      });
       messageConfig.bankId = allpay.BankCode;
       messageConfig.accountId = allpay.vAccount;
       messageConfig.expireDate = allpay.ExpireDate;

@@ -1,7 +1,5 @@
 import crypto from 'crypto';
 import moment from 'moment';
-import allPayPaymentTypeJson from '../../../../config/allpayPaymentType.json';
-
 
 module.exports = {
   paid: async (req, res) => {
@@ -23,6 +21,7 @@ module.exports = {
         messageConfig.email = eventOrder.email;
         messageConfig.username = eventOrder.User.displayName;
       }
+
       // messageConfig = await MessageService.paymentConfirm(messageConfig);
       // const message = await Message.create(messageConfig);
       // await MessageService.sendMail(message);
@@ -42,7 +41,10 @@ module.exports = {
       let messageConfig = {};
       messageConfig.serialNumber = allpay.TradeNo;
       messageConfig.paymentTotalAmount = allpay.ShouldTradeAmt;
-      messageConfig.bankName = allPayPaymentTypeJson[allpay.PaymentType] || allpay.PaymentType;
+      messageConfig.bankName = sails.__({
+        phrase: allpay.PaymentType,
+        locale: 'zh'
+      });
       messageConfig.bankId = allpay.BankCode;
       messageConfig.accountId = allpay.vAccount;
       messageConfig.expireDate = allpay.ExpireDate;
@@ -59,7 +61,7 @@ module.exports = {
         messageConfig.note = eventOrder.note;
         messageConfig.phone = eventOrder.phone;
       }
-
+      sails.log.debug(messageConfig);
       // messageConfig = await MessageService.orderConfirm(messageConfig);
       // const message = await Message.create(messageConfig);
       // await MessageService.sendMail(message);
