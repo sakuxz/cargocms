@@ -19,6 +19,7 @@ CREATE TABLE `Contacts` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 ALTER TABLE Posts ADD type enum('blog','internal-event','external-event') DEFAULT 'blog';
+ALTER TABLE Posts CHANGE url alias varchar(255);
 
 CREATE TABLE `Events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

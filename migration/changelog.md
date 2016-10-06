@@ -36,3 +36,4 @@
 * 新增 EventOrders
 * 新增 Events
 * Post type 新增 'internal-event','external-event' enum
+* Post url 改名為 alias 放 url 別名

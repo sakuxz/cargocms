@@ -38,7 +38,7 @@ module.exports = {
     const { id } = req.params;
     try {
       const currentUser = AuthService.getSessionUser(req);
-      if (!currentUser) return res.redirect('/login');
+      if (!currentUser) return res.redirect(`/login?url=/event/order/${id}`);
 
       const event = await Event.findOne({
         where: { id },
@@ -57,7 +57,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const user = AuthService.getSessionUser(req);
-      if (!user) return res.redirect('/login');
+      if (!user) return res.redirect(`/login?url=/event/order/${id}`);
 
       const { recipient, phone, email, address, note, description, paymentMethod } = req.body;
       let eventOrder = await EventOrder.create({
