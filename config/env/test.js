@@ -46,8 +46,8 @@ module.exports = {
     s3: {
       key: 'Access Key Id at local.js',
       secret: 'Secret Access Key',
-      // region can skip if region is us-standard
-      // if not in us-standard and skip region, except will come
+      // region only can be us-standard
+      // other region will get InvalidRequest Error
       region: 'region of bucket',
       bucket: 'bucket name'
     }
