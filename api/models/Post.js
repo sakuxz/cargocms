@@ -8,7 +8,7 @@ module.exports = {
     content: {
       type: Sequelize.TEXT,
     },
-    url: {
+    alias: {
       type: Sequelize.STRING,
     },
     abstract: {

@@ -24,8 +24,11 @@ module.exports = {
 
   show: async (req, res) => {
     try {
-      const {id} = req.params
-      let data = await Post.findByIdHasJoinByEvent({id});
+      const {id, name} = req.params
+      let data = await Post.findOne({
+        where: { $or: [{ id: id || name }, { alias: name }] },
+        include: [ Tag, Image, User, Location, Event]
+      });
       console.log("==== data ====", data);
       const social = SocialService.forPost({posts: [data]});
       res.view('event/show', {data, social});

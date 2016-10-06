@@ -81,6 +81,9 @@ var defaultConfig = {
   'post /api/event/paid':        'api/admin/EventController.paid',
   'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
 
+  //----- Event -----
+  'get /events/:name': 'EventController.show',
+
   //----- Admin -----
   '/admin':           'AdminController.index',
   '/admin/config.js': 'AdminController.config',
