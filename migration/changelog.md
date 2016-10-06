@@ -30,3 +30,8 @@
 ### 新增 Contacts Table
 
 * 新增 Contacts Table 用於聯繫表單
+
+## v3
+
+* 更新 Image 的格式
+原本 `local` 的紀錄格式由 `/home/ubuntu/cargocms/.tmp/public/uploads/<<filename>>`，更新為 `file:///home/ubuntu/cargocms/.tmp/public/uploads/<<filename>>`
