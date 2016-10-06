@@ -232,7 +232,9 @@ module.exports = {
         totalAmount: 1550,
         paymentMethod: paymentMethod,
         itemArray: formatName,
-        clientBackURL: `/recipe/done`
+        clientBackURL: '/recipe/done',
+        returnURL: '/api/recipe/paid',
+        paymentInfoURL: '/api/recipe/paymentinfo',
       });
       if (paymentMethod == 'gotoShop') {
         const item = await Allpay.findOne({

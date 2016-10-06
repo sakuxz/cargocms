@@ -63,9 +63,13 @@ export default class Allpay {
     totalAmount,
     paymentMethod,
     itemArray,
-    clientBackURL
+    clientBackURL,
+    returnURL,
+    paymentInfoURL,
   }) {
     clientBackURL = clientBackURL || this.ClientBackURL;
+    returnURL = returnURL || this.ReturnURL;
+    paymentInfoURL = paymentInfoURL || this.PaymentInfoURL;
     const data = {
       MerchantID: this.merchantID,
       MerchantTradeNo,
@@ -74,7 +78,7 @@ export default class Allpay {
       TotalAmount: totalAmount,
       TradeDesc: tradeDesc || 'none.',
       ItemName: itemArray ? itemArray.join('#') : '',
-      ReturnURL: this.resolve(this.domain, this.ReturnURL, true),
+      ReturnURL: this.resolve(this.domain, returnURL, true),
       ChoosePayment: paymentMethod || 'ALL',
       ClientBackURL: `${this.resolve(this.domain, clientBackURL, true)}?t=${MerchantTradeNo}`,
       PaymentInfoURL: this.resolve(this.domain, this.PaymentInfoURL, true),

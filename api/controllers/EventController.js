@@ -86,7 +86,9 @@ module.exports = {
         totalAmount: event.price,
         paymentMethod: paymentMethod,
         itemArray: [ event.title ],
-        clientBackURL: `/event/done`
+        clientBackURL: '/event/done',
+        returnURL: '/api/event/paid',
+        paymentInfoURL: '/api/event/paymentinfo',
       });
 
       if (paymentMethod == 'gotoShop') {
@@ -116,15 +118,16 @@ module.exports = {
         messageConfig.shipmentAddress = eventOrder.address;
         messageConfig.note = eventOrder.note;
         messageConfig.phone = eventOrder.phone;
-        // messageConfig = await MessageService.orderToShopConfirm(messageConfig);
-        // const message = await Message.create(messageConfig);
-        // await MessageService.sendMail(message);
 
         event.signupCount = event.signupCount + 1;
         if (event.signupCount > event.limit) {
           throw Error('票卷已賣完');
         }
         await event.save();
+
+        // messageConfig = await MessageService.orderToShopConfirm(messageConfig);
+        // const message = await Message.create(messageConfig);
+        // await MessageService.sendMail(message);
 
         res.redirect(`/event/done?t=${allPayData.MerchantTradeNo}`);
 
