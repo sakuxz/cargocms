@@ -119,10 +119,10 @@ module.exports = {
           throw e;
         }
       },
-      findByIdHasJoinByEvent: async ({id}) => {
+      findByIdHasJoinByEvent: async ({id, name}) => {
         try {
           return await Post.findOne({
-            where: { id },
+            where: { $or: [{ id: id || name }, { alias: name }] },
             include: [ Tag, Image, User, Location, Event]
           });
         } catch (e) {
