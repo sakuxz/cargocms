@@ -84,6 +84,9 @@ var defaultConfig = {
   //----- Event -----
   'get /events/:name': 'EventController.show',
 
+  //----- Blog -----
+  'get /blogs/:name': 'BlogController.show',
+
   //----- Admin -----
   '/admin':           'AdminController.index',
   '/admin/config.js': 'AdminController.config',

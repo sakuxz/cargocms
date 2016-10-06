@@ -21,8 +21,11 @@ module.exports = {
 
   show: async (req, res) => {
     try {
-      const {id} = req.params
-      let data = await Post.findByIdHasJoin({id});
+      const {id, name} = req.params
+      let data = await Post.findOne({
+        where: { $or: [{ id: id || name }, { alias: name }] },
+        include: [ Tag, Image, User, Location]
+      });
       const social = SocialService.forPost({posts: [data]});
       res.view('blog/show', {data, social});
     } catch (e) {
