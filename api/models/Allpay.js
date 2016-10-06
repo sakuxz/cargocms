@@ -88,10 +88,10 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let recipient = '';
-          if(recipeOrder){
-            recipient = recipeOrder.recipient;
+          if(order){
+            recipient = order.recipient;
           }
           return recipient;
         } catch (e) {
@@ -104,10 +104,10 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let address = '';
-          if(recipeOrder){
-            address = recipeOrder.address;
+          if(order){
+            address = order.address;
           }
           return address;
         } catch (e) {
@@ -120,10 +120,10 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let phone = '';
-          if(recipeOrder){
-            phone = recipeOrder.phone;
+          if(order){
+            phone = order.phone;
           }
           return phone;
         } catch (e) {
@@ -136,10 +136,10 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let email = '';
-          if(recipeOrder){
-            email = recipeOrder.email;
+          if(order){
+            email = order.email;
           }
           return email;
         } catch (e) {
@@ -152,10 +152,10 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let note = '';
-          if(recipeOrder){
-            note = recipeOrder.note;
+          if(order){
+            note = order.note;
           }
           return note;
         } catch (e) {
@@ -168,10 +168,10 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let remark = '';
-          if(recipeOrder){
-            remark = recipeOrder.remark;
+          if(order){
+            remark = order.remark;
           }
           return remark;
         } catch (e) {
@@ -183,10 +183,10 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let invoiceNo = '';
-          if(recipeOrder){
-            invoiceNo = recipeOrder.invoiceNo;
+          if(order){
+            invoiceNo = order.invoiceNo;
           }
           return invoiceNo;
         } catch (e) {
@@ -198,10 +198,10 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let ItemNameArray = '';
-          if(recipeOrder){
-            ItemNameArray = recipeOrder.ItemNameArray.join(',');
+          if(order && order.ItemNameArray){
+            ItemNameArray = order.ItemNameArray.join(',');
           }
           return ItemNameArray;
         } catch (e) {
@@ -214,11 +214,11 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          const recipeOrder = this.getDataValue('RecipeOrder');
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let userName = '';
-          if(recipeOrder){
-            if(recipeOrder.User){
-               userName = recipeOrder.User.displayName;
+          if(order){
+            if(order.User){
+               userName = order.User.displayName;
             }
           }
           return userName;
