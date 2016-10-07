@@ -140,6 +140,7 @@ exports.login = async (req, identifier, password, next) => {
 
   } catch (e) {
     sails.log.error(e.stack);
+    req.flash('error','Error.Passport.BadUserPassword');
     next(e);
   }
 };

@@ -1,6 +1,6 @@
 module.exports = {
   getShareUrl: function() {
-    const url = "http://" + sails.config.shareUrl
+    const url = sails.config.appUrl
     return url;
   },
 
@@ -34,9 +34,15 @@ module.exports = {
       let socialsConfig = sails.config.socials
 
       const socialData = posts.map((post) => {
-        const {id, title} = post;
+        const {id, title, type, alias} = post;
         const description = "";
-        const url = SocialService.getShareUrl() + '/blog/show/' + id
+        let url = ''
+        let domain = SocialService.getShareUrl();
+        if (type === 'blog') {
+          url = `${domain}/blogs/${ alias || id}`
+        } else {
+          url = `${domain}/events/${ alias || id}`
+        }
         return {
           description, title, url
         }

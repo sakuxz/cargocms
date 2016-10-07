@@ -66,7 +66,7 @@ module.exports = {
         return desc;
       }
     },
-		
+
 		ItemNameArray: {
 			type: Sequelize.VIRTUAL,
 			get: function () {
@@ -106,6 +106,7 @@ module.exports = {
 	associations: () => {
 		RecipeOrder.belongsTo(User);
 		RecipeOrder.belongsTo(Recipe);
+		Allpay.belongsTo(RecipeOrder);
 	},
 	options: {
 		classMethods: {

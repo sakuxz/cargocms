@@ -44,6 +44,11 @@
     <div id="fine-uploader-validation"></div>
   </section>
 
+  <section>
+    <input type="file" id="imageInput" name="uploadPic">
+    <input type="hidden" name="coverPhotoId" value="">
+  </section>
+
 </fieldset>
 
 <% if (recipe.createdBy === 'scent') { %>
@@ -64,7 +69,10 @@
 </fieldset> -->
 
 <footer>
+  <div class="alert alert-danger submittedInfo" style="display:none;">
+    <label class="text-danger"> <strong>注意！</strong>配方更新中...</label>
+  </div>
   <button type="submit" class="btn-u">送出資料</button>
-  <button type="button" class="btn-u btn-u-default" onclick="window.history.back();">返回</button>
+  <button type="button" class="btn-u btn-u-default" onclick="window.history.back();return false;">返回</button>
   <button id="recipeDeleteButton" data-id="<%= recipe.id %>" type="button" class="btn-u btn-u-red pull-right <%= req.options.action== 'edit'?'':'hidden' %>" >刪除</button>
 </footer>

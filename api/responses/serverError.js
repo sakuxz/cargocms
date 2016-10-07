@@ -50,12 +50,14 @@ module.exports = function serverError (data, options) {
   // If second argument is a string, we take that to mean it refers to a view.
   // If it was omitted, use an empty object (`{}`)
   options = (typeof options === 'string') ? { view: options } : options || {};
-
   // If a view was provided in options, serve it.
   // Otherwise try to guess an appropriate view, or if that doesn't
   // work, just send JSON.
+
   if (options.view) {
     return res.view(options.view, { data: data });
+  } else if (options.redirect) {
+    return res.redirect(options.redirect);
   }
 
   // If no second argument provided, try to serve the default view,

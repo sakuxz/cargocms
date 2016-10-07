@@ -65,7 +65,9 @@
   .panel-heading {
     padding-right: 0 !important;
   }
-
+  .fbButton {
+    margin-top: 4px;
+  }
 </style>
 
 <div class="container content profile">
@@ -82,7 +84,7 @@
           <i class="fa fa-info-circle" aria-hidden="true"></i>配方內容</h2>
         <a href="/recipe/edit/<%= recipe.hashId %>?from=<%= recipe.createdBy%>"
           class="btn-u btn-u-dark pull-right <%= editable?'':'hidden' %>">編輯</a>
-        <a onclick='history.back()' class="btn-u btn-u-dark pull-right">返回</a>
+        <a href="/lab" class="btn-u btn-u-dark pull-right">返回實驗室</a>
 
       </div>
 
@@ -92,44 +94,58 @@
         <div class="easy-block-v1">
           <div class="easy-block-v1-badge rgba-red">精選</div>
           <!--<img class="img-responsive cover-photo" src="http://loremflickr.com/640/480/perfume/all?<%= Math.random() * Date.now() %>" alt=""/>-->
-          <img class="img-responsive cover-photo" src="<%= recipe.coverPhoto %>" alt="" onerror="this.onerror=null;this.src='/assets/labfnp/img/recipe-default-cover.<%= recipe.id % 7 %>.jpg';"/>
+          <img class="img-responsive cover-photo" src="<%= recipe.coverPhoto %>" alt="" onerror="this.src='/assets/labfnp/img/recipe-default-cover.<%= recipe.id % 7 %>.jpg';"/>
         </div>
         <div class="projects">
 
-          <div class="pull-right">
-            <a href="/recipe/feedback/<%= recipe.hashId %>" class="btn-u btn-u-orange">
-              <i class="fa fa-comment-o" aria-hidden="true"></i>
-              感覺回饋
-            </a>
-            <button id="likeButton" class="btn-u btn-u-red" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
-              <i class="fa <%= recipe.currentUserLike ? 'fa-heart': 'fa-heart-o' %>" aria-hidden="true"></i>
-              收藏
-            </button>
-            <a href="/recipe/order/<%= recipe.hashId %>" id="orderButton" class="btn-u btn-u-blue" data-id="<%= recipe.hashId %>">
-              <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-              訂購
-            </a>
+          <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <h2>
+                <span class="padding-5"><%= recipe.perfumeName %></span>
+              </h2>
+
+              <ul class="list-unstyled list-inline blog-info-v2">
+                <li>
+                  <i class="fa fa-user"></i>
+                  <a class="color-green" href="/me/<%= recipe.UserId %>">
+                    <%= recipe.authorName %>
+                  </a>
+                </li>
+                <li>
+                  <i class="fa fa-clock-o"></i>
+                  <%=: recipe.createdAt | formatDate %>
+                </li>
+                <li>
+                  <i class="fa fa-heart-o"></i>
+                  <%= recipe.UserLikeRecipes.length %></li>
+              </ul>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="pull-right">
+                <button id="likeButton" class="btn-u btn-u-red" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
+                  <i class="fa <%= recipe.currentUserLike ? 'fa-heart': 'fa-heart-o' %>" aria-hidden="true"></i>
+                  <span class="hidden-xs">收藏</span>
+                </button>
+                <a href="/recipe/feedback/<%= recipe.hashId %>" class="btn-u btn-u-orange">
+                  <i class="fa fa-comment-o" aria-hidden="true"></i>
+                  <span class="hidden-xs">感覺回饋</span>
+                  <span class="hidden-lg hidden-md hidden-sm visable-xs">回饋</span>
+                </a>
+                <a href="/recipe/order/<%= recipe.hashId %>" id="orderButton" class="btn-u btn-u-blue" data-id="<%= recipe.hashId %>">
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                  訂購
+                </a>
+
+                <div class="fbButton">
+                  <% var socialData = social.data[0] %>
+                  <% include ../../lib/fbLikeShare.ejs %>
+                </div>
+              </div>
+
+            </div>
           </div>
 
-          <h2>
-            <span class="padding-5"><%= recipe.perfumeName %></span>
-          </h2>
-
-          <ul class="list-unstyled list-inline blog-info-v2">
-            <li>
-              <i class="fa fa-user"></i>
-              <a class="color-green" href="/me/<%= recipe.UserId %>">
-                <%= recipe.authorName %>
-              </a>
-            </li>
-            <li>
-              <i class="fa fa-clock-o"></i>
-              <%=: recipe.createdAt | formatDate %>
-            </li>
-            <li>
-              <i class="fa fa-heart-o"></i>
-              <%= recipe.UserLikeRecipes.length %></li>
-          </ul>
           <hr/>
 
           <div class="row">

@@ -29,11 +29,10 @@ module.exports = function sendOK (data, options) {
   if (req.wantsJSON && !data.view) {
     // data.controller = req.options.controller;
     // data.action = req.options.action;
-    if(data){
+    if (data) {
       data.success = true;
       if(!data.data)data.data = {};
       if(!data.message)data.message = "";
-
     }
     return res.jsonx(data);
   }
@@ -46,22 +45,30 @@ module.exports = function sendOK (data, options) {
   // Otherwise try to guess an appropriate view, or if that doesn't
   // work, just send JSON.
 
-  // 指定 layout sample 
+  // 指定 layout sample
   // res.ok({
   //   view: true,
   //   layout: 'layoutAdmin'
   // });
 
+  // 如何關閉預設 layout 輸出？
+  // res.ok({
+  //   layout: false,
+  // });
+
   var params = { data: data };
 
-  if(isAdminView && !data.layout){
+  if (isAdminView && !data.layout) {
     params.layout = false;
-  } else if(data.layout){
+  }
+  else if (data.layout !== null) {
     params.layout = data.layout;
   }
 
   if (options.view) {
     return res.view(options.view, params);
+  } else if (options.redirect) {
+    return res.redirect(options.redirect);
   }
 
   // If no second argument provided, try to serve the implied view,
@@ -69,5 +76,4 @@ module.exports = function sendOK (data, options) {
   else return res.guessView(params, function couldNotGuessView () {
     return res.jsonx(data);
   });
-
 };

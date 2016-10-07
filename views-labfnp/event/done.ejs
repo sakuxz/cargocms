@@ -11,13 +11,15 @@
         <table class="table table-striped">
           <tbody>
             <tr>
-              <td>訂購商品</td>
-              <td><%= item.RecipeOrder.Recipe.perfumeName + " 100 ml" %></td>
+              <td>訂購票卷</td>
+              <td><%= item.EventOrder.Event.title + " 1 張" %></td>
             </tr>
-            <tr>
-              <td>交易編號</td>
-              <td><%= item.TradeNo %></td>
-            </tr>
+						<% if(item.TradeNo){ %>
+	            <tr>
+	              <td>交易編號</td>
+	              <td><%= item.TradeNo %></td>
+	            </tr>
+						<% } %>
             <tr>
               <td>應付金額</td>
               <td><%= item.ShouldTradeAmt %></td>
@@ -41,28 +43,28 @@
 	            </tr>
 						<% } %>
             <tr>
-              <td>收件者電話</td>
-              <td><%= item.RecipeOrder.phone ? item.RecipeOrder.phone : " " %></td>
+              <td>聯絡電話</td>
+              <td><%= item.EventOrder.phone ? item.EventOrder.phone : " " %></td>
             </tr>
             <tr>
-              <td>收件者住址</td>
-              <td><%= item.RecipeOrder.address ? item.RecipeOrder.address : " " %></td>
+              <td>聯絡地址</td>
+              <td><%= item.EventOrder.address ? item.EventOrder.address : " " %></td>
             </tr>
             <tr>
               <td>備註</td>
-              <td><%= item.RecipeOrder.note ? item.RecipeOrder.note : " " %></td>
+              <td><%= item.EventOrder.note ? item.EventOrder.note : " " %></td>
             </tr>
-						<% if(item.RecipeOrder.invoiceNo){ %>
+						<% if(item.EventOrder.invoiceNo){ %>
 	            <tr>
 	              <td>發票號碼</td>
-	              <td><%= item.RecipeOrder.invoiceNo %></td>
+	              <td><%= item.EventOrder.invoiceNo %></td>
 	            </tr>
 						<% } %>
           </tbody>
         </table>
 
-				<p>感謝您的訂購！</p>
-				<a class="btn-u btn-bordered" href="/recipe/<%= item.RecipeOrder.Recipe.hashId %>">返回香料配方</a>
+				<p>感謝您的購買！</p>
+				<a class="btn-u btn-bordered" href="/event/show/<%= item.EventOrder.Event.PostId %>">返回活動資訊</a>
 			</div>
 		</div>
 	</div>

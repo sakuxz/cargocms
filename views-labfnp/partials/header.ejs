@@ -1,3 +1,4 @@
+<nav class="navbar navbar-default navbar-fixed-top">
 <!--=== Header ===-->
 <div class="header">
   <div class="container">
@@ -37,8 +38,11 @@
         <li class="<%= (req.path=='/wall')?'active':'' %>">
           <a href="/wall">近期動態</a>
         </li>
-        <li class="<%= (req.path=='/blog')?'active':'' %>">
+        <li class="<%= (req.path=='/blog?type=blog')?'active':'' %>">
           <a href="/blog">網誌</a>
+        </li>
+        <li class="<%= (req.path=='/blog?type=event')?'active':'' %>">
+          <a href="/event">活動</a>
         </li>
         <li class="base active">
           <a>1</a>
@@ -51,7 +55,14 @@
         <% if (!req.session.authenticated) { %>
           <li class="<%= (req.path=='/register')?'active':'' %>"><a href="/register">註冊</a></li>
           <li class="topbar-devider"></li>
-          <li class="<%= (req.path=='/login')?'active':'' %>"><a id="login" href="/login">登入</a></li>
+
+          <% var loginBackUrl = req.url;%>
+          <% if(loginBackUrl === '/register' || loginBackUrl === '/') { %>
+          <%   loginBackUrl = '' %>
+          <% } else { %>
+          <%   loginBackUrl = '?url=' + loginBackUrl %>
+          <% } %>
+          <li class="<%= (req.path=='/login')?'active':'' %>"><a id="login" href="/login<%= loginBackUrl %>">登入</a></li>
         <% } else { %>
           <li><a id="logout-link" href="#" >登出</a></li>
           <li class="topbar-devider"></li>
@@ -66,6 +77,7 @@
   </div><!--/navbar-collapse-->
 </div>
 <!--=== End Header ===-->
+</nav>
 
 <% LayoutUtils.addScriptBlock(`
   $('#logout-link').click(function(){
