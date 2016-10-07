@@ -20,7 +20,7 @@ CREATE TABLE `Contacts` (
 
 ALTER TABLE Posts ADD type enum('blog','internal-event','external-event') DEFAULT 'blog';
 ALTER TABLE Posts ADD alias varchar(255) DEFAULT NULL;
-UPDATE Posts SET url=NULL
+UPDATE Posts SET url=NULL;
 
 CREATE TABLE `Events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
