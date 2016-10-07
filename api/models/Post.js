@@ -14,8 +14,12 @@ module.exports = {
     alias: {
       type: Sequelize.STRING,
       unique: true,
-      // 只允許 數字、英文、'-'符號
-      is: /^[a-zA-Z0-9-]+$/i,
+      validate: {
+        is: {
+          args: /^[a-zA-Z0-9-]+$/i,
+          msg: '可讀網址只允許英文、數字、符號"-"'
+        },
+      }
     },
     abstract: {
       type: Sequelize.STRING,

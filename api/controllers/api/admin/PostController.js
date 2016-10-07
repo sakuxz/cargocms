@@ -39,7 +39,7 @@ module.exports = {
       const { id } = req.params;
       res.ok({
         message: 'find post success.',
-        data: await Post.findByIdHasJoin(id),
+        data: await Post.findByIdHasJoin({ id }),
       });
     } catch (e) {
       sails.log.error(e);
