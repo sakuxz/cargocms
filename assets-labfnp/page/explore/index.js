@@ -5,9 +5,9 @@ $(document).ready(function(){
   var gutter = 30;
   var min_width = 240;
   $container.imagesLoaded( function(){
-    $(function() {
-      $("img.lazy").unveil(screen.height);
-    });
+    // $(function() {
+    //   $("img.lazy").unveil(screen.height);
+    // });
     $container.masonry({
       itemSelector : '.grid-boxes-in',
       gutterWidth: gutter,
@@ -154,5 +154,7 @@ $(document).ready(function(){
       }
     }
   });
+
+  bindLike();
 
 });
