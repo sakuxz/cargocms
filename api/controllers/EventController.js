@@ -93,6 +93,11 @@ module.exports = {
         paymentInfoURL: '/api/event/paymentinfo',
       });
 
+      event.signupCount = event.signupCount + 1;
+      if (event.signupCount > event.limit) {
+        throw Error('票卷已賣完');
+      }
+
       if (paymentMethod == 'gotoShop') {
         // 目前 Event 沒有現場付款選項，先保留
         const item = await Allpay.findOne({
@@ -122,10 +127,6 @@ module.exports = {
         messageConfig.note = eventOrder.note;
         messageConfig.phone = eventOrder.phone;
 
-        event.signupCount = event.signupCount + 1;
-        if (event.signupCount > event.limit) {
-          throw Error('票卷已賣完');
-        }
         await event.save();
 
         // messageConfig = await MessageService.eventOrderConfirm(messageConfig);
@@ -135,6 +136,7 @@ module.exports = {
         res.redirect(`/event/done?t=${allPayData.MerchantTradeNo}`);
 
       } else {
+
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
           ...allPayData
