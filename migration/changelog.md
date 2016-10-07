@@ -26,6 +26,7 @@
 ### User 欄位變動
 
 * 新增 resetPasswordToken 紀錄忘記密碼的 token
+* 新增 birthday、phone1、phone2、address、address2、lastLoginIP、lastLoginLat、lastLoginLng
 
 ### 新增 Contacts Table
 

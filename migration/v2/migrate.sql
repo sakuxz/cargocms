@@ -4,6 +4,14 @@ ALTER TABLE Feeds add publish TINYINT DEFAULT 1;
 
 ALTER TABLE Messages MODIFY COLUMN type enum('greeting','orderConfirm','paymentConfirm','deliveryConfirm','orderSync', 'forgotPassword');
 ALTER TABLE Users add resetPasswordToken varchar(32) DEFAULT NULL;
+ALTER TABLE Users add birthday datetime DEFAULT NULL;
+ALTER TABLE Users add phone1 varchar(32) DEFAULT NULL;
+ALTER TABLE Users add phone2 varchar(32) DEFAULT NULL;
+ALTER TABLE Users add address varchar(32) DEFAULT NULL;
+ALTER TABLE Users add address2 varchar(32) DEFAULT NULL;
+ALTER TABLE Users add lastLoginIP varchar(32) DEFAULT NULL;
+ALTER TABLE Users add lastLoginLat double DEFAULT NULL;
+ALTER TABLE Users add lastLoginLng double DEFAULT NULL;
 
 CREATE TABLE `Contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
