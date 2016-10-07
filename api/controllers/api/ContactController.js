@@ -12,6 +12,10 @@ module.exports = {
 
       await Contact.create({ name, email, phone, subject, content, success: true });
 
+      let messageConfig = {name, email, phone, subject, content, success: true};
+      messageConfig = await MessageService.contactConfirm(messageConfig);
+      const message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
 
       req.flash('info', '訊息傳送成功');
       res.ok({
