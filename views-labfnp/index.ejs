@@ -108,10 +108,17 @@ p.lead {
     </div>
 
     <div class="feature-buttons">
-      <a href="/lab" class="btn-u rounded">
-        <i class="fa fa-flask fa-fw"></i>
-        開始香水創作
-      </a>
+      <% if (req.session.authenticated) { %>
+        <a href="/lab" class="btn-u rounded">
+          <i class="fa fa-flask fa-fw"></i>
+          開始香水創作
+        </a>
+      <% } else { %>
+        <a href="/login?url=/lab" class="btn-u rounded">
+          <i class="fa fa-flask fa-fw"></i>
+          開始香水創作
+        </a>
+      <% } %>
       <a href="https://www.facebook.com/LabFnP" target="_blank" class="btn-u rounded hidden-xs">
         <i class="fa fa-facebook fa-fw"></i>
         FACEBOOK

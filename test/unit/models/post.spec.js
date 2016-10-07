@@ -75,7 +75,7 @@ describe('about Post model operation.', function() {
 
     it('find Post by id has join should success.', async (done) => {
       try {
-        let result = await Post.findByIdHasJoin(post.id);
+        let result = await Post.findByIdHasJoin({id: post.id });
         result.id.should.be.eq(post.id)
         done();
       } catch (e) {

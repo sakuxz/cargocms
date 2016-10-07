@@ -10,6 +10,7 @@ module.exports = {
         currentUser,
         start: 0,
         length: 100,
+        likeUser: req.query.type === 'like' ? currentUser : null
       });
 
       let social = SocialService.forRecipe({recipes});
@@ -95,6 +96,15 @@ module.exports = {
       });
     }
     catch (e) {
+      res.serverError(e);
+    }
+  },
+
+  updatePassword: async function(req, res) {
+    try {
+      const { token } = req.query;
+      res.ok({ token });
+    } catch (e) {
       res.serverError(e);
     }
   },
