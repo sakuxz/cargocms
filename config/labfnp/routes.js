@@ -24,8 +24,15 @@ module.exports = {
   'get /api/labfnp/scent': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scentnote': 'api/labfnp/ScentNoteController.find',
 
+  // 這裡先相容舊版 api
+  'post /api/allpay/paid':        'api/admin/labfnp/RecipeController.paid',
+  'post /api/allpay/paymentinfo': 'api/admin/labfnp/RecipeController.paymentinfo',
+  //
+  'post /api/recipe/paid':        'api/admin/labfnp/RecipeController.paid',
+  'post /api/recipe/paymentinfo': 'api/admin/labfnp/RecipeController.paymentinfo',
   'get /api/admin/labfnp/recipe/export': 'api/admin/labfnp/RecipeController.export',
 
+  '/recipe/done':     'labfnp/RecipeController.done',
   '/recipe/:id':      'labfnp/RecipeController.show',
   // '/recipe/preview/:id': 'labfnp/RecipeController.preview',
   '/recipe/order/:id': 'labfnp/RecipeController.order',

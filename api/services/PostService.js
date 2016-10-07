@@ -10,6 +10,8 @@ module.exports = {
     UserId,
     longitude,
     latitude,
+    alias,
+    type,
   }) {
     try {
       const post = await Post.create({
@@ -21,6 +23,8 @@ module.exports = {
         url,
         abstract,
         UserId,
+        alias,
+        type,
       });
       if (longitude && latitude) {
         // 不知道為什麼無法運作
@@ -54,6 +58,8 @@ module.exports = {
     TagsArray,
     longitude,
     latitude,
+    alias,
+    type,
   }) {
     try {
       let location = null;
@@ -78,6 +84,8 @@ module.exports = {
         url,
         abstract,
         LocationId: location ? location.id : null,
+        alias,
+        type,
       }, {
         where: {
           id: postId,

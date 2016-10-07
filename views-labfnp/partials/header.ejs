@@ -38,8 +38,11 @@
         <li class="<%= (req.path=='/wall')?'active':'' %>">
           <a href="/wall">近期動態</a>
         </li>
-        <li class="<%= (req.path=='/blog')?'active':'' %>">
+        <li class="<%= (req.path=='/blog?type=blog')?'active':'' %>">
           <a href="/blog">網誌</a>
+        </li>
+        <li class="<%= (req.path=='/blog?type=event')?'active':'' %>">
+          <a href="/event">活動</a>
         </li>
         <li class="base active">
           <a>1</a>

@@ -1,7 +1,15 @@
 module.exports = {
+
   index: async (req, res) => {
     try {
-      const posts = await Post.findAllHasJoin('DESC');
+      const {type} = req.query
+      const order = 'DESC';
+      let where = {
+        type: "blog"
+      }
+
+
+      const posts = await Post.findAllHasJoin({order, where});
       const social = SocialService.forPost({posts});
       const items = posts;
       const data = {items}
@@ -10,9 +18,14 @@ module.exports = {
       res.serverError(e);
     }
   },
+
   show: async (req, res) => {
     try {
-      let data = await Post.findByIdHasJoin(req.params.id);
+      const {id, name} = req.params
+      let data = await Post.findOne({
+        where: { $or: [{ id: id || name }, { alias: name }] },
+        include: [ Tag, Image, User, Location]
+      });
       const social = SocialService.forPost({posts: [data]});
       res.view('blog/show', {data, social});
     } catch (e) {

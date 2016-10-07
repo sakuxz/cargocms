@@ -1,6 +1,5 @@
 <% LayoutUtils.addStylesheets('/assets/unify/css/pages/profile.css'); %>
 <!--<div class="container">-->
-<!--<pre><%= JSON.stringify(recipe, null, 2) %></pre>-->
 <!--</div>-->
 
 <style>
@@ -67,7 +66,7 @@
 
 <div class="container content profile">
   <% var error = req.flash('error'); %>
-  <input type="hidden" name="id" class="hidden" value="<%= recipe.id %>" disabled>
+  <input type="hidden" name="id" class="hidden" value="<%= event.id %>" disabled>
 
   <!-- begin row -->
   <div class="row">
@@ -88,50 +87,30 @@
         <div class="projects">
 
           <h2>
-            <span class="padding-5"><%= recipe.perfumeName %></span>
+            <span class="padding-5"><%= event.title %></span>
           </h2>
 
-          <ul class="list-unstyled list-inline blog-info-v2">
+          <!--<ul class="list-unstyled list-inline blog-info-v2">
             <li>
               <i class="fa fa-user"></i>
               <a class="color-green" href="#">
-                <%= recipe.authorName %>
+                <%= event.authorName %>
               </a>
             </li>
             <li>
               <i class="fa fa-clock-o"></i>
-              <%=: recipe.createdAt | formatDate %>
+              <%=: event.createdAt | formatDate %>
             </li>
-            <li>
-              <i class="fa fa-heart-o"></i>
-              <%= recipe.UserLikeRecipes.length %></li>
           </ul>
-          <hr/>
-
-          <div class="row">
-            <div class="col col-md-12">
-              <div id="pieChart" class="text-center"></div>
-            </div>
-          </div>
+          <hr/>-->
 
           <!-- <label for="description">描述</label> -->
           <ul class="list-unstyled list-inline description">
             <li>
-              <p class="padding-5"><%= recipe.description %></p>
+              <p class="padding-5"><%= event.description %></p>
             </li>
           </ul>
 
-          <!--
-          <% if(recipe.message.length >0){ %>
-            <hr/>
-            <label for="message">備註</label>
-            <ul class="list-unstyled list-inline message">
-              <li>
-                <p class="padding-5"><%= recipe.message %></p>
-              </li>
-            </ul>
-          <% } %>
-        -->
       </div>
 
       <br/>
@@ -139,59 +118,59 @@
       <div class="text-center">
         <h3>
           <i class="fa fa-info-circle" aria-hidden="true"></i>
-          <label>配送資料</label>
+          <label>聯絡資訊</label>
         </h3>
       </div>
 
       <div class="projects form-group" id="orderFormWrapper">
-        <form class="orderForm" id="orderForm" action="/recipe/allpay/<%= recipe.id %>" method="post">
-          <input type="hidden" name="id" value="<%= recipe.id %>">
-          <input type="hidden" name="perfumeName" value="<%= recipe.perfumeName %>">
-          <input type="hidden" name="description" value="<%= recipe.description %>">
-          <input type="hidden" name="message" value="<%= recipe.message %>">
+        <form class="orderForm" id="orderForm" action="/event/allpay/<%= event.id %>" method="post">
+          <input type="hidden" name="id" value="<%= event.id %>">
+          <input type="hidden" name="title" value="<%= event.title %>">
+          <input type="hidden" name="description" value="<%= event.description %>">
+          <input type="hidden" name="message" value="<%= event.message %>">
 
           <section class="col">
-            <label for="reciverName">收件人姓名<span class="required">*</span>
+            <label for="reciverName">姓名<span class="required">*</span>
             </label>
             <input type="text" id="recipient" class="form-control" name="recipient" value="<%= user.displayName %>" placeholder="請輸入姓名..." required>
           </section>
 
           <section class="col">
-            <label for="phone">收件人聯絡電話<span class="required">*</span>
+            <label for="phone">聯絡電話<span class="required">*</span>
             </label>
             <input type="tel" id="phone" class="form-control" name="phone" value="" placeholder="請輸入手機號碼或市話含區碼..." required>
           </section>
 
           <section class="col">
-            <label for="address">收件地址<span class="required">*</span>
-            </label>
-            <input type="text" id="address" class="form-control" name="address" value="" placeholder="請輸入地址..." required>
+            <label for="address">聯絡電子信箱<span class="required">*</span></label>
+            <input type="email" id="email" class="form-control" name="email" value="<%= user.email %>" placeholder="請輸入 Email..." required>
           </section>
 
           <section class="col">
-            <label for="address">收件人電子信箱<span class="required">*</span></label>
-            <input type="email" id="email" class="form-control" name="email" value="<%= user.email %>" placeholder="請輸入 Email..." required>
+            <label for="address">地址
+            </label>
+            <input type="text" id="address" class="form-control" name="address" value="" placeholder="請輸入地址...">
           </section>
+
 
           <section class="col">
             <label for="address">備註（選填）</label>
             <input type="text" id="note" class="form-control" name="note" value="" placeholder="請輸入送件備註...">
           </section>
 
+          <!--<section class="col">
+            <label for="invoiceNo">發票號碼</label>
+            <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="請輸入發票號碼...">
+          </section>-->
+
           <section class="col paymentMethod">
             <label for="paymentMethod">付款方式<span class="required">*</span>
             </label>
             <select class="form-control" id="paymentMethod" class="form-control" name="paymentMethod" required>
-              <option value="" selected disabled>請選擇付款方式</option>
-              <option value="gotoShop">到店購買</option>
               <option value="Credit">信用卡</option>
               <option value="ATM">ATM轉帳</option>
+              <!--<option value="gotoShop">現場付費</option>-->
             </select>
-          </section>
-
-          <section class="col" id="invoiceSection" style="display: none;">
-            <label for="invoiceNo">發票號碼<span class="required">*</span></label>
-            <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="請輸入發票號碼...">
           </section>
 
         </form>
@@ -208,7 +187,7 @@
       </section>
 
       <div class="text-center">
-        <button form="orderForm" id="submitOrder" type="sumbit" class="btn-u btn-u-green" data-id="<%= recipe.id %>">
+        <button form="orderForm" id="submitOrder" type="sumbit" class="btn-u btn-u-green" data-id="<%= event.id %>">
           <i class="fa fa-check" aria-hidden="true"></i>
           送出
         </button>
@@ -224,12 +203,6 @@
 </div>
 <!-- end row -->
 </div>
-<% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3.min.js'); %>
-<% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3pie.min.js'); %>
-<% LayoutUtils.addScripts('/assets/labfnp/lib/d3.layout.cloud.js'); %>
-<% LayoutUtils.addScripts('/assets/labfnp/page/wordCloud.js'); %>
-<% LayoutUtils.addScripts('/assets/labfnp/page/recipe/pieChart.js'); %>
-<% LayoutUtils.addScripts('/assets/labfnp/page/recipe/favorite.js'); %>
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
 
@@ -242,7 +215,7 @@
             event.preventDefault();
           } else {
             $form.data("submitted", true);
-
+            
             $("#submitOrder").prop("disabled", true);
             $("#submitOrder").text("處理中...");
 
@@ -268,7 +241,7 @@
       return this;
     }
 
-    var validateFields = {
+    $("#orderForm").validate({
       rules: {
         recipient: {
           required: true
@@ -276,19 +249,11 @@
         phone: {
           required: true
         },
-        address: {
-          required: true
-        },
         email: {
           required: true,
           email: true
         },
-        paymentMethod: {
-          required: true
-        },
-        invoiceNo: {
-          required: true
-        }
+
       },
       messages: {
         recipient: {
@@ -297,39 +262,12 @@
         phone: {
           required: "請輸入 收件人電話"
         },
-        address: {
-          required: "請輸入 地址"
-        },
         email: {
           required: "請輸入 Email",
           email: "請輸入正確格式Email"
         },
-        paymentMethod: {
-          required: "請選擇付款方式"
-        },
-        invoiceNo: {
-          required: "請輸入發票號碼"
-        }
       }
-    }
-
-    $("#paymentMethod").change(function() {
-      var selected = $("#paymentMethod").val();
-      
-      if (selected=="gotoShop") {
-        var invoiceDisplay = "";
-        var invoiceNeed = true;
-      } else {
-        var invoiceDisplay = "None";
-        var invoiceNeed = false;
-      }
-      $("#invoiceSection").css("display",invoiceDisplay);
-      validateFields.rules.invoiceNo.required = invoiceNeed;
-      $("#orderForm").validate(validateFields);
-      $("#orderForm").validate().resetForm();
     });
-    
-    $("#orderForm").validate(validateFields);
 
     $("#orderForm").preventDoubleSubmission();
 

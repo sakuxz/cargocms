@@ -17,7 +17,6 @@
     -o-filter: saturate(1);
     filter: saturate(1);
   }
-
 </style>
 <% data.items.forEach(function(post, index){ %>
   <div class="news-v3 bg-color-white margin-bottom-60">
@@ -47,7 +46,7 @@
 
       <div class="blog-title">
         <h2>
-          <a href="/blogs/<%= post.alias || post.id %>"><%= post.title %></a>
+          <a href="/events/<%= post.alias || post.id %>"><%= post.title %></a>
         </h2>
       </div>
 
