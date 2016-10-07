@@ -50,6 +50,11 @@
         </h2>
       </div>
 
+      <div>
+        <% var socialData = social.data[index] %>
+        <%- include ../lib/fbLikeShare.ejs %>
+      </div>
+
       <div class="blog-content">
         <p><%= post.abstract %></p>
       </div>
@@ -79,6 +84,7 @@
           <span class="label label-default"><%= tag %></span>
         <% }); %>
       </div>
+      <!--
       <% if(social.targets.length > 0){ %>
         <div class="row shareSticker">
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -87,6 +93,7 @@
           </div>
         </div>
       <% } %>
+      -->
     </div>
   </div>
 <% }); %>

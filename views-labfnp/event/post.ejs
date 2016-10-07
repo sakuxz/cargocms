@@ -23,8 +23,15 @@
       <li><%= data.createdAt %></li>
     </ul>
 
-    <div class="blog-title">
-      <h2><%= data.title %></h2>
+    <div class="row">
+      <div class="blog-title col-md-8">
+        <h2><%= data.title %></h2>
+      </div>
+
+      <div class="col-md-2 col-md-offset-2">
+        <% var socialData = social.data[0] %>
+        <%- include ../lib/fbLikeShare.ejs %>
+      </div>
     </div>
 
     <div class="blog-content">
@@ -89,6 +96,9 @@
 			</div>
 		</div>
 
+    <div>
+      <%- include ../lib/fbLikeShare.ejs %>
+    </div>
   </div>
 </div>
 
