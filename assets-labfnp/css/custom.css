@@ -46,6 +46,7 @@
 
 body {
   overflow-x: hidden;
+  padding-top: 59px;
 }
 
 .dont-break-out {
