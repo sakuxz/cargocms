@@ -236,6 +236,29 @@ module.exports = {
       throw e;
     }
   },
+  contactConfirm: ( result = {
+    name, email, phone, subject, content, success
+  }) => {
+    try{
+      let contactConfirmTemplete = sails.config.mail.templete.contactConfirm;
+      let mailSendConfig = {...contactConfirmTemplete, to: result.email};
+
+      mailSendConfig.subject = sprintf(mailSendConfig.subject, {name: result.name});
+      mailSendConfig.html    = sprintf(mailSendConfig.html, {
+        name: result.name,
+        email: result.email,
+        phone: result.phone,
+        subject: result.subject,
+        content: result.content
+      });
+      mailSendConfig.type = 'contact';
+      mailSendConfig.success = result.success;
+      return mailSendConfig;
+    } catch (e) {
+      throw e;
+    }
+  },
+
   sendMail: async (message) => {
 
     try {
