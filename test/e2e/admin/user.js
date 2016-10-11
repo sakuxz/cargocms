@@ -122,6 +122,7 @@ describe('test user', () => {
         const userEmail = await browser.element('#main-table-widget tbody tr:nth-child(1) td:nth-child(4)')
                           .getText();
         await browser.doubleClick('#main-table-widget tbody tr:nth-child(1)');
+        await browser.pause(1000);
         //進入檢視頁面，比對email是否相同
         await browser.waitForExist('#main-show');
         const uiEmail = await browser.getText('ul.list-unstyled > li:nth-child(1) > p > a')
@@ -146,6 +147,7 @@ describe('test user', () => {
                           .getText();
         await browser.click('#main-table-widget tbody tr:nth-child(1)');
         await browser.click('#ToolTables_main-table_1');
+        await browser.pause(1000);
         //進入檢視頁面，比對email是否相同
         await browser.waitForExist('#main-show');
         const uiEmail = await browser.getText('ul.list-unstyled > li:nth-child(1) > p > a')
