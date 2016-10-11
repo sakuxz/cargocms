@@ -66,7 +66,12 @@ module.exports = {
         return desc;
       }
     },
-
+    shipping: {
+      type: Sequelize.STRING,
+    },
+    trackingNumber: {
+      type: Sequelize.STRING,
+    },
 		ItemNameArray: {
 			type: Sequelize.VIRTUAL,
 			get: function () {
