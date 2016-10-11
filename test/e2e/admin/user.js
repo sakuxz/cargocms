@@ -170,6 +170,7 @@ describe('test user', () => {
                           .getText();
 
         await browser.click('a[name="showDataButton"]');
+        await browser.pause(1000);
         //進入檢視頁面，比對email是否相同
 
 
@@ -238,11 +239,12 @@ describe('test user', () => {
         await browser.waitForExist('#main-table_filter input[type="search"]');
         await browser.setValue('#main-table_filter input[type="search"]', deleteThisUser.username);
 
-        await browser.pause(2000);
+        await browser.pause(1000);
         await browser.waitForExist('#ToolTables_main-table_3');
         await browser
         .click('#main-table tbody')
         .click('#ToolTables_main-table_3');
+        await browser.pause(1000);
 
         await browser.waitForExist('[name="username"]');
         //點擊刪除user
