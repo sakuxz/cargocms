@@ -240,20 +240,23 @@ describe('test user', () => {
         await browser.setValue('#main-table_filter input[type="search"]', deleteThisUser.username);
 
         await browser.pause(1000);
-        await browser.waitForExist('#ToolTables_main-table_3');
+        await browser.waitForExist('#ToolTables_main-table_3')
         await browser
-        .click('#main-table tbody')
-        .click('#ToolTables_main-table_3');
+          .click('#main-table tbody')
+          .click('#ToolTables_main-table_3');
+
         await browser.pause(1000);
 
         await browser.waitForExist('[name="username"]');
         //點擊刪除user
         await browser.click('.btn.btn-danger');
+        await browser.pause(1000);
         //確定刪除
         await browser.waitForExist('#bot1-Msg1');
         await browser.click('#bot1-Msg1');
+        await browser.pause(1000);
         //等待後端完成刪除 跳轉回user列表
-        await browser.waitForExist('#main-table_filter input[type="search"]');
+
 
         let res = await User.find({
           where: {
