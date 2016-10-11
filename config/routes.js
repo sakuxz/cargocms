@@ -54,8 +54,6 @@ var defaultConfig = {
   'post /api/admin/allpay':       'api/admin/AllpayController.create',
   'put /api/admin/allpay/:id':    'api/admin/AllpayController.update',
   'delete /api/admin/allpay/:id': 'api/admin/AllpayController.destroy',
-  'post /api/allpay/paid':        'api/admin/AllpayController.paid',
-  'post /api/allpay/paymentinfo': 'api/admin/AllpayController.paymentinfo',
 
   'get /api/admin/message':        'api/admin/MessageController.find',
   'get /api/admin/message/:id':    'api/admin/MessageController.findOne',
@@ -79,6 +77,15 @@ var defaultConfig = {
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
   'put /api/admin/facebook/update':        'api/admin/facebook/FeedController.update',
+
+  'post /api/event/paid':        'api/admin/EventController.paid',
+  'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
+
+  //----- Event -----
+  'get /events/:name': 'EventController.show',
+
+  //----- Blog -----
+  'get /blogs/:name': 'BlogController.show',
 
   //----- Admin -----
   '/admin':           'AdminController.index',

@@ -101,6 +101,14 @@ module.exports.bootstrap = async (cb) => {
           }
         }
       });
+    } else {
+      // 測試時需要初始化的 module
+      try {
+        require(`${__dirname}/init/allpay`).init();
+      }
+      catch (e) {
+        sails.log.error(e);
+      }
     }
 
 

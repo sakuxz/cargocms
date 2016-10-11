@@ -116,6 +116,46 @@ var defaultConfig = {
       <br />此為系統信件，請勿直接回覆此信件
       <br />From %(storeName)s
       `
+    },
+    event : {
+      orderConfirm: {
+        sendBy: 'email',
+        subject: '訂單 %(orderSerialNumber)s 建立完成',
+        html: `<html><body>
+        <br />Hi %(username)s:
+
+        <br />感謝你的訂購，你所購買的票卷 %(productName)s 已訂購完成
+        <br />訂單編號為： %(orderSerialNumber)s
+        <br />聯繫姓名： %(shipmentUsername)s
+        <br />聯繫電話： %(phone)s
+        <br />聯繫地址： %(shipmentAddress)s
+        <br />備註： %(note)s
+        <br />
+        <br />如果上述資料正確，請將款項 $ %(paymentTotalAmount)s 匯款至以下帳號：
+        <br />
+        <br />銀行名稱： %(bankName)s
+        <br />銀行代碼： %(bankId)s
+        <br />帳號： %(accountId)s
+        <br />匯款金額： $ %(paymentTotalAmount)s
+        <br />匯款期限： %(expireDate)s
+        <br />
+        <br />From %(storeName)s
+        </body></html>`
+      },
+      paymentConfirm: {
+        sendBy: 'email',
+        subject: '訂單 %(orderSerialNumber)s 已確認付款完成',
+        text: `
+        Hi %(username)s:
+
+        您的付款已經確認，
+        請記得在時間內報到
+        並示此 Email
+        訂單編號為： %(orderSerialNumber)s
+
+        From %(storeName)s
+        `
+      },
     }
   }
 }

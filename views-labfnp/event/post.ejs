@@ -1,0 +1,107 @@
+<style>
+  .hiddenRow {
+    padding: 0 !important;
+  }
+</style>
+
+<div class="news-v3 bg-color-white margin-bottom-60">
+
+  <% if (data.coverUrl) { %>
+    <% if (data.coverType == 'img') { %>
+      <img class="img-responsive full-width" src="<%= data.coverUrl %>" alt="">
+    <% } else{ %>
+      <div class="responsive-video">
+        <iframe src="<%= data.coverUrl %>" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+    <% } %>
+  <% } %>
+  <div class="news-v3-in">
+    <ul class="list-inline posted-info">
+      <% if (data.UserId) { %>
+        <li>By <a href="#"><%= data.User.displayName %></a></li>
+      <% } %>
+      <li><%= data.createdAt %></li>
+    </ul>
+
+    <div class="row">
+      <div class="blog-title col-md-8">
+        <h2><%= data.title %></h2>
+      </div>
+
+      <div class="col-md-2 col-md-offset-2">
+        <% var socialData = social.data[0] %>
+        <%- include ../lib/fbLikeShare.ejs %>
+      </div>
+    </div>
+
+    <div class="blog-content">
+      <%- data.content %>
+    </div>
+
+    <div class="panel panel-red margin-bottom-40 margin-top-20">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-user"></i>票券資訊</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>票券名稱</th>
+							<th class="hidden-sm">發售狀態</th>
+							<th>票價</th>
+							<th>訂購</th>
+						</tr>
+					</thead>
+					<tbody>
+            <% data.Events.forEach(function(Event){ %>
+  						<tr data-toggle="collapse" data-target="#event<%= Event.id %>" class="accordion-toggle">
+  							<td><%= Event.title %></td>
+  							<td><%= Event.signupCount + "/" + Event.limit %></td>
+  							<td class="hidden-sm"><%= Event.price %></td>
+  							<td><a href="/event/order/<%= Event.id %>" data-id="<%= Event.id %>" class="btn btn-success btn-xs">訂購</a></td>
+  						</tr>
+              <tr>
+                  <td colspan="6" class="hiddenRow">
+                    <div class="accordian-body collapse" id="event<%= Event.id %>">
+                      <div>
+                          <b>票券名稱：</b>
+                      </div>
+                      <p class="ng-binding">
+                          <%= Event.title %>
+                      </p>
+                      <div>
+                          <b>售票時間：</b>
+                      </div>
+                      <p class="ng-binding">
+                          <%= Event.sellStartDate %> ~ <%= Event.sellEndDate %>
+                      </p>
+                      <div>
+                          <b>有效時間：</b>
+                      </div>
+                      <p class="ng-binding">
+                          <%= Event.eventStartDate %> ~ <%= Event.eventEndDate %>
+                      </p>
+                      <div ng-show="ticket.description" class="">
+                          <b>票券說明：</b>
+                      </div>
+                      <div ng-show="ticket.description" class="ng-binding">
+                          <%= Event.description %>
+                      </div>
+                    </div>
+                  </td>
+              </tr>
+            <% }); %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+    <div>
+      <%- include ../lib/fbLikeShare.ejs %>
+    </div>
+  </div>
+</div>
+
+<h2>回應這篇文章</h2>
+
+<div class="fb-comments" data-href="<%= SocialService.getShareUrl() + req.path %>" data-numposts="5"></div>

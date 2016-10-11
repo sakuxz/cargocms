@@ -65,6 +65,9 @@
   .panel-heading {
     padding-right: 0 !important;
   }
+  .fbButton {
+    margin-top: 4px;
+  }
 </style>
 
 <div class="container content profile">
@@ -120,10 +123,10 @@
 
             <div class="col-md-6 col-sm-6 col-xs-12">
               <div class="pull-right">
-              <button id="likeButton" class="btn-u btn-u-red" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
-                <i class="fa <%= recipe.currentUserLike ? 'fa-heart': 'fa-heart-o' %>" aria-hidden="true"></i>
-                <span class="hidden-xs">收藏</span>
-              </button>
+                <button id="likeButton" class="btn-u btn-u-red" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
+                  <i class="fa <%= recipe.currentUserLike ? 'fa-heart': 'fa-heart-o' %>" aria-hidden="true"></i>
+                  <span class="hidden-xs">收藏</span>
+                </button>
                 <a href="/recipe/feedback/<%= recipe.hashId %>" class="btn-u btn-u-orange">
                   <i class="fa fa-comment-o" aria-hidden="true"></i>
                   <span class="hidden-xs">感覺回饋</span>
@@ -133,7 +136,13 @@
                   <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                   訂購
                 </a>
+
+                <div class="fbButton">
+                  <% var socialData = social.data[0] %>
+                  <% include ../../lib/fbLikeShare.ejs %>
+                </div>
               </div>
+
             </div>
           </div>
 

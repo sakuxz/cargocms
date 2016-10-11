@@ -23,7 +23,8 @@ module.exports.init = async () => {
         ]
       }
     }
-    var appRoot = path.dirname(require.main.filename);
+    let appRoot = path.dirname(require.main.filename);
+    if (environment === 'test') appRoot = `${__dirname}/../../..`;
     let AllpayClass = require(`${appRoot}/api/services/libraries/Allpay`);
     global.AllpayService = new AllpayClass.default({
       domain: allpayConfig.domain,
@@ -38,8 +39,7 @@ module.exports.init = async () => {
       allpayModel: Allpay,
     });
 
-
   } catch (e) {
-    console.error(e);
+    sails.log.error(e);
   }
 };

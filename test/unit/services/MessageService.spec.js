@@ -83,4 +83,33 @@ describe("about Mailer service", () => {
 
   });
 
+  it('send eventOrderConfirm', async (done) => {
+
+    try {
+      let messageConfig = await MessageService.eventOrderConfirm({
+        productName: 'productName!!!!',
+        serialNumber: 'serialNumber!!!!',
+        email: 'email!!!!',
+        phone: 'phone!!!!!',
+        username: 'username!!!!',
+        bankId: 'bankId!!!!',
+        bankName: 'bankName!!!!',
+        bankName: 'bankName!!!!',
+        accountId: 'accountId!!!!',
+        accountName: 'accountName!!!!',
+        paymentTotalAmount: 'paymentTotalAmount!!!!',
+        shipmentUsername: 'shipmentUsername!!!!',
+        shipmentAddress: 'shipmentAddress!!!!',
+        expireDate: '2016/09/13',
+        note: 'note!!!!!!!',
+      });
+      let message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
+      done();
+    } catch (e) {
+      done(e);
+    }
+
+  });
+
 });
