@@ -39,7 +39,7 @@ module.exports = {
         ]
       }
     },
-  }
+  },
   google: {
     name: 'GoogleAPIKey',
     key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
