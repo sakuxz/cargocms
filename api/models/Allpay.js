@@ -227,6 +227,55 @@ module.exports = {
         }
       }
     },
+    shipping: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
+          let shipping = '';
+          if(order){
+            shipping = order.shipping;
+          }
+          return shipping;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    shippingDsc: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
+          let shippingDsc = '';
+          if(order && order.shipping ){
+            shippingDsc = sails.__({
+              phrase: order.shipping,
+              locale: 'zh'
+            });
+          }
+          return shippingDsc;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    trackingNumber: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
+          let trackingNumber = '';
+          if(order){
+            trackingNumber = order.trackingNumber;
+          }
+          return trackingNumber;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+
     PaymentTypeDesc:{
       type: Sequelize.VIRTUAL,
       get: function() {
