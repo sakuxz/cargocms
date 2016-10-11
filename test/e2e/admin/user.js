@@ -237,7 +237,7 @@ describe('test user', () => {
         await browser.url('/admin/#/admin/user');
         //搜尋該user 進入編輯user頁面
         await browser.waitForExist('#main-table_filter input[type="search"]');
-        await browser.setValue('#main-table_filter input[type="search"]', deleteThisUser.username);
+        await browser.setValue('#main-table_filter input[type="search"]', deleteThisUser.email);
 
         await browser.pause(1000);
         await browser.waitForExist('#ToolTables_main-table_3')
