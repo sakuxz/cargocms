@@ -37,5 +37,11 @@
 * 新增 EventOrders
 * 新增 Events
 * Post type 新增 'internal-event','external-event' enum
-* Post url 清空目前沒有地方有用到 
+* Post url 清空目前沒有地方有用到
 * Post url 改名為 alias 放 url 別名
+
+## v3
+
+### 新增 RecipeOrders
+* 新增 shipping 運送物流
+* 新增 trackingNumber 物流編號
