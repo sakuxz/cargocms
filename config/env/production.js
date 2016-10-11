@@ -77,5 +77,9 @@ module.exports = {
       region: 'region of bucket',
       bucket: 'bucket name'
     }
+  google: {
+    name: 'GoogleAPIKey',
+    key: undefined
   }
+
 };

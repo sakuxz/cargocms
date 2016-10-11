@@ -73,6 +73,13 @@
 <div class="container content profile">
   <input type="hidden" name="id" class="hidden" value="<%= recipe.id %>" disabled>
 
+  <% var socialData = social.data[0]; %>
+  <% var info = req.flash('info')[0] || null; %>
+  <% if(info === "Info.New.Recipe") { %>
+    <% var recipeShareUrl = encodeURI(socialData.url); %>
+    <a id="isNewRecipe" class="hidden" href="https://www.facebook.com/sharer.php?u=<%= recipeShareUrl %>&display=popup&ref=plugin&src=like&app_id=1011584022234802"> New Recipe </a>
+  <% } %>
+
   <!-- begin row -->
   <div class="row">
 
@@ -138,7 +145,6 @@
                 </a>
 
                 <div class="fbButton">
-                  <% var socialData = social.data[0] %>
                   <% include ../../lib/fbLikeShare.ejs %>
                 </div>
               </div>
@@ -228,3 +234,23 @@
 <% LayoutUtils.addScripts('/assets/labfnp/page/wordCloud.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/pieChart.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/favorite.js'); %>
+<% LayoutUtils.addScriptBlock(`
+  $(document).ready(function(){
+    if( $("#isNewRecipe").length > 0 ){
+      swal({
+        type: "info",
+        title: "新配方",
+        text: "是否要在 F B 分享呢 ?",
+        showCancelButton: true,
+        confirmButtonText: "分享",
+        cancelButtonText: "暫時不要"
+      },
+      function(){
+        var url = $("#isNewRecipe").attr("href");
+        window.open( url, "_blank");
+      }
+     );
+   }
+
+  });
+`); %>
