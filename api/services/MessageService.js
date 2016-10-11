@@ -243,8 +243,12 @@ module.exports = {
       let contactConfirmTemplete = sails.config.mail.templete.contact.Confirm;
       let mailSendConfig = {...contactConfirmTemplete, to: result.email};
 
-      mailSendConfig.subject = sprintf(mailSendConfig.subject, {name: result.name});
+      mailSendConfig.subject = sprintf(mailSendConfig.subject, {
+        name: result.name,
+        storeName: 'LFP'
+      });
       mailSendConfig.html    = sprintf(mailSendConfig.html, {
+        storeName: 'LFP',
         name: result.name,
         email: result.email,
         phone: result.phone,
@@ -265,7 +269,11 @@ module.exports = {
       let contactConfirmTemplete = sails.config.mail.templete.contact.SendToAdmin;
       let mailSendConfig = {...contactConfirmTemplete, to: 'info@labfnp.com'};
 
-      mailSendConfig.subject = sprintf(mailSendConfig.subject, {name: result.name});
+      mailSendConfig.subject = sprintf(mailSendConfig.subject, {
+        name: result.name,
+        storeName: 'LFP',
+        subject: result.subject
+      });
       mailSendConfig.html    = sprintf(mailSendConfig.html, {
         name: result.name,
         email: result.email,
