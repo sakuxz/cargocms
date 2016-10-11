@@ -183,6 +183,20 @@
       <b class="tooltip tooltip-bottom-right">Note</b></label>
   </section>
 
+  <section >
+    <label class="label">運送物流</label>
+    <label class="select state-disabled">
+      <select v-model="data.item.shipping" disabled>
+        <option value="HCT" selected>新竹物流</option>
+      </select> <i></i> </label>
+  </section>
+
+  <section>
+    <label class="input state-disabled">物流編號
+      <input type="text" name="trackingNumber" placeholder="物流編號" v-model="data.item.trackingNumber" disabled>
+      <b class="tooltip tooltip-bottom-right">物流編號</b></label>
+  </section>
+
 </fieldset>
 
 <script>
