@@ -84,7 +84,7 @@ describe('about Post model operation.', function() {
     });
     it('find All Post by id has join should success.', async (done) => {
       try {
-        let result = await Post.findAllHasJoin();
+        let result = await Post.findAllHasJoin({order: 'DESC'});
         result.length.should.be.not.eq(0);
         result[0].id.should.be.eq(post.id);
         result[0].User.id.should.be.eq(user.id)

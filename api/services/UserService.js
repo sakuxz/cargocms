@@ -35,7 +35,7 @@ module.exports = {
         address2
       });
       const findExistUser = await User.find({
-        where: { $or: [ username, email ] }
+        where: { $or: [ {username}, {email} ] }
       });
 
       if (findExistUser)
@@ -58,7 +58,7 @@ module.exports = {
         password: Passports[0].password,
         UserId: user.id
       });
-      
+
       return user;
     } catch (e) {
       sails.log.error(e);
