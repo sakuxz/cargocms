@@ -160,7 +160,7 @@ var defaultConfig = {
     contact:{
       Confirm: {
         sendBy: 'email',
-        subject: '%(name)s 聯繫了 LFP',
+        subject: '%(name)s 聯繫了 %(storeName)s',
         html: `<html><body>
         <br /><p> %(name)s 聯繫 LFP ！</p>
         <br />
@@ -175,12 +175,13 @@ var defaultConfig = {
         <br />
         <br />此為系統信件，請勿直接回覆此信件
         <br />
+        <br />From %(storeName)s
         </body></html>
         `
       },
       SendToAdmin:{
         sendBy: 'email',
-        subject: '客戶 %(name)s 聯繫了 LFP',
+        subject: '%(storeName)s 客戶 %(name)s 詢問了 %(subject)s',
         html: `<html><body>
         <br /><p>客戶 %(name)s 聯繫 LFP ！</p>
         <br />
@@ -191,6 +192,7 @@ var defaultConfig = {
         <br /><p> 客戶問題主旨：%(subject)s </p>
         <br /><p> 客戶問題內容：%(content)s </p>
         <br />
+        <br />此為系統信件，請勿直接回覆此信件
         <br />
         </body></html>
         `
