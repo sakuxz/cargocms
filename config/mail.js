@@ -157,25 +157,44 @@ var defaultConfig = {
         `
       },
     },
-    contactConfirm: {
-      sendBy: 'email',
-      subject: '%(name)s 聯繫了 LFP',
-      html: `<html><body>
-      <br /><p> %(name)s 聯繫 LFP ！</p>
-      <br />
-      <br />聯繫內容：
-      <br /><p> 你的大名：%(name)s </p>
-      <br /><p> 你的 Email：%(email)s </p>
-      <br /><p> 你的聯絡電話：%(phone)s </p>
-      <br /><p> 你的問題主旨：%(subject)s </p>
-      <br /><p> 你的問題內容：%(content)s </p>
-      <br />
-      <br /><p>我們將會盡快與您聯繫，謝謝</p>
-      <br />
-      <br />此為系統信件，請勿直接回覆此信件
-      <br />
-      </body></html>
-      `
+    contact:{
+      Confirm: {
+        sendBy: 'email',
+        subject: '%(name)s 聯繫了 LFP',
+        html: `<html><body>
+        <br /><p> %(name)s 聯繫 LFP ！</p>
+        <br />
+        <br />聯繫內容：
+        <br /><p> 你的大名：%(name)s </p>
+        <br /><p> 你的 Email：%(email)s </p>
+        <br /><p> 你的聯絡電話：%(phone)s </p>
+        <br /><p> 你的問題主旨：%(subject)s </p>
+        <br /><p> 你的問題內容：%(content)s </p>
+        <br />
+        <br /><p>我們將會盡快與您聯繫，謝謝</p>
+        <br />
+        <br />此為系統信件，請勿直接回覆此信件
+        <br />
+        </body></html>
+        `
+      },
+      SendToAdmin:{
+        sendBy: 'email',
+        subject: '客戶 %(name)s 聯繫了 LFP',
+        html: `<html><body>
+        <br /><p>客戶 %(name)s 聯繫 LFP ！</p>
+        <br />
+        <br />聯繫內容：
+        <br /><p> 客戶名稱：%(name)s </p>
+        <br /><p> 客戶 Email：%(email)s </p>
+        <br /><p> 客戶聯絡電話：%(phone)s </p>
+        <br /><p> 客戶問題主旨：%(subject)s </p>
+        <br /><p> 客戶問題內容：%(content)s </p>
+        <br />
+        <br />
+        </body></html>
+        `
+      }
     }
   }
 }
