@@ -5,6 +5,7 @@ module.exports = {
     try {
       const { name, email, phone, subject, content } = req.body;
 
+
       const secret = sails.config.reCAPTCHA.secret;
       const response = req.body['g-recaptcha-response'];
       const recaptcha = await axios.get(`https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${response}`);

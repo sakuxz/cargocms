@@ -38,6 +38,10 @@ module.exports = {
           'displayName', 'photos'
         ]
       }
-    }
+    },
+  },
+  google: {
+    name: 'GoogleAPIKey',
+    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
   }
 };

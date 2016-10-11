@@ -44,5 +44,10 @@ module.exports = {
   reCAPTCHA: {
     key: '',
     secret: ''
+  }, 
+  google: {
+    name: 'GoogleAPIKey',
+    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
   }
+
 };
