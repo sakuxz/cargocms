@@ -12,7 +12,9 @@ module.exports = {
       messageConfig.serialNumber = allpay.TradeNo;
       if (allpay.RecipeOrderId) {
         const recipeOrder = await RecipeOrder.findByIdHasJoin(allpay.RecipeOrderId);
-        recipeOrder.productionStatus = 'PAID';
+        if (parseInt(allpay.RtnCode, 10) === 1) {
+          recipeOrder.productionStatus = 'PAID';
+        }
         await recipeOrder.save();
         messageConfig.email = recipeOrder.email;
         messageConfig.username = recipeOrder.User.displayName;
