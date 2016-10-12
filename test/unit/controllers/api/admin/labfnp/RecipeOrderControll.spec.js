@@ -42,7 +42,7 @@ describe('about Recipe Order Controller operation.', function() {
     }
   });
 
-  it.only('update Production Status', async (done) => {
+  it('update Production Status', async (done) => {
     try {
       const data = {
         productionStatus: 'PAID'
