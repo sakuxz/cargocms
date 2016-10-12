@@ -112,7 +112,7 @@ var defaultConfig = {
       <br />若是您忘記了密碼，點選以下連結即可重置密碼
       <br /><a href='%(url)s'>Click Me</a>
       <br />
-      <br />若無法點擊連擊，請複製下方連結至瀏覽器中
+      <br />若無法點擊連結，請複製下方連結至瀏覽器中
       <br />
       <br />%(url)s
       <br />
