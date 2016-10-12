@@ -43,7 +43,7 @@ var appModel = {
     },
     items: [],
     option: {
-      exportCSV: true,
+      exportCSV: false,
       defaultSort: [[ 22, 'desc' ]]
     }
   },
@@ -73,6 +73,28 @@ appMain.DataTableInitComplete = function() {
       date_format: 'yy/mm/dd',
     },
   ]);
+
+  var serialize = function(obj, prefix) {
+    var str = [];
+    for(var p in obj) {
+      if (obj.hasOwnProperty(p)) {
+        var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+        str.push(typeof v == "object" ?
+          serialize(v, k) :
+          encodeURIComponent(k) + "=" + encodeURIComponent(v));
+      }
+    }
+    return str.join("&");
+  }
+
+  var exportBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_0" title="匯出地址寄送表、配方製作表" tabindex="0" aria-controls="main-table"><span>匯出</span></a>'
+  $(exportBtn).prependTo('.DTTT_container');
+  $('#ToolTables_main-table_custom_0').on('click', function() {
+    window.open('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), '_blank');
+    window.open('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), '_blank');
+  });
+
+
   var slesct = '<span>訂單狀態：</span>'+
   '<select class="form-control input-sm" id="productionStatus" style="margin-right: 5px;">'+
     '<option value=""></option>' +

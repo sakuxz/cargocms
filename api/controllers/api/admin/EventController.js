@@ -16,7 +16,9 @@ module.exports = {
           where: allpay.EventOrderId,
           include: [User, Event]
         });
-        eventOrder.productionStatus = 'PAID';
+        if (parseInt(allpay.RtnCode, 10) === 1) {
+          eventOrder.productionStatus = 'PAID';
+        }
         await eventOrder.save();
         messageConfig.email = eventOrder.email;
         messageConfig.username = eventOrder.User.displayName;
