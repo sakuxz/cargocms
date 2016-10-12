@@ -11,7 +11,8 @@ module.exports = {
       'paymentConfirm',
       'deliveryConfirm',
       'orderSync',
-      'forgotPassword'
+      'forgotPassword',
+      'contact'
     ),
     from: Sequelize.STRING,
     to: Sequelize.STRING,

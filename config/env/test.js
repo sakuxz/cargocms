@@ -39,5 +39,21 @@ module.exports = {
         ]
       }
     }
+  },
+  storage: {
+    // locate can be s3 or local
+    locate: 's3',
+    s3: {
+      key: 'Access Key Id at local.js',
+      secret: 'Secret Access Key',
+      // region only can be us-standard
+      // other region will get InvalidRequest Error
+      region: 'region of bucket',
+      bucket: 'bucket name'
+    },
+  },
+  google: {
+    name: 'GoogleAPIKey',
+    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
   }
 };

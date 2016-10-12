@@ -44,5 +44,22 @@ module.exports = {
   reCAPTCHA: {
     key: '',
     secret: ''
+  },
+  storage: {
+    // locate can be s3 or local
+    locate: 'local',
+    s3: {
+      key: 'Access Key Id',
+      secret: 'Secret Access Key',
+      // region only can be us-standard
+      // other region will get InvalidRequest Error
+      region: 'region of bucket',
+      bucket: 'bucket name'
+    }
+  }, 
+  google: {
+    name: 'GoogleAPIKey',
+    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
   }
+
 };
