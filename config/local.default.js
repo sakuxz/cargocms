@@ -18,6 +18,7 @@ module.exports = {
         clientID: '',
         clientSecret: '',
         callbackURL: "http://localhost:5001/auth/facebook/callback",
+        scope: [ 'email', 'public_profile' ],
         profileFields: [
           'id', 'email', 'gender', 'link', 'locale',
           'name', 'timezone', 'updated_time', 'verified',
@@ -64,7 +65,7 @@ module.exports = {
   reCAPTCHA: {
     key: '',
     secret: ''
-  }, 
+  },
   storage: {
     // locate can be s3 or local
     locate: 'local',
