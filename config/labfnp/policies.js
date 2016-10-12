@@ -9,6 +9,8 @@ module.exports = {
   'labfnp/RecipeController': {
     'create': ['passport', 'sessionAuth'],
     'order': ['passport', 'sessionAuth'],
-    'update': ['nocache']
+    'update': ['nocache'],
+    'allpay': ['passport', 'sessionAuth'],
+    'done': ['passport', 'sessionAuth'],
   },
 }
