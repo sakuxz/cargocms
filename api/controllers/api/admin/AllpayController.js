@@ -170,8 +170,9 @@ module.exports = {
         scentList: '香味清單'
       }
       const format = (items) => {
-        let result = items.map((data) => {
-          sails.log.debug(data);
+        let result = [];
+        for (let data of items) {
+          if (data.PaymentType === 'aio') continue;
           let formatted = {
             id: data.id,
             TradeNo: data.TradeNo ? `="${data.TradeNo}"` : '',
@@ -203,8 +204,8 @@ module.exports = {
               }
             });
           }
-          return formatted;
-        });
+          result.push(formatted);
+        };
         return result;
       }
 
@@ -245,8 +246,10 @@ module.exports = {
         scentList: '香味清單'
       }
       const format = (items) => {
-        let result = items.map((data) => {
-          sails.log.debug(data);
+        // let result = items.map((data) => {
+        let result = [];
+        for (let data of items) {
+          if (data.PaymentType === 'aio') continue;
           let formatted = {
             check: '',
             PaymentTypeDesc: data.PaymentTypeDesc,
@@ -270,8 +273,8 @@ module.exports = {
               }
             });
           }
-          return formatted;
-        });
+          result.push(formatted);
+        };
         return result;
       }
 
