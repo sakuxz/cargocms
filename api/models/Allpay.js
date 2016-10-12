@@ -233,7 +233,7 @@ module.exports = {
         try {
           const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let shipping = '';
-          if(order){
+          if(order && order.shipping){
             shipping = order.shipping;
           }
           return shipping;
@@ -266,7 +266,7 @@ module.exports = {
         try {
           const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
           let trackingNumber = '';
-          if(order){
+          if(order && order.trackingNumber){
             trackingNumber = order.trackingNumber;
           }
           return trackingNumber;
