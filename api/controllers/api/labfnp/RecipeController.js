@@ -64,6 +64,7 @@ module.exports = {
       }
       sails.log.info('create recipe controller=>', data);
       const recipe = await RecipeService.create(data);
+      req.flash('info', 'Info.New.Recipe');
       res.ok({
         message: 'Create recipe success.',
         data: recipe,

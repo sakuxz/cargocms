@@ -30,8 +30,6 @@ module.exports = {
         recipe.formula.push(formula);
       }
 
-      req.flash('info', 'Info.New.Recipe');
-
       if (from == 'scent') {
         return res.view({ user, recipe, scents });
       }
