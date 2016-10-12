@@ -90,8 +90,11 @@ appMain.DataTableInitComplete = function() {
   var exportBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_0" title="匯出地址寄送表、配方製作表" tabindex="0" aria-controls="main-table"><span>匯出</span></a>'
   $(exportBtn).prependTo('.DTTT_container');
   $('#ToolTables_main-table_custom_0').on('click', function() {
-    window.open('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), '_blank');
-    window.open('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), '_blank');
+    var download = function(url, id) {
+      $('<iframe>', { id: id, src:url }).hide().appendTo('body');
+    }
+    download('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), 'exportSend');
+    download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
   });
 
 
