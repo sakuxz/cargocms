@@ -13,4 +13,8 @@ module.exports = {
     'allpay': ['passport', 'sessionAuth'],
     'done': ['passport', 'sessionAuth'],
   },
+  'api/admin/ImageController': {
+    //'upload': ['passport', 'sessionAuth'],
+    'destory': ['passport', 'sessionAuth'],
+  },
 }
