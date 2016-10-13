@@ -43,7 +43,7 @@ module.exports = {
   },
   storage: {
     // locate can be s3 or local
-    locate: 's3',
+    locate: 'local',
     s3: {
       key: 'Access Key Id at local.js',
       secret: 'Secret Access Key',

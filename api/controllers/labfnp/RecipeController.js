@@ -223,11 +223,12 @@ module.exports = {
       const formatName = recipeOrder.ItemNameArray.map((name) => {
         return name + ' 100 ml';
       });
-      const allPayData = await AllpayService.getAllpayConfig({
+      let MerchantTradeNo = crypto.randomBytes(32).toString('hex').substr(0, 8);
+      const allPayData = await AllpayService.createAndgetAllpayConfig({
         relatedKeyValue: {
           RecipeOrderId: recipeOrder.id,
         },
-        MerchantTradeNo: crypto.randomBytes(32).toString('hex').substr(0, 8),
+        MerchantTradeNo,
         tradeDesc: `配方名稱：${perfumeName} 100 ml, (備註：${message})`,
         totalAmount: 1550,
         paymentMethod: paymentMethod,
@@ -237,25 +238,15 @@ module.exports = {
         paymentInfoURL: '/api/recipe/paymentinfo',
       });
       if (paymentMethod == 'gotoShop') {
-        const item = await Allpay.findOne({
-          where:{
-            MerchantTradeNo: allPayData.MerchantTradeNo
-          },
-          include:{
-            model: RecipeOrder,
-            include: [User, Recipe]
-          }
-        });
-        item.RtnMsg = '到店購買';
-        item.ShouldTradeAmt = 1550;
-        item.TradeAmt = 1550;
-        // item.TradeNo = item.MerchantTradeNo;
-        item.PaymentType = '到店購買';
-        item.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
-        await item.save();
+        allPayData.allpay.RtnMsg = '到店購買';
+        allPayData.allpay.ShouldTradeAmt = 1550;
+        allPayData.allpay.TradeAmt = 1550;
+        allPayData.allpay.PaymentType = '到店購買';
+        allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
+        await allPayData.allpay.save();
 
         let messageConfig = {};
-        messageConfig.serialNumber = item.MerchantTradeNo;
+        messageConfig.serialNumber = MerchantTradeNo;
         messageConfig.paymentTotalAmount = 1550;
         messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
         messageConfig.email = recipeOrder.email;
@@ -269,12 +260,12 @@ module.exports = {
         const message = await Message.create(messageConfig);
         await MessageService.sendMail(message);
 
-        res.redirect(`/recipe/done?t=${allPayData.MerchantTradeNo}`);
+        res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
 
       } else {
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
-          ...allPayData
+          ...allPayData.config
         });
       }
     } catch (e) {
@@ -302,8 +293,8 @@ module.exports = {
           model: RecipeOrder,
           include: [
             {
-              model: User, 
-              where: { Id: user.id } }, 
+              model: User,
+              where: { Id: user.id } },
             Recipe
           ]
         }
