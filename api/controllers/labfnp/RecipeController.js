@@ -213,15 +213,20 @@ module.exports = {
       });
 
       let updateUserData = await User.findById(user.id);
+      let userNeedUpdate = false;
       //update Phone
       if( !updateUserData.phone1 && !updateUserData.phone2 ) {
         updateUserData.phone1 = phone;
+        userNeedUpdate = true;
       }
       //update Email
       if( !updateUserData.email ){
         updateUserData.email = email;
+        userNeedUpdate = true;
       }
-      updateUserData = await updateUserData.save();
+      if( userNeedUpdate ) {
+        updateUserData = await updateUserData.save()
+      };
 
       recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
       const formatName = recipeOrder.ItemNameArray.map((name) => {
