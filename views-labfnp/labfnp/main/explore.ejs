@@ -108,6 +108,9 @@
   text-overflow: ellipsis;;
   white-space: nowrap;
 }
+.well {
+   background: #fff;
+}
 </style>
 
 
@@ -148,15 +151,20 @@
 
 	<!--=== Content Part ===-->
 
-	<% if (recipes.length == 0) { %>
-
+	<% if (recipes.length == 0 && req.query.type === 'like') { %>
 		<div class="container content">
-			<div class="alert alert-success fade in margin-bottom-40">
+			<div class="well fade in margin-bottom-40">
+				<h2>還沒有收藏的配方</h2>
+				<p>請到<a href="/lab">實驗室</a>逛逛，看看是否有喜歡的配方可收藏！</p>
+			</div>
+		</div>
+  <% } else if (recipes.length == 0) { %>
+    <div class="container content">
+			<div class="well fade in margin-bottom-40">
 				<h2>成為第一個創作者</h2>
 				<p>請立即登入並開始創作，您將有機會成為本站的第一個創作者！</p>
 			</div>
 		</div>
-
 	<% } else { %>
 
 		<div class="blog_masonry_3col">

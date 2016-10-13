@@ -30,8 +30,6 @@ module.exports = {
         recipe.formula.push(formula);
       }
 
-      req.flash('info', 'Info.New.Recipe');
-
       if (from == 'scent') {
         return res.view({ user, recipe, scents });
       }
@@ -289,6 +287,12 @@ module.exports = {
 
   done: async (req, res) => {
     try {
+      let user = AuthService.getSessionUser(req);
+      if (!user) {
+        return res.redirect('/login');
+      }
+
+
       const merchantTradeNo = req.query.t;
       const item = await Allpay.findOne({
         where:{
@@ -296,15 +300,23 @@ module.exports = {
         },
         include:{
           model: RecipeOrder,
-          include: [User, Recipe]
+          include: [
+            {
+              model: User, 
+              where: { Id: user.id } }, 
+            Recipe
+          ]
         }
       });
 
-      if(!item){
-        throw Error(`找不到 ${merchantTradeNo} 編號的交易`);
-      }
-      res.view('labfnp/recipe/done', {item} );
+      console.log(user.id);
+      console.log(item.dataValues.RecipeOrder.UserId);
 
+      if(!item){
+        throw Error(`找不到 ${merchantTradeNo} 編號的交易，或是使用者錯誤`);
+      }
+
+      res.view('labfnp/recipe/done', {item} );
 
     } catch (e) {
       res.serverError(e);
