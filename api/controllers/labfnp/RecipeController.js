@@ -237,6 +237,7 @@ module.exports = {
         returnURL: '/api/recipe/paid',
         paymentInfoURL: '/api/recipe/paymentinfo',
       });
+
       if (paymentMethod == 'gotoShop') {
         allPayData.allpay.RtnMsg = '到店購買';
         allPayData.allpay.ShouldTradeAmt = 1550;
@@ -270,7 +271,7 @@ module.exports = {
       }
     } catch (e) {
       req.flash('error', e.toString());
-      res.serverError(e, {redirect: '/recipe/order/' + req.body.id});
+      res.serverError(e, {redirect: '/recipe/order/' + req.query.hashId});
     }
   },
 
