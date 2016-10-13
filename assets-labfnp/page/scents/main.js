@@ -155,11 +155,14 @@ $(document).ready(function () {
 				var scent = document.getElementsByName("formulaScents[" + idx + "]")[0].value;
 				var drops = $('.scents-drops[data-index=' + idx + ']').val();
 				var color = $('option:selected', this).data('color');
+				var userFeeling = $("input[name='userFeeling[" + idx + "]']");
+				// TODO 找到存進 obj
 				var feeling = '';
 				var formulaObj = {
 					"scent": scent,
 					"drops": drops,
-					"color": color
+					"color": color,
+					"userFeeling": userFeeling,
 				};
 
 				if (isFromFeeling) {
@@ -474,5 +477,6 @@ $(document).ready(function () {
 
 	$('.scents-dropdown').change();
 	$('.scents-drops').change();
+
 
 });
