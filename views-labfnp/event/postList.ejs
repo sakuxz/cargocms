@@ -22,7 +22,7 @@
   <div class="news-v3 bg-color-white margin-bottom-60">
     <% if (post.coverUrl) { %>
       <% if (post.coverType == 'img') { %>
-        <img class="img-responsive full-width" src="<%= post.coverUrl %>" alt="">
+        <img class="img-responsive full-width" src="<%= post.coverUrl %>" alt="" onerror="this.src='/assets/labfnp/img/event_default_cover.jpg';">
       <% } else{ %>
         <div class="responsive-video">
           <iframe src="<%= post.coverUrl %>" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
