@@ -157,17 +157,6 @@
         <form class="orderForm" id="orderForm" action="/" method="post">
           <input type="hidden" class="form-control" name="UserId" value="<%= user.id %>" >
           <input type="hidden" class="form-control" name="RecipeId" value="<%= recipe.id %>" >
-          <section class="col">
-            <label for="reciverName">發票號碼
-            </label>
-            <input type="text" value="<%= recipeFeedback.invoiceNo %>" class="form-control" name="invoiceNo" placeholder="選填，有發票號碼請填寫" >
-          </section>
-
-          <section class="col">
-            <label for="phone">交易序號
-            </label>
-            <input type="text" value="<%= recipeFeedback.tradeNo %>" class="form-control" name="tradeNo" placeholder="選填，有交易序號請填寫" >
-          </section>
 
           <section class="col">
             <label for="payment">感覺<span class="required">*</span>
@@ -175,6 +164,18 @@
             <input type="text" class="form-control" name="feeling" >
           </section>
           <label class="error-text">請填寫您的感覺</label>
+
+          <section class="col">
+            <label for="reciverName">發票號碼 (選填)
+            </label>
+            <input type="text" value="<%= recipeFeedback.invoiceNo %>" class="form-control" name="invoiceNo" placeholder="例：LB-12345678" >
+          </section>
+
+          <section class="col">
+            <label for="phone">交易序號 (選填)
+            </label>
+            <input type="text" value="<%= recipeFeedback.tradeNo %>" class="form-control" name="tradeNo" placeholder="例：86fbe12a" >
+          </section>
 
         </form>
 
