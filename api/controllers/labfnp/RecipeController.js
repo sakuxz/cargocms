@@ -269,10 +269,8 @@ module.exports = {
         });
       }
     } catch (e) {
-      if (e.type === 'flash') {
-        req.flash('error', e.toString());
-        res.redirect('/recipe/order/' + req.body.id);
-      } else res.serverError(e);
+      req.flash('error', e.toString());
+      res.serverError(e, {redirect: '/recipe/order/' + req.body.id});
     }
   },
 
