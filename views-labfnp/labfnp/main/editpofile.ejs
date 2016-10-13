@@ -93,7 +93,7 @@
                 <span class="input-group-addon rounded-left">
                   <i class="fa fa-calendar color-blue"></i>
                 </span>
-                <input type="text" id="birthday" name="birthday" class="form-control rounded-right" placeholder="請輸入生日" value="<%= user.birthday %>">
+                <input type="text" id="birthday" name="birthday" class="form-control rounded-right" placeholder="例: 1970-01-01" value="<%= user.birthday ? user.birthday : "" %>">
               </div>
             </section>
 
