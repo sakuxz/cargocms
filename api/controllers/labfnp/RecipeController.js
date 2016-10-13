@@ -112,7 +112,10 @@ module.exports = {
     const { id } = req.params;
     try {
       const currentUser = AuthService.getSessionUser(req);
-      if (!currentUser) return res.redirect('/login');
+      if (!currentUser) {
+        req.flash('error','Error.Order.Need.Login');
+        return res.redirect('/login');
+      }
 
       const { recipe, editable, social } = await RecipeService.loadRecipe(id, currentUser);
 
@@ -302,8 +305,8 @@ module.exports = {
           model: RecipeOrder,
           include: [
             {
-              model: User, 
-              where: { Id: user.id } }, 
+              model: User,
+              where: { Id: user.id } },
             Recipe
           ]
         }
