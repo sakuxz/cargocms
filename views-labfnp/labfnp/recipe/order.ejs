@@ -227,7 +227,6 @@
 <% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3.min.js'); %>
 <% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3pie.min.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/lib/d3.layout.cloud.js'); %>
-<% LayoutUtils.addScripts('/assets/labfnp/page/wordCloud.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/pieChart.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/favorite.js'); %>
 <% LayoutUtils.addScriptBlock(`
@@ -315,7 +314,7 @@
 
     $("#paymentMethod").change(function() {
       var selected = $("#paymentMethod").val();
-      
+
       if (selected=="gotoShop") {
         var invoiceDisplay = "";
         var invoiceNeed = true;
@@ -328,7 +327,7 @@
       $("#orderForm").validate(validateFields);
       $("#orderForm").validate().resetForm();
     });
-    
+
     $("#orderForm").validate(validateFields);
 
     $("#orderForm").preventDoubleSubmission();

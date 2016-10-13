@@ -131,46 +131,48 @@ module.exports = {
       }
       const content = await ExportService.query({ query, modelName, include });
       const columns = {
-        id: "ID",
-        MerchantTradeNo: "訂單編號",
-        TradeNo: "金流交易編號",
-        RtnMsg: "交易訊息",
-        PaymentDate: "付款時間",
-        PaymentTypeDesc: "付款方式",
-        invoiceNo: "發票號碼",
-        TradeAmt: "付款金額",
+        // id: "ID",
+        // MerchantTradeNo: "訂單編號",
+        // TradeNo: "金流交易編號",
+        // PaymentDate: "付款時間",
+        // PaymentTypeDesc: "付款方式",
+        // invoiceNo: "發票號碼",
+        // TradeAmt: "付款金額",
         vAccount: "付款帳號",
         ItemNameArray: "訂購物品",
         UserName: "訂購人",
-        RecipeId: "配方編號",
-        productionStatusDesc: "訂單狀態",
         note: "備註",
+        // RecipeId: "配方編號",
         scent0: '香味分子 1',
-        scentml0: '香味分子 1 滴數',
+        // scentml0: '香味分子 1 滴數',
         scentPercent0: '香味分子 1 比例',
         scent1: '香味分子 2',
-        scentml1: '香味分子 2 滴數',
+        // scentml1: '香味分子 2 滴數',
         scentPercent1: '香味分子 2 比例',
         scent2: '香味分子 3',
-        scentml2: '香味分子 3 滴數',
+        // scentml2: '香味分子 3 滴數',
         scentPercent2: '香味分子 3 比例',
         scent3: '香味分子 4',
-        scentml3: '香味分子 4 滴數',
+        // scentml3: '香味分子 4 滴數',
         scentPercent3: '香味分子 4 比例',
         scent4: '香味分子 5',
-        scentml4: '香味分子 5 滴數',
+        // scentml4: '香味分子 5 滴數',
         scentPercent4: '香味分子 5 比例',
         scent5: '香味分子 6',
-        scentml5: '香味分子 6 滴數',
+        // scentml5: '香味分子 6 滴數',
         scentPercent5: '香味分子 6 比例',
-        Email: "Email",
+        // Email: "Email",
         Phone: "電話",
         Address: "住址",
-        createdAt: "訂單建立時間"
+        productionStatusDesc: "訂單狀態",
+        RtnMsg: "交易訊息",
+        createdAt: "訂單建立時間",
+        scentList: '香味清單'
       }
       const format = (items) => {
-        let result = items.map((data) => {
-          sails.log.debug(data);
+        let result = [];
+        for (let data of items) {
+          if (data.PaymentType === 'aio') continue;
           let formatted = {
             id: data.id,
             TradeNo: data.TradeNo ? `="${data.TradeNo}"` : '',
@@ -192,21 +194,92 @@ module.exports = {
             createdAt: new Date(data.createdAt).toISOString(),
           }
           if (data.RecipeOrder && data.RecipeOrder.Recipe) {
+            formatted['scentList'] = '';
             data.RecipeOrder.Recipe.formula.forEach((formula, index) => {
               if (formula.scent && formula.drops > 0) {
+                formatted[`scentList`] += `${formula.scent}:${formula.drops} `;
                 formatted[`scent${index}`] = `${formula.scent}`,
                 formatted[`scentml${index}`] = `${formula.drops}`,
                 formatted[`scentPercent${index}`] = Math.ceil(formula.drops / data.RecipeOrder.Recipe.formulaTotalDrops * 10000)/10000;
               }
             });
           }
-          return formatted;
-        });
+          result.push(formatted);
+        };
         return result;
       }
 
       const result = await ExportService.export({
-        fileName: modelName,
+        fileName: '配方製作表',
+        content,
+        format,
+        columns,
+      });
+      res.attachment(result.fileName);
+      res.end(result.data, 'UTF-8');
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+
+  exportSend: async (req, res) => {
+    try {
+      let { query, options } = req;
+      sails.log.info('exportSend', query);
+      const modelName = options.controller.split("/").reverse()[0];
+      const include = {
+        model: RecipeOrder,
+        include: [User, Recipe]
+      }
+      const content = await ExportService.query({ query, modelName, include });
+      const columns = {
+        check: "check",
+        PaymentTypeDesc: "付款方式",
+        invoiceNo: "發票號碼",
+        ItemNameArray: "訂購物品",
+        UserName: "訂購人",
+        note: "備註",
+        Email: "Email",
+        Phone: "電話",
+        Address: "住址",
+        createdAt: "訂單建立時間",
+        scentList: '香味清單'
+      }
+      const format = (items) => {
+        // let result = items.map((data) => {
+        let result = [];
+        for (let data of items) {
+          if (data.PaymentType === 'aio') continue;
+          let formatted = {
+            check: '',
+            PaymentTypeDesc: data.PaymentTypeDesc,
+            invoiceNo: `="${data.invoiceNo || ''}"`,
+            ItemNameArray: data.ItemNameArray,
+            UserName: data.UserName,
+            note: data.Note,
+            Email: data.Email,
+            Phone: `="${data.Phone || ''}"`,
+            Address: data.Address,
+            createdAt: new Date(data.createdAt).toISOString(),
+          }
+          if (data.RecipeOrder && data.RecipeOrder.Recipe) {
+            formatted['scentList'] = '';
+            data.RecipeOrder.Recipe.formula.forEach((formula, index) => {
+              if (formula.scent && formula.drops > 0) {
+                formatted[`scentList`] += `${formula.scent}:${formula.drops} `;
+                // formatted[`scent${index}`] = `${formula.scent}`,
+                // formatted[`scentml${index}`] = `${formula.drops}`,
+                // formatted[`scentPercent${index}`] = Math.ceil(formula.drops / data.RecipeOrder.Recipe.formulaTotalDrops * 10000)/10000;
+              }
+            });
+          }
+          result.push(formatted);
+        };
+        return result;
+      }
+
+      const result = await ExportService.export({
+        fileName: '地址寄送表',
         content,
         format,
         columns,
