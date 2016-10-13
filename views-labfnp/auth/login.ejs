@@ -90,6 +90,8 @@
         </div>
         <% if (data.errors === 'Error.Passport.BadUserPassword') { %>
           <div class="alert alert-warning" role="alert">帳號或密碼錯誤！</div>
+        <% } else if(data.errors === 'Error.Order.Need.Login') { %>
+          <div class="alert alert-warning" role="alert">訂購需為本站會員，請先登入帳號或註冊</div>
         <% } %>
         <hr>
 
@@ -143,7 +145,7 @@
       }
     });
 
-  
+
 
   });
 `); %>
