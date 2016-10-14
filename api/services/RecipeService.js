@@ -132,4 +132,24 @@ module.exports = {
     }
   },
 
+  createUserFeeling: async function(formula) {
+    try {
+      let userFeeling = [];
+      for (let item of formula) {
+        if (!item.userFeeling) continue;
+        let data = item.userFeeling.map((word) => {
+          return {
+            title: word,
+            scentName: item.scent,
+          }
+        });
+        userFeeling = userFeeling.concat(data);
+      }
+      sails.log.info(userFeeling);
+      await UserFeeling.bulkCreate(userFeeling);
+    } catch (e) {
+      throw e
+    }
+  }
+
 }

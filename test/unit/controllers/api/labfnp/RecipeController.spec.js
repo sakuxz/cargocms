@@ -1,10 +1,10 @@
 var sinon = require('sinon');
 describe('about LikeRecipe Controller operation.', function() {
 
-  let recipe;
+  let recipe, user;
   before(async (done) => {
     try {
-      let user = await User.create({
+      user = await User.create({
         username: 'likeRecipeUserController',
         email: 'likeRecipeUserController@gmail.com',
         password: ''
@@ -32,6 +32,39 @@ describe('about LikeRecipe Controller operation.', function() {
   after((done) => {
     AuthService.getSessionUser.restore();
     done();
+  });
+
+  it('Recipe create should be success.', async (done) => {
+    try {
+      const res = await request(sails.hooks.http.app)
+      .post(`/api/labfnp/recipe`)
+      .send({
+        authorName: 'Recipe create',
+        perfumeName: 'sdf',
+        formulaLogs: '',
+        formula:
+         [ { scent: 'T14',
+             drops: '1',
+             color: '#227059',
+             userFeeling: ['AAA', 'VVV', 'CCC'] },
+           { scent: 'T29',
+             drops: '1',
+             color: '#E5127F',
+             userFeeling: ['BB', 'VVV', 'A'] } ],
+        visibility: 'PRIVATE',
+        description: 'sdfsf',
+        coverPhotoId: '',
+        createdBy: 'scent',
+        feedback: [ 'sdasd' ],
+        UserId: user.id }
+      )
+      res.status.should.be.eq(200);
+      let check = await UserFeeling.findAll();
+      check.length.should.be.above(0);
+      done();
+    } catch (e) {
+      done(e);
+    }
   });
 
   it('Recipe like action should be success.', async (done) => {
