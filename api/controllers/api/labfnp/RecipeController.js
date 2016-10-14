@@ -211,7 +211,7 @@ module.exports = {
       }else {
         feedback = await RecipeFeedback.create(data);
       }
-      
+
       let createUserFeeling = [];
       Object.keys(data.scentFeeling).forEach(function (key) {
         const user = AuthService.getSessionUser(req);
@@ -220,13 +220,16 @@ module.exports = {
           feeling.forEach((adj) => {
             createUserFeeling.push(
               UserFeeling.findOrCreate({
-                where: { title: adj },
+                where: {
+                  title: adj,
+                  scentName: key,
+                },
                 defaults: {
                   title: adj,
                   scentName: key,
                   UserId: user ? user.id : null,
                 }
-              });
+              })
             );
           });
         }

@@ -95,7 +95,19 @@ module.exports = {
       recipeFeedback.invoiceNo = recipeFeedback.invoiceNo ? recipeFeedback.invoiceNo : '';
       recipeFeedback.tradeNo = recipeFeedback.tradeNo ? recipeFeedback.tradeNo : '';
 
-      return res.view({ recipe, editable, social, recipeFeedback, feelings:feelingArray , user: currentUser});
+      let scentFeeling = {};
+      let allUserAddFeeling = await UserFeeling.findAll();
+      allUserAddFeeling.forEach((feeling) => {
+        scentFeeling[feeling.scentName] = scentFeeling[feeling.scentName] || [];
+        scentFeeling[feeling.scentName].push(feeling.title);
+      })
+      Object.keys(scentFeeling).map((key) => {
+        scentFeeling[key] = scentFeeling[key].join(',');
+      });
+      console.log(scentFeeling);
+
+      return res.view({ recipe, editable, social, recipeFeedback,
+        feelings:feelingArray , user: currentUser, scentFeeling});
     } catch (e) {
       if (e.type === 'notFound') return res.notFound();
       return res.serverError(e);
