@@ -132,7 +132,7 @@ module.exports = {
     }
   },
 
-  createUserFeeling: async function(formula) {
+  createUserFeeling: async function({formula, userId}) {
     try {
       let userFeeling = [];
       for (let item of formula) {
@@ -141,6 +141,7 @@ module.exports = {
           return {
             title: word,
             scentName: item.scent,
+            UserId: userId,
           }
         });
         userFeeling = userFeeling.concat(data);

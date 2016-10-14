@@ -13,6 +13,18 @@ module.exports = {
           let recordsTotal = data.length
           let recordsFiltered =  result.count
           let draw = parseInt(req.draw) + 1
+
+          let user = AuthService.getSessionUser(req);
+          if (user) {
+            let userFeeling = await UserFeeling.findAll({
+              where: {
+                scentName: query.search.value,
+                UserId: user.id,
+              }
+            });
+            data = userFeeling.concat(data);
+          }
+
           res.ok({draw, recordsTotal, recordsFiltered, data});
         }else {
           const feelings = await Feeling.findAll();

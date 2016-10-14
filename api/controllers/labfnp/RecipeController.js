@@ -18,6 +18,19 @@ module.exports = {
       recipe.description = "";
       recipe.createdBy = from;
 
+      let userFeeling = await UserFeeling.findAll({
+        where: {
+          UserId: user.id
+        }
+      });
+      for (const feeling of userFeeling) {
+        let findIndex = _.findIndex(scents, {'name': feeling.scentName});
+        if (findIndex > 0) {
+          scents[findIndex].feelings.splice(0, 0, {key: feeling.title, value: '10' });
+          scents[findIndex].displayFeeling.splice(0, 0, feeling.title);
+        }
+      }
+
       for (var i = 0; i < 6; i++) {
         let formula = {
           index: i,
@@ -36,11 +49,13 @@ module.exports = {
 
       if (from == 'feeling') {
         feelings = await Feeling.findRamdomFeelings();
-
         let feelingArray = [];
         for (const feeling of feelings) {
           feelingArray.push(feeling.title);
         }
+
+        userFeeling = userFeeling.map((feeling) => feeling.title);
+        feelingArray = userFeeling.concat(feelingArray);
 
         return res.view({ user, recipe, scents, feelings: feelingArray });
       }

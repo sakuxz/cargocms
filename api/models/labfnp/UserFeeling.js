@@ -13,7 +13,7 @@ module.exports = {
 
   },
   associations: function() {
-    //Feeling.belongsTo(Scent);
+    UserFeeling.belongsTo(User);
   },
   options: {
     classMethods: {},

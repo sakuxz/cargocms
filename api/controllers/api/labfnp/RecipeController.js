@@ -64,7 +64,10 @@ module.exports = {
       }
       sails.log.info('create recipe controller=>', data);
       const recipe = await RecipeService.create(data);
-      await RecipeService.createUserFeeling(data.formula);
+      await RecipeService.createUserFeeling({
+        formula: data.formula,
+        userId: loginedUser.id
+      });
 
       if (data.feedback && data.feedback.length > 0) {
         await RecipeFeedback.create({
