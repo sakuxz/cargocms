@@ -4,6 +4,10 @@ module.exports = {
     return url;
   },
 
+  getFBUrl: function() {
+    const url = 'https://www.facebook.com/LabFnP';
+    return url;
+  },
 
   forRecipe: ({recipes}) => {
     try {
