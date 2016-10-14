@@ -211,6 +211,27 @@ module.exports = {
       }else {
         feedback = await RecipeFeedback.create(data);
       }
+      
+      let createUserFeeling = [];
+      Object.keys(data.scentFeeling).forEach(function (key) {
+        const user = AuthService.getSessionUser(req);
+        if (data.scentFeeling[key]) {
+          let feeling = data.scentFeeling[key].split(',');
+          feeling.forEach((adj) => {
+            createUserFeeling.push(
+              UserFeeling.findOrCreate({
+                where: { title: adj },
+                defaults: {
+                  title: adj,
+                  scentName: key,
+                  UserId: user ? user.id : null,
+                }
+              });
+            );
+          });
+        }
+      });
+      await Promise.all(createUserFeeling);
 
       res.ok({
         message: 'save feedback success.',

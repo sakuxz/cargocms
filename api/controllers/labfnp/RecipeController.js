@@ -95,7 +95,7 @@ module.exports = {
       recipeFeedback.invoiceNo = recipeFeedback.invoiceNo ? recipeFeedback.invoiceNo : '';
       recipeFeedback.tradeNo = recipeFeedback.tradeNo ? recipeFeedback.tradeNo : '';
 
-      return res.view({ recipe, editable, social, recipeFeedback,feelings:feelingArray , user: currentUser});
+      return res.view({ recipe, editable, social, recipeFeedback, feelings:feelingArray , user: currentUser});
     } catch (e) {
       if (e.type === 'notFound') return res.notFound();
       return res.serverError(e);
@@ -335,9 +335,6 @@ module.exports = {
           ]
         }
       });
-
-      console.log(user.id);
-      console.log(item.dataValues.RecipeOrder.UserId);
 
       if(!item){
         throw Error(`找不到 ${merchantTradeNo} 編號的交易，或是使用者錯誤`);

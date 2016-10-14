@@ -89,7 +89,7 @@ describe('about LikeRecipe Controller operation.', function() {
     }
   });
 
-  it('Recipe feelings create should be success.', async (done) => {
+  it.only('Recipe feelings create should be success.', async (done) => {
     try {
       const res = await request(sails.hooks.http.app)
       .post(`/api/labfnp/recipe/feedback`)
@@ -97,6 +97,7 @@ describe('about LikeRecipe Controller operation.', function() {
         invoiceNo: '123',
         tradeNo: 1608301610017019,
         feeling: '清香的植物味,123',
+        scentFeeling: { BA69: '水果香,蜂蜜', BA70: '冰淇淋' },
       });
       res.status.should.be.eq(200);
 

@@ -16,13 +16,18 @@ $.fn.serializeObject = function () {
 
 $(document).ready(function () {
 
-	$('input[name="feeling"]').tagEditor({
+  $('.userFeeling').tagEditor({
+    forceLowercase: false,
+    placeholder: '你覺得這個分子是什麼味道？'
+  });
+
+  $('input[name="feeling"]').tagEditor({
     autocomplete: {
         delay: 0, // show suggestions immediately
         position: { collision: 'flip' }, // automatic menu position up/down
         source: feelingData,
     },
-		initialTags: initialTags,
+    initialTags: initialTags,
     forceLowercase: false,
     placeholder: '請填寫您的感覺，例：蘋果香味 <br/>(可填寫多個)'
   });
