@@ -174,32 +174,30 @@ label.error{
       $(this).on("submit", function(event){
         var $form = $(this);
 
-        if( $(this).valid()) {
-          if ($form.data("submitted") === true){
-            event.preventDefault();
-          } else {
-            $form.data("submitted", true);
-
-            $("#submit-button").prop("disabled", true);
-            $("#submit-button").text("處理中...");
-
-            setTimeout(function (){
-              $("#submit-button").prop("disabled", false);
-              $("#submit-button").text("註冊");
-            }, 1000);
-
-            swal({
-              type: "info",
-              title: "註冊",
-              text: "資料傳送中...",
-              showConfirmButton: false,
-              timer: 5000,
-            });
-          }
-        } else {
-          event.preventDefault();
+        if( !$(this).valid() || $form.data("submitted") === true) {
+          return event.preventDefault();
         }
+
+        $form.data("submitted", true);
+
+        $("#submit-button").prop("disabled", true);
+        $("#submit-button").text("處理中...");
+
+        setTimeout(function (){
+          $("#submit-button").prop("disabled", false);
+          $("#submit-button").text("註冊");
+        }, 1000);
+
+        swal({
+          type: "info",
+          title: "註冊",
+          text: "資料傳送中...",
+          showConfirmButton: false,
+          timer: 5000,
+        });
+
       });
+
       return this;
     }
 
