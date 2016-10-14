@@ -66,7 +66,7 @@
 </style>
 
 <div class="container content profile">
-  <% var error = req.flash('error'); %>
+  <% let error = req.flash('error'); %>
   <input type="hidden" name="id" class="hidden" value="<%= recipe.id %>" disabled>
 
   <!-- begin row -->
