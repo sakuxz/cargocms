@@ -212,12 +212,21 @@ module.exports = {
         invoiceNo,
       });
 
-      let updateUserPhone = await User.findById(user.id);
-      if( !updateUserPhone.phone1 && !updateUserPhone.phone2 ) {
-        updateUserPhone.phone1 = phone;
-        updateUserPhone = await updateUserPhone.save();
+      let updateUserData = await User.findById(user.id);
+      let userNeedUpdate = false;
+      //update Phone
+      if( !updateUserData.phone1 && !updateUserData.phone2 ) {
+        updateUserData.phone1 = phone;
+        userNeedUpdate = true;
       }
-
+      //update Email
+      if( !updateUserData.email ){
+        updateUserData.email = email;
+        userNeedUpdate = true;
+      }
+      if( userNeedUpdate ) {
+        updateUserData = await updateUserData.save()
+      };
 
       recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
       const formatName = recipeOrder.ItemNameArray.map((name) => {
@@ -302,8 +311,8 @@ module.exports = {
           model: RecipeOrder,
           include: [
             {
-              model: User, 
-              where: { Id: user.id } }, 
+              model: User,
+              where: { Id: user.id } },
             Recipe
           ]
         }
