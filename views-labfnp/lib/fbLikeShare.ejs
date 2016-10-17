@@ -1,7 +1,8 @@
-<% let shareUrl = encodeURI(SocialService.getFBUrl()); %>
+<% let shareUrl ='' %>
 <% if(req.url === "/") { %>
-  <iframe src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=142&layout=button_count&action=like&size=large&show_faces=false&share=true&height=46&appId=1011584022234802" width="142" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+  <% shareUrl = encodeURI( 'https://www.facebook.com/' + SocialService.getFBPageId()); %>
+  <iframe src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=142&layout=button_count&action=like&size=large&show_faces=false&share=true&height=46&appId=<%= SocialService.getFBAppId() %>" width="142" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
 <% } else { %>
   <% shareUrl = encodeURI(socialData.url); %>
-  <iframe src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=142&layout=button_count&action=like&size=large&show_faces=false&share=true&height=46&appId=1011584022234802" width="142" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+  <iframe src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=142&layout=button_count&action=like&size=large&show_faces=false&share=true&height=46&appId=<%= SocialService.getFBAppId() %>" width="142" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
 <% } %>
