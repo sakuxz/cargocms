@@ -51,3 +51,7 @@
 ### Message 欄位變動
 
 *  type 新增 contact enum
+
+v4
+
+### 新增 UserFeeling 紀錄使用者回饋的感覺
