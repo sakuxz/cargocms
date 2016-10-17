@@ -226,40 +226,21 @@ module.exports = {
         feedback = await RecipeFeedback.create(data);
       }
 
-      let createUserFeeling = [];
+      let updateformula = [];
       Object.keys(data.scentFeeling).forEach(function (key) {
-        const user = AuthService.getSessionUser(req);
         if (data.scentFeeling[key]) {
           let feeling = data.scentFeeling[key].split(',');
-          // [ { scent: 'A100',
-          //     drops: '1',
-          //     color: '#227059',
-          //     userFeeling: ['test','123'] },
-          //   {
-          //     scent: 'B100',
-          //     drops: '1',
-          //     color: '#227059',
-          //     userFeeling: ['test','BBB']
-          //   }],
-          feeling.forEach((adj) => {
-            createUserFeeling.push(
-              UserFeeling.findOrCreate({
-                where: {
-                  title: adj,
-                  scentName: key,
-                  UserId: user ? user.id : null,
-                },
-                defaults: {
-                  title: adj,
-                  scentName: key,
-                  UserId: user ? user.id : null,
-                }
-              })
-            );
-          });
+          updateformula.push({
+            scent: key,
+            userFeeling: feeling,
+          })
         }
       });
-      await Promise.all(createUserFeeling);
+      const user = AuthService.getSessionUser(req);
+      await RecipeService.updateUserFeeling({
+        formula: updateformula,
+        userId: user ? user.id : null,
+      });
 
       res.ok({
         message: 'save feedback success.',
