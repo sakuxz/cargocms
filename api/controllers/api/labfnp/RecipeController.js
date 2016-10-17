@@ -92,10 +92,24 @@ module.exports = {
     try {
       sails.log.info('update recipe controller id=>', id);
       sails.log.info('update recipe controller data=>', data);
+      const user = AuthService.getSessionUser(req);
+
       const recipe = await RecipeService.update({
         id: id,
         ...data,
       });
+
+      await RecipeFeedback.update({
+        feeling: data.feedback
+      },{
+        where: { UserId: user.id, RecipeId: id }
+      });
+
+      await RecipeService.updateUserFeeling({
+        formula: data.formula,
+        userId: user.id,
+      });
+
       res.ok({
         message: 'Update recipe success.',
         data: recipe,
@@ -217,12 +231,23 @@ module.exports = {
         const user = AuthService.getSessionUser(req);
         if (data.scentFeeling[key]) {
           let feeling = data.scentFeeling[key].split(',');
+          // [ { scent: 'A100',
+          //     drops: '1',
+          //     color: '#227059',
+          //     userFeeling: ['test','123'] },
+          //   {
+          //     scent: 'B100',
+          //     drops: '1',
+          //     color: '#227059',
+          //     userFeeling: ['test','BBB']
+          //   }],
           feeling.forEach((adj) => {
             createUserFeeling.push(
               UserFeeling.findOrCreate({
                 where: {
                   title: adj,
                   scentName: key,
+                  UserId: user ? user.id : null,
                 },
                 defaults: {
                   title: adj,

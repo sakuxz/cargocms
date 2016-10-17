@@ -23,6 +23,16 @@ describe('about LikeRecipe Controller operation.', function() {
         message: 'this is love test',
         UserId: user.id,
       });
+      await UserFeeling.create({
+        title: 'test',
+        scentName: 'A100',
+        UserId: user.id,
+      })
+      await UserFeeling.create({
+        title: 'ABC',
+        scentName: 'A100',
+        UserId: user.id,
+      })
       done()
     } catch (e) {
       done(e)
@@ -126,5 +136,43 @@ describe('about LikeRecipe Controller operation.', function() {
       done(e);
     }
   });
+
+
+  it('Recipe update should be success.', async (done) => {
+    try {
+      const res = await request(sails.hooks.http.app)
+      .put(`/api/labfnp/recipe/${recipe.id}`)
+      .send({
+        authorName: 'Recipe create',
+        perfumeName: 'sdf',
+        formulaLogs: '',
+        formula:
+         [ { scent: 'A100',
+             drops: '1',
+             color: '#227059',
+             userFeeling: ['test','123'] },
+           {
+             scent: 'B100',
+             drops: '1',
+             color: '#227059',
+             userFeeling: ['test','BBB']
+           }],
+        visibility: 'PRIVATE',
+        description: 'sdfsf',
+        coverPhotoId: '',
+        createdBy: 'scent',
+        feedback: [ 'sdfsfsdf' ],
+        UserId: user.id }
+      )
+      res.status.should.be.eq(200);
+      // let check = await UserFeeling.findAll();
+      // console.log(check);
+      // check.length.should.be.above(0);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
 
 });

@@ -174,4 +174,48 @@ module.exports = {
     }
   },
 
+  updateUserFeeling: async function({formula, userId}) {
+    try {
+      let deleteAdj = [];
+      let createNewAdj = [];
+      for (let item of formula) {
+        if (item.userFeeling && item.userFeeling.length > 0) {
+          console.log(item.scent, item.userFeeling);
+          deleteAdj.push(
+            UserFeeling.destroy({
+              where: {
+                UserId: userId,
+                $and: {
+                  scentName: { $in: [item.scent] },
+                  title: { $notIn: item.userFeeling }
+                }
+              }
+            })
+          );
+          item.userFeeling.forEach((adj) => {
+            createNewAdj.push(
+              UserFeeling.findOrCreate({
+                where: {
+                  title: adj,
+                  scentName: item.scent,
+                  UserId: userId,
+                },
+                defaults: {
+                  title: adj,
+                  scentName: item.scent,
+                  UserId: userId,
+                }
+              })
+            );
+          });
+        }
+      }
+      await Promise.all(deleteAdj);
+      await Promise.all(createNewAdj);
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
 }
