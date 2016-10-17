@@ -115,6 +115,10 @@ module.exports.bootstrap = async (cb) => {
     if (sails.config.google===undefined || sails.config.google.key===undefined) {
       throw('google api Key not exist!!');
     }
+    //檢查 FB Page & App ID 是否存在
+    if (sails.config.facebook === undefined || sails.config.facebook.pageId === '' || sails.config.facebook.appId === ''){
+      sails.log.error('Facebook Page ID or App ID not exist!!');
+    }
 
     cb();
   } catch (e) {
