@@ -15,6 +15,6 @@ module.exports = {
   },
   'api/admin/ImageController': {
     //'upload': ['passport', 'sessionAuth'],
-    'destory': ['passport', 'sessionAuth'],
+    'destroy': ['passport', 'sessionAuth'],
   },
 }
