@@ -95,16 +95,8 @@ module.exports = {
       recipeFeedback.invoiceNo = recipeFeedback.invoiceNo ? recipeFeedback.invoiceNo : '';
       recipeFeedback.tradeNo = recipeFeedback.tradeNo ? recipeFeedback.tradeNo : '';
 
-      let scentFeeling = {};
-      let allUserAddFeeling = await UserFeeling.findAll();
-      allUserAddFeeling.forEach((feeling) => {
-        scentFeeling[feeling.scentName] = scentFeeling[feeling.scentName] || [];
-        scentFeeling[feeling.scentName].push(feeling.title);
-      })
-      Object.keys(scentFeeling).map((key) => {
-        scentFeeling[key] = scentFeeling[key].join(',');
-      });
-      console.log(scentFeeling);
+
+      let scentFeeling = await RecipeService.getUserFeeling({ userId: currentUser.id });
 
       return res.view({ recipe, editable, social, recipeFeedback,
         feelings:feelingArray , user: currentUser, scentFeeling});
@@ -203,8 +195,20 @@ module.exports = {
       }
       recipe.formula = formatFormula;
 
+      let scentFeeling = await RecipeService.getUserFeeling({ userId: user.id });
+      let feedback = '';
+      let recipeFeedback = await RecipeFeedback.findOne({
+        where: {
+          RecipeId: recipe.id,
+          UserId: user.id,
+        }
+      });
+      if (recipeFeedback && recipeFeedback.feeling) {
+        feedback = recipeFeedback.feeling.join(',');
+      }
+
       if (from === 'scent') {
-        return res.view({ user, recipe, scents, totalDrops });
+        return res.view({ user, recipe, scents, totalDrops, scentFeeling, feedback });
       }
 
       if (from === 'feeling') {
@@ -215,7 +219,7 @@ module.exports = {
           feelingArray.push(feeling.title);
         }
 
-        return res.view({ user, recipe, scents, feelings: feelingArray, totalDrops });
+        return res.view({ user, recipe, scents, feelings: feelingArray, totalDrops, scentFeeling, feedback });
       }
     } catch (e) {
       return res.serverError(e);

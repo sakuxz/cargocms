@@ -68,7 +68,7 @@
 <fieldset class="margin-bottom-20">
   <section class='feedback'>
     <label class="label">感覺回饋</label>
-      <input type="text" name="feedback" >
+      <input type="text" name="feedback" value="<%= typeof feedback !== 'undefined' ? feedback : '' %>">
     </label>
   </section>
 </fieldset>

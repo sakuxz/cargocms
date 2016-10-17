@@ -151,6 +151,27 @@ module.exports = {
     } catch (e) {
       throw e
     }
-  }
+  },
+
+  getUserFeeling: async function({userId}) {
+    try {
+      let scentFeeling = {};
+      let allUserAddFeeling = await UserFeeling.findAll({
+        where: {
+          UserId: userId
+        }
+      });
+      allUserAddFeeling.forEach((feeling) => {
+        scentFeeling[feeling.scentName] = scentFeeling[feeling.scentName] || [];
+        scentFeeling[feeling.scentName].push(feeling.title);
+      })
+      Object.keys(scentFeeling).map((key) => {
+        scentFeeling[key] = scentFeeling[key].join(',');
+      });
+      return scentFeeling;
+    } catch (e) {
+      throw e
+    }
+  },
 
 }
