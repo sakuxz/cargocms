@@ -65,7 +65,7 @@
 </style>
 
 <div class="container content profile">
-  <% let error = req.flash('error'); %>
+  <% var error = req.flash('error'); %>
   <input type="hidden" name="id" class="hidden" value="<%= event.id %>" disabled>
 
   <!-- begin row -->
