@@ -119,7 +119,8 @@ module.exports = {
 
       const { recipe, editable, social } = await RecipeService.loadRecipe(id, currentUser);
 
-      return res.view({ recipe, editable, social, user: currentUser });
+      const token = crypto.randomBytes(32).toString('hex').substr(0, 32);
+      return res.view({ recipe, editable, social, user: currentUser, token });
     } catch (e) {
       if (e.type === 'notFound') return res.notFound();
       return res.serverError(e);
@@ -203,7 +204,18 @@ module.exports = {
       if (!user) return res.redirect('/login');
 
       const { recipient, phone, address, paymentMethod } = req.body;
-      const { email, note, perfumeName, description, message, invoiceNo } = req.body;
+      const { email, note, perfumeName, description, message, invoiceNo, token } = req.body;
+
+      let findOrder = await Allpay.find({
+        include: {
+          model: RecipeOrder,
+          where: { token },
+        },
+      });
+      if (findOrder) {
+        return res.redirect(`/recipe/done?t=${findOrder.MerchantTradeNo}`);
+      }
+
       let recipeOrder = await RecipeOrder.create({
         UserId: user.id,
         RecipeId: id,
@@ -213,6 +225,7 @@ module.exports = {
         email,
         note,
         invoiceNo,
+        token
       });
 
       let updateUserData = await User.findById(user.id);
@@ -235,11 +248,12 @@ module.exports = {
       const formatName = recipeOrder.ItemNameArray.map((name) => {
         return name + ' 100 ml';
       });
-      const allPayData = await AllpayService.getAllpayConfig({
+      let MerchantTradeNo = crypto.randomBytes(32).toString('hex').substr(0, 8);
+      const allPayData = await AllpayService.createAndgetAllpayConfig({
         relatedKeyValue: {
           RecipeOrderId: recipeOrder.id,
         },
-        MerchantTradeNo: crypto.randomBytes(32).toString('hex').substr(0, 8),
+        MerchantTradeNo,
         tradeDesc: `配方名稱：${perfumeName} 100 ml, (備註：${message})`,
         totalAmount: 1550,
         paymentMethod: paymentMethod,
@@ -248,26 +262,17 @@ module.exports = {
         returnURL: '/api/recipe/paid',
         paymentInfoURL: '/api/recipe/paymentinfo',
       });
+
       if (paymentMethod == 'gotoShop') {
-        const item = await Allpay.findOne({
-          where:{
-            MerchantTradeNo: allPayData.MerchantTradeNo
-          },
-          include:{
-            model: RecipeOrder,
-            include: [User, Recipe]
-          }
-        });
-        item.RtnMsg = '到店購買';
-        item.ShouldTradeAmt = 1550;
-        item.TradeAmt = 1550;
-        // item.TradeNo = item.MerchantTradeNo;
-        item.PaymentType = '到店購買';
-        item.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
-        await item.save();
+        allPayData.allpay.RtnMsg = '到店購買';
+        allPayData.allpay.ShouldTradeAmt = 1550;
+        allPayData.allpay.TradeAmt = 1550;
+        allPayData.allpay.PaymentType = '到店購買';
+        allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
+        await allPayData.allpay.save();
 
         let messageConfig = {};
-        messageConfig.serialNumber = item.MerchantTradeNo;
+        messageConfig.serialNumber = MerchantTradeNo;
         messageConfig.paymentTotalAmount = 1550;
         messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
         messageConfig.email = recipeOrder.email;
@@ -281,19 +286,17 @@ module.exports = {
         const message = await Message.create(messageConfig);
         await MessageService.sendMail(message);
 
-        res.redirect(`/recipe/done?t=${allPayData.MerchantTradeNo}`);
+        return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
 
       } else {
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
-          ...allPayData
+          ...allPayData.config
         });
       }
     } catch (e) {
-      if (e.type === 'flash') {
-        req.flash('error', e.toString());
-        res.redirect('/recipe/order/' + req.body.id);
-      } else res.serverError(e);
+      req.flash('error', e.toString());
+      res.serverError(e, {redirect: '/recipe/order/' + req.query.hashId});
     }
   },
 
@@ -320,9 +323,6 @@ module.exports = {
           ]
         }
       });
-
-      console.log(user.id);
-      console.log(item.dataValues.RecipeOrder.UserId);
 
       if(!item){
         throw Error(`找不到 ${merchantTradeNo} 編號的交易，或是使用者錯誤`);
