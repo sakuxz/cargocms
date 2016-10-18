@@ -1,26 +1,26 @@
 
 
 module.exports = {
-  login: (user) => {
+  login: async (user) => {
     try {
       console.log("=== login ===");
-      browser.windowHandleSize({width:1280,height:900}).url('/');
-      expect(browser.getTitle()).to.equal('LFP: 香料香水實驗室，客製專屬香水');
-      browser.click('#login');
-      browser.setValue('#identifier', user)
-      browser.setValue('#password', user)
-      browser.click('#submit-button');
-      browser.element('#logout-link').state.should.be.equal('success');
+      await browser.windowHandleSize({width:1280,height:900}).url('/');
+      // expect(browser.getTitle()).to.equal('LFP: 香料香水實驗室，客製專屬香水');
+      await browser.click('#login');
+      await browser.pause(1000);
+      await browser.setValue('#identifier', user)
+      await browser.setValue('#password', user)
+      await browser.click('#submit-button');
 
     } catch (e) {
       throw e;
     }
   },
 
-  logout: () => {
+  logout: async () => {
     try {
       console.log("=== logout ===");
-      browser.url('/logout');
+      await browser.url('/logout');
 
     } catch (e) {
       throw e;

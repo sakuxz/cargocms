@@ -2,18 +2,18 @@ require("../../bootstrap.test.js")
 import {login, logout} from "../../util/e2eHelper.js"
 
 describe('test user', () => {
-  before((done)=>{
+  before(async (done)=>{
     try {
       console.log("=== admin login ===");
-      login("admin");
+      await login("admin");
       done();
     } catch (e) {
       done(e);
     }
   })
-  after((done)=>{
+  after(async (done)=>{
     try {
-      logout();
+      await logout();
       done();
     } catch (e) {
       done(e);
@@ -62,10 +62,11 @@ describe('test user', () => {
   });
 
   it('Update user infomation', async(done) => {
+    console.log("Update user infomation");
     try{
-      const updateTargetUser = 'admin';
+      let updateTargetUser = 'admin';
 
-      const userInfo = {
+      let userInfo = {
         username: 'admin',
         email: 'brooklynBay@email.com',
         firstName: 'Brooklyn',
@@ -74,16 +75,20 @@ describe('test user', () => {
       }
 
       //search user item
-      await browser.url('/admin/#/admin/user');
+      console.log("Update user infomation 1");
+      browser.url('/admin/#/admin/user');
+      console.log("Update user infomation 11");
+      await browser.pause(1000);
+
       await browser.waitForExist('#main-table_filter input[type="search"]')
       await browser.setValue('#main-table_filter input[type="search"]', updateTargetUser);
-
+      console.log("Update user infomation 2");
       await browser.pause(1000);
       await browser.waitForExist('#ToolTables_main-table_3')
       await browser
         .click('#main-table tbody')
         .click('#ToolTables_main-table_3');
-
+      console.log("Update user infomation 3");
       await browser.pause(1000);
       await browser.waitForExist('[name="username"]');
       await browser
