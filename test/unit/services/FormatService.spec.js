@@ -129,6 +129,57 @@ describe('about Format Service operation.', function() {
     }
   });
 
+
+  it('get Incude Array Query Obj search by index.js object', async (done) => {
+    try {
+      const result = FormatService.getIncudeQueryObj({
+        include: [{
+          model: RecipeOrder,
+          include: [User, Recipe]
+        }],
+        query: { draw: '1',
+          columns:{
+            '0': { data: 'id', name: '' },
+            '1': { data: 'username', name: '' },
+            '2': { data: 'displayName', name: '', "searchable": "false"},
+            '3': { data: 'email', name: '' },
+            '4': { data: 'lastLogin', name: '', "searchable": "false"},
+            '5': { data: '5', name: '', "searchable": "false"},
+            '6': {
+              data: '',
+              searchable: true,
+              findInclude: true,
+              search: {
+                model: 'RecipeOrder',
+                column: 'recipient',
+              }
+            },
+            '7': {
+              data: '',
+              searchable: true,
+              findInclude: true,
+              search: {
+                model: 'RecipeOrder',
+                where: {
+                  productionStatus: '123',
+                }
+              }
+            }
+          },
+          order: [ { column: '0', dir: 'asc' } ],
+          start: '0',
+          length: '10',
+          search: { value: 'userX', regex: 'false' },
+          _: '1470989140227'
+        }
+      });
+      sails.log.debug(result);
+      done();
+    } catch (e) {
+      done(e)
+    }
+  });
+
   it('get Incude single Query Obj', async (done) => {
     try {
       const result = FormatService.getIncudeQueryObj({
