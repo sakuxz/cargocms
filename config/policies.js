@@ -16,7 +16,7 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.policies.html
  */
 import customConfigLoader from './util/customConfigLoader.js';
-var customConfig = customConfigLoader('mail.js');
+var customConfig = customConfigLoader('policies.js');
 
 var defaultConfig = {
   '*': ['nocache', 'passport', 'sessionAuth'],
