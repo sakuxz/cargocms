@@ -59,6 +59,10 @@ var appModel = {
 <%- include ../default/vue.ejs %>
 // 需要新增函式可以對 appMain 進行定義，如：
 // appMain.log = function () {console.log("123")}
+appMain.enableText = function () {
+  $('textarea').attr('disabled', false);
+}
+
 appMain.disableAllpay = function(){
   $('.allpay').attr('disabled', true);
   $('.allpaydisabled').addClass('state-disabled');

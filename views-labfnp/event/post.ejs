@@ -8,7 +8,7 @@
 
   <% if (data.coverUrl) { %>
     <% if (data.coverType == 'img') { %>
-      <img class="img-responsive full-width" src="<%= data.coverUrl %>" alt="">
+      <img class="img-responsive full-width" src="<%= data.coverUrl %>" alt="" onerror="this.src='/assets/labfnp/img/blog_event_default_cover.jpg';">
     <% } else{ %>
       <div class="responsive-video">
         <iframe src="<%= data.coverUrl %>" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>

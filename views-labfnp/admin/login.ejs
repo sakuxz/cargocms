@@ -46,6 +46,11 @@
 		.equal-height-column img {
 			height: 42px;
 		}
+
+    .alert-danger p {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
 	</style>
 </head>
 
@@ -76,15 +81,15 @@
             <% var error = data.errors; %>
             <% if(error === 'Error.NoPermitted') { %>
               <div class="alert-danger">
-                <label class="text-danger">
+                <p class="text-center text-danger">
                   <strong>此使用者並無權限登入！</strong>
-                </label>
+                </p>
               </div>
             <% } else if (error === 'Error.Passport.BadUserPassword') { %>
               <div class="alert-danger">
-                <label class="text-danger">
+                <p class="text-center text-danger">
                   <strong>帳號密碼錯誤，請重新輸入！</strong>
-                </label>
+                </p>
               </div>
             <% } %>
 
