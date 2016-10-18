@@ -51,7 +51,7 @@ describe.skip('about Allpay service', () => {
   });
 
 
-  describe('first create allpay order use getAllpayConfig() generator allpay Config ', () => {
+  describe('first create allpay order use createAndgetAllpayConfig() generator allpay Config ', () => {
 
     it('paymentMethod is ATM', async(done) => {
       try {
@@ -65,10 +65,10 @@ describe.skip('about Allpay service', () => {
           paymentMethod: 'ATM',
           itemArray: ['Item01', 'Item02'],
         }
-        const result = await AllpayService.getAllpayConfig(data);
+        const result = await AllpayService.createAndgetAllpayConfig(data);
         console.log(result);
-        result.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
-        result.ChoosePayment.should.be.an.equal(data.paymentMethod);
+        result.config.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
+        result.config.ChoosePayment.should.be.an.equal(data.paymentMethod);
         done();
       } catch (e) {
         console.log(e);
@@ -86,10 +86,10 @@ describe.skip('about Allpay service', () => {
           tradeDesc: 'test gen config',
           totalAmount: 999,
         };
-        const result = await AllpayService.getAllpayConfig(data);
+        const result = await AllpayService.createAndgetAllpayConfig(data);
         console.log(result);
-        result.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
-        result.ChoosePayment.should.be.an.equal('ALL');
+        result.config.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
+        result.config.ChoosePayment.should.be.an.equal('ALL');
         done();
       } catch (e) {
         console.log(e);
