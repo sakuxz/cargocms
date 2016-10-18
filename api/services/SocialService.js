@@ -4,6 +4,14 @@ module.exports = {
     return url;
   },
 
+  getFBPageId: function() {
+    const pageId = sails.config.facebook.pageId;
+    return pageId;
+  },
+  getFBAppId: function() {
+    const appId = sails.config.facebook.appId;
+    return appId;
+  },
 
   forRecipe: ({recipes}) => {
     try {
