@@ -3,7 +3,7 @@ var robotsConfig = {
   User-Agent: *
   Disallow: /admin
   `,
-  developmen:`
+  development:`
   User-Agent: *
   Disallow: /
   `

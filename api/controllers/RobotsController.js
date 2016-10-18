@@ -5,7 +5,7 @@ module.exports = {
     res.type('text/plain')
 
     if(domain[0] === 'test' || domain[0] === 'qa' || domain[0] === 'beta'){
-      res.send(robots.developmen);
+      res.send(robots.development);
     } else {
       res.send(robots.production);
     }
