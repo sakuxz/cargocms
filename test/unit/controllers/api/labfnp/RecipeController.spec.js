@@ -99,7 +99,7 @@ describe('about LikeRecipe Controller operation.', function() {
     }
   });
 
-  it.only('Recipe feelings create should be success.', async (done) => {
+  it('Recipe feelings create should be success.', async (done) => {
     try {
       const res = await request(sails.hooks.http.app)
       .post(`/api/labfnp/recipe/feedback`)
