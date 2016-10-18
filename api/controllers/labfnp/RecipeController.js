@@ -119,7 +119,8 @@ module.exports = {
 
       const { recipe, editable, social } = await RecipeService.loadRecipe(id, currentUser);
 
-      return res.view({ recipe, editable, social, user: currentUser });
+      const token = crypto.randomBytes(32).toString('hex').substr(0, 32);
+      return res.view({ recipe, editable, social, user: currentUser, token });
     } catch (e) {
       if (e.type === 'notFound') return res.notFound();
       return res.serverError(e);
@@ -203,7 +204,18 @@ module.exports = {
       if (!user) return res.redirect('/login');
 
       const { recipient, phone, address, paymentMethod } = req.body;
-      const { email, note, perfumeName, description, message, invoiceNo } = req.body;
+      const { email, note, perfumeName, description, message, invoiceNo, token } = req.body;
+
+      let findOrder = await Allpay.find({
+        include: {
+          model: RecipeOrder,
+          where: { token },
+        },
+      });
+      if (findOrder) {
+        return res.redirect(`/recipe/done?t=${findOrder.MerchantTradeNo}`);
+      }
+
       let recipeOrder = await RecipeOrder.create({
         UserId: user.id,
         RecipeId: id,
@@ -213,6 +225,7 @@ module.exports = {
         email,
         note,
         invoiceNo,
+        token
       });
 
       let updateUserData = await User.findById(user.id);
@@ -273,7 +286,7 @@ module.exports = {
         const message = await Message.create(messageConfig);
         await MessageService.sendMail(message);
 
-        res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
+        return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
 
       } else {
         return res.view({
@@ -310,9 +323,6 @@ module.exports = {
           ]
         }
       });
-
-      console.log(user.id);
-      console.log(item.dataValues.RecipeOrder.UserId);
 
       if(!item){
         throw Error(`找不到 ${merchantTradeNo} 編號的交易，或是使用者錯誤`);
