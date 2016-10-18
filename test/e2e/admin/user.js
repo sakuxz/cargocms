@@ -75,20 +75,17 @@ describe('test user', () => {
       }
 
       //search user item
-      console.log("Update user infomation 1");
-      browser.url('/admin/#/admin/user');
-      console.log("Update user infomation 11");
+      await browser.url('/admin/#/admin/user');
       await browser.pause(1000);
 
       await browser.waitForExist('#main-table_filter input[type="search"]')
       await browser.setValue('#main-table_filter input[type="search"]', updateTargetUser);
-      console.log("Update user infomation 2");
       await browser.pause(1000);
       await browser.waitForExist('#ToolTables_main-table_3')
       await browser
-        .click('#main-table tbody')
+        .click('#main-table-widget tbody tr:nth-child(1)')
         .click('#ToolTables_main-table_3');
-      console.log("Update user infomation 3");
+
       await browser.pause(1000);
       await browser.waitForExist('[name="username"]');
       await browser
@@ -99,8 +96,8 @@ describe('test user', () => {
 
       //save
       await browser
-        .click('[class="btn btn-primary"]')
-        .waitForExist('[class="btn btn-primary"]', null, true);
+        .click('[class="btn btn-primary"]');
+      await browser.pause(1000);
 
       //check
       const userUpdateField = await browser.element('#main-table-widget tbody tr:nth-child(1) td:nth-child(4)').getText();
