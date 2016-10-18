@@ -166,35 +166,21 @@ function init() {
     });
 }
 `); %>
-
+<% LayoutUtils.addScripts('/assets/labfnp/lib/formSubmitHelper.js'); %>
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
+
     $.fn.preventDoubleSubmission = function() {
       $(this).on("submit", function(event){
-        var $form = $(this);
-
         if (grecaptcha.getResponse() === "") {
           swal('錯誤', '請勾選我不是機器人', 'warning');
           return event.preventDefault();
         }
-
-        if( !$(this).valid() || $form.data("submitted") === true) {
-          return event.preventDefault();
-        }
-        $form.data("submitted", true);
-
-        $("#submit-button").prop("disabled", true);
-        $("#submit-button").text("處理中...");
-
-        setTimeout(function (){
-          $("#submit-button").prop("disabled", false);
-          $("#submit-button").text("送出");
-        }, 1000);
-
+        defaultFormSubmit(event);
       });
       return this;
     }
-    $("#form").preventDoubleSubmission();
+
 
     $(".reg-page").validate({
       rules: {
@@ -249,6 +235,8 @@ function init() {
           }
       }
     });
+
+    $("#form").preventDoubleSubmission();
   });
 `); %>
 <!--=== End Content Part ===-->
