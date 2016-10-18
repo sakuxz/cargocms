@@ -144,7 +144,7 @@
       </div>
 
       <div class="projects form-group" id="orderFormWrapper">
-        <form class="orderForm" id="orderForm" action="/recipe/allpay/<%= recipe.id %>" method="post">
+        <form class="orderForm" id="orderForm" action="/recipe/allpay/<%= recipe.id %>?hashId=<%= recipe.hashId %>" method="post">
           <input type="hidden" name="id" value="<%= recipe.id %>">
           <input type="hidden" name="perfumeName" value="<%= recipe.perfumeName %>">
           <input type="hidden" name="description" value="<%= recipe.description %>">
@@ -193,6 +193,8 @@
             <label for="invoiceNo">發票號碼<span class="required">*</span></label>
             <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="例：LB-12345678">
           </section>
+
+          <input type="hidden" name="token" value="<%= token %>">
 
         </form>
       </div>
