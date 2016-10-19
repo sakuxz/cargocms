@@ -23,6 +23,15 @@
 
 [v-cloak] { display:none; }
 
+.btn.btn-default.btn-xs {
+  margin-top: 5px;
+}
+
+.row-action-buttons {
+  cursor: pointer;
+  text-align: left;
+}
+
 </style>
 <!-- client -->
 <table id="main-table" class="table table-striped table-bordered table-hover" width="100%">
@@ -64,6 +73,8 @@
       <th class="hide" data-hide="always">電話</th>
       <th class="hide" data-hide="always">住址</th>
       <th width="8%" data-hide="phone,tablet">建立時間</th>
+      <th class="hide" data-hide="always">運送物流</th>
+      <th class="hide" data-hide="always">物流編號</th>
 			<th class="hide" data-hide="always">備註</th>
       <th width="8%" data-hide="phone,tablet"></th>
 
@@ -97,6 +108,9 @@
 					</a>
 					<a class="btn btn-default btn-xs" role="button" v-on:click="edit(item.id)">
 						<i class="fa-fw fa fa-pencil-square-o text-muted"/>
+					</a>
+          <a class="btn btn-default btn-xs" role="button" v-on:click="edit(item.id)">
+						<i class="fa-fw fa fa-keyboard-o text-muted"/>
 					</a>
 				</div>
 			</td>
@@ -145,6 +159,8 @@
       { "data": "Phone" },
       { "data": "Address" },
       { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 22, 'desc' ]]
+      { "data": null },
+      { "data": null },
 			{ "data": "Note" },
 			{ "data": null },
 
@@ -297,9 +313,23 @@
 			{
         "searchable": false,
         "targets": 23,
+        "render": function (data, type, row) {
+          return '<td>' + data.shippingDesc ? data.shippingDesc : '' + '</td>';
+        }
+      },
+      {
+        "searchable": false,
+        "targets": 24,
+        "render": function (data, type, row) {
+          return '<td>' + data.trackingNumber ? data.trackingNumber : '' + '</td>';
+        }
+      },
+      {
+        "searchable": false,
+        "targets": 25
       },
 			{
-				"targets"  : 24,
+				"targets"  : 26,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
@@ -310,6 +340,9 @@
 						'</a>'+
 						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
+						'</a>'+
+            '<a name="editOrderButton" class="btn btn-default btn-xs" role="button" data-recipeOrder-id="'+data.RecipeOrder.id+'">'+
+							'<i class="fa-fw fa fa-truck text-muted"/>'+
 						'</a>'+
 					'</div>';
 					return colBody;

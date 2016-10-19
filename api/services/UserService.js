@@ -47,7 +47,7 @@ module.exports = {
         firstName,
         lastName,
         locale,
-        birthday,
+        birthday: birthday === '' ? null : birthday,
         phone1,
         phone2,
         address,
