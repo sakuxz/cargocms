@@ -242,19 +242,19 @@ module.exports = {
         }
       }
     },
-    shippingDsc: {
+    shippingDesc: {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
           const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
-          let shippingDsc = '';
+          let shippingDesc = '';
           if(order && order.shipping ){
-            shippingDsc = sails.__({
+            shippingDesc = sails.__({
               phrase: order.shipping,
               locale: 'zh'
             });
           }
-          return shippingDsc;
+          return shippingDesc;
         } catch (e) {
           sails.log.error(e);
         }
