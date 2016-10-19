@@ -13,4 +13,7 @@ CREATE TABLE `ScentFeedbacks` (
   CONSTRAINT `scentfeedbacks_ibfk_2` FOREIGN KEY (`ScentId`) REFERENCES `Scents` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
-ALTER TABLE RecipeOrders add `token` varchar(32) DEFAULT NULL,
+
+ALTER TABLE RecipeOrders add shipping varchar(255) DEFAULT NULL;
+ALTER TABLE RecipeOrders add trackingNumber varchar(255) DEFAULT NULL;
+ALTER TABLE RecipeOrders add `token` varchar(32) DEFAULT NULL;

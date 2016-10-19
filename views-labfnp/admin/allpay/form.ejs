@@ -223,6 +223,23 @@
     </section>
   </div>
 
+  <div class="row">
+    <section class="col col-lg-6 col-xs-6">
+      <label class="label">運送物流</label>
+      <label class="select state-disabled">
+        <select v-model="data.item.shipping" disabled>
+          <option value="HCT" selected>新竹物流</option>
+        </select> <i></i> </label>
+    </section>
+
+    <section class="col col-lg-6 col-xs-6">
+      <label class="label">物流編號</label>
+      <label class="input state-disabled">
+        <input type="text" name="trackingNumber" placeholder="物流編號" v-model="data.item.trackingNumber" disabled>
+        <b class="tooltip tooltip-bottom-right">Address</b></label>
+    </section>
+  </div>
+
   <section>
     <label class="label">備註</label>
     <label class="input state-disabled">
