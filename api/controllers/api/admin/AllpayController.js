@@ -81,6 +81,8 @@ module.exports = {
         note: data.Note,
         remark: data.Remark,
         productionStatus: data.RecipeOrder.productionStatus,
+        shipping: data.shipping,
+        trackingNumber: data.trackingNumber,
       };
 
       // const allpay = await Allpay.update(allpayData ,{

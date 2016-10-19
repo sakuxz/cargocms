@@ -32,6 +32,7 @@ module.exports = {
   'post /api/recipe/paymentinfo': 'api/admin/labfnp/RecipeController.paymentinfo',
   'get /api/admin/labfnp/recipe/export': 'api/admin/labfnp/RecipeController.export',
 
+  'put /api/admin/shipping/:id': 'api/admin/labfnp/RecipeOrderController.shippingUpdate',
   'put /api/admin/labfnp/recipeorder/status/:id': 'api/admin/labfnp/RecipeOrderController.updateProductionStatus',
 
   '/recipe/done':     'labfnp/RecipeController.done',

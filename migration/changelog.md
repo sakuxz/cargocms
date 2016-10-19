@@ -41,6 +41,7 @@
 * Post url 清空目前沒有地方有用到
 * Post url 改名為 alias 放 url 別名
 
+
 ## v3
 
 ### 紀錄方式改變
@@ -53,5 +54,9 @@
 *  type 新增 contact enum
 
 ## v4
+
+### 新增 RecipeOrders 欄位
+* 新增 shipping 運送物流
+* 新增 trackingNumber 物流編號
 
 ### RecipeOrder 新增訂單 token
