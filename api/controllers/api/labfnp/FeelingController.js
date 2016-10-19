@@ -18,8 +18,21 @@ module.exports = {
           if (user) {
             let scentFeedback = await ScentFeedback.findAll({
               where: {
-                scentName: query.search.value,
                 UserId: user.id,
+              },
+              include: {
+                model: Scent,
+                where: {
+                  name: query.search.value,
+                }
+              }
+            });
+            data = data.map((info) => info.toJSON());
+            scentFeedback = scentFeedback.map((info) => {
+              info = info.toJSON();
+              return {
+                ...info,
+                title: info.feeling
               }
             });
             data = scentFeedback.concat(data);

@@ -6,8 +6,15 @@ module.exports = {
     },
 
     scentName: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.VIRTUAL,
+      get: function () {
+        try {
+          const scent = this.getDataValue('Scent');
+          return scent ? scent.name : '';
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
     },
 
   },

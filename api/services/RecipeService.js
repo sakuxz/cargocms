@@ -137,10 +137,12 @@ module.exports = {
       let userFeeling = [];
       for (let item of formula) {
         if (!item.userFeeling) continue;
+        const scent = await Scent.findOne({ where: { name: item.scent } });
         let data = item.userFeeling.map((word) => {
           return {
             feeling: word,
-            scentName: item.scent,
+            // scentName: item.scent,
+            ScentId: scent.id,
             UserId: userId,
           }
         });
@@ -159,11 +161,12 @@ module.exports = {
       let allUserScentFeedback = await ScentFeedback.findAll({
         where: {
           UserId: userId
-        }
+        },
+        include: Scent
       });
       allUserScentFeedback.forEach((feedback) => {
-        scentFeeling[feedback.scentName] = scentFeeling[feedback.scentName] || [];
-        scentFeeling[feedback.scentName].push(feedback.feeling);
+        scentFeeling[feedback.Scent.name] = scentFeeling[feedback.Scent.name] || [];
+        scentFeeling[feedback.Scent.name].push(feedback.feeling);
       })
       Object.keys(scentFeeling).map((key) => {
         scentFeeling[key] = scentFeeling[key].join(',');
@@ -181,14 +184,13 @@ module.exports = {
       for (let item of formula) {
         if (item.userFeeling && item.userFeeling.length > 0) {
           console.log(item.scent, item.userFeeling);
+          const scent = await Scent.findOne({ where: { name: item.scent } });
           deleteAdj.push(
             ScentFeedback.destroy({
               where: {
                 UserId: userId,
-                $and: {
-                  scentName: { $in: [item.scent] },
-                  feeling: { $notIn: item.userFeeling }
-                }
+                ScentId: scent.id,
+                feeling: { $notIn: item.userFeeling }
               }
             })
           );
@@ -197,12 +199,12 @@ module.exports = {
               ScentFeedback.findOrCreate({
                 where: {
                   feeling: adj,
-                  scentName: item.scent,
+                  ScentId: scent.id,
                   UserId: userId,
                 },
                 defaults: {
                   feeling: adj,
-                  scentName: item.scent,
+                  ScentId: scent.id,
                   UserId: userId,
                 }
               })

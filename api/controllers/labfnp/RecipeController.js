@@ -21,10 +21,11 @@ module.exports = {
       let scentFeedback = await ScentFeedback.findAll({
         where: {
           UserId: user.id
-        }
+        },
+        include: Scent
       });
       for (const feedback of scentFeedback) {
-        let findIndex = _.findIndex(scents, {'name': feedback.scentName});
+        let findIndex = _.findIndex(scents, {'name': feedback.Scent.name});
         if (findIndex > 0) {
           scents[findIndex].feelings.splice(0, 0, {key: feedback.feeling, value: '10' });
           scents[findIndex].displayFeeling.splice(0, 0, feedback.feeling);
