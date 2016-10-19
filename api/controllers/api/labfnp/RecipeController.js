@@ -198,7 +198,8 @@ module.exports = {
       const recipes = await Recipe.findAll({
         where: { visibility: { $not: 'PRIVATE' } },
         offset: 0,
-        limit: 3,
+        limit: 5,
+        order: [['createdAt', 'DESC']],
       });
       res.ok({
         message: 'success get new recipe',
