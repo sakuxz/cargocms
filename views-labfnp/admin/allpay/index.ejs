@@ -21,6 +21,8 @@
     }
 }
 
+[v-cloak] { display:none; }
+
 </style>
 <!-- client -->
 <table id="main-table" class="table table-striped table-bordered table-hover" width="100%">
@@ -29,13 +31,13 @@
 			<th width="6%" data-hide="phone,tablet"><i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/> ID</th>
 			<th width="11%" data-class="expand">訂單編號</th>
 			<th width="14%" data-hide="phone"><i class="fa fa-fw text-muted hidden-sm hidden-xs"/> 金流交易編號 </th>
-      <th data-hide="always">交易訊息</th>
+      <th data-hide="always" class="hide">交易訊息</th>
       <th width="8%" data-hide="phone,tablet">付款時間</th>
       <th width="8%" class="no-sort no-over" data-hide="phone,tablet">付款方式</th>
       <th width="9%" class="no-sort" data-hide="">發票號碼</th>
       <th width="6%">金額</th>
-      <th data-hide="always">付款帳號</th>
-      <th data-hide="always">訂購物品</th>
+      <th data-hide="always" class="hide">付款帳號</th>
+      <th data-hide="always" class="hide">訂購物品</th>
       <th width="8%" class="no-sort">訂購人</th>
       <th width="6%" class="no-sort" data-hide="phone,tablet">配方編號</th>
       <th width="8%" class="no-sort">
@@ -52,17 +54,17 @@
           <option value="COMPLETED">完成</option>
         </select>-->
 			</th>
-      <th class="no-sort" data-hide="always" style="">香味分子1</th>
-      <th class="no-sort" data-hide="always" style="">香味分子2</th>
-      <th class="no-sort" data-hide="always" style="">香味分子3</th>
-      <th class="no-sort" data-hide="always" style="">香味分子4</th>
-      <th class="no-sort" data-hide="always" style="">香味分子5</th>
-      <th class="no-sort" data-hide="always" style="">香味分子6</th>
-      <th data-hide="always">Email</th>
-      <th data-hide="always">電話</th>
-      <th data-hide="always">住址</th>
+      <th class="no-sort hide" data-hide="always" style="">香味分子1</th>
+      <th class="no-sort hide" data-hide="always" style="">香味分子2</th>
+      <th class="no-sort hide" data-hide="always" style="">香味分子3</th>
+      <th class="no-sort hide" data-hide="always" style="">香味分子4</th>
+      <th class="no-sort hide" data-hide="always" style="">香味分子5</th>
+      <th class="no-sort hide" data-hide="always" style="">香味分子6</th>
+      <th class="hide" data-hide="always">Email</th>
+      <th class="hide" data-hide="always">電話</th>
+      <th class="hide" data-hide="always">住址</th>
       <th width="8%" data-hide="phone,tablet">建立時間</th>
-			<th data-hide="always">備註</th>
+			<th class="hide" data-hide="always">備註</th>
       <th width="8%" data-hide="phone,tablet"></th>
 
 		</tr>
@@ -70,25 +72,25 @@
 	<!-- client only -->
 	<tbody>
 		<tr v-for="item in data.items">
-      <td>{{ item.id }}</td>
-			<td><a href="/admin/#/admin/{{modelName}}/show/{{item.id}}">{{ item.TradeNo ? item.TradeNo:"訂單尚未成立" }}</a></td>
-      <td>{{ item.MerchantTradeNo }}</td>
-			<td>{{ item.RtnMsg }}</td>
-      <td>{{ (item.PaymentDate == "Invalid date") ? "":item.PaymentDate }}</td>
-      <td>{{ item.PaymentTypeDesc }} </td>
-      <td>{{ item.invoiceNo }} </td>
-      <td>{{ item.TradeAmt }} </td>
-      <td>{{ item.vAccount }} </td>
-      <td>{{ item.ItemNameArray }} </td>
-      <td>{{ item.UserName}} </td>
-      <td>{{ item.RecipeOrder.Recipe.id}}<a href="/admin/#/admin/labfnp/recipe/show/{{item.RecipeOrder.Recipe.id}}"> <i class="fa fa-fw fa-external-link"></i> </a></td>
+      <td v-cloak>{{ item.id }}</td>
+			<td v-cloak><a href="/admin/#/admin/{{modelName}}/show/{{item.id}}">{{ item.TradeNo ? item.TradeNo:"訂單尚未成立" }}</a></td>
+      <td v-cloak>{{ item.MerchantTradeNo }}</td>
+			<td v-cloak>{{ item.RtnMsg }}</td>
+      <td v-cloak>{{ (item.PaymentDate == "Invalid date") ? "":item.PaymentDate }}</td>
+      <td v-cloak>{{ item.PaymentTypeDesc }} </td>
+      <td v-cloak>{{ item.invoiceNo }}</td>
+      <td v-cloak>{{ item.TradeAmt }} </td>
+      <td v-cloak>{{ item.vAccount }} </td>
+      <td v-cloak>{{ item.ItemNameArray }} </td>
+      <td v-cloak>{{ item.UserName}} </td>
+      <td v-cloak>{{ item.RecipeOrder.Recipe.id}}<a href="/admin/#/admin/labfnp/recipe/show/{{item.RecipeOrder.Recipe.id}}"> <i class="fa fa-fw fa-external-link"></i> </a></td>
       <template v-for="n in 6">
         <td>{{ item.RecipeOrder.Recipe.formula[n].scent + ' , ' + item.RecipeOrder.Recipe.formula[n].drops + ' 滴'}}</td>
       </template>
-      <td>{{ item.Email }} </td>
-      <td>{{ item.Phone}} </td>
-      <td>{{ item.Address }} </td>
-			<td align="center" style="cursor: pointer;">
+      <td v-cloak>{{ item.Email }} </td>
+      <td v-cloak>{{ item.Phone}} </td>
+      <td v-cloak>{{ item.Address }} </td>
+			<td v-cloak align="center" style="cursor: pointer;">
 				<div class="row">
 					<a class="btn btn-default btn-xs" role="button" v-on:click="show(item.id)">
 						<i class="fa-fw fa fa-eye text-muted" />
@@ -98,7 +100,7 @@
 					</a>
 				</div>
 			</td>
-			<td>{{ item.createdAt }} </td>
+			<td v-cloak>{{ item.createdAt }} </td>
 		</tr>
 	</tbody>
  </table>
@@ -197,7 +199,8 @@
         "searchable": false,
         "targets": 6,
         "render": function(data, type, row) {
-          return '<td><span class="textbreak">' + data ? data: "" +'</span></td>';
+          var data = data || ""
+          return '<td><span class="textbreak">' + data +'</span></td>';
         }
       },
       {
@@ -223,7 +226,6 @@
         "searchable": false,
         "targets": 12,
         "render": function (data, type, row) {
-					console.log(row);
           // return '<td>' + data.RecipeOrder.productionStatusDesc + '</td>';
 					var productionStatus =  row.RecipeOrder.productionStatus;
 					return '<select class="form-control input-xs" data-id="'+ row.RecipeOrderId +'" name="updateProductionStatus">' +

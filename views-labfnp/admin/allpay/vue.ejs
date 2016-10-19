@@ -118,11 +118,12 @@ appMain.DataTableInitComplete = function() {
   $('#productionStatus').on('change', function(){
     api.columns().search().draw();
   })
-  $("[name='updateProductionStatus']").focus(function() {
+
+  $("#main-table").delegate("[name='updateProductionStatus']", 'focus', function() {
     $(this).attr('data-oldValue', $(this).val());
   });
 
-  $("[name='updateProductionStatus']").on('change', function() {
+  $("#main-table").delegate("[name='updateProductionStatus']", 'change', function() {
     var that = this;
     var id = $(this).data("id")
     var selectedDesc = $(this).find('option:selected').text();
@@ -175,4 +176,40 @@ appMain.customSearch = function() {
       }
     })
   }
+  appModel.pagingQuery.columns.push({
+    data: 'recipient',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder',
+      column: 'recipient',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'email',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder',
+      column: 'email',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'phone',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder',
+      column: 'phone',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'perfumeName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.Recipe',
+      column: 'perfumeName',
+    }
+  })
 }
