@@ -74,6 +74,7 @@
     "test": "mocha test/unit --reporter spec",
     "test-e2e": "npm run clean-e2e && chimp --mocha --path=test/e2e",
     "test-e2e-docker": "npm run clean-e2e && make start-e2e-docker && chimp chimp-docker.js --mocha --path=test/e2e",
+    "test-e2e-docker-watch": "npm run clean-e2e && make start-e2e-docker && chimp chimp-docker.js --mocha --path=test/e2e --watch",
     "test-e2e-watch": "npm run clean-e2e && chimp --mocha --path=test/e2e --watch",
     "clean-e2e": "rm -rf test/e2e/screenshot/*.png",
     "build": "npm i && node_modules/grunt-cli/bin/grunt build",
@@ -103,7 +104,7 @@
   "devDependencies": {
     "babel-preset-stage-0": "^6.5.0",
     "chai": "^3.4.1",
-    "chimp": "^0.40.4",
+    "chimp": "^0.41.1",
     "grunt-bower-task": "^0.4.0",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-sass": "^0.9.2",

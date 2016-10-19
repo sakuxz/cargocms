@@ -12,6 +12,7 @@ module.exports = function(req, res, next) {
   if (sails.config.offAuth || AuthService.isAdmin(req)) {
     return next();
   }
-
+  req.flash('error', 'Error.NoPermitted');
+  
   return res.forbidden('You are not permitted to perform this action.');
 };

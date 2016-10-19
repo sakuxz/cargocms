@@ -42,6 +42,7 @@ module.exports = {
         clientID: '144219216008720',
         clientSecret: '',
         callbackURL: "",
+        scope: [ 'email', 'public_profile' ],
         profileFields: [
           'id', 'email', 'gender', 'link', 'locale',
           'name', 'timezone', 'updated_time', 'verified',

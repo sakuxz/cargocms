@@ -58,3 +58,5 @@
 ### 新增 RecipeOrders 欄位
 * 新增 shipping 運送物流
 * 新增 trackingNumber 物流編號
+
+### RecipeOrder 新增訂單 token

@@ -31,6 +31,10 @@ module.exports = {
       defaultValue: 'NEW',
     },
 
+		token: {
+      type: Sequelize.STRING(32),
+    },
+
     productionStatusDesc: {
       type: Sequelize.VIRTUAL,
       get: function() {

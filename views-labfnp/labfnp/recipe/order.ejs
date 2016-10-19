@@ -144,7 +144,7 @@
       </div>
 
       <div class="projects form-group" id="orderFormWrapper">
-        <form class="orderForm" id="orderForm" action="/recipe/allpay/<%= recipe.id %>" method="post">
+        <form class="orderForm" id="orderForm" action="/recipe/allpay/<%= recipe.id %>?hashId=<%= recipe.hashId %>" method="post">
           <input type="hidden" name="id" value="<%= recipe.id %>">
           <input type="hidden" name="perfumeName" value="<%= recipe.perfumeName %>">
           <input type="hidden" name="description" value="<%= recipe.description %>">
@@ -191,8 +191,10 @@
 
           <section class="col" id="invoiceSection" style="display: none;">
             <label for="invoiceNo">發票號碼<span class="required">*</span></label>
-            <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="請輸入發票號碼...">
+            <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="例：LB-12345678">
           </section>
+
+          <input type="hidden" name="token" value="<%= token %>">
 
         </form>
       </div>
@@ -208,7 +210,7 @@
       </section>
 
       <div class="text-center">
-        <button form="orderForm" id="submitOrder" type="sumbit" class="btn-u btn-u-green" data-id="<%= recipe.id %>">
+        <button form="orderForm" id="submit-button" type="sumbit" class="btn-u btn-u-green" data-id="<%= recipe.id %>">
           <i class="fa fa-check" aria-hidden="true"></i>
           送出
         </button>
@@ -227,44 +229,14 @@
 <% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3.min.js'); %>
 <% LayoutUtils.addScripts ('/assets/admin/js/plugin/d3/d3pie.min.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/lib/d3.layout.cloud.js'); %>
-<% LayoutUtils.addScripts('/assets/labfnp/page/wordCloud.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/pieChart.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/favorite.js'); %>
+<% LayoutUtils.addScripts('/assets/labfnp/lib/formSubmitHelper.js'); %>
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
 
     $.fn.preventDoubleSubmission = function() {
-      $(this).on("submit", function(event){
-        var $form = $(this);
-
-        if( $(this).valid() ) {
-          if ($form.data("submitted") === true){
-            event.preventDefault();
-          } else {
-            $form.data("submitted", true);
-
-            $("#submitOrder").prop("disabled", true);
-            $("#submitOrder").text("處理中...");
-
-            setTimeout(function (){
-              $("#submitOrder").prop("disabled", false);
-              $("#submitOrder").text("送出");
-            }, 1000);
-
-            swal({
-              type: "info",
-              title: "訊息",
-              text: "訂單處理中...",
-              showConfirmButton: false,
-              timer: 5000,
-            });
-          }
-        } else {
-          event.preventDefault();
-        }
-
-      });
-
+      $(this).on("submit", defaultFormSubmit);
       return this;
     }
 
@@ -315,7 +287,7 @@
 
     $("#paymentMethod").change(function() {
       var selected = $("#paymentMethod").val();
-      
+
       if (selected=="gotoShop") {
         var invoiceDisplay = "";
         var invoiceNeed = true;
@@ -328,7 +300,7 @@
       $("#orderForm").validate(validateFields);
       $("#orderForm").validate().resetForm();
     });
-    
+
     $("#orderForm").validate(validateFields);
 
     $("#orderForm").preventDoubleSubmission();

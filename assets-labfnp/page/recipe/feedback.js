@@ -24,7 +24,7 @@ $(document).ready(function () {
     },
 		initialTags: initialTags,
     forceLowercase: false,
-    placeholder: '請填寫您的感覺（可填寫多個）'
+    placeholder: '請填寫您的感覺，例：蘋果香味 <br/>(可填寫多個)'
   });
 
 	$('#orderForm').submit(function (event) {
