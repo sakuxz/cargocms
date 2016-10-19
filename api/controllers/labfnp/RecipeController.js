@@ -247,7 +247,7 @@ module.exports = {
           where: { token },
         },
       });
-      if (findOrder) {
+      if (findOrder && paymentMethod == 'gotoShop') {
         return res.redirect(`/recipe/done?t=${findOrder.MerchantTradeNo}`);
       }
 

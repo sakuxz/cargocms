@@ -305,5 +305,9 @@
 
     $("#orderForm").preventDoubleSubmission();
 
+    $(window).bind("pageshow", function() {
+      $('#paymentMethod').trigger('change');
+    });
+
   });
 `); %>
