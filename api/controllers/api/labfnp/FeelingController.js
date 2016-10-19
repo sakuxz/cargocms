@@ -13,6 +13,31 @@ module.exports = {
           let recordsTotal = data.length
           let recordsFiltered =  result.count
           let draw = parseInt(req.draw) + 1
+
+          let user = AuthService.getSessionUser(req);
+          if (user) {
+            let scentFeedback = await ScentFeedback.findAll({
+              where: {
+                UserId: user.id,
+              },
+              include: {
+                model: Scent,
+                where: {
+                  name: query.search.value,
+                }
+              }
+            });
+            data = data.map((info) => info.toJSON());
+            scentFeedback = scentFeedback.map((info) => {
+              info = info.toJSON();
+              return {
+                ...info,
+                title: info.feeling
+              }
+            });
+            data = scentFeedback.concat(data);
+          }
+
           res.ok({draw, recordsTotal, recordsFiltered, data});
         }else {
           const feelings = await Feeling.findAll();

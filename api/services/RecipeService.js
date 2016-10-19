@@ -132,4 +132,92 @@ module.exports = {
     }
   },
 
+  createUserFeeling: async function({formula, userId}) {
+    try {
+      let userFeeling = [];
+      for (let item of formula) {
+        if (!item.userFeeling) continue;
+        const scent = await Scent.findOne({ where: { name: item.scent } });
+        let data = item.userFeeling.map((word) => {
+          return {
+            feeling: word,
+            // scentName: item.scent,
+            ScentId: scent.id,
+            UserId: userId,
+          }
+        });
+        userFeeling = userFeeling.concat(data);
+      }
+      sails.log.info(userFeeling);
+      await ScentFeedback.bulkCreate(userFeeling);
+    } catch (e) {
+      throw e
+    }
+  },
+
+  getUserFeeling: async function({userId}) {
+    try {
+      let scentFeeling = {};
+      let allUserScentFeedback = await ScentFeedback.findAll({
+        where: {
+          UserId: userId
+        },
+        include: Scent
+      });
+      allUserScentFeedback.forEach((feedback) => {
+        scentFeeling[feedback.Scent.name] = scentFeeling[feedback.Scent.name] || [];
+        scentFeeling[feedback.Scent.name].push(feedback.feeling);
+      })
+      Object.keys(scentFeeling).map((key) => {
+        scentFeeling[key] = scentFeeling[key].join(',');
+      });
+      return scentFeeling;
+    } catch (e) {
+      throw e
+    }
+  },
+
+  updateUserFeeling: async function({formula, userId}) {
+    try {
+      let deleteAdj = [];
+      let createNewAdj = [];
+      for (let item of formula) {
+        if (item.userFeeling && item.userFeeling.length > 0) {
+          console.log(item.scent, item.userFeeling);
+          const scent = await Scent.findOne({ where: { name: item.scent } });
+          deleteAdj.push(
+            ScentFeedback.destroy({
+              where: {
+                UserId: userId,
+                ScentId: scent.id,
+                feeling: { $notIn: item.userFeeling }
+              }
+            })
+          );
+          item.userFeeling.forEach((adj) => {
+            createNewAdj.push(
+              ScentFeedback.findOrCreate({
+                where: {
+                  feeling: adj,
+                  ScentId: scent.id,
+                  UserId: userId,
+                },
+                defaults: {
+                  feeling: adj,
+                  ScentId: scent.id,
+                  UserId: userId,
+                }
+              })
+            );
+          });
+        }
+      }
+      await Promise.all(deleteAdj);
+      await Promise.all(createNewAdj);
+
+    } catch (e) {
+      throw e;
+    }
+  }
+
 }

@@ -155,11 +155,18 @@ $(document).ready(function () {
 				var scent = document.getElementsByName("formulaScents[" + idx + "]")[0].value;
 				var drops = $('.scents-drops[data-index=' + idx + ']').val();
 				var color = $('option:selected', this).data('color');
+				var userFeeling = [];
+				var getFeelingInput = $("input[name='userFeeling[" + idx + "]']");
+				if (getFeelingInput.length > 0) {
+					userFeeling = getFeelingInput.tagEditor('getTags')[0].tags;
+				}
+
 				var feeling = '';
 				var formulaObj = {
 					"scent": scent,
 					"drops": drops,
-					"color": color
+					"color": color,
+					"userFeeling": userFeeling
 				};
 
 				if (isFromFeeling) {
@@ -408,6 +415,7 @@ $(document).ready(function () {
 		var description = $('textarea[name=description]').val();
 		var coverPhotoId = $('input[name=coverPhotoId]').val();
 		var createdBy = $('input[name=createdBy]').val();
+		var feedback = $('input[name=feedback]').tagEditor('getTags')[0].tags;
 		var formula = getFormulaData(createdBy);
 		// console.log("=== formula ===", formula);
 		var formIsValid = true;
@@ -465,6 +473,7 @@ $(document).ready(function () {
 				description: description,
 				coverPhotoId: coverPhotoId,
 				createdBy: createdBy,
+				feedback: feedback
 			}
 		}).done(function (result) {
       location.href = '/recipe/' + result.data.hashId;
@@ -474,5 +483,11 @@ $(document).ready(function () {
 
 	$('.scents-dropdown').change();
 	$('.scents-drops').change();
+
+	$('input[name=feedback]').tagEditor({
+		forceLowercase: false,
+		placeholder: '請填寫您的感覺，例：蘋果香味 <br/>(可填寫多個)'
+	});
+
 
 });

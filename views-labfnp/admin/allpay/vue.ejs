@@ -119,6 +119,66 @@ appMain.DataTableInitComplete = function() {
     api.columns().search().draw();
   })
 
+  $("#main-table").delegate("[name='editOrderButton']","click", function(e) {
+      var that = this;
+      $.SmartMessageBox({
+        title : "更新物流資料",
+        content :
+        "<select id='shipping' class='form-control'>" +
+          "<option value='HCT' selected>新竹貨運</option>" +
+        "</select> <br/>" +
+        "請輸入物流編號 :<br/>" +
+        "<input id='trackingNumber' type='text' class='form-control'/>" +
+        "<br/>",
+        buttons : "[更新][取消]"
+      }, function(ButtonPress) {
+           if(ButtonPress === "取消"){
+             return 0;
+           }
+
+           var trackingNumber = $("#trackingNumber").val();
+           var shipping = $("#shipping").val();
+           var recipeId = $(that).attr("data-recipeOrder-id");
+
+           if(!shipping || !trackingNumber){
+             messageApp.show({
+               desc: '更新資料失敗！ 請填寫完整資料 ',
+               type: 'error'
+             });
+             return 0;
+           }
+
+           var ajaxSuccess = function (result) {
+             location.href = '/admin/#/admin/' + modelName;
+             messageApp.show({
+             desc: '更新資料成功！',
+             type: 'success'
+             });
+           }; // end ajaxSuccess
+
+          var ajaxError = function (result) {
+            messageApp.show({
+              desc: '更新資料失敗！errorMessage: ' + result.responseJSON.message,
+              type: 'error'
+            });
+          };
+
+          $.ajax({
+            url: '/api/' + prefix + 'shipping' + '/' + recipeId,
+            type: 'PUT',
+            dataType: 'json',
+            data: {trackingNumber, shipping},
+            xhrFields: {
+            withCredentials: true,
+            },
+            success: ajaxSuccess,
+            error: ajaxError,
+            });
+         }
+      );
+      e.preventDefault();
+  });
+
   $("#main-table").delegate("[name='updateProductionStatus']", 'focus', function() {
     $(this).attr('data-oldValue', $(this).val());
   });
@@ -160,6 +220,7 @@ appMain.DataTableInitComplete = function() {
     };
     messageApp.confirm(msgInfo, action);
   });
+
 }
 appMain.customSearch = function() {
   var searchProductionStatus = $('#productionStatus').val() || "";
