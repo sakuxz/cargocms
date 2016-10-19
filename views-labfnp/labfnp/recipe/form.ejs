@@ -1,3 +1,12 @@
+<style>
+.feedback .tag-editor {
+  background: white;
+  border-radius: 0;
+  min-height: 120px;
+  border: 1px solid #ccc;
+  padding-top: 2px;
+}
+</style>
 <% if (recipe.createdBy === 'scent') { %>
   <header>新香水配方 - 自訂香味分子</header>
 <% } else { %>
@@ -48,7 +57,6 @@
     <input type="file" id="imageInput" name="uploadPic">
     <input type="hidden" name="coverPhotoId" value="">
   </section>
-
 </fieldset>
 
 <% if (recipe.createdBy === 'scent') { %>
@@ -57,6 +65,13 @@
   <%- include form-feeling.ejs %>
 <% } %>
 
+<fieldset class="margin-bottom-20">
+  <section class='feedback'>
+    <label class="label">感覺回饋</label>
+      <input type="text" name="feedback" value="<%= typeof feedback !== 'undefined' ? feedback : '' %>">
+    </label>
+  </section>
+</fieldset>
 <!-- <fieldset>
 
   <section>

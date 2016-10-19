@@ -53,7 +53,9 @@
 
 *  type 新增 contact enum
 
-## v4
+
+v4
+### 新增 UserFeeling 紀錄使用者回饋的感覺
 
 ### 新增 RecipeOrders 欄位
 * 新增 shipping 運送物流

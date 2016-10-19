@@ -64,6 +64,18 @@ module.exports = {
       }
       sails.log.info('create recipe controller=>', data);
       const recipe = await RecipeService.create(data);
+      await RecipeService.createUserFeeling({
+        formula: data.formula,
+        userId: loginedUser.id
+      });
+
+      if (data.feedback && data.feedback.length > 0) {
+        await RecipeFeedback.create({
+          feeling: data.feedback,
+          UserId: loginedUser.id,
+          RecipeId: recipe.id,
+        });
+      }
       req.flash('info', 'Info.New.Recipe');
       res.ok({
         message: 'Create recipe success.',
@@ -80,10 +92,24 @@ module.exports = {
     try {
       sails.log.info('update recipe controller id=>', id);
       sails.log.info('update recipe controller data=>', data);
+      const user = AuthService.getSessionUser(req);
+
       const recipe = await RecipeService.update({
         id: id,
         ...data,
       });
+
+      await RecipeFeedback.update({
+        feeling: data.feedback
+      },{
+        where: { UserId: user.id, RecipeId: id }
+      });
+
+      await RecipeService.updateUserFeeling({
+        formula: data.formula,
+        userId: user.id,
+      });
+
       res.ok({
         message: 'Update recipe success.',
         data: recipe,
@@ -199,6 +225,22 @@ module.exports = {
       }else {
         feedback = await RecipeFeedback.create(data);
       }
+
+      let updateformula = [];
+      Object.keys(data.scentFeeling).forEach(function (key) {
+        if (data.scentFeeling[key]) {
+          let feeling = data.scentFeeling[key].split(',');
+          updateformula.push({
+            scent: key,
+            userFeeling: feeling,
+          })
+        }
+      });
+      const user = AuthService.getSessionUser(req);
+      await RecipeService.updateUserFeeling({
+        formula: updateformula,
+        userId: user ? user.id : null,
+      });
 
       res.ok({
         message: 'save feedback success.',
