@@ -9,6 +9,7 @@
 
 <!-- CSS Page Style -->
 <% LayoutUtils.addStylesheets('/assets/unify/css/pages/shortcode_timeline1.css'); %>
+<% LayoutUtils.addStylesheets('/assets/labfnp/css/tagging.css'); %>
 <% LayoutUtils.addStylesheetBlock(`
 
 .user-profile-block h1 {
@@ -180,6 +181,26 @@ li.text-center a {
 	    	</ul>
 
 	    	<% } else { %>
+					<div class="well">
+						<div id="scent-content" class="funny-boxes bg-color-white">
+						  <h2 id="scent-title">M6 - Citral</h2>
+						  <p style="border-top: 2px solid rgb(247, 212, 64);" id="scent-description">Citral的香氣讓人聯想到檸檬，橘子，佛手柑,葡萄柚，提供男性香水中的微酸氣息，且適合與女性香水中的花香調搭配。由於檸檬醛提供清新的感覺，因此含檸檬醛的香水成了春秋兩季的首選。</p>
+							<div class="tags">
+							您的感覺:
+						    <div class="tag">果香</div>
+						    <div class="tag">果香</div>
+						    <div class="tag">果香</div>
+						    <div class="tag">果香</div>
+						    <div class="tag">果香</div>
+						    <div class="tag">果香</div>
+						    <div class="tag">果香</div>
+						    <div class="tag">清潔劑</div>
+						    <div class="tag">清潔劑</div>
+						    <div class="tag">酸</div>
+						  </div>
+						</div>
+					</div>
+
           <div class="well">
             <div class="margin-bottom-40">
               <h2>還沒有任何創作</h2>
@@ -188,6 +209,7 @@ li.text-center a {
             </div>
           </div>
 
+					<div id="scentFeeling"></div>
 	    	<% } %>
 
     </div>
@@ -195,7 +217,7 @@ li.text-center a {
 
   </div>
 </div>
-
+<%- include scentFeedback.inc.ejs %>
 <%- include recipeCreateBox.inc.ejs %>
 
 <% LayoutUtils.addScriptBlock(`

@@ -1,0 +1,35 @@
+<script id="scentFeedback" type="text/x-jquery-tmpl">
+  <div class="well">
+    <div id="scent-content" class="funny-boxes bg-color-white">
+      <h2 id="scent-title">${name} - ${title}</h2>
+      <p style="border-top: 2px solid ${color};" id="scent-description">${description}</p>
+      <div class="tags">
+      您的感覺:
+        {{each feeling}}
+            <div class="tag">${$value}</div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</script>
+<% LayoutUtils.addScriptBlock(`
+  $(document).ready(function(){
+    var successCatch = function(e) {
+      console.log(e);
+    }
+    var failCatch = function(e) {
+      console.log(e);
+    }
+    $.get('/api/labfnp/feeling').done(successCatch).fail(failCatch);
+    var scentFeedback = $('#scentFeedback').tmpl({
+      name: 'M6',
+      title: 'Citral',
+      description: 'Citral的香氣讓人聯想到檸檬，橘子，佛手柑,葡萄柚，提供男性香水中的微酸氣息，且適合與女性香水中的花香調搭配。由於檸檬醛提供清新的感覺，因此含檸檬醛的香水成了春秋兩季的首選。',
+      color: '#F7D440',
+      feeling: ['AAA', 'BBB', 'CCC']
+    });
+    console.log("!!!!!!", scentFeedback);
+    $('#scentFeeling').append(scentFeedback);
+  });
+`); %>
+<!--=== End Content Part ===-->

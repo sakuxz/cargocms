@@ -178,12 +178,16 @@ module.exports = {
         include: Scent
       });
       allUserScentFeedback.forEach((feedback) => {
-        scentFeeling[feedback.Scent.name] = scentFeeling[feedback.Scent.name] || [];
-        scentFeeling[feedback.Scent.name].push(feedback.feeling);
+        let key = feedback.Scent.name;
+        feedback = feedback.toJSON();
+        scentFeeling[key] = scentFeeling[key] || {...feedback};
+        scentFeeling[key].info = scentFeeling[key].info || [];
+        scentFeeling[key].info.push(feedback.feeling);
       })
       Object.keys(scentFeeling).map((key) => {
-        scentFeeling[key] = scentFeeling[key].join(',');
+        scentFeeling[key].feeling = scentFeeling[key].info.join(',');
       });
+      console.log("!!!!!", scentFeeling);
       return scentFeeling;
     } catch (e) {
       throw e

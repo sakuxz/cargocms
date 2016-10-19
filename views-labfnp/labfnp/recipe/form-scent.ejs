@@ -51,8 +51,8 @@
           <div class="tags" >
           </div>
         </div>
-        <% var scentAdj = typeof scentFeeling !== 'undefined' ? scentFeeling[formula.scentName] || '' : ''%>
-        <input type="text" class="form-control userFeeling" name="userFeeling[<%= formula.index %>]" value="<%= scentAdj %>">
+        <% var scentAdj = typeof scentFeeling !== 'undefined' ? scentFeeling[formula.scentName] : ''%>
+        <input type="text" class="form-control userFeeling" name="userFeeling[<%= formula.index %>]" value="<%= scentAdj.feeling || '' %>">
       </div>
     </div>
 
