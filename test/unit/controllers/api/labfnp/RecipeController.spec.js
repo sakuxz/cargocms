@@ -23,13 +23,13 @@ describe('about LikeRecipe Controller operation.', function() {
         message: 'this is love test',
         UserId: user.id,
       });
-      await UserFeeling.create({
-        title: 'test',
+      await ScentFeedback.create({
+        feeling: 'test',
         scentName: 'A100',
         UserId: user.id,
       })
-      await UserFeeling.create({
-        title: 'ABC',
+      await ScentFeedback.create({
+        feeling: 'ABC',
         scentName: 'A100',
         UserId: user.id,
       })
@@ -69,7 +69,7 @@ describe('about LikeRecipe Controller operation.', function() {
         UserId: user.id }
       )
       res.status.should.be.eq(200);
-      let check = await UserFeeling.findAll();
+      let check = await ScentFeedback.findAll();
       check.length.should.be.above(0);
       done();
     } catch (e) {
@@ -165,7 +165,7 @@ describe('about LikeRecipe Controller operation.', function() {
         UserId: user.id }
       )
       res.status.should.be.eq(200);
-      // let check = await UserFeeling.findAll();
+      // let check = await ScentFeedback.findAll();
       // console.log(check);
       // check.length.should.be.above(0);
       done();

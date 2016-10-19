@@ -16,13 +16,13 @@ module.exports = {
 
           let user = AuthService.getSessionUser(req);
           if (user) {
-            let userFeeling = await UserFeeling.findAll({
+            let scentFeedback = await ScentFeedback.findAll({
               where: {
                 scentName: query.search.value,
                 UserId: user.id,
               }
             });
-            data = userFeeling.concat(data);
+            data = scentFeedback.concat(data);
           }
 
           res.ok({draw, recordsTotal, recordsFiltered, data});

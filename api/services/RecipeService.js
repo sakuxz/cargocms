@@ -139,7 +139,7 @@ module.exports = {
         if (!item.userFeeling) continue;
         let data = item.userFeeling.map((word) => {
           return {
-            title: word,
+            feeling: word,
             scentName: item.scent,
             UserId: userId,
           }
@@ -147,7 +147,7 @@ module.exports = {
         userFeeling = userFeeling.concat(data);
       }
       sails.log.info(userFeeling);
-      await UserFeeling.bulkCreate(userFeeling);
+      await ScentFeedback.bulkCreate(userFeeling);
     } catch (e) {
       throw e
     }
@@ -156,14 +156,14 @@ module.exports = {
   getUserFeeling: async function({userId}) {
     try {
       let scentFeeling = {};
-      let allUserAddFeeling = await UserFeeling.findAll({
+      let allUserScentFeedback = await ScentFeedback.findAll({
         where: {
           UserId: userId
         }
       });
-      allUserAddFeeling.forEach((feeling) => {
-        scentFeeling[feeling.scentName] = scentFeeling[feeling.scentName] || [];
-        scentFeeling[feeling.scentName].push(feeling.title);
+      allUserScentFeedback.forEach((feedback) => {
+        scentFeeling[feedback.scentName] = scentFeeling[feedback.scentName] || [];
+        scentFeeling[feedback.scentName].push(feedback.feeling);
       })
       Object.keys(scentFeeling).map((key) => {
         scentFeeling[key] = scentFeeling[key].join(',');
@@ -182,26 +182,26 @@ module.exports = {
         if (item.userFeeling && item.userFeeling.length > 0) {
           console.log(item.scent, item.userFeeling);
           deleteAdj.push(
-            UserFeeling.destroy({
+            ScentFeedback.destroy({
               where: {
                 UserId: userId,
                 $and: {
                   scentName: { $in: [item.scent] },
-                  title: { $notIn: item.userFeeling }
+                  feeling: { $notIn: item.userFeeling }
                 }
               }
             })
           );
           item.userFeeling.forEach((adj) => {
             createNewAdj.push(
-              UserFeeling.findOrCreate({
+              ScentFeedback.findOrCreate({
                 where: {
-                  title: adj,
+                  feeling: adj,
                   scentName: item.scent,
                   UserId: userId,
                 },
                 defaults: {
-                  title: adj,
+                  feeling: adj,
                   scentName: item.scent,
                   UserId: userId,
                 }

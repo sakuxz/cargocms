@@ -1,7 +1,6 @@
-import moment from 'moment';
 module.exports = {
   attributes: {
-    title: {
+    feeling: {
       type: Sequelize.STRING,
       allowNull: false
     },
@@ -13,7 +12,8 @@ module.exports = {
 
   },
   associations: function() {
-    UserFeeling.belongsTo(User);
+    ScentFeedback.belongsTo(User);
+    ScentFeedback.belongsTo(Scent);
   },
   options: {
     classMethods: {},
