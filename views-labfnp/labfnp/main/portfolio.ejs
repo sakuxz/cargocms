@@ -114,13 +114,16 @@ li.text-center a {
 
 			<ul class="list-group sidebar-nav-v1 margin-bottom-40" id="sidebar-nav-1">
 				<li class="list-group-item">
-					<a href="/me"><i class="fa fa-bar-chart-o icon-weight"></i> 我的配方</a>
+					<a id="myRecipe"><i class="fa fa-bar-chart-o icon-weight"></i> 我的配方</a>
 				</li>
 				<li class="list-group-item">
 				  <a href="#" class="btn-create-recipe">
 				    <i class="fa fa-flask icon-weight"></i>
 				    創作一個新配方
 				  </a>
+				</li>
+				<li class="list-group-item">
+					<a id="loadScentNote"><i class="fa fa-book icon-weight"></i>香味筆記本</a>
 				</li>
 				<!-- <li class="list-group-item">
 					<a href="page_profile_users.html"><i class="fa fa-group"></i> 粉絲</a>
@@ -131,7 +134,7 @@ li.text-center a {
 		<!--End Left Sidebar-->
 
     <!-- Begin Content -->
-    <div class="col-md-9">
+    <div class="col-md-9" id="timeline">
 
 
 			<% if (recipes && recipes.length > 0) { %>
@@ -181,26 +184,6 @@ li.text-center a {
 	    	</ul>
 
 	    	<% } else { %>
-					<div class="well">
-						<div id="scent-content" class="funny-boxes bg-color-white">
-						  <h2 id="scent-title">M6 - Citral</h2>
-						  <p style="border-top: 2px solid rgb(247, 212, 64);" id="scent-description">Citral的香氣讓人聯想到檸檬，橘子，佛手柑,葡萄柚，提供男性香水中的微酸氣息，且適合與女性香水中的花香調搭配。由於檸檬醛提供清新的感覺，因此含檸檬醛的香水成了春秋兩季的首選。</p>
-							<div class="tags">
-							您的感覺:
-						    <div class="tag">果香</div>
-						    <div class="tag">果香</div>
-						    <div class="tag">果香</div>
-						    <div class="tag">果香</div>
-						    <div class="tag">果香</div>
-						    <div class="tag">果香</div>
-						    <div class="tag">果香</div>
-						    <div class="tag">清潔劑</div>
-						    <div class="tag">清潔劑</div>
-						    <div class="tag">酸</div>
-						  </div>
-						</div>
-					</div>
-
           <div class="well">
             <div class="margin-bottom-40">
               <h2>還沒有任何創作</h2>
@@ -209,10 +192,10 @@ li.text-center a {
             </div>
           </div>
 
-					<div id="scentFeeling"></div>
 	    	<% } %>
-
     </div>
+
+		<div class="col-md-9" id="scentNote" style="display: none;"></div>
     <!-- End Content -->
 
   </div>
@@ -223,6 +206,15 @@ li.text-center a {
 <% LayoutUtils.addScriptBlock(`
 jQuery(document).ready(function() {
 
+	$('#loadScentNote').on('click', function(){
+		loadScentNote();
+		$('#scentNote').fadeIn();
+		$('#timeline').hide();
+	});
+	$('#myRecipe').on('click', function(){
+		$('#scentNote').hide();
+		$('#timeline').fadeIn();
+	});
 
 	var userId = $("#follow-button").data("user-id");
 

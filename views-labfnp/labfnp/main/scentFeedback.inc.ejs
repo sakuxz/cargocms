@@ -1,3 +1,13 @@
+<script id="noneScentFeedback" type="text/x-jquery-tmpl">
+  <div class="well">
+    <div class="margin-bottom-40">
+      <h2>你還沒有任何香味筆記喔!!</h2>
+      <p><span class="brand-font">LFP</span> 香料香水實驗室的好友們，正在期待您的創作。</p>
+      <a href="#" class="btn-create-recipe btn-u btn-u-sm">開始創作</a>
+    </div>
+  </div>
+</script>
+
 <script id="scentFeedback" type="text/x-jquery-tmpl">
   <div class="well">
     <div id="scent-content" class="funny-boxes bg-color-white">
@@ -13,23 +23,32 @@
   </div>
 </script>
 <% LayoutUtils.addScriptBlock(`
-  $(document).ready(function(){
+  // $(document).ready(function(){
     var successCatch = function(e) {
-      console.log(e);
+      $('#scentNote').empty();
+      if(Object.keys(e.data.item).length === 0 ){
+        $('#scentNote').append($('#noneScentFeedback').tmpl());
+      } else {
+        Object.keys(e.data.item).forEach(function(key){
+          var data = e.data.item[key];
+          var scentFeedback = $('#scentFeedback').tmpl({
+            name: data.Scent.name,
+            title: data.Scent.title,
+            description: data.Scent.description,
+            color: data.Scent.ScentNote.color,
+            feeling: data.info
+          });
+          $('#scentNote').append(scentFeedback);
+        });
+      }
     }
     var failCatch = function(e) {
       console.log(e);
     }
-    $.get('/api/labfnp/feeling').done(successCatch).fail(failCatch);
-    var scentFeedback = $('#scentFeedback').tmpl({
-      name: 'M6',
-      title: 'Citral',
-      description: 'Citral的香氣讓人聯想到檸檬，橘子，佛手柑,葡萄柚，提供男性香水中的微酸氣息，且適合與女性香水中的花香調搭配。由於檸檬醛提供清新的感覺，因此含檸檬醛的香水成了春秋兩季的首選。',
-      color: '#F7D440',
-      feeling: ['AAA', 'BBB', 'CCC']
-    });
-    console.log("!!!!!!", scentFeedback);
-    $('#scentFeeling').append(scentFeedback);
-  });
+
+    var loadScentNote = function() {
+      $.get('/api/labfnp/user/feeling').done(successCatch).fail(failCatch);
+    }
+  // });
 `); %>
 <!--=== End Content Part ===-->

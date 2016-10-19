@@ -175,7 +175,10 @@ module.exports = {
         where: {
           UserId: userId
         },
-        include: Scent
+        include: {
+          model: Scent,
+          include: ScentNote
+        }
       });
       allUserScentFeedback.forEach((feedback) => {
         let key = feedback.Scent.name;
@@ -187,7 +190,6 @@ module.exports = {
       Object.keys(scentFeeling).map((key) => {
         scentFeeling[key].feeling = scentFeeling[key].info.join(',');
       });
-      console.log("!!!!!", scentFeeling);
       return scentFeeling;
     } catch (e) {
       throw e
