@@ -110,6 +110,9 @@ var defaultConfig = {
 
   //----- Facebook -----
   'get /admin/facebook/:controller/:action/:id?': {},
+
+  //----- robots ---
+  'get /robots.txt': 'RobotsController.robots',
 };
 
 module.exports.routes = {
