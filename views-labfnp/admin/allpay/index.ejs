@@ -23,6 +23,15 @@
 
 [v-cloak] { display:none; }
 
+.btn.btn-default.btn-xs {
+  margin-top: 5px;
+}
+
+.row-action-buttons {
+  cursor: pointer;
+  text-align: left;
+}
+
 </style>
 <!-- client -->
 <table id="main-table" class="table table-striped table-bordered table-hover" width="100%">
@@ -333,7 +342,7 @@
 							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
 						'</a>'+
             '<a name="editOrderButton" class="btn btn-default btn-xs" role="button" data-recipeOrder-id="'+data.RecipeOrder.id+'">'+
-							'<i class="fa-fw fa fa-keyboard-o text-muted"/>'+
+							'<i class="fa-fw fa fa-truck text-muted"/>'+
 						'</a>'+
 					'</div>';
 					return colBody;
