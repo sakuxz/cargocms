@@ -119,7 +119,7 @@ appMain.DataTableInitComplete = function() {
     api.columns().search().draw();
   });
 
-  $("[name=editOrderButton]").on("click", function(e) {
+  $("#main-table").delegate("[name='editOrderButton']","click", function(e) {
       var that = this;
       $.SmartMessageBox({
         title : "更新物流資料",
