@@ -79,11 +79,12 @@ module.exports = {
       }
 
       const event = await Event.findById(id);
-      const allPayData = await AllpayService.getAllpayConfig({
+      let MerchantTradeNo = crypto.randomBytes(32).toString('hex').substr(0, 8);
+      const allPayData = await AllpayService.createAndgetAllpayConfig({
         relatedKeyValue: {
           EventOrderId: eventOrder.id,
         },
-        MerchantTradeNo: crypto.randomBytes(32).toString('hex').substr(0, 8),
+        MerchantTradeNo,
         tradeDesc: event.description,
         totalAmount: event.price,
         paymentMethod: paymentMethod,
@@ -100,28 +101,19 @@ module.exports = {
 
       if (paymentMethod == 'gotoShop') {
         // 目前 Event 沒有現場付款選項，先保留
-        const item = await Allpay.findOne({
-          where:{
-            MerchantTradeNo: allPayData.MerchantTradeNo
-          },
-          include:{
-            model: EventOrder,
-            include: [User, Event]
-          }
-        });
-        item.RtnMsg = '現場付費';
-        item.ShouldTradeAmt = event.price;
-        item.TradeAmt = event.price;
-        item.PaymentType = '現場付費';
-        item.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
-        await item.save();
+        allPayData.allpay.RtnMsg = '現場付費';
+        allPayData.allpay.ShouldTradeAmt = event.price;
+        allPayData.allpay.TradeAmt = event.price;
+        allPayData.allpay.PaymentType = '現場付費';
+        allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
+        await allPayData.allpay.save();
 
         let messageConfig = {};
-        messageConfig.serialNumber = item.MerchantTradeNo;
+        messageConfig.serialNumber = MerchantTradeNo;
         messageConfig.paymentTotalAmount = event.price;
         messageConfig.productName = event.title + ' 1 張';
         messageConfig.email = eventOrder.email;
-        messageConfig.username = item.EventOrder.User.displayName;
+        messageConfig.username = eventOrder.User.displayName;
         messageConfig.shipmentUsername = eventOrder.recipient;
         messageConfig.shipmentAddress = eventOrder.address;
         messageConfig.note = eventOrder.note;
@@ -133,13 +125,13 @@ module.exports = {
         // const message = await Message.create(messageConfig);
         // await MessageService.sendMail(message);
 
-        res.redirect(`/event/done?t=${allPayData.MerchantTradeNo}`);
+        res.redirect(`/event/done?t=${MerchantTradeNo}`);
 
       } else {
 
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
-          ...allPayData
+          ...allPayData.config
         });
       }
     } catch (e) {

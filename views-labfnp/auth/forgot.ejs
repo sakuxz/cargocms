@@ -76,45 +76,22 @@
     </div>
   </div><!--/row-->
 </div><!--/container-->
-
+<% LayoutUtils.addScripts('/assets/labfnp/lib/formSubmitHelper.js'); %>
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
 
     $.fn.preventDoubleSubmission = function() {
-      $(this).on("submit", function(event){
-        var $form = $(this);
-
+      $(this).on("submit", function(event) {
         if (grecaptcha.getResponse() === "") {
           swal('錯誤', '請勾選我不是機器人', 'warning');
-          event.preventDefault();
-        } else {
-          if( $(this).valid()) {
-            if ($form.data("submitted") === true){
-              event.preventDefault();
-            } else {
-              $form.data("submitted", true);
-              $("#submit-button").prop("disabled", true);
-              $("#submit-button").text("處理中...");
-
-              setTimeout(function (){
-                $("#submit-button").prop("disabled", false);
-                $("#submit-button").text("送出");
-              }, 1000);
-            }
-          } else {
-            event.preventDefault();
-          }
+          return event.preventDefault();
         }
-
-
+        defaultFormSubmit(event);
       });
-
       return this;
     }
 
-    $("#form").preventDoubleSubmission();
-
-    $(".reg-page").validate({
+    $("#form").validate({
       rules: {
         email: {
           required: true,
@@ -143,6 +120,8 @@
           }
       }
     });
+
+    $("#form").preventDoubleSubmission();
 
   });
 `); %>

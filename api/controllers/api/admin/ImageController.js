@@ -72,6 +72,8 @@ module.exports = {
     }
   },
   destroy: async (req, res) => {
+    const user = AuthService.getSessionUser(req);
+    const UserId = user ? user.id : null;
     sails.log.info('Not implemented');
     res.ok({
       message: 'Delete Success',
