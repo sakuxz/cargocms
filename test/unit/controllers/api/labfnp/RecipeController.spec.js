@@ -23,14 +23,22 @@ describe('about LikeRecipe Controller operation.', function() {
         message: 'this is love test',
         UserId: user.id,
       });
+      const scent = await Scent.create({name: 'A100'});
+      await Scent.bulkCreate([
+        { name: 'B100' },
+        { name: 'BA69' },
+        { name: 'BA70' },
+        { name: 'T14' },
+        { name: 'T29' }
+      ]);
       await ScentFeedback.create({
         feeling: 'test',
-        scentName: 'A100',
+        ScentId: scent.id,
         UserId: user.id,
       })
       await ScentFeedback.create({
         feeling: 'ABC',
-        scentName: 'A100',
+        ScentId: scent.id,
         UserId: user.id,
       })
       done()
