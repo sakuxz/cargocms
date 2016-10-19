@@ -44,10 +44,6 @@
 
 ## v3
 
-### 新增 RecipeOrders
-* 新增 shipping 運送物流
-* 新增 trackingNumber 物流編號
-
 ### 紀錄方式改變
 
 * 更新 Image 的格式
@@ -56,3 +52,9 @@
 ### Message 欄位變動
 
 *  type 新增 contact enum
+
+## v4
+
+### 新增 RecipeOrders 欄位
+* 新增 shipping 運送物流
+* 新增 trackingNumber 物流編號
