@@ -1,10 +1,13 @@
 module.exports = {
   robots: function(req, res){
     const robots = sails.config.robots;
-    const domain = req.host.split(".");
-    res.type('text/plain')
+    let domain = sails.config.appUrl;
+    if( domain.indexOf('://') !== -1){
+      domain = domain.split('://')[1];
+    }
 
-    if(domain[0] === 'test' || domain[0] === 'qa' || domain[0] === 'beta'){
+    res.type('text/plain')
+    if(domain.startsWith('test') || domain.startsWith('qa') || domain.startsWith('beta')){
       res.send(robots.development);
     } else {
       res.send(robots.production);
