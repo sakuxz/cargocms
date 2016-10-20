@@ -77,7 +77,7 @@
   <% var info = req.flash('info')[0] || null; %>
   <% if(info === "Info.New.Recipe") { %>
     <% var recipeShareUrl = encodeURI(socialData.url); %>
-    <a id="isNewRecipe" class="hidden" href="https://www.facebook.com/sharer.php?u=<%= recipeShareUrl %>&display=popup&ref=plugin&src=like&app_id=1011584022234802"> New Recipe </a>
+    <a id="isNewRecipe" class="hidden" href="https://www.facebook.com/sharer.php?u=<%= recipeShareUrl %>&display=popup&ref=plugin&src=like&app_id=<%= SocialService.getFBAppId() %>"> New Recipe </a>
   <% } %>
 
   <!-- begin row -->
