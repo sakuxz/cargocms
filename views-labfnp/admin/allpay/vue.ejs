@@ -275,4 +275,13 @@ appMain.customSearch = function() {
       column: 'perfumeName',
     }
   })
+  appModel.pagingQuery.columns.push({
+    data: 'facebookId',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      column: 'facebookId',
+    }
+  })
 }
