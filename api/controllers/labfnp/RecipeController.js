@@ -260,7 +260,8 @@ module.exports = {
         email,
         note,
         invoiceNo,
-        token
+        token,
+        productionStatus: paymentMethod == 'gotoShop' ? 'PAID' : 'NEW',
       });
 
       let updateUserData = await User.findById(user.id);
