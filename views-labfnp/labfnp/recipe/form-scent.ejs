@@ -52,7 +52,10 @@
           </div>
         </div>
         <% var scentAdj = typeof scentFeeling !== 'undefined' ? scentFeeling[formula.scentName] : ''%>
-        <input type="text" class="form-control userFeeling" name="userFeeling[<%= formula.index %>]" value="<%= scentAdj.feeling || '' %>">
+        <label>
+          您的感覺:
+        </label>
+          <input type="text" class="form-control userFeeling" name="userFeeling[<%= formula.index %>]" value="<%= scentAdj.feeling || '' %>">
       </div>
     </div>
 

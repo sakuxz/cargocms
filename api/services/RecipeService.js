@@ -21,7 +21,6 @@ module.exports = {
     createdBy,
   }) => {
     try {
-
       recipe.formula = RecipeService.sortFormulaByScentName({ formula: recipe.formula });
       recipe.coverPhotoId = recipe.coverPhotoId == "" ? null : recipe.coverPhotoId;
 
