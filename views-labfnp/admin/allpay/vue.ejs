@@ -173,7 +173,9 @@ appMain.DataTableInitComplete = function() {
             },
             success: ajaxSuccess,
             error: ajaxError,
-            });
+          }).done(function(result){
+            defaultTable.api().ajax.reload(null, false);
+          });
          }
       );
       e.preventDefault();
