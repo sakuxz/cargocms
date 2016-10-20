@@ -148,7 +148,6 @@ $(document).ready(function(){
         setTimeout(function(){
           scrollLoad = true;
         }, 1000);
-        console.log("getRecipe");
         var recipeLength =  $('.grid-boxes').children().length
         getRecipe({start: recipeLength, length: 50});
       }

@@ -99,7 +99,7 @@
       <div class="profile-body">
 
         <div class="easy-block-v1">
-          <div class="easy-block-v1-badge rgba-red">精選</div>
+          <div class="easy-block-v1-badge rgba-red"><%= recipe.label %></div>
           <!--<img class="img-responsive cover-photo" src="http://loremflickr.com/640/480/perfume/all?<%= Math.random() * Date.now() %>" alt=""/>-->
           <img class="img-responsive cover-photo" src="<%= recipe.coverPhoto %>" alt="" onerror="this.src='/assets/labfnp/img/recipe-default-cover.<%= recipe.id % 7 %>.jpg';"/>
         </div>

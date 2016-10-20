@@ -10,6 +10,7 @@ module.exports = {
 
   'get /api/labfnp/recipe/:id/feelings': 'api/labfnp/RecipeController.feelings',
 
+  'get /api/labfnp/user/feeling': 'api/labfnp/FeelingController.findByUser',
   'get /api/labfnp/feeling': 'api/labfnp/FeelingController.find',
   'get /api/labfnp/feeling/:id': 'api/labfnp/FeelingController.findOne',
   'post /api/labfnp/feeling': 'api/labfnp/FeelingController.create',
