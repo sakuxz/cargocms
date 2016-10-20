@@ -170,10 +170,11 @@
 		<div class="blog_masonry_3col">
 
 			<hr class="soften" />
+      <%- include contentPlaceHolder.inc.ejs %>
 
 			<div class="grid-boxes" >
         <% recipes.forEach(function(recipe, index) { %>
-					<div class="grid-boxes-in col-xs-12 col-sm-6 col-md-4">
+					<div class="grid-boxes-in col-xs-12 col-sm-6 col-md-4" style="display: none;">
 						<a href="/recipe/<%= recipe.hashId %>" id="recipeImageContainer" class="easy-block-v1">
               <% if (recipe.visibility == 'PROTECTED') { %>
                 <div class="easy-block-v1-badge rgba-red"><%= recipe.visibilityDesc %></div>
