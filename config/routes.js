@@ -48,7 +48,7 @@ var defaultConfig = {
   'put /api/admin/slogan/:id': 'api/admin/SloganController.update',
   'delete /api/admin/slogan/:id': 'api/admin/SloganController.destroy',
 
-  'get /api/admin/allpay':        'api/admin/AllpayController.find',
+  'post /api/admin/allpay/find':  'api/admin/AllpayController.find',
   'get /api/admin/allpay/export': 'api/admin/AllpayController.export',
   'get /api/admin/allpay/exportSend': 'api/admin/AllpayController.exportSend',
   'get /api/admin/allpay/:id':    'api/admin/AllpayController.findOne',

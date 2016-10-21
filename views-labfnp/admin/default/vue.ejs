@@ -154,12 +154,14 @@ var defaultVueMathod = {
 			tablet: 1024,
 			phone: 480
 		};
-
-		var url = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
+		var option = appModel.data.option;
+		var customAjax = option.ajax || {};
+		var url = customAjax.url || '/api/' + prefix + modelName;
+		url = url + "?serverSidePaging=" + serverSidePaging;
 		var ajax = {
 	    "url": url,
+	    "type": customAjax.method || 'get',
 	    "data": function(data) {
-				// TODO: 這裡可以新增 startDate, endDate
 				appModel.pagingQuery = data;
 	      appModel.pagingQuery.startDate = $("#yadcf-filter--main-table-from-date-3").val() || '';
 	      appModel.pagingQuery.endDate = $("#yadcf-filter--main-table-to-date-3").val() || '';

@@ -44,7 +44,11 @@ var appModel = {
     items: [],
     option: {
       exportCSV: false,
-      defaultSort: [[ 22, 'desc' ]]
+      defaultSort: [[ 22, 'desc' ]],
+      ajax: {
+        method: 'post',
+        url: '/api/admin/allpay/find',
+      }
     }
   },
   view: {
