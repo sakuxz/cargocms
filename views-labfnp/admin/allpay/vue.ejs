@@ -318,15 +318,6 @@ appMain.customSearch = function() {
     findInclude: true,
     search: {
       model: 'RecipeOrder.User',
-      column: 'lastName',
-    }
-  })
-  appModel.pagingQuery.columns.push({
-    data: 'lastName',
-    searchable: true,
-    findInclude: true,
-    search: {
-      model: 'RecipeOrder.User',
       concat: ['lastName', 'firstName'],
     }
   })
