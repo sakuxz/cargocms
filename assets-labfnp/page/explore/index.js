@@ -38,6 +38,9 @@ $(document).ready(function(){
       targets: targets,
     });
     $container.append(newRecipe).masonry( 'appended', newRecipe)
+    setTimeout(function(){
+      $container.masonry();
+    },0);
   }
 
   var bindLike = function() {
@@ -126,9 +129,9 @@ $(document).ready(function(){
         append(recipe, result.data.social.data[i], result.data.social.targets);
       });
 
-      setTimeout(function(){
-        $container.masonry();
-      },0);
+      // setTimeout(function(){
+      //   $container.masonry();
+      // },0);
 
       setTimeout(function(){
         scrollLoad = true;
