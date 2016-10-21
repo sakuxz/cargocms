@@ -24,7 +24,8 @@ $(document).ready(function(){
         }
 
         $('.grid-boxes-in').width(box_width);
-
+        $('.grid-boxes-in').show();
+        $('.timeline-wrapper').hide();
         return box_width;
       }
     });
@@ -37,9 +38,6 @@ $(document).ready(function(){
       targets: targets,
     });
     $container.append(newRecipe).masonry( 'appended', newRecipe)
-    setTimeout(function(){
-      $container.masonry();
-    },0);
   }
 
   var bindLike = function() {
@@ -127,6 +125,10 @@ $(document).ready(function(){
       result.data.items.forEach(function(recipe, i) {
         append(recipe, result.data.social.data[i], result.data.social.targets);
       });
+
+      setTimeout(function(){
+        $container.masonry();
+      },0);
 
       setTimeout(function(){
         scrollLoad = true;
