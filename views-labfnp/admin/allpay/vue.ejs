@@ -277,6 +277,15 @@ appMain.customSearch = function() {
     }
   })
   appModel.pagingQuery.columns.push({
+    data: 'invoiceNo',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder',
+      column: 'invoiceNo',
+    }
+  })
+  appModel.pagingQuery.columns.push({
     data: 'perfumeName',
     searchable: true,
     findInclude: true,
@@ -292,6 +301,42 @@ appMain.customSearch = function() {
     search: {
       model: 'RecipeOrder.User',
       column: 'facebookId',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'username',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      column: 'username',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'lastName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      column: 'lastName',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'lastName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      concat: ['lastName', 'firstName'],
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'lastName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      concat: ['firstName', 'lastName'],
     }
   })
 }

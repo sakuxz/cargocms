@@ -16,6 +16,7 @@
 				<i class="fa fa-fw fa-envelope text-muted hidden-sm hidden-xs"/>
 				Email
 			</th>
+			<th width="10%" class="" data-hide="phone,tablet"> FacebookId</th>
       <th width="10%" class="" data-hide="phone,tablet"> 生日</th>
       <th width="10%" class="" data-hide="phone,tablet"> 手機</th>
       <th class="" data-hide="always"> 市話</th>
@@ -64,6 +65,7 @@
 			{ "data": "username" },
 			{ "data": "displayName" },
       { "data": "email" },
+			{ "data": "facebookId" },
       { "data": "birthday" },
       { "data": "phone1" },
       { "data": "phone2" },
@@ -92,7 +94,7 @@
         "targets": 2
       },
 			{
-				"targets" : 9,
+				"targets" : 10,
 				"render": function(data, type, row) {
 					if (!data) {
 						return '<span class="text-muted"><small>沒有記錄</small></span>';
@@ -101,7 +103,7 @@
 				}
 			},
 			{
-				"targets"  : 10,
+				"targets"  : 11,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
