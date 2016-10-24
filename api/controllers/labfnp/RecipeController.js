@@ -229,7 +229,7 @@ module.exports = {
   },
 
   allpay: async function(req, res) {
-    console.log('body=>', req.body);
+    sails.log.warn('新建訂單傳入資料', req.body);
     try {
       const { id } = req.params;
       const user = AuthService.getSessionUser(req);
@@ -299,6 +299,17 @@ module.exports = {
         paymentInfoURL: '/api/recipe/paymentinfo',
       });
 
+      sails.log.warn('訂單建立 RecipeOrder',
+        '收件人:', recipeOrder.recipient,
+        'UserId:', recipeOrder.UserId,
+        'RecipeId:', recipeOrder.RecipeId,
+        '購買方式:', paymentMethod,
+        '訂購物品:', formatName,
+        '訂單編號:', MerchantTradeNo,
+        '建立時間:', recipeOrder.createdAt,
+        'AllpayId:', allPayData.allpay.id,
+      );
+
       if (paymentMethod == 'gotoShop') {
         allPayData.allpay.RtnMsg = '到店購買';
         allPayData.allpay.ShouldTradeAmt = 1550;
@@ -321,16 +332,19 @@ module.exports = {
         messageConfig = await MessageService.orderToShopConfirm(messageConfig);
         const message = await Message.create(messageConfig);
         await MessageService.sendMail(message);
+        sails.log.warn('到店購買訂單建立完成 RecipeOrder 寄送 Email id:', message.id);
 
         return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
 
       } else {
+        sails.log.warn('歐付寶訂單建立完成 RecipeOrder');
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
           ...allPayData.config
         });
       }
     } catch (e) {
+      sails.log.error('訂單建立 RecipeOrder 失敗', e.toString());
       req.flash('error', e.toString());
       res.serverError(e, {redirect: '/recipe/order/' + req.query.hashId});
     }

@@ -118,6 +118,7 @@ module.exports = {
 		Allpay.belongsTo(RecipeOrder);
 	},
 	options: {
+		paranoid: true,
 		classMethods: {
 			findByIdHasJoin: async(id) => {
 				try {
