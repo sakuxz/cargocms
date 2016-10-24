@@ -239,12 +239,15 @@ module.exports = {
       const { email, note, perfumeName, description, message, invoiceNo, token } = req.body;
 
       let findOrder = await Allpay.find({
+        where: {
+          PaymentType: '到店購買',
+        },
         include: {
           model: RecipeOrder,
           where: { token },
         },
       });
-      if (findOrder) {
+      if (findOrder && paymentMethod == 'gotoShop') {
         return res.redirect(`/recipe/done?t=${findOrder.MerchantTradeNo}`);
       }
 
@@ -257,7 +260,8 @@ module.exports = {
         email,
         note,
         invoiceNo,
-        token
+        token,
+        productionStatus: paymentMethod == 'gotoShop' ? 'PAID' : 'NEW',
       });
 
       let updateUserData = await User.findById(user.id);

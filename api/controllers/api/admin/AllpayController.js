@@ -1,10 +1,12 @@
+import moment from 'moment';
 
 module.exports = {
 
   find: async (req, res) => {
     try {
-      const { query } = req;
-      const { serverSidePaging } = query;
+      // const { query } = req;
+      const { serverSidePaging } = req.query;
+      const query = req.body;
       const modelName = req.options.controller.split("/").reverse()[0];
       let result;
       if (serverSidePaging) {
@@ -143,6 +145,8 @@ module.exports = {
         vAccount: "付款帳號",
         ItemNameArray: "訂購物品",
         UserName: "訂購人",
+        recipient: "收件人",
+        authorName: "創作人",
         note: "備註",
         // RecipeId: "配方編號",
         scent0: '香味分子 1',
@@ -187,13 +191,15 @@ module.exports = {
             vAccount: `="${data.vAccount || ''}"`,
             ItemNameArray: data.ItemNameArray,
             UserName: data.UserName,
+            recipient: data.RecipeOrder.recipient,
+            authorName: data.RecipeOrder.Recipe ? data.RecipeOrder.Recipe.authorName : '',
             RecipeId: data.RecipeOrder.RecipeId,
             productionStatusDesc: data.RecipeOrder.productionStatusDesc,
             note: data.Note,
             Email: data.Email,
             Phone: `="${data.Phone || ''}"`,
             Address: data.Address,
-            createdAt: new Date(data.createdAt).toISOString(),
+            createdAt: moment(new Date(data.createdAt)).format("YYYY/MM/DD HH:mm"),
           }
           if (data.RecipeOrder && data.RecipeOrder.Recipe) {
             formatted['scentList'] = '';
@@ -240,6 +246,8 @@ module.exports = {
         invoiceNo: "發票號碼",
         ItemNameArray: "訂購物品",
         UserName: "訂購人",
+        recipient: "收件人",
+        authorName: "創作人",
         note: "備註",
         Email: "Email",
         Phone: "電話",
@@ -258,11 +266,13 @@ module.exports = {
             invoiceNo: `="${data.invoiceNo || ''}"`,
             ItemNameArray: data.ItemNameArray,
             UserName: data.UserName,
+            recipient: data.RecipeOrder.recipient,
+            authorName: data.RecipeOrder.Recipe ? data.RecipeOrder.Recipe.authorName : '',
             note: data.Note,
             Email: data.Email,
             Phone: `="${data.Phone || ''}"`,
             Address: data.Address,
-            createdAt: new Date(data.createdAt).toISOString(),
+            createdAt: moment(new Date(data.createdAt)).format("YYYY/MM/DD HH:mm"),
           }
           if (data.RecipeOrder && data.RecipeOrder.Recipe) {
             formatted['scentList'] = '';

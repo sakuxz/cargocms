@@ -44,7 +44,9 @@ module.exports = {
   findOne: async (req, res) => {
     const { id } = req.params;
     try {
-      const recipe = await Recipe.findOneWithScent({id})
+      const currentUser = AuthService.getSessionUser(req);
+      const isAdmin = AuthService.isAdmin(req);
+      let { recipe } =  await RecipeService.loadRecipe(id, currentUser, isAdmin);
       sails.log.info('get recipe =>', recipe);
       res.ok({
         message: 'Get recipe success.',
@@ -198,7 +200,8 @@ module.exports = {
       const recipes = await Recipe.findAll({
         where: { visibility: { $not: 'PRIVATE' } },
         offset: 0,
-        limit: 3,
+        limit: 5,
+        order: [['createdAt', 'DESC']],
       });
       res.ok({
         message: 'success get new recipe',

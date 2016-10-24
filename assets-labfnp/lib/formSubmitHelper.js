@@ -23,5 +23,31 @@ var defaultFormSubmit = function(event){
     showConfirmButton: false,
     timer: 5000,
   });
+}
 
+var defaultValidateSubmit = function(form){
+
+  console.log($(form).data("submitted"));
+  if($(form).data("submitted")) {
+    return false;
+  }
+
+  $(form).data("submitted", true);
+  $("#submit-button").prop("disabled", true);
+  $("#submit-button").text("處理中...");
+
+  setTimeout(function (){
+    $("#submit-button").prop("disabled", false);
+    $(form).data("submitted", false);
+    $("#submit-button").text("送出");
+  }, 1000);
+
+  swal({
+    type: "info",
+    title: "訊息",
+    text: "處理中...",
+    showConfirmButton: false,
+    timer: 5000,
+  });
+  form.submit();
 }

@@ -235,11 +235,6 @@
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
 
-    $.fn.preventDoubleSubmission = function() {
-      $(this).on("submit", defaultFormSubmit);
-      return this;
-    }
-
     var validateFields = {
       rules: {
         recipient: {
@@ -282,7 +277,8 @@
         invoiceNo: {
           required: "請輸入發票號碼"
         }
-      }
+      },
+      submitHandler: defaultValidateSubmit,
     }
 
     $("#paymentMethod").change(function() {
@@ -303,7 +299,9 @@
 
     $("#orderForm").validate(validateFields);
 
-    $("#orderForm").preventDoubleSubmission();
+    $(window).bind("pageshow", function() {
+      $('#paymentMethod').trigger('change');
+    });
 
   });
 `); %>

@@ -21,7 +21,6 @@ module.exports = {
     createdBy,
   }) => {
     try {
-
       recipe.formula = RecipeService.sortFormulaByScentName({ formula: recipe.formula });
       recipe.coverPhotoId = recipe.coverPhotoId == "" ? null : recipe.coverPhotoId;
 
@@ -83,23 +82,36 @@ module.exports = {
     }
   },
 
-  loadRecipe: async function(recipeId, currentUser) {
+  loadRecipe: async function(recipeId, currentUser, isAdmin) {
     try {
-      const find = await Recipe.findOne({
-        where: {
-          hashId: recipeId,
-        }
+      const recipe = await Recipe.findOne({
+        where: { $or: [{ id: recipeId }, {hashId: recipeId}] },
+        include: [{
+          model: UserLikeRecipe
+        }, {
+          model: Image,
+        }, {
+          model: User,
+          include: {
+            model: Passport,
+            attributes: ['provider', 'identifier']
+          },
+        }]
       })
-      recipeId = find.id;
-      const recipe = await Recipe.findOneAndIncludeUserLike({
-        findByRecipeId: recipeId,
-        currentUser
-      });
+
       if (!recipe) {
         let error = new Error('can not find recipe');
         error.type = 'notFound';
         throw error;
       }
+      recipeId = recipe.id;
+      recipe.label = '精選';
+      if (recipe.visibility === 'PRIVATE' && !isAdmin){
+        recipe.label = '非公開';
+        if (!currentUser || recipe.UserId !== currentUser.id)
+          recipe.formula = [];
+      }
+      await recipe.checkCurrentUserLike({currentUser})
 
       let editable = false;
       let userId = null;
@@ -162,14 +174,20 @@ module.exports = {
         where: {
           UserId: userId
         },
-        include: Scent
+        include: {
+          model: Scent,
+          include: ScentNote
+        }
       });
       allUserScentFeedback.forEach((feedback) => {
-        scentFeeling[feedback.Scent.name] = scentFeeling[feedback.Scent.name] || [];
-        scentFeeling[feedback.Scent.name].push(feedback.feeling);
+        let key = feedback.Scent.name;
+        feedback = feedback.toJSON();
+        scentFeeling[key] = scentFeeling[key] || {...feedback};
+        scentFeeling[key].info = scentFeeling[key].info || [];
+        scentFeeling[key].info.push(feedback.feeling);
       })
       Object.keys(scentFeeling).map((key) => {
-        scentFeeling[key] = scentFeeling[key].join(',');
+        scentFeeling[key].feeling = scentFeeling[key].info.join(',');
       });
       return scentFeeling;
     } catch (e) {

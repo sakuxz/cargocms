@@ -1,0 +1,54 @@
+<script id="noneScentFeedback" type="text/x-jquery-tmpl">
+  <div class="well">
+    <div class="margin-bottom-40">
+      <h2>你還沒有任何香味筆記喔!!</h2>
+      <p><span class="brand-font">LFP</span> 香料香水實驗室的好友們，正在期待您的創作。</p>
+      <a href="#" class="btn-create-recipe btn-u btn-u-sm">開始創作</a>
+    </div>
+  </div>
+</script>
+
+<script id="scentFeedback" type="text/x-jquery-tmpl">
+  <div class="well">
+    <div id="scent-content" class="funny-boxes bg-color-white">
+      <h2 id="scent-title">${name} - ${title}</h2>
+      <p style="border-top: 2px solid ${color};" id="scent-description">${description}</p>
+      <div class="tags">
+      您的感覺:
+        {{each feeling}}
+            <div class="tag">${$value}</div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</script>
+<% LayoutUtils.addScriptBlock(`
+  // $(document).ready(function(){
+    var successCatch = function(e) {
+      $('#scentNote').empty();
+      if(Object.keys(e.data.item).length === 0 ){
+        $('#scentNote').append($('#noneScentFeedback').tmpl());
+      } else {
+        Object.keys(e.data.item).forEach(function(key){
+          var data = e.data.item[key];
+          var scentFeedback = $('#scentFeedback').tmpl({
+            name: data.Scent.name,
+            title: data.Scent.title,
+            description: data.Scent.description,
+            color: data.Scent.ScentNote.color,
+            feeling: data.info
+          });
+          $('#scentNote').append(scentFeedback);
+        });
+      }
+    }
+    var failCatch = function(e) {
+      console.log(e);
+    }
+
+    var loadScentNote = function() {
+      $.get('/api/labfnp/user/feeling').done(successCatch).fail(failCatch);
+    }
+  // });
+`); %>
+<!--=== End Content Part ===-->

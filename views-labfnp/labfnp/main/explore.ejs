@@ -74,9 +74,13 @@
   -o-filter: saturate(1);
   filter: saturate(1);
 }
-.grid-boxes-in {
+.fade-in {
   animation: slidein 0.3s 0.1s backwards;
   animation-timing-function: ease-in-out;
+}
+.grid-boxes-in {
+  /*animation: slidein 0.3s 0.1s backwards;
+  animation-timing-function: ease-in-out;*/
   float: left;
 }
 @keyframes slidein {
@@ -170,10 +174,11 @@
 		<div class="blog_masonry_3col">
 
 			<hr class="soften" />
+      <%- include contentPlaceHolder.inc.ejs %>
 
 			<div class="grid-boxes" >
         <% recipes.forEach(function(recipe, index) { %>
-					<div class="grid-boxes-in col-xs-12 col-sm-6 col-md-4">
+					<div class="grid-boxes-in col-xs-12 col-sm-6 col-md-4" style="display: none;">
 						<a href="/recipe/<%= recipe.hashId %>" id="recipeImageContainer" class="easy-block-v1">
               <% if (recipe.visibility == 'PROTECTED') { %>
                 <div class="easy-block-v1-badge rgba-red"><%= recipe.visibilityDesc %></div>
@@ -222,7 +227,7 @@
 	<% } %>
 	<!--=== End Content Part ===-->
   <script id="recipeTmpl" type="text/x-jquery-tmpl">
-    <div class="grid-boxes-in col-xs-12 col-sm-6 col-md-4">
+    <div class="grid-boxes-in fade-in col-xs-12 col-sm-6 col-md-4">
       <a href="/recipe/${recipe.hashId}" id="recipeImageContainer" class="easy-block-v1">
         {{if recipe.visibility == 'PROTECTED'}}
           <div class="easy-block-v1-badge rgba-red">${recipe.visibilityDesc}</div>

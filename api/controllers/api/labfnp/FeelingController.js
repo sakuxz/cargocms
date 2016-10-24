@@ -95,5 +95,19 @@ module.exports = {
     } catch (e) {
       res.serverError(e);
     }
-  }
+  },
+
+  findByUser: async (req, res) => {
+    try {
+      let user = AuthService.getSessionUser(req);
+      let item =  [];
+      if (user) {
+        item = await RecipeService.getUserFeeling({ userId: user.id });
+      }
+      let message = 'find user feeling';
+      res.ok({message, data: {item}});
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
 }

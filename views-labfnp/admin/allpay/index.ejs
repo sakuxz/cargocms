@@ -24,12 +24,15 @@
 [v-cloak] { display:none; }
 
 .btn.btn-default.btn-xs {
-  margin-top: 5px;
+  margin: 1px 1px 1px 1px;
 }
 
 .row-action-buttons {
   cursor: pointer;
   text-align: left;
+}
+.responsiveExpander {
+  padding-left: 24px !important;
 }
 
 </style>
@@ -39,30 +42,17 @@
 		<tr>
 			<th width="6%" data-hide="phone,tablet"><i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/> ID</th>
 			<th width="11%" data-class="expand">訂單編號</th>
-			<th width="14%" data-hide="phone"><i class="fa fa-fw text-muted hidden-sm hidden-xs"/> 金流交易編號 </th>
+			<th width="13%" data-hide="phone"><i class="fa fa-fw text-muted hidden-sm hidden-xs"/> 金流交易編號 </th>
       <th data-hide="always" class="hide">交易訊息</th>
-      <th width="8%" data-hide="phone,tablet">付款時間</th>
+      <th width="9%" data-hide="phone,tablet">付款時間</th>
       <th width="8%" class="no-sort no-over" data-hide="phone,tablet">付款方式</th>
       <th width="9%" class="no-sort" data-hide="">發票號碼</th>
       <th width="6%">金額</th>
       <th data-hide="always" class="hide">付款帳號</th>
       <th data-hide="always" class="hide">訂購物品</th>
       <th width="8%" class="no-sort">訂購人</th>
-      <th width="6%" class="no-sort" data-hide="phone,tablet">配方編號</th>
-      <th width="8%" class="no-sort">
-				訂單狀態
-        <!--<select class="form-control input-xs" id="productionStatus">
-					<option value=""></option>
-          <option value="NEW">NEW</option>
-          <option value="SUBMITTED">下訂單</option>
-          <option value="PAID">已付款</option>
-          <option value="PROCESSING">製作中</option>
-          <option value="CANCELLED">取消</option>
-          <option value="SHIPPED">已寄出</option>
-          <option value="DELIVERED">已交付</option>
-          <option value="COMPLETED">完成</option>
-        </select>-->
-			</th>
+      <th width="8%" class="no-sort" data-hide="phone,tablet">配方編號</th>
+      <th width="8%" class="no-sort">訂單狀態</th>
       <th class="no-sort hide" data-hide="always" style="">香味分子1</th>
       <th class="no-sort hide" data-hide="always" style="">香味分子2</th>
       <th class="no-sort hide" data-hide="always" style="">香味分子3</th>
@@ -72,11 +62,12 @@
       <th class="hide" data-hide="always">Email</th>
       <th class="hide" data-hide="always">電話</th>
       <th class="hide" data-hide="always">住址</th>
-      <th width="8%" data-hide="phone,tablet">建立時間</th>
+      <th width="9%" data-hide="phone,tablet">建立時間</th>
       <th class="hide" data-hide="always">運送物流</th>
       <th class="hide" data-hide="always">物流編號</th>
 			<th class="hide" data-hide="always">備註</th>
-      <th width="8%" data-hide="phone,tablet"></th>
+      <th class="hide" data-hide="always">收件人</th>
+      <th width="95px" data-hide="phone,tablet"></th>
 
 		</tr>
 	</thead>
@@ -162,6 +153,7 @@
       { "data": null },
       { "data": null },
 			{ "data": "Note" },
+      { "data": null },
 			{ "data": null },
 
 		]
@@ -328,8 +320,15 @@
         "searchable": false,
         "targets": 25
       },
+      {
+        "searchable": false,
+        "targets": 26,
+        "render": function(data, type, row) {
+          return '<td>' + data.RecipeOrder.recipient + '</td>';
+        }
+      },
 			{
-				"targets"  : 26,
+				"targets"  : 27,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {

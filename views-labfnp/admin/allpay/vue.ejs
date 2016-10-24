@@ -44,7 +44,11 @@ var appModel = {
     items: [],
     option: {
       exportCSV: false,
-      defaultSort: [[ 22, 'desc' ]]
+      defaultSort: [[ 22, 'desc' ]],
+      ajax: {
+        method: 'post',
+        url: '/api/admin/allpay/find',
+      }
     }
   },
   view: {
@@ -97,8 +101,20 @@ appMain.DataTableInitComplete = function() {
     var download = function(url, id) {
       $('<iframe>', { id: id, src:url }).hide().appendTo('body');
     }
-    download('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), 'exportSend');
-    download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
+    $.SmartMessageBox({
+      title : "匯出",
+      content :'請選擇要匯出的資料表',
+      buttons : "[取消][匯出配方製作表][匯出地址寄送表][匯出兩種格式]"
+    }, function(ButtonPress) {
+      if(ButtonPress === '匯出配方製作表') {
+        download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
+      } else if (ButtonPress === '匯出地址寄送表') {
+        download('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), 'exportSend');
+      } else if (ButtonPress === '匯出兩種格式') {
+        download('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), 'exportSend');
+        download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
+      }
+    });
   });
 
 
@@ -173,7 +189,9 @@ appMain.DataTableInitComplete = function() {
             },
             success: ajaxSuccess,
             error: ajaxError,
-            });
+          }).done(function(result){
+            defaultTable.api().ajax.reload(null, false);
+          });
          }
       );
       e.preventDefault();
@@ -189,8 +207,6 @@ appMain.DataTableInitComplete = function() {
     var selectedDesc = $(this).find('option:selected').text();
     var oldVal = $(this).attr('data-oldValue');
     var newVal = $(this).val();
-
-    console.log(id, $(this).val(), selectedDesc, oldVal, newVal);
 
     var msgInfo = {
       title: '注意',
@@ -265,12 +281,57 @@ appMain.customSearch = function() {
     }
   })
   appModel.pagingQuery.columns.push({
+    data: 'invoiceNo',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder',
+      column: 'invoiceNo',
+    }
+  })
+  appModel.pagingQuery.columns.push({
     data: 'perfumeName',
     searchable: true,
     findInclude: true,
     search: {
       model: 'RecipeOrder.Recipe',
       column: 'perfumeName',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'facebookId',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      column: 'facebookId',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'username',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      column: 'username',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'lastName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      concat: ['lastName', 'firstName'],
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'lastName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder.User',
+      concat: ['firstName', 'lastName'],
     }
   })
 }

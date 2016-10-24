@@ -161,12 +161,12 @@
           <% recipe.formula.forEach(function(formula) { %>
             <section class="col">
               <label for="scentFeeling"><%= formula.scent %> 感覺</label>
-              <input type="text" class="form-control userFeeling" value="<%= scentFeeling[formula.scent] ? scentFeeling[formula.scent] : '' %>" name="scentFeeling[<%= formula.scent %>]" >
+              <input type="text" class="form-control userFeeling" value="<%= scentFeeling[formula.scent] ? scentFeeling[formula.scent].feeling : '' %>" name="scentFeeling[<%= formula.scent %>]" >
             </section>
           <% }); %>
 
           <section class="col feeling">
-            <label for="payment">感覺<span class="required">*</span>
+            <label for="payment">您覺得調配後的感覺<span class="required">*</span>
             </label>
             <input type="text" class="form-control" name="feeling" >
           </section>
