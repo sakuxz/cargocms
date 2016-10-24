@@ -195,6 +195,39 @@ module.exports = {
     }
   },
 
+  getUserRecipeFeeling: async function({userId}) {
+    try{
+      let recipeFeeling = {};
+
+      let allUserRecipeFeedback = await RecipeFeedback.findAll({
+        where: {
+          UserId: userId
+        },
+        include: {
+          model: Recipe
+        }
+      });
+      allUserRecipeFeedback.forEach( (feedback) => {
+        let key = feedback.Recipe.perfumeName;
+        feedback = feedback.toJSON();
+        recipeFeeling[key] = recipeFeeling[key] || {...feedback};
+        recipeFeeling[key].info = recipeFeeling[key].info || [];
+
+        feedback.feeling.forEach((feel) => {
+          recipeFeeling[key].info.push(feel);
+        })
+
+      });
+      Object.keys(recipeFeeling).map((key) => {
+        recipeFeeling[key].feeling = recipeFeeling[key].info.join(',');
+      });
+
+      return recipeFeeling;
+    } catch (e) {
+      throw e;
+    }
+  },
+
   updateUserFeeling: async function({formula, userId}) {
     try {
       let deleteAdj = [];
