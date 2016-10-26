@@ -32,6 +32,26 @@ module.exports = {
       type: Sequelize.ENUM('blog', 'internal-event', 'external-event'),
       defaultValue: 'blog',
     },
+    typeDesc: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        let desc = '';
+        switch (this.type) {
+          case 'blog':
+            desc = '部落格';
+            break;
+          case 'internal-event':
+            desc = '活動';
+            break;
+          case 'external-event':
+            desc = '外部活動';
+            break;
+          default:
+            desc = '';
+        }
+        return desc;
+      }
+    },
 
     coverUrl: {
       type: Sequelize.STRING,
