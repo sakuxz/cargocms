@@ -5,9 +5,22 @@ module.exports = {
   find: async (req, res) => {
     try {
       res.ok({
-        message: 'Create post success.',
+        message: 'find event success.',
         data: {
-          items: await Event.findAll(),
+          items: await Event.findAll({ where: { PostId: null }}),
+        }
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+  findAllAndById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      res.ok({
+        message: 'find event success.',
+        data: {
+          items: await Event.findAll({ where: { PostId: { $or: [null, id] }}}),
         }
       });
     } catch (e) {

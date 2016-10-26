@@ -23,17 +23,7 @@ var postAppModel = {
     option: {
       originCoverType: '',
       originCoverUrl: '',
-      allevent: [{
-        id: 1,
-        title: '調香工作坊個人票(只有參加工作坊)',
-        limit: '10',
-        price: '1000',
-      }, {
-        id: 2,
-        title: '早鳥單人工作坊＋客製化香水服務',
-        limit: '10',
-        price: '1000',
-      }]
+      allevent: []
     }
   },
   view: {
@@ -108,6 +98,11 @@ var postApp = new Vue({
         console.log("loadItem result.data=>", result.data);
         if (result.success) {
           postAppModel.data.item = result.data;
+          if (result.data.eventId.length > 0){
+            postAppModel.data.item.eventId = result.data.eventId;
+          } else {
+            postAppModel.data.item.eventId = [{id: 0}]
+          }
           postAppModel.data.option.originCoverType = result.data.coverType;
           postAppModel.data.option.originCoverUrl = result.data.coverUrl;
         }
@@ -418,8 +413,13 @@ var postApp = new Vue({
       postAppModel.data.item.eventId.splice(index, 1);
 
     },
-    loadEventItem: function () {
-      $.get('/api/admin/event', ajaxSuccess);
+    loadEventItem: function (type) {
+      if (type == 'create') {
+        $.get('/api/admin/event', ajaxSuccess);
+      } else if(type == 'edit') {
+        $.get('/api/admin/event/' + postAppModel.data.item.id, ajaxSuccess);
+
+      }
       function ajaxSuccess(result) {
         console.log("loadItem result.data=>", result.data.items);
         if (result.success) {

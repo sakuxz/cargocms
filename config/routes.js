@@ -80,6 +80,7 @@ var defaultConfig = {
   'put /api/admin/facebook/update':        'api/admin/facebook/FeedController.update',
 
   'get /api/admin/event':        'api/admin/EventController.find',
+  'get /api/admin/event/:id':        'api/admin/EventController.findAllAndById',
   'post /api/event/paid':        'api/admin/EventController.paid',
   'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
 

@@ -144,9 +144,9 @@
 		<%- include vue.ejs %>
 		postApp.$mount("#post-edit");
 		postApp.loadItem(function() {
+			postApp.loadEventItem("edit");
 			postApp.setupForm("edit");
 			postApp.onEnterPageEdit();
-			postApp.loadEventItem();
 		});
 
 	};

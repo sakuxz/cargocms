@@ -60,7 +60,7 @@
       <section class="col col-lg-11 col-xs-11">
         <label class="select">
           <select v-model="data.item.eventId[$index].id">
-            <option value="" selected></option>
+            <option value="0"></option>
             <option v-for="info in data.option.allevent" v-bind:value="info.id">
               {{ info.title }} - {{ info.limit }}張 - {{info.price}}元
             </option>
