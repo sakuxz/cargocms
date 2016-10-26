@@ -2,6 +2,18 @@ import crypto from 'crypto';
 import moment from 'moment';
 
 module.exports = {
+  find: async (req, res) => {
+    try {
+      res.ok({
+        message: 'Create post success.',
+        data: {
+          items: await Event.findAll(),
+        }
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
   paid: async (req, res) => {
     try {
       const data = req.body;

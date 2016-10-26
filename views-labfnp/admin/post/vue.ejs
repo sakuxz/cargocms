@@ -17,11 +17,23 @@ var postAppModel = {
       tags: [],
       TagsArray: [],
       coverType: 'img',
+      eventId: [{id: 0}],
     },
     items: [],
     option: {
       originCoverType: '',
       originCoverUrl: '',
+      allevent: [{
+        id: 1,
+        title: '調香工作坊個人票(只有參加工作坊)',
+        limit: '10',
+        price: '1000',
+      }, {
+        id: 2,
+        title: '早鳥單人工作坊＋客製化香水服務',
+        limit: '10',
+        price: '1000',
+      }]
     }
   },
   view: {
@@ -396,12 +408,25 @@ var postApp = new Vue({
         postAppModel.data.item.coverUrl = '';
       }
     },
-    multiselect: function() {
-      console.log("!!!!!!!!!!!!!!!!!");
-      $('#event-select').multiselect({
-        enableFiltering: true,
-      });
-    }
+    onEventAddClick: function() {
+      console.log(postAppModel.data.item.eventId);
+
+      postAppModel.data.item.eventId.push({id: 0});
+    },
+    onEventSubtractClick: function(index) {
+      console.log(postAppModel.data.item.eventId);
+      postAppModel.data.item.eventId.splice(index, 1);
+
+    },
+    loadEventItem: function () {
+      $.get('/api/admin/event', ajaxSuccess);
+      function ajaxSuccess(result) {
+        console.log("loadItem result.data=>", result.data.items);
+        if (result.success) {
+          postAppModel.data.option.allevent = result.data.items;
+        }
+      } // end ajaxSuccess
+    },
   },
 });
 

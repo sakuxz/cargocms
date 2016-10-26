@@ -145,8 +145,8 @@
 		postApp.$mount("#post-edit");
 		postApp.loadItem(function() {
 			postApp.setupForm("edit");
-			postApp.multiselect();
 			postApp.onEnterPageEdit();
+			postApp.loadEventItem();
 		});
 
 	};
@@ -162,9 +162,7 @@
 	// Load form valisation dependency
 	loadScript("/assets/admin/js/plugin/jquery-form/jquery-form.min.js", function () {
 		loadScript("/assets/admin/js/plugin/summernote/summernote.min.js", function(){
-			loadScript("/assets/admin/js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js", function(){
-				loadScript("/assets/admin/js/plugin/bootstrap-multiselect/bootstrap-multiselect.js", pagefunction);
-			});
+			loadScript("/assets/admin/js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js", pagefunction);
 		});
 	});
 

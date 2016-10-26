@@ -141,9 +141,8 @@
 		<%- include vue.ejs %>
 		postApp.$mount("#post-create");
 		postApp.setupForm("create");
-		postApp.multiselect();
 		postApp.onEnterPageEdit();
-
+		postApp.loadEventItem();
 	};
 
 	// end pagefunction
@@ -151,9 +150,7 @@
 	// Load form valisation dependency
 	loadScript("/assets/admin/js/plugin/jquery-form/jquery-form.min.js", function () {
 		loadScript("/assets/admin/js/plugin/summernote/summernote.min.js", function(){
-			loadScript("/assets/admin/js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js", function(){
-				loadScript("/assets/admin/js/plugin/bootstrap-multiselect/bootstrap-multiselect.js", pagefunction);
-			});
+			loadScript("/assets/admin/js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js", pagefunction);
 		});
 	});
 

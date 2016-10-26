@@ -56,11 +56,29 @@
 
   <section v-show="data.item.type === 'internal-event'">
     <label class="label">活動票卷</label>
-    <select id="event-select">
-      <option value="blog" selected>部落格</option>
-      <option value="internal-event">活動</option>
-      <option value="external-event">外部活動</option>
-    </select>
+    <div class="row" v-for="event in data.item.eventId">
+      <section class="col col-lg-11 col-xs-11">
+        <label class="select">
+          <select v-model="data.item.eventId[$index].id">
+            <option value="" selected></option>
+            <option v-for="info in data.option.allevent" v-bind:value="info.id">
+              {{ info.title }} - {{ info.limit }}張 - {{info.price}}元
+            </option>
+          </select> <i></i>
+        </label>
+      </section>
+      <section class="col col-lg-1 col-xs-1">
+        <label class='center'>
+          <button type="button"class="btn btn-default btn-sm"
+          v-on:click="onEventAddClick">+</button>
+        </label>
+        <label class='center'>
+          <button type="button" class="btn btn-default btn-sm"
+          v-bind:disabled="data.item.eventId.length == 1"
+          v-on:click="onEventSubtractClick($index)">-</button>
+        </label>
+      </section>
+    </div>
   </section>
 
   <section>
@@ -86,3 +104,6 @@
 
 
 </fieldset>
+
+<template id="event-tmpl">
+</template>

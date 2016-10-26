@@ -79,6 +79,7 @@ var defaultConfig = {
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
   'put /api/admin/facebook/update':        'api/admin/facebook/FeedController.update',
 
+  'get /api/admin/event':        'api/admin/EventController.find',
   'post /api/event/paid':        'api/admin/EventController.paid',
   'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
 
