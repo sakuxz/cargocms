@@ -75,6 +75,12 @@ var defaultConfig = {
   // 'put /api/admin/contact/:id':    'api/admin/ContactController.update',
   'delete /api/admin/contact/:id': 'api/admin/ContactController.destroy',
 
+  'get /api/admin/event':        'api/admin/EventController.find',
+  'get /api/admin/event/:id':    'api/admin/EventController.findOne',
+  'post /api/admin/event':       'api/admin/EventController.create',
+  'put /api/admin/event/:id':    'api/admin/EventController.update',
+  'delete /api/admin/event/:id': 'api/admin/EventController.destroy',
+
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
   'put /api/admin/facebook/update':        'api/admin/facebook/FeedController.update',
