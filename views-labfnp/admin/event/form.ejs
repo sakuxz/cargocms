@@ -10,7 +10,7 @@
     <section class="col col-lg-6 col-xs-6 col-xs-">
       <label class="label">價格</label>
       <label class="input state-disabled">
-        <input type="text" name="price" placeholder="請輸入價格 例：1688" v-model="data.item.price" disabled>
+        <input type="number" name="price" placeholder="請輸入價格 例：1688" v-model="data.item.price" disabled>
         <b class="tooltip tooltip-bottom-right">價格</b></label>
     </section>
   </div>
@@ -19,14 +19,14 @@
     <section class="col col-lg-6 col-xs-6 col-xs-">
       <label class="label">票券數量</label>
       <label class="input state-disabled">
-        <input type="text" name="limit" placeholder="請輸入票的數量 例：20" v-model="data.item.limit" disabled>
+        <input type="number" name="limit" placeholder="請輸入票的數量 例：20" v-model="data.item.limit" disabled>
         <b class="tooltip tooltip-bottom-right">票券數量</b></label>
     </section>
 
     <section class="col col-lg-6 col-xs-6 col-xs-">
       <label class="label">已售數量</label>
       <label class="input state-disabled">
-        <input type="text" name="signupCount" placeholder="請輸入已售數量 例：10" v-model="data.item.signupCount" disabled>
+        <input type="number" name="signupCount" placeholder="請輸入已售數量 例：10" v-model="data.item.signupCount" disabled>
         <b class="tooltip tooltip-bottom-right">已售數量</b></label>
     </section>
   </div>
@@ -84,15 +84,51 @@ var formRules = {
   price : {
     required : true
   },
+  limit : {
+    required : true
+  },
+  signupCount : {
+    required : true
+  },
+  sellStartDate : {
+    required : true
+  },
+  sellEndDate : {
+    required : true
+  },
+  eventStartDate : {
+    required : true
+  },
+  eventEndDate : {
+    required : true
+  }
 }
 
 // Messages for form validation
 var formMessages = {
   title : {
-    required : '請給予內容'
+    required : "請輸入票的名稱"
   },
   price : {
-    required : '請給予來源'
+    required : "請輸入價格"
+  },
+  limit : {
+    required : "請輸入票券數量"
+  },
+  signupCount : {
+    required : "請輸入已售出數量"
+  },
+  sellStartDate : {
+    required : "請輸入開賣時間"
+  },
+  sellEndDate : {
+    required : "請輸入結束販賣時間"
+  },
+  eventStartDate : {
+    required : "請輸入活動開始時間"
+  },
+  eventEndDate : {
+    required : "請輸入活動結束時間"
   },
 }
 
