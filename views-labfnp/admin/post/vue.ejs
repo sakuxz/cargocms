@@ -396,6 +396,12 @@ var postApp = new Vue({
         postAppModel.data.item.coverUrl = '';
       }
     },
+    multiselect: function() {
+      console.log("!!!!!!!!!!!!!!!!!");
+      $('#event-select').multiselect({
+        enableFiltering: true,
+      });
+    }
   },
 });
 
