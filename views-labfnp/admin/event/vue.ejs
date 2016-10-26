@@ -43,3 +43,18 @@ var appModel = {
 appMain.enableText = function () {
   $('textarea').attr('disabled', false);
 }
+
+appMain.datetimepicker = function () {
+  $("input[name='sellStartDate']").datetimepicker({
+    format: 'YYYY/MM/DD HH:mm'
+  });
+  $("input[name='sellEndDate']").datetimepicker({
+    format: 'YYYY/MM/DD HH:mm'
+  });
+  $("input[name='eventStartDate']").datetimepicker({
+    format: 'YYYY/MM/DD HH:mm'
+  });
+  $("input[name='eventEndDate']").datetimepicker({
+    format: 'YYYY/MM/DD HH:mm'
+  });
+}
