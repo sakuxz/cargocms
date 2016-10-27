@@ -265,7 +265,7 @@ module.exports = {
         token,
         productionStatus: paymentMethod == 'gotoShop' ? 'PAID' : 'NEW',
       }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
-        throw Error('訂單已過期')
+        throw Error('此交易已失效，請重新下訂')
       });
 
       let updateUserData = await User.findById(user.id);
