@@ -231,7 +231,7 @@ module.exports = {
   allpay: async function(req, res) {
     console.log('body=>', req.body);
     const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
-    const transaction = await sequelize.transaction({ isolationLevel });
+    const transaction = await sequelize.transaction({ isolationLevel, autocommit: false });
     try {
       const { id } = req.params;
       const user = AuthService.getSessionUser(req);
@@ -264,9 +264,11 @@ module.exports = {
         invoiceNo,
         token,
         productionStatus: paymentMethod == 'gotoShop' ? 'PAID' : 'NEW',
-      }, { transaction });
+      }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
+        throw Error('訂單已過期')
+      });
 
-      let updateUserData = await User.findById(user.id, { transaction });
+      let updateUserData = await User.findById(user.id);
       let userNeedUpdate = false;
       //update Phone
       if( !updateUserData.phone1 && !updateUserData.phone2 ) {
