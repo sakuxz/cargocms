@@ -62,3 +62,6 @@ v4
 * 新增 trackingNumber 物流編號
 
 ### RecipeOrder 新增訂單 token
+
+v5
+### RecipeOrder token 使用 UNIQUE

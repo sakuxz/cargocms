@@ -33,6 +33,7 @@ module.exports = {
 
 		token: {
       type: Sequelize.STRING(32),
+			unique: true,
     },
 
     productionStatusDesc: {

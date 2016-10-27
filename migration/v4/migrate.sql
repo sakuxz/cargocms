@@ -1,4 +1,5 @@
 
+
 CREATE TABLE `ScentFeedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feeling` varchar(255) NOT NULL,

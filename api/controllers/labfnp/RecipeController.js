@@ -230,6 +230,8 @@ module.exports = {
 
   allpay: async function(req, res) {
     console.log('body=>', req.body);
+    const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
+    const transaction = await sequelize.transaction({ isolationLevel, autocommit: false });
     try {
       const { id } = req.params;
       const user = AuthService.getSessionUser(req);
@@ -246,7 +248,7 @@ module.exports = {
           model: RecipeOrder,
           where: { token },
         },
-      });
+      }, { transaction });
       if (findOrder && paymentMethod == 'gotoShop') {
         return res.redirect(`/recipe/done?t=${findOrder.MerchantTradeNo}`);
       }
@@ -262,6 +264,8 @@ module.exports = {
         invoiceNo,
         token,
         productionStatus: paymentMethod == 'gotoShop' ? 'PAID' : 'NEW',
+      }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
+        throw Error('此交易已失效，請重新下訂')
       });
 
       let updateUserData = await User.findById(user.id);
@@ -277,13 +281,14 @@ module.exports = {
         userNeedUpdate = true;
       }
       if( userNeedUpdate ) {
-        updateUserData = await updateUserData.save()
+        updateUserData = await updateUserData.save({ transaction })
       };
 
-      recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
-      const formatName = recipeOrder.ItemNameArray.map((name) => {
-        return name + ' 100 ml';
-      });
+      // recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id, transaction);
+      // const formatName = recipeOrder.ItemNameArray.map((name) => {
+      //   return name + ' 100 ml';
+      // });
+      const formatName = [perfumeName + ' 100 ml'];
       let MerchantTradeNo = crypto.randomBytes(32).toString('hex').substr(0, 8);
       const allPayData = await AllpayService.createAndgetAllpayConfig({
         relatedKeyValue: {
@@ -297,6 +302,7 @@ module.exports = {
         clientBackURL: '/recipe/done',
         returnURL: '/api/recipe/paid',
         paymentInfoURL: '/api/recipe/paymentinfo',
+        transaction,
       });
 
       if (paymentMethod == 'gotoShop') {
@@ -305,8 +311,10 @@ module.exports = {
         allPayData.allpay.TradeAmt = 1550;
         allPayData.allpay.PaymentType = '到店購買';
         allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
-        await allPayData.allpay.save();
+        await allPayData.allpay.save({ transaction });
+        transaction.commit();
 
+        recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
         let messageConfig = {};
         messageConfig.serialNumber = MerchantTradeNo;
         messageConfig.paymentTotalAmount = 1550;
@@ -325,12 +333,14 @@ module.exports = {
         return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
 
       } else {
+        transaction.commit();
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
           ...allPayData.config
         });
       }
     } catch (e) {
+      transaction.rollback();
       req.flash('error', e.toString());
       res.serverError(e, {redirect: '/recipe/order/' + req.query.hashId});
     }
