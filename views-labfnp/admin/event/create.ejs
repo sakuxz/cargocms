@@ -12,14 +12,8 @@
 		appMain.setupForm("create");
 		appMain.onEnterPageEdit();
     appMain.enableText();
-    appMain.datetimepicker();
+    appMain.loadDateTimeScript();
 	};
 
-  loadScript("/assets/admin/js/plugin/moment/moment.min.js",function(){
-    loadScript("/assets/admin/js/plugin/bootstrap-transition/transition.js", function(){
-      loadScript("/assets/admin/js/plugin/bootstrap-collapse/collapse.js", function(){
-        loadScript("/assets/admin/js/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js", pagefunction);
-      });
-    });
-  });
+
 </script>
