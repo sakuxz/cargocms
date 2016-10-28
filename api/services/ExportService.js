@@ -33,7 +33,7 @@ module.exports = {
           defer(output);
         });
       });
-      sails.log.debug(dataString );
+      sails.log.debug(dataString);
       dataString = "\uFEFF" + dataString
       const encoding = 'utf-8';
       let dataBuffer = new Buffer(dataString);
