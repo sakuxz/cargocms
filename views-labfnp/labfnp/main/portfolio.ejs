@@ -116,6 +116,9 @@ li.text-center a {
 				<li id="myRecipe" class="list-group-item active">
 					<a><i class="fa fa-bar-chart-o icon-weight"></i> 我的配方</a>
 				</li>
+				<li id="myOrder" class="list-group-item">
+					<a><i class="fa fa-book icon-weight"></i>我的訂單</a>
+				</li>
 				<li class="list-group-item">
 				  <a href="#" class="btn-create-recipe">
 				    <i class="fa fa-flask icon-weight"></i>
@@ -196,10 +199,12 @@ li.text-center a {
     </div>
 
 		<div class="col-md-9" id="scentNote" style="display: none;"></div>
+		<div class="col-md-9" id="order" style="display: none;"></div>
     <!-- End Content -->
 
   </div>
 </div>
+<%- include userOrder.inc.ejs %>
 <%- include scentFeedback.inc.ejs %>
 <%- include recipeCreateBox.inc.ejs %>
 
@@ -209,15 +214,28 @@ jQuery(document).ready(function() {
 	$('#loadScentNote').on('click', function(){
 		loadScentNote();
 		$('#loadScentNote').toggleClass("active");
-		$('#myRecipe').toggleClass("active");
+		$('#myOrder').removeClass("active");
+		$('#myRecipe').removeClass("active");
 		$('#scentNote').fadeIn();
 		$('#timeline').hide();
+		$('#order').hide();
 	});
 	$('#myRecipe').on('click', function(){
-		$('#loadScentNote').toggleClass("active");
+		$('#loadScentNote').removeClass("active");
+		$('#myOrder').removeClass("active");
 		$('#myRecipe').toggleClass("active");
 		$('#scentNote').hide();
 		$('#timeline').fadeIn();
+		$('#order').hide();
+	});
+	$('#myOrder').on('click', function(){
+		loadOrder();
+		$('#loadScentNote').removeClass("active");
+		$('#myOrder').toggleClass("active");
+		$('#myRecipe').removeClass("active");
+		$('#scentNote').hide();
+		$('#timeline').hide();
+		$('#order').fadeIn();
 	});
 
 	var userId = $("#follow-button").data("user-id");
