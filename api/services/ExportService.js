@@ -27,15 +27,15 @@ module.exports = {
         content = format(content);
       }
       sails.log.debug(content);
-      const dataString = await new Promise((defer, reject) => {
+      let dataString = await new Promise((defer, reject) => {
         stringify(content, { header: !!columns, columns }, function(err, output){
           if (err) reject(err);
           defer(output);
         });
       });
-      sails.log.debug(dataString);
-
-      const encoding = 'big5';
+      sails.log.debug(dataString );
+      dataString = "\uFEFF" + dataString
+      const encoding = 'utf-8';
       let dataBuffer = new Buffer(dataString);
       dataBuffer = iconv.encode(dataBuffer, encoding);
       const time = moment(new Date()).format("YYYYMMDDHHmmSS");
