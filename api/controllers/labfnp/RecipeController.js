@@ -259,7 +259,7 @@ module.exports = {
           });
         };
       } catch (e) {
-        sails.log.error('更新使用者失敗')
+        sails.log.error('更新使用者失敗', e)
       }
 
 
@@ -339,7 +339,7 @@ module.exports = {
           const message = await Message.create(messageConfig);
           await MessageService.sendMail(message);
         } catch (e) {
-          sails.log.error('寄信失敗')
+          sails.log.error('寄信失敗', e)
         }
 
         return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
