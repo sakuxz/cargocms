@@ -6,9 +6,9 @@ describe('about Recipe Controller operation.', function() {
     try {
       user = await User.create({
         username: 'RecipeOrder',
-        email: 'RecipeOrder@gmail.com',
+        // email: 'RecipeOrder@gmail.com',
         password: '',
-        phone1: '0900000000'
+        // phone1: '0900000000'
       });
       sinon.stub(AuthService, 'getSessionUser', (req) => {
         return user.toJSON();

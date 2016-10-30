@@ -240,6 +240,25 @@ module.exports = {
       const { recipient, phone, address, paymentMethod } = req.body;
       const { email, note, perfumeName, description, message, invoiceNo, token } = req.body;
 
+      let updateUserData = await User.findById(user.id);
+      let userNeedUpdate = false;
+      //update Phone
+      if( !updateUserData.phone1 && !updateUserData.phone2 ) {
+        updateUserData.phone1 = phone;
+        userNeedUpdate = true;
+      }
+      //update Email
+      if( !updateUserData.email ){
+        updateUserData.email = email;
+        userNeedUpdate = true;
+      }
+      if( userNeedUpdate ) {
+        updateUserData = await updateUserData.save().catch(sequelize.UniqueConstraintError, function(err) {
+          sails.log.error('Email 重複，不更新使用者帳號資訊')
+        });
+      };
+
+
       let findOrder = await Allpay.find({
         where: {
           PaymentType: '到店購買',
@@ -267,22 +286,6 @@ module.exports = {
       }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
         throw Error('此交易已失效，請重新下訂')
       });
-
-      let updateUserData = await User.findById(user.id);
-      let userNeedUpdate = false;
-      //update Phone
-      if( !updateUserData.phone1 && !updateUserData.phone2 ) {
-        updateUserData.phone1 = phone;
-        userNeedUpdate = true;
-      }
-      //update Email
-      if( !updateUserData.email ){
-        updateUserData.email = email;
-        userNeedUpdate = true;
-      }
-      if( userNeedUpdate ) {
-        updateUserData = await updateUserData.save({ transaction })
-      };
 
       // recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id, transaction);
       // const formatName = recipeOrder.ItemNameArray.map((name) => {
