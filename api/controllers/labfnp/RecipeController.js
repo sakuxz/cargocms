@@ -240,6 +240,29 @@ module.exports = {
       const { recipient, phone, address, paymentMethod } = req.body;
       const { email, note, perfumeName, description, message, invoiceNo, token } = req.body;
 
+      try {
+        let updateUserData = await User.findById(user.id);
+        let userNeedUpdate = false;
+        //update Phone
+        if( !updateUserData.phone1 && !updateUserData.phone2 ) {
+          updateUserData.phone1 = phone;
+          userNeedUpdate = true;
+        }
+        //update Email
+        if( !updateUserData.email ){
+          updateUserData.email = email;
+          userNeedUpdate = true;
+        }
+        if( userNeedUpdate ) {
+          updateUserData = await updateUserData.save().catch(sequelize.UniqueConstraintError, function(err) {
+            sails.log.error('Email 重複，不更新使用者帳號資訊')
+          });
+        };
+      } catch (e) {
+        sails.log.error('更新使用者失敗', e)
+      }
+
+
       let findOrder = await Allpay.find({
         where: {
           PaymentType: '到店購買',
@@ -267,22 +290,6 @@ module.exports = {
       }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
         throw Error('此交易已失效，請重新下訂')
       });
-
-      let updateUserData = await User.findById(user.id);
-      let userNeedUpdate = false;
-      //update Phone
-      if( !updateUserData.phone1 && !updateUserData.phone2 ) {
-        updateUserData.phone1 = phone;
-        userNeedUpdate = true;
-      }
-      //update Email
-      if( !updateUserData.email ){
-        updateUserData.email = email;
-        userNeedUpdate = true;
-      }
-      if( userNeedUpdate ) {
-        updateUserData = await updateUserData.save({ transaction })
-      };
 
       // recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id, transaction);
       // const formatName = recipeOrder.ItemNameArray.map((name) => {
@@ -314,21 +321,26 @@ module.exports = {
         await allPayData.allpay.save({ transaction });
         transaction.commit();
 
-        recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
-        let messageConfig = {};
-        messageConfig.serialNumber = MerchantTradeNo;
-        messageConfig.paymentTotalAmount = 1550;
-        messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
-        messageConfig.email = recipeOrder.email;
-        messageConfig.username = recipeOrder.User.displayName;
-        messageConfig.shipmentUsername = recipeOrder.recipient;
-        messageConfig.shipmentAddress = recipeOrder.address;
-        messageConfig.note = recipeOrder.note;
-        messageConfig.phone = recipeOrder.phone;
-        messageConfig.invoiceNo = recipeOrder.invoiceNo;
-        messageConfig = await MessageService.orderToShopConfirm(messageConfig);
-        const message = await Message.create(messageConfig);
-        await MessageService.sendMail(message);
+
+        try {
+          recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
+          let messageConfig = {};
+          messageConfig.serialNumber = MerchantTradeNo;
+          messageConfig.paymentTotalAmount = 1550;
+          messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
+          messageConfig.email = recipeOrder.email;
+          messageConfig.username = recipeOrder.User.displayName;
+          messageConfig.shipmentUsername = recipeOrder.recipient;
+          messageConfig.shipmentAddress = recipeOrder.address;
+          messageConfig.note = recipeOrder.note;
+          messageConfig.phone = recipeOrder.phone;
+          messageConfig.invoiceNo = recipeOrder.invoiceNo;
+          messageConfig = await MessageService.orderToShopConfirm(messageConfig);
+          const message = await Message.create(messageConfig);
+          await MessageService.sendMail(message);
+        } catch (e) {
+          sails.log.error('寄信失敗', e)
+        }
 
         return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
 
