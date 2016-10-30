@@ -188,4 +188,23 @@ describe('about export service operation.', function() {
     }
   });
 
+  it.only('export Recipe to CSV test Special text should be success.', async (done) => {
+    try {
+      const content = [
+        { "text": "周咏蒨" },
+        { "text": "등원청" },
+        { "text": "訂購者" },
+        { "text": "안갯길" },
+        { "text": "羅筑儀" },
+        { "text": "香港尖沙咀金马伦道48号中国保险大厦15楼B室" },
+        { "text": "20life LM•BU•WH" },
+      ]
+      const result = await ExportService.exportExcel({ content });
+      sails.log.debug(result);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
 });
