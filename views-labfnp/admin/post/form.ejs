@@ -77,6 +77,11 @@
           v-bind:disabled="data.item.eventId.length == 1"
           v-on:click="onEventSubtractClick($index)">-</button>
         </label>
+        <label class='center'>
+          <button type="button" class="btn btn-default btn-sm"
+          v-bind:disabled="data.item.eventId.length == 1"
+          v-on:click="onEventSubtractClick($index)">編輯</button>
+        </label>
       </section>
     </div>
   </section>

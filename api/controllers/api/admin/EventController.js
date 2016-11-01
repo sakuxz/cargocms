@@ -2,31 +2,6 @@ import crypto from 'crypto';
 import moment from 'moment';
 
 module.exports = {
-  find: async (req, res) => {
-    try {
-      res.ok({
-        message: 'find event success.',
-        data: {
-          items: await Event.findAll({ where: { PostId: null }}),
-        }
-      });
-    } catch (e) {
-      res.serverError(e);
-    }
-  },
-  findAllAndById: async (req, res) => {
-    try {
-      const { id } = req.params;
-      res.ok({
-        message: 'find event success.',
-        data: {
-          items: await Event.findAll({ where: { PostId: { $or: [null, id] }}}),
-        }
-      });
-    } catch (e) {
-      res.serverError(e);
-    }
-  },
   paid: async (req, res) => {
     try {
       const data = req.body;
@@ -146,6 +121,31 @@ module.exports = {
       const { id } = req.params;
       const item = await Event.findById(id);
       res.ok({ data: { item } });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+  findNewEvent: async (req, res) => {
+    try {
+      res.ok({
+        message: 'find event success.',
+        data: {
+          items: await Event.findAll({ where: { PostId: null }}),
+        }
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+  findByPostOrNew: async (req, res) => {
+    try {
+      const { id } = req.params;
+      res.ok({
+        message: 'find event success.',
+        data: {
+          items: await Event.findAll({ where: { PostId: { $or: [null, id] }}}),
+        }
+      });
     } catch (e) {
       res.serverError(e);
     }

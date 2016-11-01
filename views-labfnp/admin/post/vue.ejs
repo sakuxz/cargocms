@@ -415,9 +415,9 @@ var postApp = new Vue({
     },
     loadEventItem: function (type) {
       if (type == 'create') {
-        $.get('/api/admin/event', ajaxSuccess);
+        $.get('/api/admin/event/new', ajaxSuccess);
       } else if(type == 'edit') {
-        $.get('/api/admin/event/' + postAppModel.data.item.id, ajaxSuccess);
+        $.get('/api/admin/event/new/' + postAppModel.data.item.id, ajaxSuccess);
 
       }
       function ajaxSuccess(result) {

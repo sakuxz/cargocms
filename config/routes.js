@@ -77,18 +77,19 @@ var defaultConfig = {
 
   'get /api/admin/event':        'api/admin/EventController.find',
   'get /api/admin/event/:id':    'api/admin/EventController.findOne',
+  'get /api/admin/event/new':    'api/admin/EventController.findNewEvent',
+  'get /api/admin/event/new/:id':'api/admin/EventController.findByPostOrNew',
   'post /api/admin/event':       'api/admin/EventController.create',
   'put /api/admin/event/:id':    'api/admin/EventController.update',
   'delete /api/admin/event/:id': 'api/admin/EventController.destroy',
+  'post /api/event/paid':        'api/admin/EventController.paid',
+  'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
+
 
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
   'put /api/admin/facebook/update':        'api/admin/facebook/FeedController.update',
 
-  'get /api/admin/event':        'api/admin/EventController.find',
-  'get /api/admin/event/:id':        'api/admin/EventController.findAllAndById',
-  'post /api/event/paid':        'api/admin/EventController.paid',
-  'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
 
   //----- Event -----
   'get /events/:name': 'EventController.show',
