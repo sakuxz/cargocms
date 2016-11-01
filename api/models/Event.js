@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 module.exports = {
   attributes: {
     limit: {
@@ -19,19 +21,47 @@ module.exports = {
     description: Sequelize.STRING,
     sellStartDate: {
       type: Sequelize.DATE,
-      allowNull: false
+      allowNull: false,
+      get: function () {
+        try {
+          return moment(this.getDataValue('sellStartDate')).format("YYYY/MM/DD HH:mm:SS");
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
     },
     sellEndDate: {
       type: Sequelize.DATE,
-      allowNull: false
+      allowNull: false,
+      get: function () {
+        try {
+          return moment(this.getDataValue('sellEndDate')).format("YYYY/MM/DD HH:mm:SS");
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
     },
     eventStartDate: {
       type: Sequelize.DATE,
-      allowNull: false
+      allowNull: false,
+      get: function () {
+        try {
+          return moment(this.getDataValue('eventStartDate')).format("YYYY/MM/DD HH:mm:SS");
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
     },
     eventEndDate: {
       type: Sequelize.DATE,
-      allowNull: false
+      allowNull: false,
+      get: function () {
+        try {
+          return moment(this.getDataValue('eventEndDate')).format("YYYY/MM/DD HH:mm:SS");
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
     }
 
   },
@@ -58,6 +88,17 @@ module.exports = {
     // });
   },
   options: {
+    classMethods: {
+      deleteById: async (id) => {
+        try {
+          return await Event.destroy({ where: { id } });
+        } catch (e) {
+          sails.log.error(e);
+          throw e;
+        }
+      },
+    },
+    instanceMethods: {},
+    hooks: {}
   }
-
 };

@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/assets/admin/css/bootstrap-datetimepicker.min.css" />
+
+<%- include form.ejs %>
+
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+
+
+	var pagefunction = function() {
+		<%- include vue.ejs %>
+		appMain.$mount("#main-edit");
+		appMain.loadItem(function(){
+      appMain.onEnterPageEdit();
+      appMain.enableText();
+    });
+		appMain.setupForm("edit");
+    appMain.datetimepicker();
+	};
+  loadScript("/assets/admin/js/plugin/moment/moment.min.js",function(){
+    loadScript("/assets/admin/js/plugin/bootstrap-transition/transition.js", function(){
+      loadScript("/assets/admin/js/plugin/bootstrap-collapse/collapse.js", function(){
+        loadScript("/assets/admin/js/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js", pagefunction);
+      });
+    });
+  });
+
+</script>
