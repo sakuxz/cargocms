@@ -54,7 +54,7 @@
 *  type 新增 contact enum
 
 
-v4
+## v4
 ### 新增 UserFeeling 紀錄使用者回饋的感覺
 
 ### 新增 RecipeOrders 欄位
@@ -63,5 +63,11 @@ v4
 
 ### RecipeOrder 新增訂單 token
 
-v5
+## v5
+### RecipeOrders 欄位變動
+* 新增 deletedAt 確保訂單刪除資料還會保留
+
+### Allpays 欄位變動
+* 新增 deletedAt 確保訂單刪除資料還會保留
+
 ### RecipeOrder token 使用 UNIQUE

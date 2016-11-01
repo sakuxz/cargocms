@@ -309,6 +309,7 @@ module.exports = {
   associations: function() {
   },
   options: {
+    paranoid: true,
     classMethods: {
       deleteById: async (id) => {
         try {
