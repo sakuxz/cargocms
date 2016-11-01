@@ -1,13 +1,23 @@
 var defaultTable = {};
 var defaultVueMathod = {
 	cancel: function (event) {
+		var callbackUrl = $('#main-form').data('callback') || '';
+		var url = '/admin/#/admin/' + modelName;
+		if (callbackUrl!== '') {
+			url = '/admin/#/admin' + callbackUrl;
+		}
 		appMain.onLeavePageEdit(function() {
-			location.href = '/admin/#/admin/' + modelName;
+			location.href = url;
 		});
 	},
 	save: function (event) {
 		var ajaxSuccess = function (result) {
-			location.href = '/admin/#/admin/' + modelName;
+			var callbackUrl = $('#main-form').data('callback') || '';
+			var url = '/admin/#/admin/' + modelName;
+			if (callbackUrl!== '') {
+				url = '/admin/#/admin' + callbackUrl;
+			}
+			location.href = url;
 			messageApp.show({
 				desc: '新增成功！',
 				type: 'success'
@@ -35,7 +45,12 @@ var defaultVueMathod = {
 	},
 	update: function (event) {
 		var ajaxSuccess = function (result) {
-			location.href = '/admin/#/admin/' + modelName;
+			var callbackUrl = $('#main-form').data('callback') || '';
+			var url = '/admin/#/admin/' + modelName;
+			if (callbackUrl!== '') {
+				url = '/admin/#/admin' + callbackUrl;
+			}
+			location.href = url;
 			messageApp.show({
 				desc: '更新資料成功！',
 				type: 'success'
@@ -372,8 +387,14 @@ var defaultVueMathod = {
 						desc: `刪除資料成功！`,
 						type: 'success'
 					});
+					var callbackUrl = $('#main-form').data('callback') || '';
+					var url = '/admin/#/admin/' + modelName;
+					if (callbackUrl!== '') {
+						url = '/admin/#/admin' + callbackUrl;
+					}
+					location.href = url;
 					setTimeout(function () {
-						location.href = '/admin/#/admin/' + modelName;
+						location.href = url;
 					}, 500);
 				}; // end ajaxSuccess
 

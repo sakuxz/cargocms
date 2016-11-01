@@ -57,7 +57,12 @@ var postApp = new Vue({
       });
 
       function ajaxSuccess(result) {
-        location.href = '/admin/#/admin/post';
+        var reload = $('#post-form').data('reload') || false;
+  			if (reload) {
+          location.href = '/admin/#/admin/post/edit/' + result.data.id;
+        } else {
+          location.href = '/admin/#/admin/post';
+        }
         messageApp.show({desc: '新增內容成功！', type: 'success'});
       } // end ajaxSuccess
 
@@ -81,7 +86,12 @@ var postApp = new Vue({
       });
 
       function ajaxSuccess(result) {
-        location.href = '/admin/#/admin/post';
+        var reload = $('#post-form').data('reload') || false;
+  			if (reload) {
+          location.reload();
+        } else {
+          location.href = '/admin/#/admin/post';
+        }
         messageApp.show({desc: '更新內容資料成功！', type: 'success'});
       } // end ajaxSuccess
 
@@ -427,6 +437,20 @@ var postApp = new Vue({
         }
       } // end ajaxSuccess
     },
+    onEventEdit: function (id) {
+      var url = '/admin/#/admin/event/edit/' + id + '?callback=/post/edit/' + postAppModel.data.item.id;
+      $('#post-form').data('reload', true);
+      postApp.onLeavePageEdit(function() {
+        location.href = url;
+      });
+    },
+    onCreateNewEvet: function() {
+      var url = '/admin/#/admin/event/create?callback=/post/edit/' + postAppModel.data.item.id;
+      $('#post-form').data('reload', true);
+      postApp.onLeavePageEdit(function() {
+        location.href = url;
+      });
+    }
   },
 });
 

@@ -55,9 +55,12 @@
   </section>
 
   <section v-show="data.item.type === 'internal-event'">
-    <label class="label">活動票卷</label>
+    <label class="label">活動票卷
+      <button type="button" class="btn btn-default btn-sm" style="margin: 10px;"
+      v-on:click="onCreateNewEvet()" >新增清單內沒有的票卷</button  >
+    </label>
     <div class="row" v-for="event in data.item.eventId">
-      <section class="col col-lg-11 col-xs-11">
+      <section class="col col-lg-10 col-xs-10">
         <label class="select">
           <select v-model="data.item.eventId[$index].id">
             <option value="0"></option>
@@ -67,7 +70,7 @@
           </select> <i></i>
         </label>
       </section>
-      <section class="col col-lg-1 col-xs-1">
+      <section class="col col-lg-2 col-xs-2">
         <label class='center'>
           <button type="button"class="btn btn-default btn-sm"
           v-on:click="onEventAddClick">+</button>
@@ -79,8 +82,7 @@
         </label>
         <label class='center'>
           <button type="button" class="btn btn-default btn-sm"
-          v-bind:disabled="data.item.eventId.length == 1"
-          v-on:click="onEventSubtractClick($index)">編輯</button>
+          v-on:click="onEventEdit(event.id)" >編輯</button  >
         </label>
       </section>
     </div>

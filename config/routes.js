@@ -76,8 +76,8 @@ var defaultConfig = {
   'delete /api/admin/contact/:id': 'api/admin/ContactController.destroy',
 
   'get /api/admin/event':        'api/admin/EventController.find',
-  'get /api/admin/event/:id':    'api/admin/EventController.findOne',
   'get /api/admin/event/new':    'api/admin/EventController.findNewEvent',
+  'get /api/admin/event/:id':    'api/admin/EventController.findOne',
   'get /api/admin/event/new/:id':'api/admin/EventController.findByPostOrNew',
   'post /api/admin/event':       'api/admin/EventController.create',
   'put /api/admin/event/:id':    'api/admin/EventController.update',
