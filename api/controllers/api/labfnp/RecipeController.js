@@ -232,10 +232,15 @@ module.exports = {
       let updateformula = [];
       Object.keys(data.scentFeeling).forEach(function (key) {
         if (data.scentFeeling[key]) {
-          let feeling = data.scentFeeling[key].split(',');
+          let feeling = data.scentFeeling[key].split(',') ;
           updateformula.push({
             scent: key,
             userFeeling: feeling,
+          })
+        } else {
+          updateformula.push({
+            scent: key,
+            userFeeling: [],
           })
         }
       });

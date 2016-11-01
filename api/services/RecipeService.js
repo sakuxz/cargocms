@@ -200,9 +200,9 @@ module.exports = {
       let deleteAdj = [];
       let createNewAdj = [];
       for (let item of formula) {
+        const scent = await Scent.findOne({ where: { name: item.scent } });
         if (item.userFeeling && item.userFeeling.length > 0) {
           console.log(item.scent, item.userFeeling);
-          const scent = await Scent.findOne({ where: { name: item.scent } });
           deleteAdj.push(
             ScentFeedback.destroy({
               where: {
@@ -228,6 +228,15 @@ module.exports = {
               })
             );
           });
+        } else {
+          deleteAdj.push(
+            ScentFeedback.destroy({
+              where: {
+                UserId: userId,
+                ScentId: scent.id,
+              }
+            })
+          );
         }
       }
       await Promise.all(deleteAdj);

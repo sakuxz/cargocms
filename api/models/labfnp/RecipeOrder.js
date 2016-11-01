@@ -33,6 +33,7 @@ module.exports = {
 
 		token: {
       type: Sequelize.STRING(32),
+			unique: true,
     },
 
     productionStatusDesc: {
@@ -118,6 +119,7 @@ module.exports = {
 		Allpay.belongsTo(RecipeOrder);
 	},
 	options: {
+		paranoid: true,
 		classMethods: {
 			findByIdHasJoin: async(id) => {
 				try {

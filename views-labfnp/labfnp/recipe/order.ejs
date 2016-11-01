@@ -201,15 +201,15 @@
 
       <section class="col">
         <% if (error.length > 0) { %>
-          <div class="margin-bottom-20 has-error">
-            <label class="col-md-6 control-label" for="password">
-              <span class="glyphicon glyphicon-remove"></span><%= error %>
+          <div class="margin-bottom-20 has-error" data-message="<%= error %>">
+            <label class="col-md-6 control-label" for="error">
+              <!--<span class="glyphicon glyphicon-remove"></span><%= error %>-->
             </label>
           </div>
         <% } %>
       </section>
 
-      <div class="text-center">
+      <div class="text-center margin-top-20">
         <button form="orderForm" id="submit-button" type="sumbit" class="btn-u btn-u-green" data-id="<%= recipe.id %>">
           <i class="fa fa-check" aria-hidden="true"></i>
           送出
@@ -302,6 +302,15 @@
     $(window).bind("pageshow", function() {
       $('#paymentMethod').trigger('change');
     });
+
+    if( $(".has-error").length > 0 ){
+      swal({
+        type: "error",
+        title: "注意",
+        text: $(".has-error").data('message'),
+        confirmButtonText: "確定"
+      });
+   }
 
   });
 `); %>
