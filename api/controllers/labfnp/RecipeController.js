@@ -230,6 +230,8 @@ module.exports = {
 
   allpay: async function(req, res) {
     sails.log.warn('新建訂單傳入資料', req.body);
+    const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
+    const transaction = await sequelize.transaction({ isolationLevel, autocommit: false });
     try {
       const { id } = req.params;
       const user = AuthService.getSessionUser(req);
@@ -237,6 +239,29 @@ module.exports = {
 
       const { recipient, phone, address, paymentMethod } = req.body;
       const { email, note, perfumeName, description, message, invoiceNo, token } = req.body;
+
+      try {
+        let updateUserData = await User.findById(user.id);
+        let userNeedUpdate = false;
+        //update Phone
+        if( !updateUserData.phone1 && !updateUserData.phone2 ) {
+          updateUserData.phone1 = phone;
+          userNeedUpdate = true;
+        }
+        //update Email
+        if( !updateUserData.email ){
+          updateUserData.email = email;
+          userNeedUpdate = true;
+        }
+        if( userNeedUpdate ) {
+          updateUserData = await updateUserData.save().catch(sequelize.UniqueConstraintError, function(err) {
+            sails.log.error('Email 重複，不更新使用者帳號資訊')
+          });
+        };
+      } catch (e) {
+        sails.log.error('更新使用者失敗', e)
+      }
+
 
       let findOrder = await Allpay.find({
         where: {
@@ -246,7 +271,7 @@ module.exports = {
           model: RecipeOrder,
           where: { token },
         },
-      });
+      }, { transaction });
       if (findOrder && paymentMethod == 'gotoShop') {
         return res.redirect(`/recipe/done?t=${findOrder.MerchantTradeNo}`);
       }
@@ -262,28 +287,15 @@ module.exports = {
         invoiceNo,
         token,
         productionStatus: paymentMethod == 'gotoShop' ? 'PAID' : 'NEW',
+      }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
+        throw Error('此交易已失效，請重新下訂')
       });
 
-      let updateUserData = await User.findById(user.id);
-      let userNeedUpdate = false;
-      //update Phone
-      if( !updateUserData.phone1 && !updateUserData.phone2 ) {
-        updateUserData.phone1 = phone;
-        userNeedUpdate = true;
-      }
-      //update Email
-      if( !updateUserData.email ){
-        updateUserData.email = email;
-        userNeedUpdate = true;
-      }
-      if( userNeedUpdate ) {
-        updateUserData = await updateUserData.save()
-      };
-
-      recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
-      const formatName = recipeOrder.ItemNameArray.map((name) => {
-        return name + ' 100 ml';
-      });
+      // recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id, transaction);
+      // const formatName = recipeOrder.ItemNameArray.map((name) => {
+      //   return name + ' 100 ml';
+      // });
+      const formatName = [perfumeName + ' 100 ml'];
       let MerchantTradeNo = crypto.randomBytes(32).toString('hex').substr(0, 8);
       const allPayData = await AllpayService.createAndgetAllpayConfig({
         relatedKeyValue: {
@@ -297,6 +309,7 @@ module.exports = {
         clientBackURL: '/recipe/done',
         returnURL: '/api/recipe/paid',
         paymentInfoURL: '/api/recipe/paymentinfo',
+        transaction,
       });
 
       sails.log.warn('訂單建立 RecipeOrder',
@@ -316,34 +329,43 @@ module.exports = {
         allPayData.allpay.TradeAmt = 1550;
         allPayData.allpay.PaymentType = '到店購買';
         allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
-        await allPayData.allpay.save();
+        await allPayData.allpay.save({ transaction });
+        transaction.commit();
 
-        let messageConfig = {};
-        messageConfig.serialNumber = MerchantTradeNo;
-        messageConfig.paymentTotalAmount = 1550;
-        messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
-        messageConfig.email = recipeOrder.email;
-        messageConfig.username = recipeOrder.User.displayName;
-        messageConfig.shipmentUsername = recipeOrder.recipient;
-        messageConfig.shipmentAddress = recipeOrder.address;
-        messageConfig.note = recipeOrder.note;
-        messageConfig.phone = recipeOrder.phone;
-        messageConfig.invoiceNo = recipeOrder.invoiceNo;
-        messageConfig = await MessageService.orderToShopConfirm(messageConfig);
-        const message = await Message.create(messageConfig);
-        await MessageService.sendMail(message);
-        sails.log.warn('到店購買訂單建立完成 RecipeOrder 寄送 Email id:', message.id);
+
+        try {
+          recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
+          let messageConfig = {};
+          messageConfig.serialNumber = MerchantTradeNo;
+          messageConfig.paymentTotalAmount = 1550;
+          messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
+          messageConfig.email = recipeOrder.email;
+          messageConfig.username = recipeOrder.User.displayName;
+          messageConfig.shipmentUsername = recipeOrder.recipient;
+          messageConfig.shipmentAddress = recipeOrder.address;
+          messageConfig.note = recipeOrder.note;
+          messageConfig.phone = recipeOrder.phone;
+          messageConfig.invoiceNo = recipeOrder.invoiceNo;
+          messageConfig = await MessageService.orderToShopConfirm(messageConfig);
+          const message = await Message.create(messageConfig);
+          await MessageService.sendMail(message);
+          sails.log.warn('到店購買訂單建立完成 RecipeOrder 寄送 Email id:', message.id);
+        } catch (e) {
+          sails.log.error('寄信失敗', e)
+        }
 
         return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
 
       } else {
         sails.log.warn('歐付寶訂單建立完成 RecipeOrder');
+        transaction.commit();
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
           ...allPayData.config
         });
       }
     } catch (e) {
+      transaction.rollback();
       sails.log.error('訂單建立 RecipeOrder 失敗', e.toString());
       req.flash('error', e.toString());
       res.serverError(e, {redirect: '/recipe/order/' + req.query.hashId});

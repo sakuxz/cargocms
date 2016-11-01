@@ -66,6 +66,7 @@ export default class Allpay {
     clientBackURL,
     returnURL,
     paymentInfoURL,
+    transaction,
   }) {
     clientBackURL = clientBackURL || this.ClientBackURL;
     returnURL = returnURL || this.ReturnURL;
@@ -87,7 +88,7 @@ export default class Allpay {
       ...relatedKeyValue,
       MerchantTradeNo: data.MerchantTradeNo,
       PaymentType: data.PaymentType,
-    });
+    }, { transaction });
     return {
       config: this.genCheckMacValue(data),
       allpay

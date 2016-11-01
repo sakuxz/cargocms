@@ -69,3 +69,5 @@
 
 ### Allpays 欄位變動
 * 新增 deletedAt 確保訂單刪除資料還會保留
+
+### RecipeOrder token 使用 UNIQUE
