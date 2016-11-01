@@ -5,8 +5,8 @@
 <!-- SCRIPTS ON PAGE EVENT -->
 <script type="text/javascript">
 
-
 	var pagefunction = function() {
+    
 		<%- include vue.ejs %>
 		appMain.$mount("#main-edit");
 		appMain.loadItem(function(){
@@ -14,14 +14,7 @@
       appMain.enableText();
     });
 		appMain.setupForm("edit");
-    appMain.datetimepicker();
+    appMain.loadDateTimeScript();
 	};
-  loadScript("/assets/admin/js/plugin/moment/moment.min.js",function(){
-    loadScript("/assets/admin/js/plugin/bootstrap-transition/transition.js", function(){
-      loadScript("/assets/admin/js/plugin/bootstrap-collapse/collapse.js", function(){
-        loadScript("/assets/admin/js/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js", pagefunction);
-      });
-    });
-  });
 
 </script>

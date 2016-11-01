@@ -44,7 +44,7 @@ appMain.enableText = function () {
   $('textarea').attr('disabled', false);
 }
 
-appMain.datetimepicker = function () {
+appMain.enterDatetime = function () {
   $("input[name='sellStartDate']").datetimepicker({
     format: 'YYYY/MM/DD HH:mm'
   });
@@ -57,4 +57,12 @@ appMain.datetimepicker = function () {
   $("input[name='eventEndDate']").datetimepicker({
     format: 'YYYY/MM/DD HH:mm'
   });
+}
+
+appMain.loadDateTimeScript = function(){
+
+  loadScript("/assets/admin/js/plugin/moment/moment.min.js",function(){
+    loadScript("/assets/admin/js/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js", appMain.enterDatetime );
+  });
+
 }

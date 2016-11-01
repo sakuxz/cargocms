@@ -165,7 +165,8 @@ module.exports = {
   update: async (req, res) => {
     try {
       const { id } = req.params;
-      const data = req.body;
+      let data = req.body;
+      if(!data.PostId) delete data.PostId;
       const message = 'Update success.';
       const item = await Event.update(data ,{
         where: { id, },
