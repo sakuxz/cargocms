@@ -189,7 +189,7 @@ describe('about export service operation.', function() {
     }
   });
 
-  it.only('export content to Excel test Special text should be success.', async (done) => {
+  it('export content to Excel test Special text should be success.', async (done) => {
     try {
       const fileName = 'TestWorkSheet';
       const columns = [
