@@ -345,7 +345,7 @@ module.exports = {
         for (let data of items) {
           if (data.PaymentType === 'aio') continue;
           let formatted = [
-            `="${data.vAccount || ''}"`, //付款帳號
+            `${data.vAccount || ''}`, //付款帳號
             data.ItemNameArray,          //訂購物品
             data.UserName,               //訂購人
             data.RecipeOrder.recipient,  //收件人
@@ -354,17 +354,18 @@ module.exports = {
           ];
           let scentList = '';           //香味清單
           if (data.RecipeOrder && data.RecipeOrder.Recipe) {
-            data.RecipeOrder.Recipe.formula.forEach((formula, index) => {
-              if (formula.scent && formula.drops > 0) {
-                scentList += `${formula.scent}:${formula.drops} `;
-                 //香味分子 & 香味分子 比例
-                formatted.push(`${formula.scent}`),
-                formatted.push(Math.ceil(formula.drops / data.RecipeOrder.Recipe.formulaTotalDrops * 10000)/10000);
+            for(let i = 0; i < 6; i++){
+              if(!data.RecipeOrder.Recipe.formula[i] || !(data.RecipeOrder.Recipe.formula[i].scent && data.RecipeOrder.Recipe.formula[i].drops > 0) ){
+                formatted.push( null, null);
+              } else {
+                scentList += `${data.RecipeOrder.Recipe.formula[i].scent}: ${data.RecipeOrder.Recipe.formula[i].drops} `;
+                formatted.push(data.RecipeOrder.Recipe.formula[i].scent);
+                formatted.push(Math.ceil( Number(data.RecipeOrder.Recipe.formula[i].drops) / Number(data.RecipeOrder.Recipe.formulaTotalDrops) * 10000)/10000);
               }
-            });
+            }
           }
           formatted.push(
-            `="${data.Phone || ''}"`,  //電話
+            `${data.Phone || ''}`,  //電話
             data.Address,              //住址
             data.RecipeOrder.productionStatusDesc,  //訂單狀態
             data.RtnMsg,              //交易訊息
@@ -423,14 +424,14 @@ module.exports = {
           let formatted = [
             '',
             data.PaymentTypeDesc,
-            `="${data.invoiceNo || ''}"`,
+            `${data.invoiceNo || ''}`,
             data.ItemNameArray,
             data.UserName,
             data.RecipeOrder.recipient,
             data.RecipeOrder.Recipe ? data.RecipeOrder.Recipe.authorName : '',
             data.Note,
             data.Email,
-            `="${data.Phone || ''}"`,
+            `${data.Phone || ''}`,
             data.Address,
             moment(new Date(data.createdAt)).format("YYYY/MM/DD HH:mm"),
           ]
