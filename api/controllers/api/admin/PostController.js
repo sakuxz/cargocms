@@ -37,9 +37,17 @@ module.exports = {
   findOne: async (req, res) => {
     try {
       const { id } = req.params;
+      let post = await Post.findByIdHasJoin({ id });
+      let eventId = await Event.findAll({ where: { PostId: post.id }})
+      eventId = eventId.map((event) => {
+        event = event.toJSON();
+        return {
+          id: event.id
+        };
+      });
       res.ok({
         message: 'find post success.',
-        data: await Post.findByIdHasJoin({ id }),
+        data: { ...post.toJSON(), eventId },
       });
     } catch (e) {
       sails.log.error(e);

@@ -62,8 +62,7 @@
 
 					<!-- widget content -->
 					<div class="widget-body no-padding">
-
-						<form id="main-form" class="smart-form">
+						<form id="main-form" class="smart-form" data-callback="<%= req.query.callback || '' %>">
 							<input type="text" name="id" id="id" v-model="data.item.id" hidden="hidden" value="<%= req.params.id %>">
 
 							<%- body -%>

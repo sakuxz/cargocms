@@ -120,10 +120,10 @@ appMain.DataTableInitComplete = function() {
 
   var slesct = '<span>訂單狀態：</span>'+
   '<select class="form-control input-sm" id="productionStatus" style="margin-right: 5px;">'+
-    '<option value=""></option>' +
+    '<option value="ALL"></option>' +
     '<option value="NEW">NEW</option>' +
     '<option value="SUBMITTED">下訂單</option>' +
-    '<option value="PAID">已付款</option>' +
+    '<option value="PAID" selected>已付款</option>' +
     '<option value="PROCESSING">製作中</option>' +
     '<option value="CANCELLED">取消</option>' +
     '<option value="SHIPPED">已寄出</option>' +
@@ -239,20 +239,23 @@ appMain.DataTableInitComplete = function() {
 
 }
 appMain.customSearch = function() {
-  var searchProductionStatus = $('#productionStatus').val() || "";
-  if (searchProductionStatus !== '') {
-    appModel.pagingQuery.columns.push({
-      data: '',
-      searchable: true,
-      findInclude: true,
-      search: {
-        model: 'RecipeOrder',
-        where: {
-          productionStatus: $('#productionStatus').val(),
-        }
-      }
-    })
+  var searchProductionStatus = $('#productionStatus').val() || 'PAID';
+  if (searchProductionStatus == 'ALL'){
+    searchProductionStatus = undefined;
   }
+
+  appModel.pagingQuery.columns.push({
+    data: '',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'RecipeOrder',
+      where: {
+        productionStatus: searchProductionStatus,
+      }
+    }
+  })
+
   appModel.pagingQuery.columns.push({
     data: 'recipient',
     searchable: true,

@@ -46,6 +46,7 @@
 								<tr>
 									<th width="10%" class="" data-hide="phone"><i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/> ID</th>
 									<th class="40%" data-class="expand"><i class="fa fa-fw fa-sticky-note text-muted hidden-sm hidden-xs"/> 標題</th>
+									<th class="15%" data-class="expand"><i class="fa fa-fw fa-sticky-note text-muted hidden-sm hidden-xs"/> 類型</th>
 									<!-- <th class="" data-hide="phone" data-class="expand">簡述</th> -->
 									<th width="15%" class="" ><i class="fa fa-fw fa-clock-o text-muted hidden-sm hidden-xs"/> 更新日期</th>
 									<th width="25%" class="" ><i class="fa fa-fw fa-tags text-muted hidden-sm hidden-xs"/> 標籤</th>
@@ -60,6 +61,7 @@
 									<td>{{ post.id }}</td>
 									<td><a href="/admin/#/admin/post/show/{{post.id}}">{{ post.title }}</a></td>
 									<!-- <td class="col-xs-8 col-sm-8 col-md-8 col-lg-8">{{ post.abstract }}</td> -->
+									<td>{{ post.typeDesc }}</td>
 									<td>{{ post.updatedAt }}</td>
 									<td><a v-for="tag in post.TagsArray" style="margin-right: 10px; margin-top: 10px;"> {{ tag }}</a></td>
 									<!-- <td>{{ post.content }}</td> -->

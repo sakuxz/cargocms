@@ -40,14 +40,18 @@ module.exports = {
     const { id } = req.params;
     try {
       const currentUser = AuthService.getSessionUser(req);
-      if (!currentUser) return res.redirect(`/login?url=/event/order/${id}`);
+      if (!currentUser) {
+        req.flash('error','Error.Order.Need.Login');
+        return res.redirect(`/login?url=/event/order/${id}`);
+      }
 
       const event = await Event.findOne({
         where: { id },
       });
 
+      const token = crypto.randomBytes(32).toString('hex').substr(0, 32);
 
-      return res.view({ event, user: currentUser });
+      return res.view({ event, user: currentUser, token });
     } catch (e) {
       if (e.type === 'notFound') return res.notFound();
       return res.serverError(e);
@@ -55,13 +59,52 @@ module.exports = {
   },
 
   allpay: async function(req, res) {
-    console.log('body=>', req.body);
+    sails.log.warn('新建訂單傳入資料', req.body);
+    const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
+    const transaction = await sequelize.transaction({ isolationLevel, autocommit: false });
     try {
       const { id } = req.params;
       const user = AuthService.getSessionUser(req);
       if (!user) return res.redirect(`/login?url=/event/order/${id}`);
 
-      const { recipient, phone, email, address, note, description, paymentMethod } = req.body;
+      const { recipient, phone, email, address, note, description, paymentMethod, token } = req.body;
+
+      try {
+        let updateUserData = await User.findById(user.id);
+        let userNeedUpdate = false;
+        //update Phone
+        if( !updateUserData.phone1 && !updateUserData.phone2 ) {
+          updateUserData.phone1 = phone;
+          userNeedUpdate = true;
+        }
+        //update Email
+        if( !updateUserData.email ){
+          updateUserData.email = email;
+          userNeedUpdate = true;
+        }
+        if( userNeedUpdate ) {
+          updateUserData = await updateUserData.save().catch(sequelize.UniqueConstraintError, function(err) {
+            sails.log.error('Email 重複，不更新使用者帳號資訊')
+          });
+        };
+      } catch (e) {
+        sails.log.error('更新使用者失敗', e)
+      }
+      const event = await Event.findById(id);
+
+      let findOrder = await Allpay.find({
+        where: {
+          PaymentType: '到店購買',
+        },
+        include: {
+          model: EventOrder,
+          where: { token },
+        },
+      }, { transaction });
+      if (findOrder) {
+        return res.redirect(`/event/done?t=${findOrder.MerchantTradeNo}`);
+      }
+
       let eventOrder = await EventOrder.create({
         UserId: user.id,
         EventId: id,
@@ -70,15 +113,11 @@ module.exports = {
         address,
         email,
         note,
+        token,
+      }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
+        throw Error('此交易已失效，請重新下訂')
       });
 
-      let updateUserPhone = await User.findById(user.id);
-      if( !updateUserPhone.phone1 && !updateUserPhone.phone2 ) {
-        updateUserPhone.phone1 = phone;
-        updateUserPhone = await updateUserPhone.save();
-      }
-
-      const event = await Event.findById(id);
       let MerchantTradeNo = crypto.randomBytes(32).toString('hex').substr(0, 8);
       const allPayData = await AllpayService.createAndgetAllpayConfig({
         relatedKeyValue: {
@@ -92,49 +131,22 @@ module.exports = {
         clientBackURL: '/event/done',
         returnURL: '/api/event/paid',
         paymentInfoURL: '/api/event/paymentinfo',
+        transaction,
       });
 
       event.signupCount = event.signupCount + 1;
       if (event.signupCount > event.limit) {
         throw Error('票卷已賣完');
       }
-
-      if (paymentMethod == 'gotoShop') {
-        // 目前 Event 沒有現場付款選項，先保留
-        allPayData.allpay.RtnMsg = '現場付費';
-        allPayData.allpay.ShouldTradeAmt = event.price;
-        allPayData.allpay.TradeAmt = event.price;
-        allPayData.allpay.PaymentType = '現場付費';
-        allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
-        await allPayData.allpay.save();
-
-        let messageConfig = {};
-        messageConfig.serialNumber = MerchantTradeNo;
-        messageConfig.paymentTotalAmount = event.price;
-        messageConfig.productName = event.title + ' 1 張';
-        messageConfig.email = eventOrder.email;
-        messageConfig.username = eventOrder.User.displayName;
-        messageConfig.shipmentUsername = eventOrder.recipient;
-        messageConfig.shipmentAddress = eventOrder.address;
-        messageConfig.note = eventOrder.note;
-        messageConfig.phone = eventOrder.phone;
-
-        await event.save();
-
-        // messageConfig = await MessageService.eventOrderConfirm(messageConfig);
-        // const message = await Message.create(messageConfig);
-        // await MessageService.sendMail(message);
-
-        res.redirect(`/event/done?t=${MerchantTradeNo}`);
-
-      } else {
-
-        return res.view({
-          AioCheckOut: AllpayService.getPostUrl(),
-          ...allPayData.config
-        });
-      }
+      sails.log.warn('歐付寶訂單建立完成 EventOrder');
+      transaction.commit();
+      return res.view({
+        AioCheckOut: AllpayService.getPostUrl(),
+        ...allPayData.config
+      });
     } catch (e) {
+      transaction.rollback();
+      sails.log.error('訂單建立 EventOrder 失敗', e.toString());
       req.flash('error', e.toString());
       res.serverError(e, {redirect: '/event/order/' + req.body.id});
     }

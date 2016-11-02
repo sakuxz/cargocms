@@ -11,9 +11,9 @@ module.exports = function(req, res, next) {
 
   // User is allowed, proceed to the next policy,
   // or if this is the last policy, the controller
-  console.log("req.session.authenticated", req.session.authenticated);
-  if (sails.config.offAuth || req.session.authenticated) {
-    // const user = AuthService.getSessionUser(req);
+  const user = AuthService.getSessionUser(req);
+  console.log("req.session.authenticated", user);
+  if (sails.config.offAuth || user) {
     // const noEmail = !user.email;
     // if (noEmail || user.email === '') {
     //   return res.redirect('/edit/me');
