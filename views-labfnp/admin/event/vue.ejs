@@ -77,4 +77,9 @@ appMain.createDateInit = function(){
   $("input[name='eventStartDate']").val( "<%= data.StartDate %>");
   $("input[name='sellEndDate']").val( "<%= data.EndDate %>");
   $("input[name='eventEndDate']").val( "<%= data.EndDate %>");
+  appModel.data.item.signupCount = 0;
+  appModel.data.item.sellStartDate = "<%= data.StartDate %>";
+  appModel.data.item.eventStartDate = "<%= data.StartDate %>";
+  appModel.data.item.sellEndDate = "<%= data.EndDate %>";
+  appModel.data.item.eventEndDate = "<%= data.EndDate %>";
 }
