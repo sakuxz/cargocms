@@ -77,6 +77,19 @@
 </fieldset>
 
 <script>
+
+$.validator.addMethod("LaterStartSell", function (value, element) {
+  var sellStart = new Date($("input[name='sellStartDate']").val());
+  var sellEnd = new Date($("input[name='sellEndDate']").val());
+  return this.optional(element) || (sellStart < sellEnd);
+});
+
+$.validator.addMethod("LaterStartEvent", function (value, element) {
+  var eventStart = new Date($("input[name='eventStartDate']").val());
+  var eventEnd = new Date($("input[name='eventEndDate']").val());
+  return this.optional(element) || (eventStart < eventEnd);
+});
+
 var formRules = {
   title : {
     required : true
@@ -91,16 +104,18 @@ var formRules = {
     required : true
   },
   sellStartDate : {
-    required : true
+    required : true,
   },
   sellEndDate : {
-    required : true
+    required : true,
+    LaterStartSell: true
   },
   eventStartDate : {
     required : true
   },
   eventEndDate : {
-    required : true
+    required : true,
+    LaterStartEvent: true
   }
 }
 
@@ -122,13 +137,15 @@ var formMessages = {
     required : "請輸入開賣時間"
   },
   sellEndDate : {
-    required : "請輸入結束販賣時間"
+    required : "請輸入結束販賣時間",
+    LaterStartSell: "請輸入開賣時間之後的時間"
   },
   eventStartDate : {
     required : "請輸入活動開始時間"
   },
   eventEndDate : {
-    required : "請輸入活動結束時間"
+    required : "請輸入活動結束時間",
+    LaterStartEvent: "請輸入活動開始之後的日期時間"
   },
 }
 
