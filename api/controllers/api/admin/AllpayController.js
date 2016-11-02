@@ -256,7 +256,6 @@ module.exports = {
         scentList: '香味清單'
       }
       const format = (items) => {
-        // let result = items.map((data) => {
         let result = [];
         for (let data of items) {
           if (data.PaymentType === 'aio') continue;
@@ -291,7 +290,6 @@ module.exports = {
       }
 
       const result = await ExportService.export({
-      // const result = await ExportService.exportExcel({
         fileName: '地址寄送表',
         content,
         format,
@@ -417,7 +415,6 @@ module.exports = {
         { caption: '香味清單', type: "string"}
       ]
       const format = (items) => {
-        // let result = items.map((data) => {
         let result = [];
         for (let data of items) {
           if (data.PaymentType === 'aio') continue;
