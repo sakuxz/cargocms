@@ -291,6 +291,166 @@ module.exports = {
       }
 
       const result = await ExportService.export({
+      // const result = await ExportService.exportExcel({
+        fileName: '地址寄送表',
+        content,
+        format,
+        columns,
+      });
+      res.attachment(result.fileName);
+      res.end(result.data, 'UTF-8');
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+
+  exportExcel: async (req, res) => {
+    try {
+      let { query, options } = req;
+      sails.log.info('export', query);
+      const modelName = options.controller.split("/").reverse()[0];
+      const include = {
+        model: RecipeOrder,
+        include: [User, Recipe]
+      }
+      const content = await ExportService.query({ query, modelName, include });
+      const columns = [
+        { caption: '付款帳號', type: 'string' },
+        { caption: '訂購物品', type: 'string' },
+        { caption: '訂購人', type: 'string' },
+        { caption: '收件人', type: 'string' },
+        { caption: '創作人', type: 'string' },
+        { caption: '備註', type: 'string' },
+        { caption: '香味分子 1', type: 'string' },
+        { caption: '香味分子 1 比例', type: 'number' },
+        { caption: '香味分子 2', type: 'string' },
+        { caption: '香味分子 2 比例', type: 'number' },
+        { caption: '香味分子 3', type: 'string' },
+        { caption: '香味分子 3 比例', type: 'number' },
+        { caption: '香味分子 4', type: 'string' },
+        { caption: '香味分子 4 比例', type: 'number' },
+        { caption: '香味分子 5', type: 'string' },
+        { caption: '香味分子 5 比例', type: 'number' },
+        { caption: '香味分子 6', type: 'string' },
+        { caption: '香味分子 6 比例', type: 'number' },
+        { caption: '電話', type: 'string' },
+        { caption: '住址', type: 'string' },
+        { caption: '訂單狀態', type: 'string' },
+        { caption: '交易訊息', type: 'string' },
+        { caption: '訂單建立時間', type: 'string' },
+        { caption: '香味清單', type: 'string' }
+      ];
+      const format = (items) => {
+        let result = [];
+        for (let data of items) {
+          if (data.PaymentType === 'aio') continue;
+          let formatted = [
+            `="${data.vAccount || ''}"`, //付款帳號
+            data.ItemNameArray,          //訂購物品
+            data.UserName,               //訂購人
+            data.RecipeOrder.recipient,  //收件人
+            data.RecipeOrder.Recipe ? data.RecipeOrder.Recipe.authorName : '', //創作人
+            data.Note,                  //備註
+          ];
+          let scentList = '';           //香味清單
+          if (data.RecipeOrder && data.RecipeOrder.Recipe) {
+            data.RecipeOrder.Recipe.formula.forEach((formula, index) => {
+              if (formula.scent && formula.drops > 0) {
+                scentList += `${formula.scent}:${formula.drops} `;
+                 //香味分子 & 香味分子 比例
+                formatted.push(`${formula.scent}`),
+                formatted.push(Math.ceil(formula.drops / data.RecipeOrder.Recipe.formulaTotalDrops * 10000)/10000);
+              }
+            });
+          }
+          formatted.push(
+            `="${data.Phone || ''}"`,  //電話
+            data.Address,              //住址
+            data.RecipeOrder.productionStatusDesc,  //訂單狀態
+            data.RtnMsg,              //交易訊息
+            moment(new Date(data.createdAt)).format("YYYY/MM/DD HH:mm"), //訂單建立時間
+            scentList                 //香味清單
+          );
+
+          result.push(formatted);
+        };
+        return result;
+      }
+
+      const result = await ExportService.exportExcel({
+        fileName: '配方製作表',
+        content,
+        format,
+        columns,
+      });
+      res.attachment(result.fileName);
+      res.end(result.data, 'UTF-8');
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+
+  exportSendExcel: async (req, res) => {
+    try {
+      let { query, options } = req;
+      sails.log.info('exportSend', query);
+      const modelName = options.controller.split("/").reverse()[0];
+      const include = {
+        model: RecipeOrder,
+        include: [User, Recipe]
+      }
+      const content = await ExportService.query({ query, modelName, include });
+      const columns = [
+        { caption: "check", type: "string"},
+        { caption: "付款方式", type: "string"},
+        { caption: "發票號碼", type: "string"},
+        { caption: "訂購物品", type: "string"},
+        { caption: "訂購人", type: "string"},
+        { caption: "收件人", type: "string"},
+        { caption: "創作人", type: "string"},
+        { caption: "備註", type: "string"},
+        { caption: "Email", type: "string"},
+        { caption: "電話", type: "string"},
+        { caption: "住址", type: "string"},
+        { caption: "訂單建立時間", type: "string"},
+        { caption: '香味清單', type: "string"}
+      ]
+      const format = (items) => {
+        // let result = items.map((data) => {
+        let result = [];
+        for (let data of items) {
+          if (data.PaymentType === 'aio') continue;
+          let formatted = [
+            '',
+            data.PaymentTypeDesc,
+            `="${data.invoiceNo || ''}"`,
+            data.ItemNameArray,
+            data.UserName,
+            data.RecipeOrder.recipient,
+            data.RecipeOrder.Recipe ? data.RecipeOrder.Recipe.authorName : '',
+            data.Note,
+            data.Email,
+            `="${data.Phone || ''}"`,
+            data.Address,
+            moment(new Date(data.createdAt)).format("YYYY/MM/DD HH:mm"),
+          ]
+
+          let scentList = '';
+          if (data.RecipeOrder && data.RecipeOrder.Recipe) {
+            data.RecipeOrder.Recipe.formula.forEach((formula, index) => {
+              if (formula.scent && formula.drops > 0) {
+                scentList += `${formula.scent}:${formula.drops} `;
+              }
+            });
+          }
+          formatted.push(scentList);
+
+          result.push(formatted);
+        };
+        return result;
+      }
+
+      const result = await ExportService.exportExcel({
         fileName: '地址寄送表',
         content,
         format,
