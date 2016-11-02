@@ -71,3 +71,4 @@
 * 新增 deletedAt 確保訂單刪除資料還會保留
 
 ### RecipeOrder token 使用 UNIQUE
+### EventOrder token 使用 UNIQUE

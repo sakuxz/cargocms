@@ -162,6 +162,7 @@
             <label for="invoiceNo">發票號碼</label>
             <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="請輸入發票號碼...">
           </section>-->
+          <input type="hidden" name="token" value="<%= token %>">
 
           <section class="col paymentMethod">
             <label for="paymentMethod">付款方式<span class="required">*</span>
@@ -178,15 +179,15 @@
 
       <section class="col">
         <% if (error.length > 0) { %>
-          <div class="margin-bottom-20 has-error">
-            <label class="col-md-6 control-label" for="password">
-              <span class="glyphicon glyphicon-remove"></span><%= error %>
+          <div class="margin-bottom-20 has-error" data-message="<%= error %>">
+            <label class="col-md-6 control-label" for="error">
+              <!--<span class="glyphicon glyphicon-remove"></span><%= error %>-->
             </label>
           </div>
         <% } %>
       </section>
 
-      <div class="text-center">
+      <div class="text-center margin-top-20">
         <button form="orderForm" id="submit-button" type="sumbit" class="btn-u btn-u-green" data-id="<%= event.id %>">
           <i class="fa fa-check" aria-hidden="true"></i>
           送出

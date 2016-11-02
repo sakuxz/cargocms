@@ -30,6 +30,11 @@ module.exports = {
       type: Sequelize.ENUM("NEW", "RECEIVED", "REQUESTED", "SUBMITTED", "PAID", "PROCESSING", "CANCELLED", "SHIPPED", "DELIVERED", "COMPLETED"),
       defaultValue: 'NEW',
     },
+		
+		token: {
+      type: Sequelize.STRING(32),
+			unique: true,
+    },
 
     productionStatusDesc: {
       type: Sequelize.VIRTUAL,
