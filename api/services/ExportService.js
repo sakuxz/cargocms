@@ -56,19 +56,17 @@ module.exports = {
         content = format(content);
       }
       let conf = {};
-      conf.name = fileName;
+      // conf.name = fileName; //試算表內的表格名稱，不能為中文
       conf.cols = columns;
       conf.rows = content;
 
       // conf.stylesXmlFile = `${__dirname}/styles.xml`;
       var result = nodeExcel.execute(conf);
-      // console.log("nodeExcel==>",result);
       let dataBuffer = new Buffer(result, 'binary');
-      // console.log("dataBuffer==>",dataBuffer);
       const time = moment(new Date()).format("YYYYMMDDHHmmSS");
       fileName = `${fileName || ''}${time}.xlsx`;
       const filePath = `${__dirname}/../../.tmp/${fileName}`;
-      await fs.writeFileSync(filePath, result, 'binary');
+      // await fs.writeFileSync(filePath, result, 'binary');
 
       return { filePath, fileName, data: dataBuffer};
     } catch (e) {
