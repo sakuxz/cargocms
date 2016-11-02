@@ -188,18 +188,70 @@ describe('about export service operation.', function() {
     }
   });
 
-  it.only('export Recipe to CSV test Special text should be success.', async (done) => {
+  it.only('export content to Excel test Special text should be success.', async (done) => {
     try {
+      const fileName = 'TestWorkSheet';
+      const columns = [ { caption: '付款帳號', type: 'string' },
+                        { caption: '訂購物品', type: 'string' },
+                        { caption: '訂購人', type: 'string' },
+                        { caption: '收件人', type: 'string' },
+                        { caption: '創作人', type: 'string' },
+                        { caption: '備註', type: 'string' },
+                        { caption: '香味分子 1', type: 'string' },
+                        { caption: '香味分子 1 比例', type: 'number' },
+                        { caption: '香味分子 2', type: 'string' },
+                        { caption: '香味分子 2 比例', type: 'number' },
+                        { caption: '香味分子 3', type: 'string' },
+                        { caption: '香味分子 3 比例', type: 'number' },
+                        { caption: '香味分子 4', type: 'string' },
+                        { caption: '香味分子 4 比例', type: 'number' },
+                        { caption: '香味分子 5', type: 'string' },
+                        { caption: '香味分子 5 比例', type: 'number' },
+                        { caption: '香味分子 6', type: 'string' },
+                        { caption: '香味分子 6 比例', type: 'number' },
+                        { caption: '電話', type: 'string' },
+                        { caption: '住址', type: 'string' },
+                        { caption: '訂單狀態', type: 'string' },
+                        { caption: '交易訊息', type: 'string' },
+                        { caption: '訂單建立時間', type: 'string' },
+                        { caption: '香味清單', type: 'string' } ];
       const content = [
-        { "text": "周咏蒨" },
-        { "text": "등원청" },
-        { "text": "訂購者" },
-        { "text": "안갯길" },
-        { "text": "羅筑儀" },
-        { "text": "香港尖沙咀金马伦道48号中国保险大厦15楼B室" },
-        { "text": "20life LM•BU•WH" },
-      ]
-      const result = await ExportService.exportExcel({ content });
+        [ '="9966627013152469"',
+          'love again',
+          '大明王',
+          null,
+          '王大明',
+          null,
+          'BA69',
+          0.3334,
+          'BA70',
+          0.6667,
+          '=""',
+          null,
+          'NEW',
+          '付款成功',
+          '2016/11/02 09:29',
+          'BA69:1 BA70:2 ' ]
+        ,
+        [ '=""',
+          'love again',
+          '大明王',
+          null,
+          '王大明',
+          null,
+          'BA69',
+          0.3334,
+          'BA70',
+          0.6667,
+          '=""',
+          null,
+          'NEW',
+          '交易成功',
+          '2016/11/02 09:29',
+          'BA69:1 BA70:2 ' ]
+        ];
+
+      const result = await ExportService.exportExcel({ content, fileName, columns });
       sails.log.debug(result);
       done();
     } catch (e) {
