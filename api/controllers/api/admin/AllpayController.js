@@ -356,7 +356,7 @@ module.exports = {
           if (data.RecipeOrder && data.RecipeOrder.Recipe) {
             for(let i = 0; i < 6; i++){
               if(!data.RecipeOrder.Recipe.formula[i] || !(data.RecipeOrder.Recipe.formula[i].scent && data.RecipeOrder.Recipe.formula[i].drops > 0) ){
-                formatted.push( null, null);
+                formatted.push( '', '');
               } else {
                 scentList += `${data.RecipeOrder.Recipe.formula[i].scent}: ${data.RecipeOrder.Recipe.formula[i].drops} `;
                 formatted.push(data.RecipeOrder.Recipe.formula[i].scent);
