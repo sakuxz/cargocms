@@ -2,10 +2,9 @@ module.exports = {
 
   find: async (req, res) => {
     try {
-      // const { query } = req;
       const { serverSidePaging } = req.query;
       const query = req.body;
-      const modelName = req.options.controller.split("/").reverse()[0];
+      const modelName = 'allpay'
       let result;
       if (serverSidePaging) {
         const include = {
