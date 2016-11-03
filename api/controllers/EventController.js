@@ -33,7 +33,6 @@ module.exports = {
 
       data.Events.forEach((e) => {
         e = Object.assign(e, EventService.getTicketStatus(e, new Date()));
-        console.log(e);
       });
 
       res.view('event/show', {data, social});

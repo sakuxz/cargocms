@@ -1,4 +1,3 @@
-import FacebookHelper from './libraries/facebook/';
 import moment from 'moment';
 
 module.exports = {
