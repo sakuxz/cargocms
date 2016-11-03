@@ -49,22 +49,14 @@
       <th width="9%" class="no-sort" data-hide="">發票號碼</th>
       <th width="6%">金額</th>
       <th data-hide="always" class="hide">付款帳號</th>
-      <th data-hide="always" class="hide">訂購物品</th>
+      <th data-hide="always" class="hide">訂購票券</th>
       <th width="8%" class="no-sort">訂購人</th>
-      <th width="8%" class="no-sort" data-hide="phone,tablet">配方編號</th>
+      <th width="8%" class="no-sort" data-hide="phone,tablet">票券編號</th>
       <th width="8%" class="no-sort">訂單狀態</th>
-      <th class="no-sort hide" data-hide="always" style="">香味分子1</th>
-      <th class="no-sort hide" data-hide="always" style="">香味分子2</th>
-      <th class="no-sort hide" data-hide="always" style="">香味分子3</th>
-      <th class="no-sort hide" data-hide="always" style="">香味分子4</th>
-      <th class="no-sort hide" data-hide="always" style="">香味分子5</th>
-      <th class="no-sort hide" data-hide="always" style="">香味分子6</th>
       <th class="hide" data-hide="always">Email</th>
       <th class="hide" data-hide="always">電話</th>
       <th class="hide" data-hide="always">住址</th>
       <th width="9%" data-hide="phone,tablet">建立時間</th>
-      <th class="hide" data-hide="always">運送物流</th>
-      <th class="hide" data-hide="always">物流編號</th>
 			<th class="hide" data-hide="always">備註</th>
       <th class="hide" data-hide="always">收件人</th>
       <th width="95px" data-hide="phone,tablet"></th>
@@ -83,15 +75,16 @@
       <td v-cloak>{{ item.invoiceNo }}</td>
       <td v-cloak>{{ item.TradeAmt }} </td>
       <td v-cloak>{{ item.vAccount }} </td>
-      <td v-cloak>{{ item.ItemNameArray }} </td>
+      <td v-cloak>{{ item.EventOrder.Event.title }} </td>
       <td v-cloak>{{ item.UserName}} </td>
-      <td v-cloak>{{ item.RecipeOrder.Recipe.id}}<a href="/admin/#/admin/labfnp/recipe/show/{{item.RecipeOrder.Recipe.id}}"> <i class="fa fa-fw fa-external-link"></i> </a></td>
-      <template v-for="n in 6">
-        <td>{{ item.RecipeOrder.Recipe.formula[n].scent + ' , ' + item.RecipeOrder.Recipe.formula[n].drops + ' 滴'}}</td>
-      </template>
+      <td v-cloak>{{ item.EventOrder.Event.id}}<a href="/admin/#/admin/labfnp/event/show/{{item.RecipeOrder.Recipe.id}}"> <i class="fa fa-fw fa-external-link"></i> </a></td>
+      <td v-cloak>{{ item.EventOrder.productionStatusDesc}}</td>
       <td v-cloak>{{ item.Email }} </td>
       <td v-cloak>{{ item.Phone}} </td>
       <td v-cloak>{{ item.Address }} </td>
+      <td v-cloak>{{ item.createdAt }} </td>
+      <td v-cloak>{{ item.note }} </td>
+      <td v-cloak>{{ item.recipient }} </td>
 			<td v-cloak align="center" style="cursor: pointer;">
 				<div class="row">
 					<a class="btn btn-default btn-xs" role="button" v-on:click="show(item.id)">
@@ -105,7 +98,6 @@
 					</a>
 				</div>
 			</td>
-			<td v-cloak>{{ item.createdAt }} </td>
 		</tr>
 	</tbody>
  </table>
@@ -127,36 +119,27 @@
 
 		// server only
 		var columns = [
-			{ "data": "id" },  // row0
-			{ "data": "MerchantTradeNo" },
-			{ "data": "TradeNo"}, //TradeNo
+      { "data": "id" },  // row0
+      { "data": "MerchantTradeNo" },
+      { "data": "TradeNo"}, //TradeNo
       { "data": "RtnMsg" },
       { "data": "PaymentDate" }, //PaymentDate
       { "data": "PaymentTypeDesc" },
       { "data": "invoiceNo"},
       { "data": "TradeAmt" },
       { "data": "vAccount" },
-      { "data": "ItemNameArray" },
+      { "data": null }, // EventOrder.Event.title
       { "data": "UserName" },
-      { "data": null }, // Recipe.id
-			{ "data": null },
-      { "data": null }, //row13 Recipe.formula[0]
-      { "data": null },
-      { "data": null },
-      { "data": null },
-      { "data": null },
-      { "data": null }, //row18
+      { "data": null }, // EventOrder.Event.id
+      { "data": null }, // Select
       { "data": "Email" },
       { "data": "Phone" },
       { "data": "Address" },
-      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 22, 'desc' ]]
-      { "data": null },
-      { "data": null },
-			{ "data": "Note" },
-      { "data": null },
-			{ "data": null },
-
-		]
+      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 16, 'desc' ]]
+      { "data": "Note" },
+      { "data": null }, // recipient
+      { "data": null }, // edit , show button
+    ]
 
 		// server only
 		var columnDefs = [
@@ -226,8 +209,8 @@
         "searchable": false,
         "targets": 11,
         "render": function (data, type, row) {
-					var RecipeID = data.RecipeOrder.Recipe ? data.RecipeOrder.Recipe.id : '';
-          return '<td>' + RecipeID + '<a href="/admin/#/admin/labfnp/recipe/show/' + RecipeID + '"> <i class="fa fa-fw fa-external-link"></i> </a>' + '</td>';
+					var EventID = data.EventOrder.Event ? data.EventOrder.Event.id : '';
+          return '<td>' + EventID + '<a href="/admin/#/admin/event/show/' + EventID + '"> <i class="fa fa-fw fa-external-link"></i> </a>' + '</td>';
         }
       },
 			{
@@ -235,8 +218,8 @@
         "targets": 12,
         "render": function (data, type, row) {
           // return '<td>' + data.RecipeOrder.productionStatusDesc + '</td>';
-					var productionStatus =  row.RecipeOrder.productionStatus;
-					return '<select class="form-control input-xs" data-id="'+ row.RecipeOrderId +'" name="updateProductionStatus">' +
+					var productionStatus =  row.EventOrder.productionStatus;
+					return '<select class="form-control input-xs" data-id="'+ row.EventOrderId +'" name="updateProductionStatus">' +
 	          '<option value="NEW" '+ (productionStatus == 'NEW' ? 'selected' : '') + '>NEW</option>' +
 	          '<option value="SUBMITTED" '+ (productionStatus == 'SUBMITTED' ? 'selected' : '') +' >下訂單</option>' +
 	          '<option value="PAID" '+ (productionStatus == 'PAID' ? 'selected' : '') +'>已付款</option>' +
@@ -250,85 +233,30 @@
       },
       {
         "searchable": false,
-        "targets": 13,
-        "render": function (data, type, row) {
-          return returnRecipeFormula(data, 0);
-        }
+        "targets": 13
       },
       {
         "searchable": false,
-        "targets": 14,
-        "render": function (data, type, row) {
-          return returnRecipeFormula(data, 1);
-        }
+        "targets": 14
       },
       {
         "searchable": false,
-        "targets": 15,
-        "render": function (data, type, row) {
-          return returnRecipeFormula(data, 2);
-        }
+        "targets": 15
       },
       {
         "searchable": false,
-        "targets": 16,
-        "render": function (data, type, row) {
-          return returnRecipeFormula(data, 3);
-        }
-      },
-      {
-        "searchable": false,
-        "targets": 17,
-        "render": function (data, type, row) {
-          return returnRecipeFormula(data, 4);
-        }
+        "targets": 17
       },
       {
         "searchable": false,
         "targets": 18,
-        "render": function (data, type, row) {
-          return returnRecipeFormula(data, 5);
-        }
-      },
-      {
-        "searchable": false,
-        "targets": 19
-      },
-      {
-        "searchable": false,
-        "targets": 20
-      },
-      {
-        "searchable": false,
-        "targets": 21
-      },
-			{
-        "searchable": false,
-        "targets": 23,
-        "render": function (data, type, row) {
-          return '<td>' + data.shippingDesc ? data.shippingDesc : '' + '</td>';
-        }
-      },
-      {
-        "searchable": false,
-        "targets": 24,
-        "render": function (data, type, row) {
-          return '<td>' + data.trackingNumber ? data.trackingNumber : '' + '</td>';
-        }
-      },
-      {
-        "searchable": false,
-        "targets": 25
-      },
-      {
-        "searchable": false,
-        "targets": 26,
         "render": function(data, type, row) {
-          return '<td>' + data.RecipeOrder.recipient + '</td>';
+          console.log("data.EventOrder.recipient==>", data);
+          return '<td>' + data.EventOrder.recipient + '</td>';
         }
       },
 			{
-				"targets"  : 27,
+				"targets"  : 19,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
@@ -339,9 +267,6 @@
 						'</a>'+
 						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
-						'</a>'+
-            '<a name="editOrderButton" class="btn btn-default btn-xs" role="button" data-recipeOrder-id="'+data.RecipeOrder.id+'">'+
-							'<i class="fa-fw fa fa-truck text-muted"/>'+
 						'</a>'+
 					'</div>';
 					return colBody;
