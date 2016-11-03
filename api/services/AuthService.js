@@ -39,4 +39,8 @@ module.exports = {
     req.session.needJwt = false;
     return jwtToken;
   },
+
+  isWebView: function(userAgent) {
+    return userAgent.indexOf('React-Native') !== -1; 
+  }
 }

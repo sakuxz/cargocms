@@ -110,9 +110,17 @@
 </div><!--/copyright-->
 </div>
 <!--=== End Footer Version 1 ===-->
+<script>
+  var token = "<%= AuthService.getSessionEncodeToJWT(req) || '' %>";
+  var isWebView = "<%= AuthService.isWebView(req.headers['user-agent'])%>";
+</script>
 
 <% LayoutUtils.addScriptBlock(`
 $(document).ready(function(){
+  if (isWebView) {
+    $('.native-hide').hide();
+    $('.native-show').show();
+  }
   $.get('/api/labfnp/recipe/new', function(result){
     console.log(result);
     var ul = $('#newRecipe');
