@@ -7,7 +7,7 @@ module.exports = {
     'delete': ['nocache'],
   },
   'labfnp/RecipeController': {
-    'create': ['passport', 'sessionAuth'],
+    'create': ['passport', 'sessionAuth', 'jwtEncode'],
     'order': ['passport', 'sessionAuth'],
     'update': ['nocache'],
     'allpay': ['passport', 'sessionAuth'],

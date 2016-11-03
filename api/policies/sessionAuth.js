@@ -12,7 +12,7 @@ module.exports = function(req, res, next) {
   // User is allowed, proceed to the next policy,
   // or if this is the last policy, the controller
   const user = AuthService.getSessionUser(req);
-  console.log("req.session.authenticated", user);
+  console.log("req.session", user);
   if (sails.config.offAuth || user) {
     // const noEmail = !user.email;
     // if (noEmail || user.email === '') {

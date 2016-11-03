@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 module.exports = {
 
   isAuthenticated: function(req) {
@@ -27,6 +28,15 @@ module.exports = {
     }
 
     return isAdmin;
-  }
+  },
 
+  getSessionEncodeToJWT: function(req) {
+    const session = AuthService.getSessionUser(req);
+    let jwtToken = '';
+    if (req.session.needJwt && session) {
+      jwtToken = jwt.sign(session, 'secret');
+    }
+    req.session.needJwt = false;
+    return jwtToken;
+  },
 }

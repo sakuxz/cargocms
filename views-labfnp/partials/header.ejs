@@ -78,6 +78,9 @@
 </div>
 <!--=== End Header ===-->
 </nav>
+<script>
+  var token = "<%= AuthService.getSessionEncodeToJWT(req) || '' %>"
+</script>
 
 <% LayoutUtils.addScriptBlock(`
   $('#logout-link').click(function(){
