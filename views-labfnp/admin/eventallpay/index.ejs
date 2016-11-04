@@ -46,19 +46,17 @@
       <th data-hide="always" class="hide">交易訊息</th>
       <th width="9%" data-hide="phone,tablet">付款時間</th>
       <th width="8%" class="no-sort no-over" data-hide="phone,tablet">付款方式</th>
-      <th width="9%" class="no-sort" data-hide="">發票號碼</th>
       <th width="6%">金額</th>
       <th data-hide="always" class="hide">付款帳號</th>
       <th data-hide="always" class="hide">訂購票券</th>
-      <th width="8%" class="no-sort">訂購人</th>
-      <th width="8%" class="no-sort" data-hide="phone,tablet">票券編號</th>
+      <th width="8%" class="no-sort">參加者</th>
       <th width="8%" class="no-sort">訂單狀態</th>
       <th class="hide" data-hide="always">Email</th>
       <th class="hide" data-hide="always">電話</th>
       <th class="hide" data-hide="always">住址</th>
       <th width="9%" data-hide="phone,tablet">建立時間</th>
 			<th class="hide" data-hide="always">備註</th>
-      <th class="hide" data-hide="always">收件人</th>
+      <th class="hide" data-hide="always">訂購人</th>
       <th width="95px" data-hide="phone,tablet"></th>
 
 		</tr>
@@ -125,19 +123,17 @@
       { "data": "RtnMsg" },
       { "data": "PaymentDate" }, //PaymentDate
       { "data": "PaymentTypeDesc" },
-      { "data": "invoiceNo"},
       { "data": "TradeAmt" },
       { "data": "vAccount" },
-      { "data": null }, // EventOrder.Event.title
-      { "data": "UserName" },
-      { "data": null }, // EventOrder.Event.id
+      { "data": "ItemNameArray" },
+      { "data": null }, // recipient
       { "data": null }, // Select
       { "data": "Email" },
       { "data": "Phone" },
       { "data": "Address" },
-      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 16, 'desc' ]]
+      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 14, 'desc' ]]
       { "data": "Note" },
-      { "data": null }, // recipient
+      { "data": "UserName" },
       { "data": null }, // edit , show button
     ]
 
@@ -189,43 +185,22 @@
       },
       {
         "searchable": false,
-        "targets": 6,
-        "render": function(data, type, row) {
-          var data = data || ""
-          return '<td><span class="textbreak">' + data +'</span></td>';
-        }
+        "targets": 8
       },
       {
         "searchable": false,
         "targets": 9,
         "render": function(data, type, row) {
-          if(data.EventOrder && data.EventOrder.Event){
-            return '<td><span class="textbreak">' + data.EventOrder.Event.title +'</span></td>';
-          }
-          return '<td></td>';
-        }
-      },
-      {
-        "searchable": false,
-        "targets": 10,
-        "render": function(data, type, row) {
-          return '<td><p class="textOver">' + data +'</p></td>';
-        }
-      },
-      {
-        "searchable": false,
-        "targets": 11,
-        "render": function (data, type, row) {
-          if(data.EventOrder && data.EventOrder.Event){
-            var EventID = data.EventOrder.Event.id;
-            return '<td>' + EventID + '<a href="/admin/#/admin/event/show/' + EventID + '"> <i class="fa fa-fw fa-external-link"></i> </a>' + '</td>';
+          console.log("data.EventOrder.recipient==>", data);
+          if(data.EventOrder){
+            return '<td>' + data.EventOrder.recipient + '</td>';
           }
           return '<td></td>';
         }
       },
 			{
         "searchable": false,
-        "targets": 12,
+        "targets": 10,
         "render": function (data, type, row) {
           // return '<td>' + data.RecipeOrder.productionStatusDesc + '</td>';
           if(row.EventOrder){
@@ -247,11 +222,15 @@
       },
       {
         "searchable": false,
-        "targets": 13
+        "targets": 11
       },
       {
         "searchable": false,
-        "targets": 14
+        "targets": 12
+      },
+      {
+        "searchable": false,
+        "targets": 13
       },
       {
         "searchable": false,
@@ -259,21 +238,13 @@
       },
       {
         "searchable": false,
-        "targets": 17
-      },
-      {
-        "searchable": false,
-        "targets": 18,
+        "targets": 16,
         "render": function(data, type, row) {
-          console.log("data.EventOrder.recipient==>", data);
-          if(data.EventOrder){
-            return '<td>' + data.EventOrder.recipient + '</td>';
-          }
-          return '<td></td>';
+          return '<td>' + data +'</td>';
         }
       },
 			{
-				"targets"  : 19,
+				"targets"  : 17,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
