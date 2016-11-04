@@ -51,12 +51,12 @@
       <th data-hide="always" class="hide">訂購票券</th>
       <th width="8%" class="no-sort">參加者</th>
       <th width="8%" class="no-sort">訂單狀態</th>
+      <th class="hide" data-hide="always">訂購人</th>
       <th class="hide" data-hide="always">Email</th>
       <th class="hide" data-hide="always">電話</th>
       <th class="hide" data-hide="always">住址</th>
       <th width="9%" data-hide="phone,tablet">建立時間</th>
 			<th class="hide" data-hide="always">備註</th>
-      <th class="hide" data-hide="always">訂購人</th>
       <th width="95px" data-hide="phone,tablet"></th>
 
 		</tr>
@@ -128,12 +128,12 @@
       { "data": "ItemNameArray" },
       { "data": null }, // recipient
       { "data": null }, // Select
+      { "data": "UserName" },
       { "data": "Email" },
       { "data": "Phone" },
       { "data": "Address" },
-      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 14, 'desc' ]]
+      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 15, 'desc' ]]
       { "data": "Note" },
-      { "data": "UserName" },
       { "data": null }, // edit , show button
     ]
 
@@ -222,7 +222,10 @@
       },
       {
         "searchable": false,
-        "targets": 11
+        "targets": 11,
+        "render": function(data, type, row) {
+          return '<td>' + data +'</td>';
+        }
       },
       {
         "searchable": false,
@@ -234,14 +237,11 @@
       },
       {
         "searchable": false,
-        "targets": 15
+        "targets": 14
       },
       {
         "searchable": false,
-        "targets": 16,
-        "render": function(data, type, row) {
-          return '<td>' + data +'</td>';
-        }
+        "targets": 16
       },
 			{
 				"targets"  : 17,
