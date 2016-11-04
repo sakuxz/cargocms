@@ -118,7 +118,7 @@ module.exports = {
 		classMethods: {
 			findByIdHasJoin: async(id) => {
 				try {
-					return await RecipeOrder.findOne({
+					return await EventOrder.findOne({
 						where: {
 							id
 						},
@@ -131,7 +131,7 @@ module.exports = {
 			},
 			deleteById: async(id) => {
 				try {
-					return await RecipeOrder.destroy({
+					return await EventOrder.destroy({
 						where: {
 							id
 						}
