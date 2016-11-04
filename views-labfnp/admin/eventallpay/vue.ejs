@@ -155,7 +155,7 @@ appMain.DataTableInitComplete = function() {
       if (ButtonPressed === '確認') {
         $(that).val(newVal);
         $.ajax({
-          url: "/api/admin/labfnp/recipeorder/status/"+id,
+          url: "/api/admin/eventorder/status/"+id,
           method: "put",
           dataType: 'json',
           cache: false,
