@@ -4,7 +4,7 @@
     <section class="col col-lg-4 col-xs-4">
       <label class="label">訂單狀態</label>
       <label class="select state-disabled">
-        <select v-model="data.item.RecipeOrder.productionStatus" disabled>
+        <select v-model="data.item.EventOrder.productionStatus" disabled>
           <option value="NEW" selected>NEW</option>
           <option value="SUBMITTED">下訂單</option>
           <option value="PAID">已付款</option>
@@ -156,10 +156,10 @@
     </section>
 
     <section class="col col-lg-6 col-xs-6">
-      <label class="label">配方訂單ID</label>
+      <label class="label">票券訂單ID</label>
       <label class="input state-disabled allpaydisabled">
-        <input class="allpay" type="text" name="RecipeOrderId" placeholder="RecipeOrderId" v-model="data.item.RecipeOrderId" disabled>
-        <b class="tooltip tooltip-bottom-right">RecipeOrderId</b></label>
+        <input class="allpay" type="text" name="EventOrderId" placeholder="EventOrderId" v-model="data.item.EventOrderId" disabled>
+        <b class="tooltip tooltip-bottom-right">EventOrderId</b></label>
     </section>
   </div>
   <div class="row hidden">
@@ -179,7 +179,7 @@
   </div>
   <div class="row">
     <section class="col col-lg-6 col-xs-6">
-      <label class="label">配方名稱</label>
+      <label class="label">票券名稱</label>
       <label class="input state-disabled allpaydisabled">
         <input class="allpay" type="text" name="ItemNameArray" placeholder="ItemNameArray" v-model="data.item.ItemNameArray" disabled>
         <b class="tooltip tooltip-bottom-right">ItemNameArray</b></label>
@@ -223,6 +223,8 @@
     </section>
   </div>
 
+
+  <%/*
   <div class="row">
     <section class="col col-lg-6 col-xs-6">
       <label class="label">運送物流</label>
@@ -239,6 +241,8 @@
         <b class="tooltip tooltip-bottom-right">Address</b></label>
     </section>
   </div>
+  */%>
+
 
   <section>
     <label class="label">備註</label>
