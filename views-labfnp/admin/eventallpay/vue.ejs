@@ -44,7 +44,7 @@ var appModel = {
     items: [],
     option: {
       exportCSV: false,
-      defaultSort: [[ 16, 'desc' ]],
+      defaultSort: [[ 14, 'desc' ]],
       ajax: {
         method: 'post',
         url: '/api/admin/eventallpay/find',
@@ -104,14 +104,14 @@ appMain.DataTableInitComplete = function() {
     $.SmartMessageBox({
       title : "匯出",
       content :'請選擇要匯出的資料表',
-      buttons : "[取消][匯出配方製作表][匯出地址寄送表][匯出兩種格式]"
+      buttons : "[取消][匯出完整資訊表][匯出簽到資訊表][匯出兩種格式]"
     }, function(ButtonPress) {
-      if(ButtonPress === '匯出配方製作表') {
-        download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
-      } else if (ButtonPress === '匯出地址寄送表') {
-        download('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), 'exportSend');
+      if(ButtonPress === '匯出完整資訊表') {
+        download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'exportExcel');
+      } else if (ButtonPress === '匯出簽到資訊表') {
+        download('/api/admin/' + modelName + '/exportSign?' + serialize(appModel.pagingQuery), 'exportSignExcel');
       } else if (ButtonPress === '匯出兩種格式') {
-        download('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), 'exportSend');
+        download('/api/admin/' + modelName + '/exportSign?' + serialize(appModel.pagingQuery), 'exportSend');
         download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
       }
     });
