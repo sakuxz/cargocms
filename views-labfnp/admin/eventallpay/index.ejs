@@ -183,6 +183,7 @@
         "searchable": false,
         "targets": 5,
         "render": function(data, type, row) {
+          var data = data || ""
           return '<td><p class="textOver">' + data +'</p></td>';
         }
       },
@@ -196,7 +197,10 @@
       },
       {
         "searchable": false,
-        "targets": 9
+        "targets": 9,
+        "render": function(data, type, row) {
+          return '<td><span class="textbreak">' + data.EventOrder.Event.title +'</span></td>';
+        }
       },
       {
         "searchable": false,
