@@ -49,6 +49,7 @@
       <th width="6%">金額</th>
       <th data-hide="always" class="hide">付款帳號</th>
       <th data-hide="always" class="hide">訂購票券</th>
+      <th width="8%" class="no-sort">活動名稱</th>
       <th width="8%" class="no-sort">參加者</th>
       <th width="8%" class="no-sort">訂單狀態</th>
       <th class="hide" data-hide="always">訂購人</th>
@@ -126,13 +127,14 @@
       { "data": "TradeAmt" },
       { "data": "vAccount" },
       { "data": "ItemNameArray" },
+      { "data": null }, // EventOrder.Event.Post.title
       { "data": null }, // recipient
       { "data": null }, // Select
       { "data": "UserName" },
       { "data": "Email" },
       { "data": "Phone" },
       { "data": "Address" },
-      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 15, 'desc' ]]
+      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 16, 'desc' ]]
       { "data": "Note" },
       { "data": null }, // edit , show button
     ]
@@ -188,10 +190,19 @@
         "targets": 8
       },
       {
-        "searchable": false,
+        "searchable": true,
         "targets": 9,
         "render": function(data, type, row) {
-          console.log("data.EventOrder.recipient==>", data);
+          if(data.EventOrder && data.EventOrder.Event && data.EventOrder.Event.Post){
+            return '<td><p class="textOver">' + data.EventOrder.Event.Post.title + '</p></td>';
+          }
+          return '<td></td>';
+        }
+      },
+      {
+        "searchable": false,
+        "targets": 10,
+        "render": function(data, type, row) {
           if(data.EventOrder){
             return '<td>' + data.EventOrder.recipient + '</td>';
           }
@@ -200,7 +211,7 @@
       },
 			{
         "searchable": false,
-        "targets": 10,
+        "targets": 11,
         "render": function (data, type, row) {
           // return '<td>' + data.RecipeOrder.productionStatusDesc + '</td>';
           if(row.EventOrder){
@@ -222,14 +233,10 @@
       },
       {
         "searchable": false,
-        "targets": 11,
+        "targets": 12,
         "render": function(data, type, row) {
           return '<td>' + data +'</td>';
         }
-      },
-      {
-        "searchable": false,
-        "targets": 12
       },
       {
         "searchable": false,
@@ -241,10 +248,14 @@
       },
       {
         "searchable": false,
-        "targets": 16
+        "targets": 15
+      },
+      {
+        "searchable": false,
+        "targets": 17
       },
 			{
-				"targets"  : 17,
+				"targets"  : 18,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {

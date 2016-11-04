@@ -44,7 +44,7 @@ var appModel = {
     items: [],
     option: {
       exportCSV: false,
-      defaultSort: [[ 15, 'desc' ]],
+      defaultSort: [[ 16, 'desc' ]],
       ajax: {
         method: 'post',
         url: '/api/admin/eventallpay/find',
@@ -276,6 +276,15 @@ appMain.customSearch = function() {
     search: {
       model: 'EventOrder.User',
       concat: ['firstName', 'lastName'],
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'title',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'EventOrder.Event.Post',
+      column: 'title',
     }
   })
 }
