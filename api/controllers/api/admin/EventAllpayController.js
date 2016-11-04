@@ -15,7 +15,7 @@ module.exports = {
             User,
             {
               model: Event,
-              // include: [ Post ]
+              include: [ {model: Post } ]
             }
           ]
         }
@@ -24,7 +24,7 @@ module.exports = {
         const items = await sails.models[modelName].findAll({
           include:{
             model: EventOrder,
-            include: [User, Event]
+            include: [ {model: Post } ]
           }
         });
         result = { data: { items } };
@@ -48,7 +48,7 @@ module.exports = {
             User,
             {
               model: Event,
-              // include: [ Post ]
+              include: [ {model: Post } ]
             }
           ]
         } ]
