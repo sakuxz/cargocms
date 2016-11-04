@@ -92,7 +92,7 @@ var defaultConfig = {
   // 'post /api/admin/eventallpay':       'api/admin/EventAllpayController.create',
   // 'put /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.update',
   // 'delete /api/admin/eventallpay/:id': 'api/admin/EventAllpayController.destroy',
-  'put /api/admin/labfnp/eventorder/status/:id': 'api/admin/EventOrderController.updateProductionStatus',
+  'put /api/admin/eventorder/status/:id': 'api/admin/EventOrderController.updateProductionStatus',
 
 
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
