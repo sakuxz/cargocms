@@ -243,6 +243,17 @@ appMain.customSearch = function() {
   if (searchProductionStatus == 'ALL'){
     searchProductionStatus = undefined;
   }
+  appModel.pagingQuery.columns.push({
+    data: 'RecipeOrderId',
+    searchable: true,
+    search: {
+         custom: {
+              where: {
+                 $not: null
+              }
+          }
+      }
+  });
 
   appModel.pagingQuery.columns.push({
     data: '',
