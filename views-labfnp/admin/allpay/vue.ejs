@@ -120,6 +120,7 @@ appMain.DataTableInitComplete = function() {
       }
 
     });
+
   });
 
 
@@ -241,6 +242,9 @@ appMain.DataTableInitComplete = function() {
     };
     messageApp.confirm(msgInfo, action);
   });
+
+  //隱藏新增按鈕
+  $('#ToolTables_main-table_2').hide();
 
 }
 appMain.customSearch = function() {
