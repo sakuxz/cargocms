@@ -6,6 +6,9 @@ module.exports = {
     'update': ['nocache'],
     'delete': ['nocache'],
   },
+  'api/labfnp/RecipeOrderController': {
+    'find': ['passport', 'sessionAuth'],
+  },
   'labfnp/RecipeController': {
     'create': ['passport', 'sessionAuth'],
     'order': ['passport', 'sessionAuth'],

@@ -22,15 +22,30 @@
     </div>
   </div>
 </script>
+
+<script id="recipeFeedback" type="text/x-jquery-tmpl">
+  <div class="well">
+    <div id="scent-content" class="funny-boxes bg-color-white">
+      <h2 id="scent-title">配方：${name}</h2>
+      <p style="border-top: 2px solid #CD853F;" id="scent-description">${description}</p>
+      <div class="tags">
+      您的感覺:
+        {{each feeling}}
+            <div class="tag">${$value}</div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</script>
 <% LayoutUtils.addScriptBlock(`
   // $(document).ready(function(){
     var successCatch = function(e) {
       $('#scentNote').empty();
-      if(Object.keys(e.data.item).length === 0 ){
+      if(Object.keys(e.data.scentItem).length === 0 || Object.keys(e.data.recipeItem).length === 0){
         $('#scentNote').append($('#noneScentFeedback').tmpl());
       } else {
-        Object.keys(e.data.item).forEach(function(key){
-          var data = e.data.item[key];
+        Object.keys(e.data.scentItem).forEach(function(key){
+          var data = e.data.scentItem[key];
           var scentFeedback = $('#scentFeedback').tmpl({
             name: data.Scent.name,
             title: data.Scent.title,
@@ -39,6 +54,16 @@
             feeling: data.info
           });
           $('#scentNote').append(scentFeedback);
+        });
+
+        Object.keys(e.data.recipeItem).forEach(function(key){
+          var data = e.data.recipeItem[key];
+          var recipeFeedback = $('#recipeFeedback').tmpl({
+            name: data.Recipe.perfumeName,
+            description: data.Recipe.description,
+            feeling: data.info
+          });
+          $('#scentNote').append(recipeFeedback);
         });
       }
     }

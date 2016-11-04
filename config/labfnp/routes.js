@@ -21,6 +21,8 @@ module.exports = {
   'get /api/labfnp/recipe/unlike/:id': 'api/labfnp/RecipeController.unlike',
   'post /api/labfnp/recipe/feedback': 'api/labfnp/RecipeController.saveFeedback',
 
+  'get /api/labfnp/order': 'api/labfnp/RecipeOrderController.find',
+
   'get /api/labfnp/scent/simpleList': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scent': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scentnote': 'api/labfnp/ScentNoteController.find',
