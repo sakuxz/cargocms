@@ -32,8 +32,9 @@ module.exports = {
 
   getSessionEncodeToJWT: function(req) {
     const session = AuthService.getSessionUser(req);
+    const isWebView = AuthService.isWebView(req.headers['user-agent']);
     let jwtToken = '';
-    if (req.session.needJwt && session) {
+    if ((req.session.needJwt || isWebView ) && session ) {
       jwtToken = jwt.sign(session, 'secret');
     }
     req.session.needJwt = false;
@@ -41,6 +42,6 @@ module.exports = {
   },
 
   isWebView: function(userAgent) {
-    return userAgent.indexOf('React-Native') !== -1; 
+    return userAgent.indexOf('React-Native') !== -1;
   }
 }
