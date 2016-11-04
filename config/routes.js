@@ -90,8 +90,8 @@ var defaultConfig = {
   // 'get /api/admin/eventallpay/exportSend': 'api/admin/EventAllpayController.exportSend',
   'get /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.findOne',
   // 'post /api/admin/eventallpay':       'api/admin/EventAllpayController.create',
-  // 'put /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.update',
-  // 'delete /api/admin/eventallpay/:id': 'api/admin/EventAllpayController.destroy',
+  'put /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.update',
+  'delete /api/admin/eventallpay/:id': 'api/admin/EventAllpayController.destroy',
   'put /api/admin/eventorder/status/:id': 'api/admin/EventOrderController.updateProductionStatus',
 
 
