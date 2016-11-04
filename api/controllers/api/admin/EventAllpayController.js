@@ -12,8 +12,9 @@ module.exports = {
         const include = {
           model: EventOrder,
           include: [
-            User,
             {
+              model: User
+            },{
               model: Event,
               include: [ {model: Post } ]
             }
@@ -24,7 +25,14 @@ module.exports = {
         const items = await sails.models[modelName].findAll({
           include:{
             model: EventOrder,
-            include: [ {model: Post } ]
+            include: [
+              {
+                model: User
+              },{
+                model: Event,
+                include: [ {model: Post } ]
+              }
+            ]
           }
         });
         result = { data: { items } };
@@ -45,8 +53,9 @@ module.exports = {
         include:[ {
           model: EventOrder,
           include: [
-            User,
             {
+              model: User
+            },{
               model: Event,
               include: [ {model: Post } ]
             }
@@ -115,11 +124,18 @@ module.exports = {
       const modelName = 'allpay';
       const include = {
         model: EventOrder,
-        include: [User, Event]
+        include: [
+          User,
+          {
+            model: Event,
+            include: [ {model: Post } ]
+          }
+        ]
       }
       const content = await ExportService.query({ query, modelName, include });
       const columns = [
         { caption: '付款帳號', type: 'string' },
+        { caption: "活動名稱", type: "string"},
         { caption: '訂購票券', type: 'string' },
         { caption: '訂購人', type: 'string' },
         { caption: '參加者', type: 'string' },
@@ -136,6 +152,7 @@ module.exports = {
           if (data.PaymentType === 'aio') continue;
           let formatted = [
             `${data.vAccount || ''}`, //付款帳號
+            data.EventOrder.Event.Post.title, //活動名稱
             data.ItemNameArray,          //訂購票券
             data.UserName,               //訂購人
             data.EventOrder.recipient,  //參加者
@@ -170,15 +187,23 @@ module.exports = {
   exportSignExcel: async (req, res) => {
     try {
       let { query, options } = req;
-      sails.log.info('exportSend', query);
+      sails.log.info('exportSign', query);
       const modelName = 'allpay';
       const include = {
         model: EventOrder,
-        include: [User, Event]
+        include: [
+          {
+            model: User
+          },{
+            model: Event,
+            include: [ {model: Post } ]
+          }
+        ]
       }
       const content = await ExportService.query({ query, modelName, include });
       const columns = [
         { caption: "check", type: "string"},
+        { caption: "活動名稱", type: "string"},
         { caption: "訂購票券", type: "string"},
         { caption: "訂購人", type: "string"},
         { caption: "參加者", type: "string"},
@@ -192,6 +217,7 @@ module.exports = {
           if (data.PaymentType === 'aio') continue;
           let formatted = [
             '',
+            data.EventOrder.Event.Post.title, //活動名稱
             data.ItemNameArray,
             data.UserName,
             data.EventOrder.recipient,
