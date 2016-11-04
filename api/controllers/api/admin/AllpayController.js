@@ -126,7 +126,8 @@ module.exports = {
 
   export: async (req, res) => {
     try {
-      let { query, options } = req;
+      let { body, options } = req;
+      let query = body;
       sails.log.info('export', query);
       const modelName = options.controller.split("/").reverse()[0];
       const include = {
@@ -232,7 +233,8 @@ module.exports = {
 
   exportSend: async (req, res) => {
     try {
-      let { query, options } = req;
+      let { body, options } = req;
+      let query = body;
       sails.log.info('exportSend', query);
       const modelName = options.controller.split("/").reverse()[0];
       const include = {
@@ -304,7 +306,8 @@ module.exports = {
 
   exportExcel: async (req, res) => {
     try {
-      let { query, options } = req;
+      let { options, body } = req;
+      let query = body;
       sails.log.info('export', query);
       const modelName = options.controller.split("/").reverse()[0];
       const include = {
@@ -382,8 +385,10 @@ module.exports = {
         format,
         columns,
       });
-      res.attachment(result.fileName);
-      res.end(result.data, 'UTF-8');
+      res.ok({
+        message: 'Get Excel export success.',
+        data: result.fileName,
+      })
     } catch (e) {
       res.serverError(e);
     }
@@ -391,7 +396,8 @@ module.exports = {
 
   exportSendExcel: async (req, res) => {
     try {
-      let { query, options } = req;
+      let { options, body } = req;
+      let query = body;
       sails.log.info('exportSend', query);
       const modelName = options.controller.split("/").reverse()[0];
       const include = {
@@ -454,10 +460,24 @@ module.exports = {
         format,
         columns,
       });
-      res.attachment(result.fileName);
-      res.end(result.data, 'UTF-8');
+      res.ok({
+        message: 'Get Excel export success.',
+        data: result.fileName,
+      })
     } catch (e) {
       res.serverError(e);
     }
   },
+
+  download: async (req, res) => {
+    try {
+      let { query } = req;
+      const fileName = query.fileName
+      const result = await ExportService.downloadExport(fileName);
+      res.attachment(fileName);
+      res.end(result, 'UTF-8');
+    } catch (e) {
+      res.serverError(e);
+    }
+  }
 }

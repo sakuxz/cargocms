@@ -52,6 +52,9 @@ var defaultConfig = {
   'EventController': {
     'allpay': ['passport', 'sessionAuth'],
   },
+  'api/admin/AllpayController': {
+    'download': ['passport', 'sessionAuth', 'isAdmin'],
+  },
   /***************************************************************************
   *                                                                          *
   * Default policy for all controllers and actions (`true` allows public     *

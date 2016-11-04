@@ -98,8 +98,14 @@ appMain.DataTableInitComplete = function() {
   var exportBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_0" title="匯出地址寄送表、配方製作表" tabindex="0" aria-controls="main-table"><span>匯出</span></a>'
   $(exportBtn).prependTo('.DTTT_container');
   $('#ToolTables_main-table_custom_0').on('click', function() {
-    var download = function(url, id) {
-      $('<iframe>', { id: id, src:url }).hide().appendTo('body');
+    var download = function(url, data, id) {
+      $.post( url, data)
+      .done(function( result ) {
+        $('<iframe>', { id: id, src: '/api/admin/allpay/download?fileName=' + result.data }).hide().appendTo('body');
+      })
+      .fail(function( result ) {
+        console.log(result);
+      });
     }
     $.SmartMessageBox({
       title : "匯出",
@@ -107,16 +113,16 @@ appMain.DataTableInitComplete = function() {
       buttons : "[取消][匯出配方製作表][匯出地址寄送表][匯出兩種格式]"
     }, function(ButtonPress) {
       if(ButtonPress === '匯出配方製作表') {
-        // download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
-        download('/api/admin/' + modelName + '/exportExcel?' + serialize(appModel.pagingQuery), 'exportExcel');
+        // download('/api/admin/' + modelName + '/export', serialize(appModel.pagingQuery), 'export');
+        download('/api/admin/' + modelName + '/exportExcel', serialize(appModel.pagingQuery), 'exportExcel');
       } else if (ButtonPress === '匯出地址寄送表') {
-        // download('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), 'exportSend');
-        download('/api/admin/' + modelName + '/exportSendExcel?' + serialize(appModel.pagingQuery), 'exportSendExcel');
+        // download('/api/admin/' + modelName + '/exportSend', serialize(appModel.pagingQuery), 'exportSend');
+        download('/api/admin/' + modelName + '/exportSendExcel', serialize(appModel.pagingQuery), 'exportSendExcel');
       } else if (ButtonPress === '匯出兩種格式') {
-        // download('/api/admin/' + modelName + '/exportSend?' + serialize(appModel.pagingQuery), 'exportSend');
-        // download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
-        download('/api/admin/' + modelName + '/exportExcel?' + serialize(appModel.pagingQuery), 'exportExcel');
-        download('/api/admin/' + modelName + '/exportSendExcel?' + serialize(appModel.pagingQuery), 'exportSendExcel');
+        // download('/api/admin/' + modelName + '/exportSend', serialize(appModel.pagingQuery), 'exportSend');
+        // download('/api/admin/' + modelName + '/export', serialize(appModel.pagingQuery), 'export');
+        download('/api/admin/' + modelName + '/exportExcel', serialize(appModel.pagingQuery), 'exportExcel');
+        download('/api/admin/' + modelName + '/exportSendExcel', serialize(appModel.pagingQuery), 'exportSendExcel');
       }
 
     });
