@@ -203,13 +203,13 @@ module.exports = {
       const content = await ExportService.query({ query, modelName, include });
       const columns = [
         { caption: "check", type: "string"},
-        { caption: "活動名稱", type: "string"},
+        // { caption: "活動名稱", type: "string"},
         { caption: "訂購票券", type: "string"},
-        { caption: "訂購人", type: "string"},
+        // { caption: "訂購人", type: "string"},
         { caption: "參加者", type: "string"},
-        { caption: "備註", type: "string"},
         { caption: "Email", type: "string"},
         { caption: "電話", type: "string"},
+        { caption: "備註", type: "string"},
       ]
       const format = (items) => {
         let result = [];
@@ -217,13 +217,13 @@ module.exports = {
           if (data.PaymentType === 'aio') continue;
           let formatted = [
             '',
-            data.EventOrder.Event.Post.title, //活動名稱
+            // data.EventOrder.Event.Post.title, //活動名稱
             data.ItemNameArray,
-            data.UserName,
+            // data.UserName,
             data.EventOrder.recipient,
-            data.Note,
             data.Email,
             `${data.Phone || ''}`,
+            data.Note,
           ]
 
           result.push(formatted);
