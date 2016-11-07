@@ -101,6 +101,11 @@ module.exports.http = {
         sails.log.debug('Setup static assets folder: ' + dirName + ', uri: /' + dirName.replace('-', '/'));
         app.use('/' + dirName.replace('-', '/'), express.static(dirName));
       }
+
+      if (isDir && dirName === 'assets') {
+
+        app.use('/assets/', express.static(dirName));
+      }
     }
   },
   middleware: {
