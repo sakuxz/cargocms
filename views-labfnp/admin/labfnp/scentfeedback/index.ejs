@@ -6,7 +6,7 @@
 			<th width="15%" class="" data-class="expand"><i class="fa fa-fw text-muted fa-hashtag"/> ID</th>
       <th width="10%" class=""> 回饋內容</th>
       <th width="15%" class=""> 回饋時間</th>
-      <th width="10%" class=""> 回饋會員</th>
+      <th width="10%" class=""> 會員</th>
       <th width="15%" class=""> 香調</th>
 			<th width="10%" class="" data-hide="phone,tablet"></th>
 		</tr>
@@ -17,8 +17,8 @@
 			<td>{{ item.id }}</td>
 			<td>{{ item.feeling }}</td>
       <td>{{ item.createdAt }}</td>
-      <td>{{ item.UserId }}</td>
-      <td>{{ item.ScentId }}</td>
+      <td>{{ item.userName }}</td>
+      <td>{{ item.scentName }}</td>
 			<td align="center" style="cursor: pointer;">
 				<div class="row">
 					<a class="btn btn-default btn-xs" role="button" v-on:click="show(item.id)">
@@ -42,8 +42,8 @@
 			{ "data": "id" },
 			{ "data": "feeling" },
 			{ "data": "createdAt" },
-      { "data": "UserId" },
-      { "data": "ScentId" },
+      { "data": "userName" },
+      { "data": "scentName" },
 			{ "data": null }
 		]
 
@@ -57,6 +57,21 @@
         "searchable": true,
         "targets": 1
       },
+      {
+        "searchable": false,
+        "targets": 3,
+        	"render": function ( data, type, row ) {
+            return '<td>'+ data +'</td>';
+          }
+      },
+      {
+        "searchable": false,
+        "targets": 4,
+        	"render": function ( data, type, row ) {
+            console.log("scent===>", data);
+            return '<td>'+ data +'</td>';
+          }
+      },
 			{
 				"targets"  : 5,
 				"orderable": false,
@@ -67,9 +82,9 @@
 						'<a name="showDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-eye text-muted" />'+
 						'</a>'+
-						// '<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
-						// 	'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
-						// '</a>'+
+						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
+							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
+						'</a>'+
 					'</div>';
 					return colBody;
 				}
