@@ -47,16 +47,18 @@
     </label>
   </section>
 
-  <section>
-    <label class="label">封面圖片</label>
-    <%- include ../../lib/fineuploader.ejs %>
-    <div id="fine-uploader-validation"></div>
-  </section>
+  <% if(!AuthService.isWebView(req.headers['user-agent'])) { %>
+    <section>
+      <label class="label">封面圖片</label>
+      <%- include ../../lib/fineuploader.ejs %>
+      <div id="fine-uploader-validation"></div>
+    </section>
 
-  <section>
-    <input type="file" id="imageInput" name="uploadPic">
-    <input type="hidden" name="coverPhotoId" value="">
-  </section>
+    <section>
+      <input type="file" id="imageInput" name="uploadPic">
+      <input type="hidden" name="coverPhotoId" value="">
+    </section>
+  <% } %>
 </fieldset>
 
 <% if (recipe.createdBy === 'scent') { %>
