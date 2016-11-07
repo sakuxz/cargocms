@@ -4,10 +4,12 @@
 	<thead>
 		<tr>
 			<th width="15%" class="" data-class="expand"><i class="fa fa-fw text-muted fa-hashtag"/> ID</th>
-      <th width="" class=""> 回饋內容</th>
-      <th width="20%" class=""> 回饋時間</th>
-      <th width="15%" class=""> 會員</th>
       <th width="15%" class=""> 香調</th>
+      <th width="" class=""> 回饋內容</th>
+      <th width="15%" class=""> 會員</th>
+      <th width="20%" class=""> 回饋時間</th>
+
+
 			<th width="80px" class="" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
@@ -15,10 +17,10 @@
 	<tbody>
 		<tr v-for="item in data.items">
 			<td>{{ item.id }}</td>
-			<td>{{ item.feeling }}</td>
-      <td>{{ item.createdAt }}</td>
+			<td>{{ item.scentName }}</td>
+      <td>{{ item.feeling }}</td>
       <td>{{ item.userName }}</td>
-      <td>{{ item.scentName }}</td>
+      <td>{{ item.createdAt }}</td>
 			<td align="center" style="cursor: pointer;">
 				<div class="row">
 					<a class="btn btn-default btn-xs" role="button" v-on:click="show(item.id)">
@@ -40,10 +42,10 @@
 		// server only
 		var columns = [
 			{ "data": "id" },
+			{ "data": "scentName" },
 			{ "data": "feeling" },
-			{ "data": "createdAt" },
       { "data": "userName" },
-      { "data": "scentName" },
+      { "data": "createdAt" },
 			{ "data": null }
 		]
 
@@ -53,24 +55,13 @@
         "targets": 'no-sort',
         "orderable": false,
       },
-			{
-        "searchable": true,
+      {
+        "searchable": false,
         "targets": 1
       },
       {
         "searchable": false,
         "targets": 3,
-        	"render": function ( data, type, row ) {
-            return '<td>'+ data +'</td>';
-          }
-      },
-      {
-        "searchable": false,
-        "targets": 4,
-        	"render": function ( data, type, row ) {
-            console.log("scent===>", data);
-            return '<td>'+ data +'</td>';
-          }
       },
 			{
 				"targets"  : 5,
