@@ -88,23 +88,26 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-  cache: 0,
+  cache: 86400000,
 
   customMiddleware: function(app) {
     // app.use(express.logger());
     // app.use(express.compress());
+    var {environment} = sails.config;
+    var maxAge = sails.config.http.cache;
+    if(environment == 'development') maxAge = 0;
 
     const files = fs.readdirSync('.');
     for (var dirName of files) {
       let isDir = fs.statSync(dirName).isDirectory();
       if (isDir && dirName.startsWith('assets-')) {
         sails.log.debug('Setup static assets folder: ' + dirName + ', uri: /' + dirName.replace('-', '/'));
-        app.use('/' + dirName.replace('-', '/'), express.static(dirName));
+        app.use('/' + dirName.replace('-', '/'), express.static(dirName, {maxAge}));
       }
 
       if (isDir && dirName === 'assets') {
 
-        app.use('/assets/', express.static(dirName));
+        app.use('/assets/', express.static(dirName, {maxAge}));
       }
     }
   },
