@@ -1,8 +1,21 @@
+import moment from 'moment';
+
 module.exports = {
   attributes: {
     feeling: {
       type: Sequelize.STRING,
       allowNull: false
+    },
+
+    createdAt: {
+      type: Sequelize.DATE,
+      get: function () {
+        try {
+          return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm");
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
     },
 
     scentName: {
