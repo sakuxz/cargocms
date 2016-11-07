@@ -94,8 +94,10 @@ module.exports.http = {
     // app.use(express.logger());
     // app.use(express.compress());
     var {environment} = sails.config;
-    var maxAge = sails.config.http.cache;
-    if(environment == 'development') maxAge = 0;
+    var maxAge = 0;
+    if(environment == 'production'){
+      maxAge = sails.config.http.cache
+    }
 
     const files = fs.readdirSync('.');
     for (var dirName of files) {
