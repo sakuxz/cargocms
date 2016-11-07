@@ -8,7 +8,8 @@ module.exports = {
           model: RecipeOrder,
           where: { UserId: user.id },
           include: Recipe
-        }
+        },
+        order: [['createdAt', 'DESC']],
       });
       sails.log.debug(item);
       res.ok({ message, data: { item }});
