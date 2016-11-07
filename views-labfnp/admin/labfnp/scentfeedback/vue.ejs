@@ -37,5 +37,8 @@ var appModel = {
 // appMain.log = function () {console.log("123")}
 appMain.DataTableInitComplete = function() {
   $('#ToolTables_main-table_2').hide();
-  $('#ToolTables_main-table_3').hide();
+  // $('#ToolTables_main-table_3').hide();
+}
+appMain.hideSubmit = function() {
+  $('button[type="submit"]').hide();
 }
