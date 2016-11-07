@@ -50,7 +50,7 @@ module.exports = {
     classMethods: {
       deleteById: async (id) => {
         try {
-          return await Allpay.destroy({ where: { id } });
+          return await ScentFeedback.destroy({ where: { id } });
         } catch (e) {
           sails.log.error(e);
           throw e;
