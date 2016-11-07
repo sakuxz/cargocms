@@ -17,6 +17,8 @@ var appModel = {
       createdAt: '',
       UserId: '',
       ScentId: '',
+      userName:'',
+      scentName: '',
     },
     items: [],
     option: {
@@ -41,4 +43,34 @@ appMain.DataTableInitComplete = function() {
 }
 appMain.hideSubmit = function() {
   $('button[type="submit"]').hide();
+}
+
+appMain.customSearch = function() {
+  appModel.pagingQuery.columns.push({
+    data: 'scentName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'Scent',
+      column: 'name',
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'userName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'User',
+      concat: ['lastName', 'firstName'],
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'userName',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'User',
+      concat: ['firstName', 'lastName'],
+    }
+  })
 }
