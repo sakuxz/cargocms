@@ -28,6 +28,7 @@ module.exports = {
   'get /api/labfnp/scentnote': 'api/labfnp/ScentNoteController.find',
 
   'get /api/admin/labfnp/scentfeedback': 'api/admin/labfnp/ScentFeedbackController.find',
+  'get /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.findOne',
 
   // 這裡先相容舊版 api
   'post /api/allpay/paid':        'api/admin/labfnp/RecipeController.paid',
