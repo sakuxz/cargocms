@@ -8,9 +8,7 @@
       <th width="" class=""> 回饋內容</th>
       <th width="15%" class=""> 會員</th>
       <th width="20%" class=""> 回饋時間</th>
-
-
-			<th width="80px" class="" data-hide="phone,tablet"></th>
+			<th width="120px" class="" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
 	<!-- client only -->
@@ -68,6 +66,7 @@
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
+          console.log("===data===", data);
 					var colBody =
 					'<div class="row-action-buttons hidden-xs hidden-sm">'+
 						'<a name="showDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
@@ -76,6 +75,9 @@
 						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
 						'</a>'+
+            '<a name="checkFeelButton" class="btn btn-default btn-xs" role="button" scentFeeling-data="'+ data.feeling+'" scent-data="'+ data.scentName+'">'+
+              '<i class="fa-fw fa fa-check text-muted"/>'+
+            '</a>'+
 					'</div>';
 					return colBody;
 				}

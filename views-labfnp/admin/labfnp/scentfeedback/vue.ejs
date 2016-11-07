@@ -74,3 +74,56 @@ appMain.customSearch = function() {
     }
   })
 }
+
+$("#main-table").delegate("[name='checkFeelButton']","click", function(e) {
+    var that = this;
+    var scent_name = $(that).attr("scent-data");
+    var scent_feeling = $(that).attr("scentFeeling-data");
+    $.SmartMessageBox({
+      title : "確認香調回饋",
+      content :
+      "香調分子 :<br/>" +
+      `<input id='ScentName' type='text' class='form-control' value='${scent_name}'/ disabled>` +
+      "<br/>" +
+      "香調回饋 :<br/>" +
+      `<input id='ScentFeeling' type='text' class='form-control' value='${scent_feeling}'/ disabled>` +
+      "<br/>",
+      buttons : "[確認][取消]"
+    }, function(ButtonPress) {
+         if(ButtonPress === "取消"){
+           return 0;
+         }
+
+         var ajaxSuccess = function (result) {
+           location.href = '/admin/#/admin/' + modelName;
+           messageApp.show({
+           desc: '更新香調感覺成功！',
+           type: 'success'
+           });
+         }; // end ajaxSuccess
+
+        var ajaxError = function (result) {
+          messageApp.show({
+            desc: '更新資料失敗！errorMessage: ' + result.responseJSON.message,
+            type: 'error'
+          });
+        };
+
+        console.log(`ScentName: ${scent_name} , ScentFeeling: ${scent_feeling}`);
+        // $.ajax({
+        //   url: '/api/' + prefix + 'scentfeedback' + '/' + ,
+        //   type: 'PUT',
+        //   dataType: 'json',
+        //   data: {trackingNumber, shipping},
+        //   xhrFields: {
+        //   withCredentials: true,
+        //   },
+        //   success: ajaxSuccess,
+        //   error: ajaxError,
+        // }).done(function(result){
+        //   defaultTable.api().ajax.reload(null, false);
+        // });
+       }
+    );
+    e.preventDefault();
+});
