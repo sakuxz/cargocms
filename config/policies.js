@@ -34,13 +34,13 @@ var defaultConfig = {
     'portfolio': ['nocache', 'passport'],
   },
   'AdminController': {
-    'index': ['passport', 'passport', 'sessionAuth', 'isAdmin']
+    'index': ['passport', 'sessionAuth', 'isAdmin']
   },
   'EventController': {
-    'allpay': ['passport', 'passport', 'sessionAuth'],
+    'allpay': ['passport', 'sessionAuth'],
   },
   'api/admin/AllpayController': {
-    'download': ['passport', 'passport', 'sessionAuth', 'isAdmin'],
+    'download': ['passport', 'sessionAuth', 'isAdmin'],
   },
   /***************************************************************************
   *                                                                          *
