@@ -79,6 +79,7 @@ $("#main-table").delegate("[name='checkFeelButton']","click", function(e) {
     var that = this;
     var scent_name = $(that).attr("scent-data");
     var scent_feeling = $(that).attr("scentFeeling-data");
+    var scent_feedbackId = $(that).attr("data-id");
     $.SmartMessageBox({
       title : "確認香調回饋",
       buttons : "[確認][取消]"
@@ -103,20 +104,20 @@ $("#main-table").delegate("[name='checkFeelButton']","click", function(e) {
         };
 
         //暫時 console 輸出資料，尚未確認回饋
-        console.log(`ScentName: ${scent_name} , ScentFeeling: ${scent_feeling}`);
-        // $.ajax({
-        //   url: '/api/' + prefix + 'scentfeedback' + '/' + ,
-        //   type: 'PUT',
-        //   dataType: 'json',
-        //   data: {trackingNumber, shipping},
-        //   xhrFields: {
-        //   withCredentials: true,
-        //   },
-        //   success: ajaxSuccess,
-        //   error: ajaxError,
-        // }).done(function(result){
-        //   defaultTable.api().ajax.reload(null, false);
-        // });
+        console.log(`ScentName: ${scent_name} , ScentFeeling: ${scent_feeling}, ScentFeedbackID: ${scent_feedbackId}`);
+        $.ajax({
+          url: '/api/' + prefix + 'labfnp/feedbackcheck' + '/' + scent_feedbackId,
+          type: 'PUT',
+          dataType: 'json',
+          data: {scentName: scent_name, feeling: scent_feeling},
+          xhrFields: {
+          withCredentials: true,
+          },
+          success: ajaxSuccess,
+          error: ajaxError,
+        }).done(function(result){
+          defaultTable.api().ajax.reload(null, false);
+        });
        }
     );
     e.preventDefault();
