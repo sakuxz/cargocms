@@ -30,27 +30,17 @@ var defaultConfig = {
   },
   'WallController': true,
   'MainController': {
-    'index': ['nocache'],
-    'portfolio': ['nocache'],
+    'index': ['nocache', 'passport'],
+    'portfolio': ['nocache', 'passport'],
   },
-
-  'labfnp/RecipeController': {
-    'show': ['nocache'],
-    'feedback': ['nocache']
-  },
-
-  'labfnp/MainController': {
-    'explore': ['nocache']
-  },
-
   'AdminController': {
-    'index': ['passport', 'sessionAuth', 'isAdmin']
+    'index': ['passport', 'passport', 'sessionAuth', 'isAdmin']
   },
   'EventController': {
-    'allpay': ['passport', 'sessionAuth'],
+    'allpay': ['passport', 'passport', 'sessionAuth'],
   },
   'api/admin/AllpayController': {
-    'download': ['passport', 'sessionAuth', 'isAdmin'],
+    'download': ['passport', 'passport', 'sessionAuth', 'isAdmin'],
   },
   /***************************************************************************
   *                                                                          *
