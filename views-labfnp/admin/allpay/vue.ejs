@@ -255,17 +255,33 @@ appMain.customSearch = function() {
     searchProductionStatus = undefined;
   }
 
-  appModel.pagingQuery.columns.push({
-    data: '',
-    searchable: true,
-    findInclude: true,
-    search: {
-      model: 'RecipeOrder',
-      where: {
-        productionStatus: searchProductionStatus,
+  if (searchProductionStatus) {
+    appModel.pagingQuery.columns.push({
+      data: '',
+      searchable: true,
+      findInclude: true,
+      search: {
+        model: 'RecipeOrder',
+        where: {
+          productionStatus: searchProductionStatus,
+        }
       }
-    }
-  })
+    })
+  } else {
+    appModel.pagingQuery.columns.push({
+      data: '',
+      searchable: true,
+      findInclude: true,
+      search: {
+        model: 'RecipeOrder',
+        where: {
+          productionStatus: {
+            $not: null
+          },
+        }
+      }
+    })
+  }
 
   appModel.pagingQuery.columns.push({
     data: 'recipient',
