@@ -24,30 +24,27 @@ var defaultConfig = {
     '*': ['passport'],
     'status': [],
   },
-  'UserController': {
-    'index': ['nocache'],
-    'findOne': ['nocache'],
-    'create': ['nocache'],
-    'update': ['nocache'],
-    'delete': ['nocache']
-  },
   ...customConfig,
   'BlogController': {
     'index': true
   },
   'WallController': true,
   'MainController': {
-    'index': ['nocache']
+    'index': ['nocache'],
+    'portfolio': ['nocache'],
   },
+
+  'labfnp/RecipeController': {
+    'show': ['nocache'],
+    'feedback': ['nocache']
+  },
+
+  'labfnp/MainController': {
+    'explore': ['nocache']
+  },
+
   'AdminController': {
     'index': ['passport', 'sessionAuth', 'isAdmin']
-  },
-  'SloganController': {
-    'index': ['nocache'],
-    'findOne': ['nocache'],
-    'create': ['nocache'],
-    'update': ['nocache'],
-    'delete': ['nocache'],
   },
   'EventController': {
     'allpay': ['passport', 'sessionAuth'],

@@ -94,7 +94,7 @@ module.exports.http = {
     // app.use(express.logger());
     // app.use(express.compress());
     var {environment} = sails.config;
-    var maxAge = 0;
+    var maxAge = sails.config.http.cache;
     if(environment == 'production'){
       maxAge = sails.config.http.cache
     }
