@@ -8,6 +8,7 @@
       <th width="" class=""> 回饋內容</th>
       <th width="15%" class=""> 會員</th>
       <th width="20%" class=""> 回饋時間</th>
+      <th width="8%" class=""> 已確認</th>
 			<th width="120px" class="" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
@@ -19,6 +20,7 @@
       <td>{{ item.feeling }}</td>
       <td>{{ item.userName }}</td>
       <td>{{ item.createdAt }}</td>
+      <td>{{ item.feedbackCheck }}</td>
 			<td align="center" style="cursor: pointer;">
 				<div class="row">
 					<a class="btn btn-default btn-xs" role="button" v-on:click="show(item.id)">
@@ -44,6 +46,7 @@
 			{ "data": "feeling" },
       { "data": "userName" },
       { "data": "createdAt" },
+      { "data": "feedbackCheck" },
 			{ "data": null }
 		]
 
@@ -61,8 +64,18 @@
         "searchable": false,
         "targets": 3,
       },
+      {
+        "searchable": false,
+        "targets": 5,
+        "render": function ( data, type, row ) {
+          if(data){
+            return '<td>Yes</td>';
+          }
+          return '<td>No</td>';
+        }
+      },
 			{
-				"targets"  : 5,
+				"targets"  : 6,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
@@ -75,7 +88,7 @@
 						'<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
 							'<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
 						'</a>'+
-            '<a name="checkFeelButton" class="btn btn-default btn-xs" role="button" scentFeeling-data="'+ data.feeling+'" scent-data="'+ data.scentName+'">'+
+            '<a name="checkFeelButton" class="btn btn-default btn-xs'+(data.feedbackCheck? " hidden ": "") +'" role="button" data-id="'+ row.id +'" scentFeeling-data="'+ data.feeling+'" scent-data="'+ data.scentName+'">'+
               '<i class="fa-fw fa fa-check text-muted"/>'+
             '</a>'+
 					'</div>';
