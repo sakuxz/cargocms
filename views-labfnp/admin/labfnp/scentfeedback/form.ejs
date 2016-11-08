@@ -36,8 +36,10 @@
     <section class="col col-lg-6 col-xs-6">
       <label class="label">已確認</label>
       <label class="input state-disabled">
-        <input type="text" name="feedbackCheck" placeholder="" v-model="data.item.feedbackCheck" disabled>
-        <b class="tooltip tooltip-bottom-right">已確認</b></label>
+        <select class="form-control" v-model="data.item.feedbackCheck" disabled>
+          <option value="0" selected>No</option>
+          <option value="1">Yes</option>
+        </select> <i></i> </label>
     </section>
   </div>
 
