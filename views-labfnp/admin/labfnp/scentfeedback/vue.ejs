@@ -81,13 +81,6 @@ $("#main-table").delegate("[name='checkFeelButton']","click", function(e) {
     var scent_feeling = $(that).attr("scentFeeling-data");
     $.SmartMessageBox({
       title : "確認香調回饋",
-      content :
-      "香調分子 :<br/>" +
-      `<input id='ScentName' type='text' class='form-control' value='${scent_name}'/ disabled>` +
-      "<br/>" +
-      "香調回饋 :<br/>" +
-      `<input id='ScentFeeling' type='text' class='form-control' value='${scent_feeling}'/ disabled>` +
-      "<br/>",
       buttons : "[確認][取消]"
     }, function(ButtonPress) {
          if(ButtonPress === "取消"){
@@ -109,6 +102,7 @@ $("#main-table").delegate("[name='checkFeelButton']","click", function(e) {
           });
         };
 
+        //暫時 console 輸出資料，尚未確認回饋
         console.log(`ScentName: ${scent_name} , ScentFeeling: ${scent_feeling}`);
         // $.ajax({
         //   url: '/api/' + prefix + 'scentfeedback' + '/' + ,
