@@ -11,8 +11,8 @@ module.exports = {
   create: async (req, res) => {
     let startTime = Date.now();
     let endTime = Date.now() + 86400000; // add one day.
-    startTime = moment(startTime).format("YYYY/MM/DD HH:mm");
-    endTime = moment(endTime).format("YYYY/MM/DD HH:mm");
+    startTime = moment(startTime).format("YYYY/MM/DD 00:00");
+    endTime = moment(endTime).format("YYYY/MM/DD 00:00");
     res.ok({
       view: true,
       layout: 'admin/default/create',

@@ -66,7 +66,6 @@
   						</tr>
               <tr>
                   <td colspan="6" class="hiddenRow">
-                    <% if (Event.open){ %>
                     <div class="accordian-body collapse" id="event<%= Event.id %>">
                       <div>
                           <b>票券名稱：</b>
@@ -93,7 +92,6 @@
                           <%= Event.description %>
                       </div>
                     </div>
-                    <% } %>
                   </td>
               </tr>
             <% }); %>
