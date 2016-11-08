@@ -42,7 +42,7 @@ module.exports = {
       const time = moment(new Date()).format("YYYYMMDDHHmmSS");
       fileName = `${fileName || ''}${time}.csv`;
       const filePath = `${__dirname}/../../.tmp/${fileName}`;
-      // await fs.writeFileSync(filePath, dataBuffer);
+      await fs.writeFileSync(filePath, dataBuffer);
 
       return { filePath, fileName, data: dataBuffer};
     } catch (e) {
@@ -66,11 +66,21 @@ module.exports = {
       const time = moment(new Date()).format("YYYYMMDDHHmmSS");
       fileName = `${fileName || ''}${time}.xlsx`;
       const filePath = `${__dirname}/../../.tmp/${fileName}`;
-      // await fs.writeFileSync(filePath, result, 'binary');
+      await fs.writeFileSync(filePath, result, 'binary');
 
       return { filePath, fileName, data: dataBuffer};
     } catch (e) {
       throw e;
     }
   },
+
+  downloadExport: async(fileName) => {
+    try {
+      const filePath = `${__dirname}/../../.tmp/${fileName}`;
+      var buffer = fs.readFileSync(filePath);
+      return buffer;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

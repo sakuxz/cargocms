@@ -30,6 +30,11 @@ module.exports = {
         return res.redirect(data.url)
       }
       const social = SocialService.forPost({posts: [data]});
+
+      data.Events.forEach((e) => {
+        e = Object.assign(e, EventService.getTicketStatus(e, new Date()));
+      });
+
       res.view('event/show', {data, social});
     } catch (e) {
       res.serverError(e);

@@ -6,7 +6,7 @@ var COMMON = {
 
 var itemBeforeEdit = {};
 var prefix = 'admin/';
-var modelName = "allpay";
+var modelName = "eventallpay";
 var appModel = {
   modelName: modelName,
   prefix: prefix,
@@ -34,7 +34,7 @@ var appModel = {
       createdAt: '',
       updatedAt: '',
       RecipeOrderId: '',
-      ItemNameArray: '',
+      EventOrderId: '',
       UserName: '',
       Email: '',
       Phone: '',
@@ -44,10 +44,10 @@ var appModel = {
     items: [],
     option: {
       exportCSV: false,
-      defaultSort: [[ 22, 'desc' ]],
+      defaultSort: [[ 16, 'desc' ]],
       ajax: {
         method: 'post',
-        url: '/api/admin/allpay/find',
+        url: '/api/admin/eventallpay/find',
       }
     }
   },
@@ -98,35 +98,23 @@ appMain.DataTableInitComplete = function() {
   var exportBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_0" title="匯出地址寄送表、配方製作表" tabindex="0" aria-controls="main-table"><span>匯出</span></a>'
   $(exportBtn).prependTo('.DTTT_container');
   $('#ToolTables_main-table_custom_0').on('click', function() {
-    var download = function(url, data, id) {
-      $.post( url, data)
-      .done(function( result ) {
-        $('<iframe>', { id: id, src: '/api/admin/allpay/download?fileName=' + result.data }).hide().appendTo('body');
-      })
-      .fail(function( result ) {
-        console.log(result);
-      });
+    var download = function(url, id) {
+      $('<iframe>', { id: id, src:url }).hide().appendTo('body');
     }
     $.SmartMessageBox({
       title : "匯出",
       content :'請選擇要匯出的資料表',
-      buttons : "[取消][匯出配方製作表][匯出地址寄送表][匯出兩種格式]"
+      buttons : "[取消][匯出完整資訊表][匯出簽到資訊表][匯出兩種格式]"
     }, function(ButtonPress) {
-      if(ButtonPress === '匯出配方製作表') {
-        // download('/api/admin/' + modelName + '/export', serialize(appModel.pagingQuery), 'export');
-        download('/api/admin/' + modelName + '/exportExcel', serialize(appModel.pagingQuery), 'exportExcel');
-      } else if (ButtonPress === '匯出地址寄送表') {
-        // download('/api/admin/' + modelName + '/exportSend', serialize(appModel.pagingQuery), 'exportSend');
-        download('/api/admin/' + modelName + '/exportSendExcel', serialize(appModel.pagingQuery), 'exportSendExcel');
+      if(ButtonPress === '匯出完整資訊表') {
+        download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'exportExcel');
+      } else if (ButtonPress === '匯出簽到資訊表') {
+        download('/api/admin/' + modelName + '/exportSign?' + serialize(appModel.pagingQuery), 'exportSignExcel');
       } else if (ButtonPress === '匯出兩種格式') {
-        // download('/api/admin/' + modelName + '/exportSend', serialize(appModel.pagingQuery), 'exportSend');
-        // download('/api/admin/' + modelName + '/export', serialize(appModel.pagingQuery), 'export');
-        download('/api/admin/' + modelName + '/exportExcel', serialize(appModel.pagingQuery), 'exportExcel');
-        download('/api/admin/' + modelName + '/exportSendExcel', serialize(appModel.pagingQuery), 'exportSendExcel');
+        download('/api/admin/' + modelName + '/exportSign?' + serialize(appModel.pagingQuery), 'exportSend');
+        download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
       }
-
     });
-
   });
 
 
@@ -146,68 +134,6 @@ appMain.DataTableInitComplete = function() {
   $('#productionStatus').on('change', function(){
     api.columns().search().draw();
   })
-
-  $("#main-table").delegate("[name='editOrderButton']","click", function(e) {
-      var that = this;
-      $.SmartMessageBox({
-        title : "更新物流資料",
-        content :
-        "<select id='shipping' class='form-control'>" +
-          "<option value='HCT' selected>新竹貨運</option>" +
-        "</select> <br/>" +
-        "請輸入物流編號 :<br/>" +
-        "<input id='trackingNumber' type='text' class='form-control'/>" +
-        "<br/>",
-        buttons : "[更新][取消]"
-      }, function(ButtonPress) {
-           if(ButtonPress === "取消"){
-             return 0;
-           }
-
-           var trackingNumber = $("#trackingNumber").val();
-           var shipping = $("#shipping").val();
-           var recipeId = $(that).attr("data-recipeOrder-id");
-
-           if(!shipping || !trackingNumber){
-             messageApp.show({
-               desc: '更新資料失敗！ 請填寫完整資料 ',
-               type: 'error'
-             });
-             return 0;
-           }
-
-           var ajaxSuccess = function (result) {
-             location.href = '/admin/#/admin/' + modelName;
-             messageApp.show({
-             desc: '更新資料成功！',
-             type: 'success'
-             });
-           }; // end ajaxSuccess
-
-          var ajaxError = function (result) {
-            messageApp.show({
-              desc: '更新資料失敗！errorMessage: ' + result.responseJSON.message,
-              type: 'error'
-            });
-          };
-
-          $.ajax({
-            url: '/api/' + prefix + 'shipping' + '/' + recipeId,
-            type: 'PUT',
-            dataType: 'json',
-            data: {trackingNumber, shipping},
-            xhrFields: {
-            withCredentials: true,
-            },
-            success: ajaxSuccess,
-            error: ajaxError,
-          }).done(function(result){
-            defaultTable.api().ajax.reload(null, false);
-          });
-         }
-      );
-      e.preventDefault();
-  });
 
   $("#main-table").delegate("[name='updateProductionStatus']", 'focus', function() {
     $(this).attr('data-oldValue', $(this).val());
@@ -229,7 +155,7 @@ appMain.DataTableInitComplete = function() {
       if (ButtonPressed === '確認') {
         $(that).val(newVal);
         $.ajax({
-          url: "/api/admin/labfnp/recipeorder/status/"+id,
+          url: "/api/admin/eventorder/status/"+id,
           method: "put",
           dataType: 'json',
           cache: false,
@@ -251,15 +177,16 @@ appMain.DataTableInitComplete = function() {
 
   //隱藏新增按鈕
   $('#ToolTables_main-table_2').hide();
-
 }
+
 appMain.customSearch = function() {
   var searchProductionStatus = $('#productionStatus').val() || 'PAID';
   if (searchProductionStatus == 'ALL'){
     searchProductionStatus = undefined;
   }
+  // only Event data
   appModel.pagingQuery.columns.push({
-    data: 'RecipeOrderId',
+    data: 'EventOrderId',
     searchable: true,
     search: {
          custom: {
@@ -275,7 +202,7 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder',
+      model: 'EventOrder',
       where: {
         productionStatus: searchProductionStatus,
       }
@@ -287,7 +214,7 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder',
+      model: 'EventOrder',
       column: 'recipient',
     }
   })
@@ -296,7 +223,7 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder',
+      model: 'EventOrder',
       column: 'email',
     }
   })
@@ -305,7 +232,7 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder',
+      model: 'EventOrder',
       column: 'phone',
     }
   })
@@ -314,17 +241,8 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder',
+      model: 'EventOrder',
       column: 'invoiceNo',
-    }
-  })
-  appModel.pagingQuery.columns.push({
-    data: 'perfumeName',
-    searchable: true,
-    findInclude: true,
-    search: {
-      model: 'RecipeOrder.Recipe',
-      column: 'perfumeName',
     }
   })
   appModel.pagingQuery.columns.push({
@@ -332,7 +250,7 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder.User',
+      model: 'EventOrder.User',
       column: 'facebookId',
     }
   })
@@ -341,7 +259,7 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder.User',
+      model: 'EventOrder.User',
       column: 'username',
     }
   })
@@ -350,7 +268,7 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder.User',
+      model: 'EventOrder.User',
       concat: ['lastName', 'firstName'],
     }
   })
@@ -359,8 +277,17 @@ appMain.customSearch = function() {
     searchable: true,
     findInclude: true,
     search: {
-      model: 'RecipeOrder.User',
+      model: 'EventOrder.User',
       concat: ['firstName', 'lastName'],
+    }
+  })
+  appModel.pagingQuery.columns.push({
+    data: 'title',
+    searchable: true,
+    findInclude: true,
+    search: {
+      model: 'EventOrder.Event.Post',
+      column: 'title',
     }
   })
 }

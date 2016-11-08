@@ -4,7 +4,7 @@
     <section class="col col-lg-4 col-xs-4">
       <label class="label">訂單狀態</label>
       <label class="select state-disabled">
-        <select v-model="data.item.RecipeOrder.productionStatus" disabled>
+        <select v-model="data.item.EventOrder.productionStatus" disabled>
           <option value="NEW" selected>NEW</option>
           <option value="SUBMITTED">下訂單</option>
           <option value="PAID">已付款</option>
@@ -148,6 +148,15 @@
   </div>
 
   <div class="row">
+    <section class="col col-lg-12 col-xs-12 col-xs-12">
+      <label class="label">活動名稱</label>
+      <label class="input state-disabled allpaydisabled">
+        <input class="allpay" type="text" name="PostTitle" placeholder="活動名稱" v-model="data.item.EventOrder.Event.Post.title" disabled>
+        <b class="tooltip tooltip-bottom-right">Post Title</b></label>
+    </section>
+  </div>
+
+  <div class="row">
     <section class="col col-lg-6 col-xs-6 col-xs-6">
       <label class="label">訂單成立時間</label>
       <label class="input state-disabled allpaydisabled">
@@ -156,10 +165,10 @@
     </section>
 
     <section class="col col-lg-6 col-xs-6">
-      <label class="label">配方訂單ID</label>
+      <label class="label">票券訂單ID</label>
       <label class="input state-disabled allpaydisabled">
-        <input class="allpay" type="text" name="RecipeOrderId" placeholder="RecipeOrderId" v-model="data.item.RecipeOrderId" disabled>
-        <b class="tooltip tooltip-bottom-right">RecipeOrderId</b></label>
+        <input class="allpay" type="text" name="EventOrderId" placeholder="EventOrderId" v-model="data.item.EventOrderId" disabled>
+        <b class="tooltip tooltip-bottom-right">EventOrderId</b></label>
     </section>
   </div>
   <div class="row hidden">
@@ -179,7 +188,7 @@
   </div>
   <div class="row">
     <section class="col col-lg-6 col-xs-6">
-      <label class="label">配方名稱</label>
+      <label class="label">票券名稱</label>
       <label class="input state-disabled allpaydisabled">
         <input class="allpay" type="text" name="ItemNameArray" placeholder="ItemNameArray" v-model="data.item.ItemNameArray" disabled>
         <b class="tooltip tooltip-bottom-right">ItemNameArray</b></label>
@@ -194,7 +203,7 @@
   </div>
   <div class="row">
     <section class="col col-lg-6 col-xs-6">
-      <label class="label">收件人</label>
+      <label class="label">參加者</label>
       <label class="input state-disabled">
         <input type="text" name="Recipient" placeholder="Recipient" v-model="data.item.Recipient" disabled>
         <b class="tooltip tooltip-bottom-right">Recipient</b></label>
@@ -223,6 +232,8 @@
     </section>
   </div>
 
+
+  <%/*
   <div class="row">
     <section class="col col-lg-6 col-xs-6">
       <label class="label">運送物流</label>
@@ -239,6 +250,8 @@
         <b class="tooltip tooltip-bottom-right">Address</b></label>
     </section>
   </div>
+  */%>
+
 
   <section>
     <label class="label">備註</label>
