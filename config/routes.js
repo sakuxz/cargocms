@@ -88,6 +88,15 @@ var defaultConfig = {
   'post /api/event/paid':        'api/admin/EventController.paid',
   'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
 
+  'post /api/admin/eventallpay/find':  'api/admin/EventAllpayController.find',
+  'get /api/admin/eventallpay/export': 'api/admin/EventAllpayController.exportExcel',
+  'get /api/admin/eventallpay/exportSign': 'api/admin/EventAllpayController.exportSignExcel',
+  'get /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.findOne',
+  // 'post /api/admin/eventallpay':       'api/admin/EventAllpayController.create',
+  'put /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.update',
+  'delete /api/admin/eventallpay/:id': 'api/admin/EventAllpayController.destroy',
+  'put /api/admin/eventorder/status/:id': 'api/admin/EventOrderController.updateProductionStatus',
+
 
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',

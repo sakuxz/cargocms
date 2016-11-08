@@ -68,7 +68,7 @@ module.exports = {
 
   associations: function() {
     Post.hasMany(Event);
-
+    Event.belongsTo(Post,{ foreignKey: "PostId" } );
     // Event.belongsToMany(User, {
     //
     //   through: 'UserEvent',
