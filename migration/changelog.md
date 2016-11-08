@@ -72,3 +72,6 @@
 
 ### RecipeOrder token 使用 UNIQUE
 ### EventOrder token 使用 UNIQUE
+
+### ScentFeedback 欄位變動
+* 新增 feedbackCheck 確認 回饋內容 寫入 Scent 資料庫

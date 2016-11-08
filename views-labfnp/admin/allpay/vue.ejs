@@ -241,6 +241,7 @@ appMain.DataTableInitComplete = function() {
             desc: result.message,
             type: 'success'
           });
+          defaultTable.api().ajax.reload(null, false);
         });
       } else {
         $(that).val(oldVal);
