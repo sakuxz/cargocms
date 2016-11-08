@@ -18,6 +18,11 @@ module.exports = {
       }
     },
 
+    feedbackCheck: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+
     scentName: {
       type: Sequelize.VIRTUAL,
       get: function () {
