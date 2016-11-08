@@ -32,6 +32,11 @@ $("#likeButton").on("click", function (event) {
 			document.querySelector('.sweet-overlay').onclick = function(event) {
 				swal.close();
 			};
+      $(document).on('keydown', function(evt){
+        if(evt.keyCode == 27){
+          swal.close();
+        }
+      });
 		}
 	}
 	if (isLike) {
