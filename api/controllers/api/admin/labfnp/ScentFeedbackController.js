@@ -45,5 +45,21 @@ module.exports = {
     } catch (e) {
       res.serverError(e);
     }
+  },
+
+  feedbackCheck: async (req, res) => {
+    try{
+      const { id } = req.params;
+      const data = req.body;
+
+      await ScentService.scentUpdatebyFeedback(data);
+      const item = await ScentFeedback.update({ feedbackCheck: true },{
+        where: { id }
+      });
+      const message = 'Feedback Checked.';
+      res.ok({ message, data: { item } });
+    } catch (e) {
+      res.serverError(e);
+    }
   }
 }
