@@ -9,10 +9,10 @@ module.exports = {
       type: Sequelize.STRING,
     },
     description: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
     },
     message: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
     },
     story: {
       type: Sequelize.STRING,
