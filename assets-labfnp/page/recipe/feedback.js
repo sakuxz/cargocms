@@ -16,6 +16,10 @@ $.fn.serializeObject = function () {
 
 $(document).ready(function () {
 
+  $('#orderFormWrapper').on("paste",".tag-editor",function(event) {
+    event.preventDefault();
+  });
+
   $('.userFeeling').tagEditor({
     forceLowercase: false,
     placeholder: '你覺得這個分子是什麼味道？'
@@ -31,6 +35,7 @@ $(document).ready(function () {
     forceLowercase: false,
     placeholder: '請填寫您的感覺，例：蘋果香味 <br/>(可填寫多個)'
   });
+
 
 	$('#orderForm').submit(function (event) {
 		if ($('input[name="feeling"]').val() === '') {
