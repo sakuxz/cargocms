@@ -30,9 +30,13 @@ module.exports = {
           }
           data.where.$or.push(result);
           if (column.search && column.search.custom) {
-            data.where[column.data] = {
-              $like: `%${column.search.custom}%`
-            };
+            if (column.search.custom.where) {
+              data.where[column.data] = column.search.custom.where;
+            } else {
+              data.where[column.data] = {
+                $like: `%${column.search.custom}%`
+              };
+            }
           }
         }
       }

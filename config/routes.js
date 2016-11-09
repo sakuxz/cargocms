@@ -49,8 +49,11 @@ var defaultConfig = {
   'delete /api/admin/slogan/:id': 'api/admin/SloganController.destroy',
 
   'post /api/admin/allpay/find':  'api/admin/AllpayController.find',
-  'get /api/admin/allpay/export': 'api/admin/AllpayController.export',
-  'get /api/admin/allpay/exportSend': 'api/admin/AllpayController.exportSend',
+  'post /api/admin/allpay/export': 'api/admin/AllpayController.export',
+  'post /api/admin/allpay/exportSend': 'api/admin/AllpayController.exportSend',
+  'post /api/admin/allpay/exportExcel': 'api/admin/AllpayController.exportExcel',
+  'post /api/admin/allpay/exportSendExcel': 'api/admin/AllpayController.exportSendExcel',
+  'get /api/admin/allpay/download': 'api/admin/AllpayController.download',
   'get /api/admin/allpay/:id':    'api/admin/AllpayController.findOne',
   'post /api/admin/allpay':       'api/admin/AllpayController.create',
   'put /api/admin/allpay/:id':    'api/admin/AllpayController.update',
@@ -84,6 +87,15 @@ var defaultConfig = {
   'delete /api/admin/event/:id': 'api/admin/EventController.destroy',
   'post /api/event/paid':        'api/admin/EventController.paid',
   'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
+
+  'post /api/admin/eventallpay/find':  'api/admin/EventAllpayController.find',
+  'get /api/admin/eventallpay/export': 'api/admin/EventAllpayController.exportExcel',
+  'get /api/admin/eventallpay/exportSign': 'api/admin/EventAllpayController.exportSignExcel',
+  'get /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.findOne',
+  // 'post /api/admin/eventallpay':       'api/admin/EventAllpayController.create',
+  'put /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.update',
+  'delete /api/admin/eventallpay/:id': 'api/admin/EventAllpayController.destroy',
+  'put /api/admin/eventorder/status/:id': 'api/admin/EventOrderController.updateProductionStatus',
 
 
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',

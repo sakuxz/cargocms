@@ -3,7 +3,7 @@
     <div class="margin-bottom-40">
       <h2>你還沒有任何香味筆記喔!!</h2>
       <p><span class="brand-font">LFP</span> 香料香水實驗室的好友們，正在期待您的創作。</p>
-      <a href="#" class="btn-create-recipe btn-u btn-u-sm">開始創作</a>
+      <!-- <a href="#" class="btn-create-recipe btn-u btn-u-sm">開始創作</a> -->
     </div>
   </div>
 </script>
@@ -22,15 +22,32 @@
     </div>
   </div>
 </script>
+
+<script id="recipeFeedback" type="text/x-jquery-tmpl">
+  <div class="col-md-6">
+    <div id="scent-content" class="well funny-boxes bg-color-white">
+      <img class="img-responsive" src="${coverPhoto}" alt="" onerror="this.onerror=null;this.src='${coverPhoto2}';"/>
+      <h2 id="scent-title" style="margin-top: 20px;">配方：${name}</h2>
+      <p style="border-top: 2px solid #CD853F;" id="scent-description">${description}</p>
+      <div class="tags">
+      您的感覺:
+        {{each feeling}}
+            <div class="tag">${$value}</div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</script>
 <% LayoutUtils.addScriptBlock(`
   // $(document).ready(function(){
     var successCatch = function(e) {
       $('#scentNote').empty();
-      if(Object.keys(e.data.item).length === 0 ){
+      if(Object.keys(e.data.scentItem).length === 0 || Object.keys(e.data.recipeItem).length === 0){
         $('#scentNote').append($('#noneScentFeedback').tmpl());
       } else {
-        Object.keys(e.data.item).forEach(function(key){
-          var data = e.data.item[key];
+        $('#scentNote').append('<h2>香味分子筆記</h2>');
+        Object.keys(e.data.scentItem).forEach(function(key){
+          var data = e.data.scentItem[key];
           var scentFeedback = $('#scentFeedback').tmpl({
             name: data.Scent.name,
             title: data.Scent.title,
@@ -39,6 +56,19 @@
             feeling: data.info
           });
           $('#scentNote').append(scentFeedback);
+        });
+
+        $('#scentNote').append('<h2>配方感覺筆記</h2>');
+        Object.keys(e.data.recipeItem).forEach(function(key){
+          var data = e.data.recipeItem[key];
+          var recipeFeedback = $('#recipeFeedback').tmpl({
+            name: data.Recipe.perfumeName,
+            description: data.Recipe.description,
+            feeling: data.info,
+            coverPhoto: data.Recipe.coverPhoto,
+            coverPhoto2: '/assets/labfnp/img/recipe-default-cover.'+ data.Recipe.id % 7 + '.jpg'
+          });
+          $('#scentNote').append(recipeFeedback);
         });
       }
     }

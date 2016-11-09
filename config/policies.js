@@ -24,33 +24,23 @@ var defaultConfig = {
     '*': ['passport'],
     'status': [],
   },
-  'UserController': {
-    'index': ['nocache'],
-    'findOne': ['nocache'],
-    'create': ['nocache'],
-    'update': ['nocache'],
-    'delete': ['nocache']
-  },
   ...customConfig,
   'BlogController': {
     'index': true
   },
   'WallController': true,
   'MainController': {
-    'index': ['nocache']
+    'index': ['nocache', 'passport'],
+    'portfolio': ['nocache', 'passport'],
   },
   'AdminController': {
     'index': ['passport', 'sessionAuth', 'isAdmin']
   },
-  'SloganController': {
-    'index': ['nocache'],
-    'findOne': ['nocache'],
-    'create': ['nocache'],
-    'update': ['nocache'],
-    'delete': ['nocache'],
-  },
   'EventController': {
     'allpay': ['passport', 'sessionAuth'],
+  },
+  'api/admin/AllpayController': {
+    'download': ['passport', 'sessionAuth', 'isAdmin'],
   },
   /***************************************************************************
   *                                                                          *

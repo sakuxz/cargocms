@@ -221,4 +221,40 @@ describe('about Format Service operation.', function() {
     }
   });
 
+  it('get none Incude single Query Obj', async (done) => {
+    try {
+      const result = FormatService.getQueryObj({
+        draw: '1',
+        columns:{
+          '0': { data: 'id', name: '' },
+          '1': { data: 'username', name: '' },
+          '2': { data: 'displayName', name: '', "searchable": "false"},
+          '3': { data: 'email', name: '' },
+          '4': { data: 'lastLogin', name: '', "searchable": "false"},
+          '5': { data: '5', name: '', "searchable": "false"},
+          '6': {
+            data: 'RecipeOrder',
+            searchable: true,
+            search: {
+              custom: {
+                where: {
+                  $not: null
+                }
+              }
+            }
+          }
+        },
+        order: [ { column: '0', dir: 'asc' } ],
+        start: '0',
+        length: '10',
+        search: { value: 'userX', regex: 'false' },
+        _: '1470989140227'
+      });
+      sails.log.debug(result);
+      done();
+    } catch (e) {
+      done(e)
+    }
+  });
+
 });
