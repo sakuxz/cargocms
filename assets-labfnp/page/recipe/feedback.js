@@ -16,7 +16,7 @@ $.fn.serializeObject = function () {
 
 $(document).ready(function () {
 
-  $('#orderFormWrapper').on("paste",".tag-editor",function(event) {
+  $('#orderFormWrapper').on("copy paste",".tag-editor",function(event) {
     event.preventDefault();
   });
 
