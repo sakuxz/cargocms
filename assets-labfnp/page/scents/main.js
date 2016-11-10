@@ -489,5 +489,9 @@ $(document).ready(function () {
 		placeholder: '請填寫您的感覺，例：蘋果香味 <br/>(可填寫多個)'
 	});
 
+  $('#main-form').on('copy paste', '.tag-editor', function(event){
+    event.preventDefault();
+  });
+
 
 });
