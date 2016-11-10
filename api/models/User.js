@@ -27,7 +27,7 @@ module.exports = {
             return null;
           }
 
-          return moment(birthday).format("YYYY/MM/DD");
+          return moment(new Date(birthday)).format("YYYY/MM/DD");
 
         } catch (e) {
           sails.log.error(e);
@@ -105,7 +105,7 @@ module.exports = {
             return lastLogin;
           }
 
-          return moment(lastLogin).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(lastLogin)).format("YYYY/MM/DD HH:mm:SS");
         }
         catch (e) {
           throw e;
@@ -140,7 +140,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('updatedAt')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -150,7 +150,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
