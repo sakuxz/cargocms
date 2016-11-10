@@ -26,6 +26,11 @@ module.exports = {
         where: { $or: [{ id: id || name }, { alias: name }] },
         include: [ Tag, Image, User, Location]
       });
+
+      if(!data){
+        sails.log.error(`Post ID or Name: ${id || name}, data not found.`);
+        return res.notFound();
+      }
       const social = SocialService.forPost({posts: [data]});
       res.view('blog/show', {data, social});
     } catch (e) {

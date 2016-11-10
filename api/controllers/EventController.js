@@ -26,6 +26,12 @@ module.exports = {
     try {
       const {id, name} = req.params
       let data = await Post.findByIdHasJoinByEvent({id, name});
+
+      if(!data){
+        sails.log.error(`Event ID or Name: ${id || name} ,data not found.`);
+        return res.notFound();
+      }
+
       if (data.url) {
         return res.redirect(data.url)
       }
