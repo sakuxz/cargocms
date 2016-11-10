@@ -72,6 +72,9 @@
             </a>
           </li>
         <% } %>
+        <li class="<%= (req.path.startsWith('/contact'))?'active':'' %> hidden-lg hidden-md hidden-sm">
+          <a href="/contact">聯絡我們</a>
+        </li>
       </ul>
     </div><!--/end container-->
   </div><!--/navbar-collapse-->
