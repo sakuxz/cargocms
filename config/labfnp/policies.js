@@ -5,6 +5,7 @@ module.exports = {
   'labfnp/RecipeController': {
     'create': ['passport', 'sessionAuth'],
     'order': ['passport', 'sessionAuth'],
+    'feedback': ['passport', 'sessionAuth'],
     'allpay': ['passport', 'sessionAuth'],
     'done': ['passport', 'sessionAuth'],
     'show': ['nocache', 'passport'],
