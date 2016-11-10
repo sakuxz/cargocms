@@ -94,14 +94,11 @@ module.exports = {
       sails.log.info('export Birthday', body.month);
       const modelName = 'user';
 
-      let content = await User.findAll();
-      content = content.filter( function(element, index, array){
-        if (element.birthdayMonth === body.month){
-          return element;
-        }
+      let content = await User.findAll({
+        where: sequelize.where(
+          User.sequelize.fn('DATE_FORMAT', User.sequelize.col('birthday'), '%c'), body.month
+        )
       });
-
-      // sails.log.info("content ==>",content);
 
       const columns = [
         { caption: "使用者名稱", type: "string"},
@@ -121,7 +118,7 @@ module.exports = {
             data.username,
             data.displayName,
             data.email,
-            data.FacebookId,
+            data.FacebookId ? data.FacebookId : '',
             data.birthday,
             data.phone1,
             data.phone2,
