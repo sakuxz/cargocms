@@ -27,11 +27,14 @@
 
 .user-profile-block ul {
 	margin: auto;
+	display: flex;
+  justify-content: center;
 }
 
 .user-profile-block ul li {
   font-size: 11px;
   color: #999;
+	margin: auto;
 }
 
 .user-profile-block ul li strong {
@@ -60,6 +63,15 @@
 li.text-center a {
   text-decoration: none;
 }
+.avatar-block {
+	position: relative;
+}
+.edit-profile-block {
+	position: absolute;
+	bottom: 0px;
+	right: 15px;
+	padding: 4px;
+}
 `); %>
 
 <div class="container content">
@@ -68,29 +80,32 @@ li.text-center a {
     <!--Left Sidebar-->
 		<div class="col-md-3 md-margin-bottom-40">
 
-			<div class="margin-bottom-20">
-	      <img class="img-responsive img-bordered" src="<%= user.avatar %>" alt="" style="margin: auto; width: 100%;" />
-			</div>
-
 			<div class="user-profile-block margin-bottom-20">
-				<div style="float:right">
-					<% if(isMe) {%>
-						<a id="edit-profile-button" data-user-id="<%= user.id %>" class="btn btn-primary" href="/edit/me">修改個人資料</a>
-					<% } else { %>
-						<button id="follow-button" data-user-id="<%= user.id %>" class="btn <%= isFollowing ? 'btn-default' : 'btn-primary' %>"><%= isFollowing ? '取消追蹤' : '追蹤' %></button>
-					<% } %>
+				<div class="row">
+					<div class="col-xs-6 col-md-12 col-lg-12 margin-bottom-20 avatar-block">
+						<img class="img-responsive img-bordered" src="<%= user.avatar %>" alt="" style="margin: auto; width: 100%;" />
+						<div class="edit-profile-block">
+							<% if(isMe) {%>
+								<a id="edit-profile-button" data-user-id="<%= user.id %>" class="btn btn-primary" href="/edit/me">修改個人資料</a>
+							<% } else { %>
+								<button id="follow-button" data-user-id="<%= user.id %>" class="btn <%= isFollowing ? 'btn-default' : 'btn-primary' %>"><%= isFollowing ? '取消追蹤' : '追蹤' %></button>
+							<% } %>
+						</div>
+					</div>
+					<div class="col-xs-6 col-md-12 col-lg-12">
+						<h1>
+							<div><%= user.displayName %></div>
+							<div><small>創作者</small></div>
+						</h1>
+						<hr />
+						<div>
+							<i class="fa fa-heart icon-weight"></i><span> <%= score %></span><br/>
+							<i class="fa fa-map-marker icon-weight "></i><span> Taiwan</span><br/>
+							<i class="fa fa-clock-o icon-weight " aria-hidden="true"></i> <%= user.createdAt %>
+						</div>
+						<hr />
+					</div>
 				</div>
-				<h1>
-					<div><%= user.displayName %></div>
-					<div><small>創作者</small></div>
-				</h1>
-				<hr />
-				<div>
-					<i class="fa fa-heart icon-weight"></i><span> <%= score %></span><br/>
-					<i class="fa fa-map-marker icon-weight "></i><span> Taiwan</span><br/>
-					<i class="fa fa-clock-o icon-weight " aria-hidden="true"></i> <%= user.createdAt %>
-				</div>
-				<hr />
 				<ul class="list-inline">
 					<li class="text-center">
 						<strong><%= followers %></strong>
