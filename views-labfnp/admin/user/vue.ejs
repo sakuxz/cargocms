@@ -66,7 +66,7 @@ appMain.DataTableInitComplete = function() {
     var download = function(url, data, id) {
       $.post( url, data)
       .done(function( result ) {
-        $('<iframe>', { id: id, src: '/api/admin/user/download?fileName=' + result.data }).hide().appendTo('body');
+        $('<iframe>', { id: id, src: '/api/admin/download?fileName=' + result.data }).hide().appendTo('body');
       })
       .fail(function( result ) {
         console.log(result);
@@ -93,10 +93,12 @@ appMain.DataTableInitComplete = function() {
       buttons : "[取消][匯出壽星資料]"
     }, function(ButtonPress) {
       if(ButtonPress === '匯出壽星資料') {
-        download('/api/admin/' + modelName + '/exportExcel', serialize(appModel.pagingQuery), 'exportExcel');
+        var month = $("#birthdayMonth").val();
+        download('/api/admin/' + modelName + '/exportBirthday', { month: month} , 'exportExcel');
       }
     });
     var dateMonth = new Date();
-    $("#birthdayMonth").val((dateMonth.getMonth() + 1).toString());
+    dateMonth = (dateMonth.getMonth() + 1).toString()
+    $("#birthdayMonth").val(dateMonth);
   });
 }
