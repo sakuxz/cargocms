@@ -47,7 +47,7 @@ module.exports = {
           data: user,
         });
       } else {
-        
+
         req.flash('新增使用者失敗，請檢查使用者名稱/信箱是否重複！');
       }
     } catch (e) {
@@ -86,5 +86,67 @@ module.exports = {
     } catch (e) {
       res.serverError(e);
     }
-  }
+  },
+
+  exportBirthday: async (req, res) => {
+    try {
+      let { body } = req;
+      sails.log.info('export Birthday', body.month);
+      const modelName = 'user';
+
+      let content = await User.findAll();
+      content = content.filter( function(element, index, array){
+        if (element.birthdayMonth === body.month){
+          return element;
+        }
+      });
+
+      // sails.log.info("content ==>",content);
+
+      const columns = [
+        { caption: "使用者名稱", type: "string"},
+        { caption: "全名", type: "string"},
+        { caption: "Email", type: "string"},
+        { caption: "FacebookID", type: "string"},
+        { caption: "生日", type: "string"},
+        { caption: "手機", type: "string"},
+        { caption: "電話", type: "string"},
+        { caption: "地址1", type: "string"},
+        { caption: "地址2", type: "string"}
+      ]
+      const format = (items) => {
+        let result = [];
+        for (let data of items) {
+          let formatted = [
+            data.username,
+            data.displayName,
+            data.email,
+            data.FacebookId,
+            data.birthday,
+            data.phone1,
+            data.phone2,
+            data.address,
+            data.address2
+          ]
+
+          result.push(formatted);
+        };
+        return result;
+      }
+
+      const result = await ExportService.exportExcel({
+        fileName: `${body.month}月壽星資料`,
+        content,
+        format,
+        columns,
+      });
+      res.ok({
+        message: 'Get Excel export success.',
+        data: result.fileName,
+      })
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+
 }
