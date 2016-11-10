@@ -158,7 +158,25 @@ module.exports = {
     },
     resetPasswordToken: {
       type: Sequelize.STRING(32),
-    }
+    },
+
+    birthdayMonth:{
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          let birthday = this.getDataValue('birthday');
+
+          if (!birthday) {
+            return null;
+          }
+
+          return moment(birthday).format("M");
+
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
   },
   associations: function() {
     User.hasMany(Image, {
