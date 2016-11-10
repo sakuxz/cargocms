@@ -10,6 +10,14 @@
     margin-bottom: 10px;
   }
 }
+
+.vcenter {
+  /* http://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3 */
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
 </style>
 
 <!--=== Footer Version 1 ===-->
@@ -25,12 +33,17 @@
         </div>
       </div><!--/col-md-3-->
 
-      <div class="col-md-3 md-margin-bottom-10 text-left">
+      <div class="col-md-3 md-margin-bottom-10 text-left hidden-lg hidden-md hidden-sm">
         <div class="row">
-          <a href="/"><img name="logo-footer" class="footer-logo col-xs-3" src="/assets/labfnp/img/lfp.png" width="40" alt=""></a>
-          <p class="col-xs-9">LFP : 香料香水實驗室，自己的香水自己創造，由你創作專屬個人化香水。</p>
+          <div class="col-xs-3 text-center vcenter">
+            <a href="/"><img name="logo-footer" class="footer-logo" src="/assets/labfnp/img/lfp.png" width="60" alt=""></a>
+            <!--下方的註解很重要，請參考網址說明 http://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3 -->
+          </div><!--
+          --><div class="col-xs-9 vcenter">
+            <p class="text-left">LFP : 香料香水實驗室，自己的香水自己創造，由你創作專屬個人化香水。</p>
+          </div>
         </div>
-      </div><!--/col-md-3-->
+      </div>
       <!-- End About -->
 
       <!-- Latest -->
