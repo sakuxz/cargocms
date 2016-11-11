@@ -73,7 +73,7 @@ module.exports = {
 
       if(sameFeeling){
         sails.log.error('Can not create same feeling.');
-        
+
       } else {
         const item = await FeelingService.create(data);
 
@@ -90,10 +90,12 @@ module.exports = {
     try {
       const { id } = req.params;
       const data = req.body;
-      const message = 'Update success.';
+
       const item = await Feeling.update(data ,{
         where: { id, },
       });
+
+      const message = 'Update success.';
       res.ok({ message, data: { item } });
     } catch (e) {
       res.serverError(e);
@@ -103,7 +105,8 @@ module.exports = {
   destroy: async (req, res) => {
     try {
       const { id } = req.params;
-      const item = await Feeling.deleteById(id);
+      // const item = await Feeling.deleteById(id);
+      const item = await FeelingService.destroy(id);
       let message = 'Delete success';
       res.ok({message, data: {item}});
     } catch (e) {

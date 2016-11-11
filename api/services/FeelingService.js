@@ -37,4 +37,47 @@ module.exports = {
       throw e;
     }
   },
+
+  destroy: async ( id ) => {
+    try{
+      let item, scent;
+      let feeling = await Feeling.findById(id);
+
+      scent = await Scent.findOne({
+        where: {
+          name: feeling.scentName
+        }
+      });
+
+      let scentFeelings = scent.feelings;
+      for(let i = 0, len = scentFeelings.length; i < len; i++){
+        if(scentFeelings[i].key === feeling.title){
+          scentFeelings.splice( i , 1);
+          break;
+        }
+      }
+      scent.feelings = scentFeelings;
+      await scent.save();
+
+      if( Number(feeling.totalRepeat) > 1 ){
+        let newTotalRepeat = (Number(feeling.totalRepeat) - 1).toString();
+
+        await Feeling.update({
+          totalRepeat: newTotalRepeat
+        },{
+          where: {
+            title: feeling.title
+          }
+        });
+      }
+
+      item = await Feeling.deleteById(id);
+
+      return item;
+    } catch (e) {
+      sails.log.error(e);
+      throw e;
+    }
+  },
+
 }
