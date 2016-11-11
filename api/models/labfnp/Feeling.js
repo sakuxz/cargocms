@@ -48,6 +48,14 @@ module.exports = {
   },
   options: {
     classMethods: {
+      deleteById: async (id) => {
+        try {
+          return await Feeling.destroy({ where: { id } });
+        } catch (e) {
+          sails.log.error(e);
+          throw e;
+        }
+      },
       findDistinctFeelings: async function() {
         const feelings = await Feeling.findAll({
           attributes: ['title'],
