@@ -401,4 +401,25 @@ describe('about export service operation.', function() {
     }
   });
 
+  describe('about export service operation.', function() {
+    it('parse excel ', async (done) => {
+      try {
+        const columns = [{
+          name: 'MerchantTradeNo',
+          index: 2,
+        }]
+        const result = await ExportService.parseExcel({
+          fileName: '順豐form.xlsx',
+          startIndex: 1,
+          sheetIndex: 0,
+          columns,
+         });
+         sails.log.info(result);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
+  });
+
 });

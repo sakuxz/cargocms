@@ -54,7 +54,8 @@ var defaultConfig = {
   'post /api/admin/allpay/exportSend': 'api/admin/AllpayController.exportSend',
   'post /api/admin/allpay/exportExcel': 'api/admin/AllpayController.exportExcel',
   'post /api/admin/allpay/exportSendExcel': 'api/admin/AllpayController.exportSendExcel',
-  // 'get /api/admin/allpay/download': 'api/admin/AllpayController.download',
+  'post /api/admin/allpay/import/trackingNumber': 'api/admin/AllpayController.importTrackingNumberExcel',
+
   'get /api/admin/allpay/:id':    'api/admin/AllpayController.findOne',
   'post /api/admin/allpay':       'api/admin/AllpayController.create',
   'put /api/admin/allpay/:id':    'api/admin/AllpayController.update',

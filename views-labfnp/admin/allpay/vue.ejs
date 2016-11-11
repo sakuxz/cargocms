@@ -95,6 +95,20 @@ appMain.DataTableInitComplete = function() {
     return str.join("&");
   }
 
+  var importBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_1" title="匯入貨運編號" tabindex="0" aria-controls="main-table"><span>匯入</span></a>'
+  $(importBtn).prependTo('.DTTT_container');
+  $('#ToolTables_main-table_custom_1').on('click', function() {
+    $.SmartMessageBox({
+      title : "匯入",
+      content :'請選擇要匯入的物流 Excel',
+      buttons : "[取消][確定]"
+    }, function(ButtonPress) {
+      if(ButtonPress === '確定') {
+        alert("!!!!!!");
+      }
+    });
+  });
+
   var exportBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_0" title="匯出地址寄送表、配方製作表" tabindex="0" aria-controls="main-table"><span>匯出</span></a>'
   $(exportBtn).prependTo('.DTTT_container');
   $('#ToolTables_main-table_custom_0').on('click', function() {

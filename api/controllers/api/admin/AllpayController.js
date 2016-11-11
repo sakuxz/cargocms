@@ -469,4 +469,23 @@ module.exports = {
     }
   },
 
+  importTrackingNumberExcel: async (req, res) => {
+    try {
+      sails.log.info(req.body)
+      let uploadParam = {
+        dirname: '../../.tmp/'
+      };
+      let promise = new Promise((resolve, reject) => {
+        req.file('uploadPic').upload(uploadParam, async(err, files) => {
+          resolve(files);
+        });
+      });
+      let files = await promise.then();
+
+      const { size, type, fd, extra } = files[0];
+    } catch (e) {
+      res.serverError(e);
+    }
+  }
+
 }
