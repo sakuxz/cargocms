@@ -64,10 +64,23 @@ module.exports = {
   create: async (req, res) => {
     try {
       const data = req.body;
-      const item = await FeelingService.create(data);
+      let sameFeeling = Feeling.findOne({
+        where:{
+          title: data.title,
+          scentName: data.scentName
+        }
+      });
 
-      let message = 'Create success.';
-      res.ok({ message, data: { item } } );
+      if(sameFeeling){
+        sails.log.error('Can not create same feeling.');
+        
+      } else {
+        const item = await FeelingService.create(data);
+
+        let message = 'Create success.';
+        res.ok({ message, data: { item } } );
+      }
+
     } catch (e) {
       res.serverError(e);
     }
