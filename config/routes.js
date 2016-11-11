@@ -29,6 +29,7 @@ var defaultConfig = {
   'post /api/admin/upload': 'api/admin/ImageController.upload',
   'delete /api/admin/upload/:id': 'api/admin/ImageController.destroy',
 
+  'post /api/admin/user/exportBirthday': 'api/user/UserController.exportBirthday',
   'get /api/admin/user': 'api/admin/UserController.find',
   'get /api/admin/user/:id': 'api/admin/UserController.findOne',
   'post /api/admin/user': 'api/admin/UserController.create',
@@ -53,7 +54,7 @@ var defaultConfig = {
   'post /api/admin/allpay/exportSend': 'api/admin/AllpayController.exportSend',
   'post /api/admin/allpay/exportExcel': 'api/admin/AllpayController.exportExcel',
   'post /api/admin/allpay/exportSendExcel': 'api/admin/AllpayController.exportSendExcel',
-  'get /api/admin/allpay/download': 'api/admin/AllpayController.download',
+  // 'get /api/admin/allpay/download': 'api/admin/AllpayController.download',
   'get /api/admin/allpay/:id':    'api/admin/AllpayController.findOne',
   'post /api/admin/allpay':       'api/admin/AllpayController.create',
   'put /api/admin/allpay/:id':    'api/admin/AllpayController.update',
@@ -97,6 +98,7 @@ var defaultConfig = {
   'delete /api/admin/eventallpay/:id': 'api/admin/EventAllpayController.destroy',
   'put /api/admin/eventorder/status/:id': 'api/admin/EventOrderController.updateProductionStatus',
 
+  'get /api/admin/download': 'api/admin/DownloadController.download',
 
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',

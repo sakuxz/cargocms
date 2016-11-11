@@ -101,7 +101,7 @@ appMain.DataTableInitComplete = function() {
     var download = function(url, data, id) {
       $.post( url, data)
       .done(function( result ) {
-        $('<iframe>', { id: id, src: '/api/admin/allpay/download?fileName=' + result.data }).hide().appendTo('body');
+        $('<iframe>', { id: id, src: '/api/admin/download?fileName=' + result.data }).hide().appendTo('body');
       })
       .fail(function( result ) {
         console.log(result);
