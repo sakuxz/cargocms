@@ -33,7 +33,7 @@ describe.only('about admin api Feeling Controller operation.', function() {
 
     });
 
-    it('Create a new Feeling with title 木質, scentName C4, totalRepeat should Add 1.', async (done) => {
+    it('Create a new Feeling with title 木質, scentName C4, 木質 totalRepeat should Add 1.', async (done) => {
       try{
         const data = {
           title: "木質",
