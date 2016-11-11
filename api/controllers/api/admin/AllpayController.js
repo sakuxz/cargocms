@@ -476,13 +476,63 @@ module.exports = {
         dirname: '../../.tmp/'
       };
       let promise = new Promise((resolve, reject) => {
-        req.file('uploadPic').upload(uploadParam, async(err, files) => {
+        req.file('upload').upload(uploadParam, async(err, files) => {
           resolve(files);
         });
       });
       let files = await promise.then();
-
       const { size, type, fd, extra } = files[0];
+      res.ok({
+        message: 'Get Excel export success.',
+        data: fd.split('.tmp/').pop(),
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+
+  updateTrackingNumberfromExcel: async (req, res) => {
+    try {
+      const { body } = req;
+      sails.log.info(body);
+
+      const columns = [{
+        name: 'merchantTradeNo',
+        index: 2,
+      }, {
+        name: 'trackingNumber',
+        index: 3,
+      }]
+
+      const result = await ExportService.parseExcel({
+        fileName: body.fileName,
+        startIndex: 1,
+        sheetIndex: 0,
+        columns,
+      });
+      for (let data of result) {
+        let allpay = await Allpay.findOne({
+          where: {
+            MerchantTradeNo: data.merchantTradeNo
+          },
+        });
+        if (data.trackingNumber === 123123123) {
+          throw Error("!!!!!!!!!!");
+        }
+        let recipeOrder = await RecipeOrder.update({
+          trackingNumber: data.trackingNumber,
+          productionStatus: 'SHIPPED',
+        }, {
+          where: {
+            id : allpay.RecipeOrderId,
+          },
+        });
+      }
+
+      res.ok({
+        message: 'update trackingNumber success',
+        data: result,
+      })
     } catch (e) {
       res.serverError(e);
     }
