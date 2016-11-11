@@ -130,7 +130,7 @@
         <div class="projects">
 
           <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-5 col-sm-5 col-xs-12">
               <h2>
                 <span class="padding-5"><%= recipe.perfumeName %></span>
               </h2>
@@ -146,16 +146,14 @@
                   <i class="fa fa-clock-o"></i>
                   <%=: recipe.createdAt | formatDate %>
                 </li>
-                <li>
-                  <i class="fa fa-heart-o"></i>
-                  <%= recipe.UserLikeRecipes.length %></li>
               </ul>
             </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-7 col-sm-7 col-xs-12">
               <div class="pull-right">
                 <button id="likeButton" class="btn-u btn-custom-like" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
                   <i class="fa <%= recipe.currentUserLike ? 'fa-heart': 'fa-heart-o' %>" aria-hidden="true"></i>
+                  <%= recipe.UserLikeRecipes.length %>
                   <span class="hidden-xs">收藏</span>
                 </button>
                 <a href="/recipe/feedback/<%= recipe.hashId %>" class="btn-u btn-custom-feedback <%= !req.session.authenticated ? 'needLogin': '' %>">
