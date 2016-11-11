@@ -261,6 +261,7 @@ module.exports = {
       }
 
       const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
+      const MerchantTradeNo = crypto.randomBytes(32).toString('hex').substr(0, 8);
       return sequelize.transaction({ isolationLevel }).then(function (transaction) {
         return Allpay.find({
           where: {
@@ -269,6 +270,7 @@ module.exports = {
           include: {
             model: RecipeOrder,
             where: { token },
+            include: [Recipe, User],
           },
         }, { transaction }).then(function(findOrder) {
           if (findOrder && paymentMethod == 'gotoShop') {
@@ -285,11 +287,54 @@ module.exports = {
             invoiceNo,
             token,
             productionStatus: paymentMethod == 'gotoShop' ? 'PAID' : 'NEW',
-          }, { transaction })
+          }, { transaction }).then(function(recipeOrder) {
+            const formatName = [perfumeName + ' 100 ml'];
+            return AllpayService.createAndgetAllpayConfig({
+              relatedKeyValue: {
+                RecipeOrderId: recipeOrder.id,
+              },
+              MerchantTradeNo,
+              tradeDesc: `配方名稱：${perfumeName} 100 ml, (備註：${message})`,
+              totalAmount: 1550,
+              paymentMethod: paymentMethod,
+              itemArray: formatName,
+              clientBackURL: '/recipe/done',
+              returnURL: '/api/recipe/paid',
+              paymentInfoURL: '/api/recipe/paymentinfo',
+              transaction,
+            }).then(function(allPayData) {
+              sails.log.warn('訂單建立 RecipeOrder',
+                '收件人:', recipeOrder.recipient,
+                'UserId:', recipeOrder.UserId,
+                'RecipeId:', recipeOrder.RecipeId,
+                '購買方式:', paymentMethod,
+                '訂購物品:', formatName,
+                '訂單編號:', MerchantTradeNo,
+                '建立時間:', recipeOrder.createdAt,
+                'AllpayId:', allPayData.allpay.id,
+              );
+              if (paymentMethod == 'gotoShop') {
+                allPayData.allpay.RtnMsg = '到店購買';
+                allPayData.allpay.ShouldTradeAmt = 1550;
+                allPayData.allpay.TradeAmt = 1550;
+                allPayData.allpay.PaymentType = '到店購買';
+                allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
+                return allPayData.allpay.save({ transaction });
+              }
+            });
+          })
         }).then(function (a) {
           transaction.commit();
-          let MerchantTradeNo = crypto.randomBytes(32).toString('hex').substr(0, 8);
-          return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
+          if (paymentMethod == 'gotoShop') {
+            // TODO 完成後要寄信
+            return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
+          } else {
+            sails.log.warn('歐付寶訂單建立完成 RecipeOrder');
+            return res.view({
+              AioCheckOut: AllpayService.getPostUrl(),
+              ...allPayData.config
+            });
+          }
         }).catch(function (e) {
           transaction.rollback();
           sails.log.error('訂單建立 RecipeOrder 失敗', e.toString());
@@ -360,36 +405,36 @@ module.exports = {
       // );
 
       // if (paymentMethod == 'gotoShop') {
-        // allPayData.allpay.RtnMsg = '到店購買';
-        // allPayData.allpay.ShouldTradeAmt = 1550;
-        // allPayData.allpay.TradeAmt = 1550;
-        // allPayData.allpay.PaymentType = '到店購買';
-        // allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
-        // await allPayData.allpay.save({ transaction });
-        // transaction.commit();
-
-
-        // try {
-        //   recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
-        //   let messageConfig = {};
-        //   messageConfig.serialNumber = MerchantTradeNo;
-        //   messageConfig.paymentTotalAmount = 1550;
-        //   messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
-        //   messageConfig.email = recipeOrder.email;
-        //   messageConfig.username = recipeOrder.User.displayName;
-        //   messageConfig.shipmentUsername = recipeOrder.recipient;
-        //   messageConfig.shipmentAddress = recipeOrder.address;
-        //   messageConfig.note = recipeOrder.note;
-        //   messageConfig.phone = recipeOrder.phone;
-        //   messageConfig.invoiceNo = recipeOrder.invoiceNo;
-        //   messageConfig = await MessageService.orderToShopConfirm(messageConfig);
-        //   const message = await Message.create(messageConfig);
-        //   await MessageService.sendMail(message);
-        //   sails.log.warn('到店購買訂單建立完成 RecipeOrder 寄送 Email id:', message.id);
-        // } catch (e) {
-        //   sails.log.error('寄信失敗', e)
-        // }
-
+      //   allPayData.allpay.RtnMsg = '到店購買';
+      //   allPayData.allpay.ShouldTradeAmt = 1550;
+      //   allPayData.allpay.TradeAmt = 1550;
+      //   allPayData.allpay.PaymentType = '到店購買';
+      //   allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
+      //   await allPayData.allpay.save({ transaction });
+      //   transaction.commit();
+      //
+      //
+      //   try {
+          // recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
+          // let messageConfig = {};
+          // messageConfig.serialNumber = MerchantTradeNo;
+          // messageConfig.paymentTotalAmount = 1550;
+          // messageConfig.productName = recipeOrder.Recipe.perfumeName + ' 100 ml';
+          // messageConfig.email = recipeOrder.email;
+          // messageConfig.username = recipeOrder.User.displayName;
+          // messageConfig.shipmentUsername = recipeOrder.recipient;
+          // messageConfig.shipmentAddress = recipeOrder.address;
+          // messageConfig.note = recipeOrder.note;
+          // messageConfig.phone = recipeOrder.phone;
+          // messageConfig.invoiceNo = recipeOrder.invoiceNo;
+          // messageConfig = await MessageService.orderToShopConfirm(messageConfig);
+          // const message = await Message.create(messageConfig);
+          // await MessageService.sendMail(message);
+          // sails.log.warn('到店購買訂單建立完成 RecipeOrder 寄送 Email id:', message.id);
+      //   } catch (e) {
+      //     sails.log.error('寄信失敗', e)
+      //   }
+      //
       //   return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
       //
       // } else {
