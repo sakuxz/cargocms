@@ -1,6 +1,6 @@
 describe.only('about admin api Feeling Controller operation.', function() {
   describe('create a feeling with scent.', () => {
-    let feeling = {};
+    let feeling, feeling2;
     before( async(done) => {
       try{
         // await Scent.create({
@@ -17,6 +17,13 @@ describe.only('about admin api Feeling Controller operation.', function() {
           "scentName": "BU2",
           "totalRepeat": "22",
           "score": "7",
+        });
+
+        feeling2 = await Feeling.create({
+          "title": "木質",
+          "scentName": "BJ4",
+          "totalRepeat": "22",
+          "score": "1",
         });
 
         done();
