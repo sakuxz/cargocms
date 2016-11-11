@@ -45,8 +45,7 @@ describe.only('about admin api Feeling Controller operation.', function() {
       try{
         const data = {
           title: "木質",
-          scentName: "C4",
-          score: "1"
+          scentName: "C4"
         };
         const res = await request(sails.hooks.http.app)
         .post(`/api/labfnp/feeling`).send(data);
