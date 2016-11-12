@@ -21,7 +21,7 @@ module.exports = {
         feeling.score = ( Number(feeling.score) + 1 ).toString();
         feeling = await feeling.save();
         item  = ScentService.updateByFeeling( feeling );
-        
+
       }
 
       return item;
@@ -62,4 +62,28 @@ module.exports = {
       throw e;
     }
   },
+
+  deleteByFeeling: async ( scentName, key) => {
+    try{
+      let scent = await Scent.findOne({
+        where:{
+          name: scentName
+        }
+      });
+
+      let scentFeelings = scent.feelings;
+      for(let i = 0, len = scentFeelings.length; i < len; i++){
+        if(scentFeelings[i].key === key ){
+          scentFeelings.splice( i , 1);
+          break;
+        }
+      }
+      scent.feelings = scentFeelings;
+      await scent.save();
+
+    } catch (e){
+      sails.log.error(e);
+      throw e;
+    }
+  }
 }
