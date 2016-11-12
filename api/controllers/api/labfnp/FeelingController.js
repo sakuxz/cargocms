@@ -64,7 +64,7 @@ module.exports = {
   create: async (req, res) => {
     try {
       const data = req.body;
-      let sameFeeling = Feeling.findOne({
+      let sameFeeling = await Feeling.findOne({
         where:{
           title: data.title,
           scentName: data.scentName
@@ -72,8 +72,7 @@ module.exports = {
       });
 
       if(sameFeeling){
-        sails.log.error('Can not create same feeling.');
-
+        sails.log.error('Can not create same feeling with same scentName.');
       } else {
         const item = await FeelingService.create(data);
 
