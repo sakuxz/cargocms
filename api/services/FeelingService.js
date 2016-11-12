@@ -38,6 +38,54 @@ module.exports = {
     }
   },
 
+  update: async ( id , data ) => {
+    try{
+      let oldFeeling = await Feeling.findById(id);
+      let item;
+
+      if( oldFeeling.title !== data.title ){
+
+        if(oldFeeling.totalRepeat > 1){
+          let oldTitleNewTotalRepeat = (Number(oldFeeling.totalRepeat) - 1).toString();
+          await Feeling.update({
+            totalRepeat: oldTitleNewTotalRepeat
+          },{
+            where:{
+              title: oldFeeling.title
+            }
+          });
+        }
+
+        let newTitleTotalRepeat = await Feeling.findOne({ where:{ title: data.title }});
+        newTitleTotalRepeat = (Number(newTitleTotalRepeat.totalRepeat) + 1).toString();
+
+        oldFeeling.title = data.title;
+        oldFeeling.score = data.score;
+        item = await oldFeeling.save();
+
+        await Feeling.update({
+          totalRepeat: newTitleTotalRepeat
+        },{
+          where:{
+            title: item.title
+          }
+        });
+
+      } else if( oldFeeling.score !== data.score) {
+        oldFeeling.score = data.score;
+        item = await oldFeeling.save();
+      } else {
+        item = oldFeeling;
+      }
+
+      return item;
+
+    } catch (e){
+      sails.log.error(e);
+      throw e;
+    }
+  },
+
   destroy: async ( id ) => {
     try{
       let item, scent;
