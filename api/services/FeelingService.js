@@ -58,7 +58,11 @@ module.exports = {
         }
 
         let newTitleTotalRepeat = await Feeling.findOne({ where:{ title: data.title }});
-        newTitleTotalRepeat = (Number(newTitleTotalRepeat.totalRepeat) + 1).toString();
+        if(newTitleTotalRepeat){
+          newTitleTotalRepeat = (Number(newTitleTotalRepeat.totalRepeat) + 1).toString();
+        } else {
+          newTitleTotalRepeat = "1";
+        }
 
         oldFeeling.title = data.title;
         oldFeeling.score = data.score;
