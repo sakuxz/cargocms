@@ -35,3 +35,7 @@ var appModel = {
 appMain.hide_Total_Score =  function (){
   $(".notForCreate").hide();
 }
+
+appMain.disable_TotalRepeat = function () {
+  $("input[name=totalRepeat]").attr("disabled", true);
+}

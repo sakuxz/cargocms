@@ -8,9 +8,12 @@
 	var pagefunction = function() {
 		<%- include vue.ejs %>
 		appMain.$mount("#main-edit");
-		appMain.loadItem(appMain.onEnterPageEdit);
+		appMain.loadItem( function(){
+      appMain.onEnterPageEdit();
+      appMain.disable_TotalRepeat();
+    });
 		appMain.setupForm("edit");
-    appMain.hide_Total_Score();
+
 	};
 
 </script>
