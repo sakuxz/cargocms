@@ -91,9 +91,7 @@ module.exports = {
       const { id } = req.params;
       const data = req.body;
 
-      const item = await Feeling.update(data ,{
-        where: { id, },
-      });
+      const item = await FeelingService.update(id, data);
 
       const message = 'Update success.';
       res.ok({ message, data: { item } });
