@@ -387,12 +387,14 @@ $(document).ready(function () {
 	    // $("#imageInput").val('');
 	})
 
+  /*
 	var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	if (isMobile) {
 		$('#fine-uploader-validation').remove()
 	} else {
 		$("#imageInput").remove()
 	}
+  */
 
 	$('#main-form').on('submit', function (event) {
 

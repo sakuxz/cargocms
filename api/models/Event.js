@@ -24,7 +24,7 @@ module.exports = {
       allowNull: false,
       get: function () {
         try {
-          return moment(this.getDataValue('sellStartDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('sellStartDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -35,7 +35,7 @@ module.exports = {
       allowNull: false,
       get: function () {
         try {
-          return moment(this.getDataValue('sellEndDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('sellEndDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -46,7 +46,7 @@ module.exports = {
       allowNull: false,
       get: function () {
         try {
-          return moment(this.getDataValue('eventStartDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('eventStartDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -57,7 +57,7 @@ module.exports = {
       allowNull: false,
       get: function () {
         try {
-          return moment(this.getDataValue('eventEndDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('eventEndDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
