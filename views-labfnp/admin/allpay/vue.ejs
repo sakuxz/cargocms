@@ -336,12 +336,12 @@ appMain.customSearch = function() {
     data: 'RecipeOrderId',
     searchable: true,
     search: {
-         custom: {
-              where: {
-                 $not: null
-              }
-          }
+      custom: {
+        where: {
+          $not: null
+        }
       }
+    }
   });
 
   if (searchProductionStatus) {
