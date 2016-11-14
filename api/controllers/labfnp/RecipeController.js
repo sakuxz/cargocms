@@ -331,26 +331,25 @@ module.exports = {
                 messageConfig.phone = recipeOrder.phone;
                 messageConfig.invoiceNo = recipeOrder.invoiceNo;
                 const config = MessageService.orderToShopConfirm(messageConfig);
-                return Message.create(config).then(function(message) {
+                Message.create(config).then(function(message) {
                   sails.log.warn('到店購買訂單建立完成 RecipeOrder 寄送 Email id:', message.id);
-                  return MessageService.sendMail(message);
-                });
-              }).catch(function(e){
-                sails.log.error('寄信失敗', e)
-              });
+                  MessageService.sendMail(message);
+                })
+              })
             }
-          });
+            return {
+              AioCheckOut: AllpayService.getPostUrl(),
+              ...allPayData.config
+            };
+          })
         })
-      }).then(function () {
+      }).then(function (data) {
         transaction.commit();
         if (paymentMethod == 'gotoShop') {
           return res.redirect(`/recipe/done?t=${MerchantTradeNo}`);
         } else {
           sails.log.warn('歐付寶訂單建立完成 RecipeOrder');
-          return res.view({
-            AioCheckOut: AllpayService.getPostUrl(),
-            ...allPayData.config
-          });
+          return res.view(data);
         }
       }).catch(sequelize.UniqueConstraintError, function(e) {
         throw Error('此交易已失效，請重新下訂')
