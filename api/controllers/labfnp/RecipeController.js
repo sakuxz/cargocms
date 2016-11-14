@@ -331,9 +331,9 @@ module.exports = {
                 messageConfig.phone = recipeOrder.phone;
                 messageConfig.invoiceNo = recipeOrder.invoiceNo;
                 const config = MessageService.orderToShopConfirm(messageConfig);
-                Message.create(config).then(function(message) {
+                return Message.create(config, { transaction }).then(function(message) {
                   sails.log.warn('到店購買訂單建立完成 RecipeOrder 寄送 Email id:', message.id);
-                  MessageService.sendMail(message);
+                  // MessageService.sendMail(message);
                 })
               })
             }
