@@ -60,6 +60,15 @@
 	              <td><%= item.RecipeOrder.invoiceNo %></td>
 	            </tr>
 						<% } %>
+						<% if(item.RecipeOrder.trackingNumber){ %>
+	            <tr>
+	              <td>貨運單號</td>
+	              <td>
+									<%= item.RecipeOrder.trackingNumber %>
+									<a href="http://www.sf-express.com/tw/tc/dynamic_functions/waybill/#search/bill-number/<%= item.RecipeOrder.trackingNumber %>" class="btn-u btn-u-brown btn-u-xs" target="_blank">查詢</a>
+								</td>
+	            </tr>
+						<% } %>
           </tbody>
         </table>
 
