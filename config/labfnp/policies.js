@@ -11,9 +11,9 @@ module.exports = {
     'show': ['nocache', 'passport'],
   },
   'labfnp/MainController': {
-    'explore': ['nocache', 'passport']
-  },
-  'api/admin/ImageController': {
-    'destroy': ['passport', 'sessionAuth'],
+    'explore': ['nocache', 'passport'],
+    'portfolio': ['nocache'],
+    'editPofile': ['nocache'],
+
   },
 }

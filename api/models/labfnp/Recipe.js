@@ -159,7 +159,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('updatedAt')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -170,7 +170,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -181,7 +181,7 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          return moment(this.getDataValue('createdAt'), moment.ISO_8601);
+          return moment(new Date(this.getDataValue('createdAt')), moment.ISO_8601);
         } catch (e) {
           sails.log.error(e);
         }
@@ -192,7 +192,7 @@ module.exports = {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
-          return moment(this.getDataValue('updatedAt'), moment.ISO_8601);
+          return moment(new Date(this.getDataValue('updatedAt')), moment.ISO_8601);
         } catch (e) {
           sails.log.error(e);
         }

@@ -40,8 +40,45 @@ var defaultConfig = {
     'allpay': ['passport', 'sessionAuth'],
   },
   'api/admin/DownloadController': {
-    'download': ['passport', 'sessionAuth', 'isAdmin'],
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
+  'api/admin/AllpayController': {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/AllpayController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/ContactController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/EventController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/facebook/FeedController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  // user using admin's ImageController to upload image...
+  "api/admin/ImageController": {
+    'upload': ['passport', 'sessionAuth'],
+    'destroy': ['passport', 'sessionAuth'],
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/MessageController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/MockController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/PostController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/SloganController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/UserController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+
   /***************************************************************************
   *                                                                          *
   * Default policy for all controllers and actions (`true` allows public     *
