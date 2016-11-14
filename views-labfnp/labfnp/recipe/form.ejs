@@ -49,12 +49,18 @@
 
   <section>
     <label class="label">封面圖片</label>
-    <%- include ../../lib/fineuploader.ejs %>
-    <div id="fine-uploader-validation"></div>
+    
+    <% var isMobile = UtilsService.isMobileForFineUpload(req) %>
+    <% if (!isMobile)  { %>
+      <%- include ../../lib/fineuploader.ejs %>
+      <div id="fine-uploader-validation"></div>
+    <% } %>
   </section>
 
   <section>
-    <input type="file" id="imageInput" name="uploadPic">
+    <% if (isMobile) { %>
+      <input type="file" id="imageInput" name="uploadPic">
+    <% } %>
     <input type="hidden" name="coverPhotoId" value="">
   </section>
 </fieldset>
