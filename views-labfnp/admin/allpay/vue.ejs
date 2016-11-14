@@ -120,7 +120,7 @@ appMain.DataTableInitComplete = function() {
   $('#ToolTables_main-table_custom_1').on('click', function() {
     $.SmartMessageBox({
       title : "匯入",
-      content :'請選擇要匯入的物流 Excel<br> <div id="uploadExcel"></div>' +
+      content :'請選擇要匯入的物流 Excel，請確認 Ｃ 欄為交易編號、D 欄為運單號<br> <div id="uploadExcel"></div>' +
       '<input type="hidden" id="uploadExcelFileName"></input>',
       buttons : "[取消][確定]"
     }, function(ButtonPress) {
@@ -132,10 +132,27 @@ appMain.DataTableInitComplete = function() {
             fileName: $('#uploadExcelFileName').val(),
           },
           success: function(result) {
+            console.log(result);
             messageApp.show({
               desc: '更新資料成功！',
               type: 'success'
             });
+            var content = ''
+            if (result.data.notFound.length > 0) {
+              content += "交易編號: " + result.data.notFound.join(', ') + ' 未找到<br>';
+            }
+            if (result.data.updateError.length > 0) {
+              content += "交易編號: " + result.data.updateError.join(', ') + ' 更新失敗<br>';
+            }
+            if (content !== '') {
+              setTimeout(function(){
+                $.SmartMessageBox({
+                  title : "失敗交易編號",
+                  content : content,
+                  buttons : "[確認]"
+                });
+              }, 1000);
+            }
             defaultTable.api().ajax.reload(null, false);
           },
           error: function(result) {

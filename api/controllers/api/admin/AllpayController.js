@@ -510,28 +510,38 @@ module.exports = {
         sheetIndex: 0,
         columns,
       });
+      sails.log.info("匯入貨運表", result);
+      let notFound = [];
+      let updateError = [];
       for (let data of result) {
         let allpay = await Allpay.findOne({
           where: {
             MerchantTradeNo: data.merchantTradeNo
           },
         });
-        if (data.trackingNumber === 123123123) {
-          throw Error("!!!!!!!!!!");
+        if (allpay) {
+          let recipeOrder = await RecipeOrder.update({
+            trackingNumber: data.trackingNumber,
+            productionStatus: 'SHIPPED',
+          }, {
+            where: {
+              id : allpay.RecipeOrderId,
+            },
+          });
+          if (recipeOrder[0] !== 1) {
+            updateError.push(data.merchantTradeNo);
+          }
+        } else {
+          notFound.push(data.merchantTradeNo);
         }
-        let recipeOrder = await RecipeOrder.update({
-          trackingNumber: data.trackingNumber,
-          productionStatus: 'SHIPPED',
-        }, {
-          where: {
-            id : allpay.RecipeOrderId,
-          },
-        });
       }
 
       res.ok({
-        message: 'update trackingNumber success',
-        data: result,
+        message: 'update trackingNumber',
+        data: {
+          updateError,
+          notFound,
+        },
       })
     } catch (e) {
       res.serverError(e);
