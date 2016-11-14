@@ -11,7 +11,10 @@ module.exports = {
     'show': ['nocache', 'passport'],
   },
   'labfnp/MainController': {
-    'explore': ['nocache', 'passport']
+    'explore': ['nocache', 'passport'],
+    'portfolio': ['nocache'],
+    'editPofile': ['nocache'],
+
   },
   'api/admin/ImageController': {
     'destroy': ['passport', 'sessionAuth'],
