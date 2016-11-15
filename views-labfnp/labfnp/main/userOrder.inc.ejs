@@ -19,8 +19,9 @@
   		<tr>
         <td>訂單編號</td>
   			<th class="hidden-sm">訂購商品</th>
-        <th class="center">收件人</th>
+        <th class="center hidden-sm">收件人</th>
   			<th class="center">訂單狀態</th>
+        <th class="center hidden-sm">貨運單號</th>
         <th class="center"></th>
   		</tr>
   	</thead>
@@ -29,13 +30,23 @@
   			<tr data-toggle="collapse" data-target="#${MerchantTradeNo}" class="accordion-toggle collapsed" aria-expanded="false">
           <td width="20%">${MerchantTradeNo}</td>
           <td width="20%" class="hidden-sm">${RecipeOrder.Recipe.perfumeName}</td>
-          <td width="20%" align="center">${RecipeOrder.recipient}</td>
+          <td width="20%" class="hidden-sm" align="center">${RecipeOrder.recipient}</td>
   				<td width="20%" align="center">${RecipeOrder.productionStatusDesc}</td>
-          <td width="20%" align="center"><a href="/recipe/done?t=${MerchantTradeNo}" class="btn btn-success btn-xs">詳細</a></td>
+          <td width="20%" class="hidden-sm" align="center">${RecipeOrder.trackingNumber}</td>
+          <td width="20%" align="center"><a href="/recipe/done?t=${MerchantTradeNo}" class="btn-u btn-u-brown btn-u-xs">詳細</a></td>
   			</tr>
         <tr>
             <td colspan="6" class="hiddenRow no-padding">
               <div class="margin-bottom-20 margin-top-20 margin-right-10 margin-left-10 collapse" id="${MerchantTradeNo}" aria-expanded="false" style="height: 0px;">
+                {{if RecipeOrder.trackingNumber}}
+                  <div class="margin-bottom-10">
+                    <b>貨運單號:</b>
+                    <p class="ng-binding">
+                      ${RecipeOrder.trackingNumber}
+                        <a href="http://www.sf-express.com/tw/tc/dynamic_functions/waybill/#search/bill-number/${RecipeOrder.trackingNumber}" class="btn-u btn-u-brown btn-u-xs" target="_blank">查詢</a>
+                    </p>
+                  </div>
+                {{/if}}
                 <div class="margin-bottom-10">
                   <b>收件地址:</b>
                   <p class="ng-binding">

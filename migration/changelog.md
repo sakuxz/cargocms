@@ -75,4 +75,7 @@
 
 ### Feed 欄位變動
 * 修改 description 型態 STRING 修改為 TEXT
-* 修改 message 型態 STRING 修改為 TEXT 
+* 修改 message 型態 STRING 修改為 TEXT
+
+### ScentFeedback 欄位變動
+* 新增 feedbackCheck 確認 回饋內容 寫入 Scent 資料庫

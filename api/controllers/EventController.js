@@ -36,6 +36,11 @@ module.exports = {
         return res.redirect(data.url)
       }
       const social = SocialService.forPost({posts: [data]});
+
+      data.Events.forEach((e) => {
+        e = Object.assign(e, EventService.getTicketStatus(e, new Date()));
+      });
+
       res.view('event/show', {data, social});
     } catch (e) {
       res.serverError(e);
@@ -66,8 +71,8 @@ module.exports = {
 
   allpay: async function(req, res) {
     sails.log.warn('新建訂單傳入資料', req.body);
-    const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
-    const transaction = await sequelize.transaction({ isolationLevel, autocommit: false });
+    // const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
+    // const transaction = await sequelize.transaction({ isolationLevel, autocommit: false });
     try {
       const { id } = req.params;
       const user = AuthService.getSessionUser(req);
@@ -106,7 +111,7 @@ module.exports = {
           model: EventOrder,
           where: { token },
         },
-      }, { transaction });
+      });
       if (findOrder) {
         return res.redirect(`/event/done?t=${findOrder.MerchantTradeNo}`);
       }
@@ -120,7 +125,7 @@ module.exports = {
         email,
         note,
         token,
-      }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
+      }).catch(sequelize.UniqueConstraintError, function(err) {
         throw Error('此交易已失效，請重新下訂')
       });
 
@@ -137,7 +142,6 @@ module.exports = {
         clientBackURL: '/event/done',
         returnURL: '/api/event/paid',
         paymentInfoURL: '/api/event/paymentinfo',
-        transaction,
       });
 
       event.signupCount = event.signupCount + 1;
@@ -145,13 +149,13 @@ module.exports = {
         throw Error('票卷已賣完');
       }
       sails.log.warn('歐付寶訂單建立完成 EventOrder');
-      transaction.commit();
+      // transaction.commit();
       return res.view({
         AioCheckOut: AllpayService.getPostUrl(),
         ...allPayData.config
       });
     } catch (e) {
-      transaction.rollback();
+      // transaction.rollback();
       sails.log.error('訂單建立 EventOrder 失敗', e.toString());
       req.flash('error', e.toString());
       res.serverError(e, {redirect: '/event/order/' + req.body.id});

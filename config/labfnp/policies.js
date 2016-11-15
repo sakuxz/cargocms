@@ -16,7 +16,4 @@ module.exports = {
     'editPofile': ['nocache'],
 
   },
-  'api/admin/ImageController': {
-    'destroy': ['passport', 'sessionAuth'],
-  },
 }

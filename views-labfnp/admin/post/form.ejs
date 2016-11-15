@@ -2,42 +2,6 @@
 <fieldset>
 
   <section>
-    <label class="label">封面類型</label>
-    <label class="select">
-      <select v-model="data.item.coverType" v-on:change="selectOnChange">
-        <option value="img" selected>圖片</option>
-        <option value="video">影片</option>
-      </select> <i></i> </label>
-  </section>
-
-
-  <section v-show="data.item.coverType === 'img'">
-    <label class="label">封面</label>
-    <%- include ../image/upload.ejs %>
-  </section>
-  <section v-show="data.item.coverType === 'video'">
-    <label class="label">封面影片</label>
-    <label class="input">
-      <input type="text" name="coverUrl" placeholder="請輸入影片連結" v-model="data.item.coverUrl">
-    </label>
-  </section>
-
-
-  <section>
-    <label class="label">標題</label>
-    <label class="input">
-      <input type="text" name="title" placeholder="請輸入標題" v-model="data.item.title">
-      <b class="tooltip tooltip-bottom-right">請輸入標題</b> </label>
-  </section>
-
-  <section>
-    <label class="label">簡述</label>
-    <label class="textarea">
-      <textarea rows="3" name="abstract" placeholder="請輸入 100 字以內的簡短的描述" v-model="data.item.abstract"></textarea>
-      <b class="tooltip tooltip-bottom-right">請輸入 100 字以內的簡短的描述</b> </label>
-  </section>
-
-  <section>
     <label class="label">內容類型</label>
     <label class="select">
       <select v-model="data.item.type">
@@ -86,6 +50,42 @@
         </label>
       </section>
     </div>
+  </section>
+
+  <section>
+    <label class="label">封面類型</label>
+    <label class="select">
+      <select v-model="data.item.coverType" v-on:change="selectOnChange">
+        <option value="img" selected>圖片</option>
+        <option value="video">影片</option>
+      </select> <i></i> </label>
+  </section>
+
+
+  <section v-show="data.item.coverType === 'img'">
+    <label class="label">封面</label>
+    <%- include ../image/upload.ejs %>
+  </section>
+  <section v-show="data.item.coverType === 'video'">
+    <label class="label">封面影片</label>
+    <label class="input">
+      <input type="text" name="coverUrl" placeholder="請輸入影片連結" v-model="data.item.coverUrl">
+    </label>
+  </section>
+
+
+  <section>
+    <label class="label">標題</label>
+    <label class="input">
+      <input type="text" name="title" placeholder="請輸入標題" v-model="data.item.title">
+      <b class="tooltip tooltip-bottom-right">請輸入標題</b> </label>
+  </section>
+
+  <section>
+    <label class="label">簡述</label>
+    <label class="textarea">
+      <textarea rows="3" name="abstract" placeholder="請輸入 100 字以內的簡短的描述" v-model="data.item.abstract"></textarea>
+      <b class="tooltip tooltip-bottom-right">請輸入 100 字以內的簡短的描述</b> </label>
   </section>
 
   <section>

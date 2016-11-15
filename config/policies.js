@@ -39,6 +39,9 @@ var defaultConfig = {
   'EventController': {
     'allpay': ['passport', 'sessionAuth'],
   },
+  'api/admin/DownloadController': {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
   'api/admin/AllpayController': {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
