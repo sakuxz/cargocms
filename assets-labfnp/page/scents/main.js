@@ -364,26 +364,33 @@ $(document).ready(function () {
 	    var base_url = '/api/admin/upload';
 
 	    var file_data = $("#imageInput").prop("files")[0];
-	    var form_data = new FormData();
-	    form_data.append("uploadPic", file_data);
-			$('.uploadLoaging').removeClass('hide')
-	    $.ajax({
-	        type: "POST",
-	        url: base_url,
-	        datatype: 'script',
-	        cache: false,
-	        contentType: false,
-	        processData: false,
-	        data: form_data,
-	        success: function(result) {
+			console.log("!!!!!!", file_data.type);
+			if (file_data.type.indexOf('image') === -1) {
+				swal('提示','僅能上傳圖片', 'warning');
+				$("#imageInput").val('');
+			} else {
+				var form_data = new FormData();
+				form_data.append("uploadPic", file_data);
+				$('.uploadLoaging').removeClass('hide')
+				$.ajax({
+					type: "POST",
+					url: base_url,
+					datatype: 'script',
+					cache: false,
+					contentType: false,
+					processData: false,
+					data: form_data,
+					success: function(result) {
 						$('.uploadLoaging').addClass('hide')
 						$('input[name=coverPhotoId]').val(result.data.id);
-	        },
-	        error: function(result) {
+					},
+					error: function(result) {
 						$('.uploadLoaging').addClass('hide')
-            $('input[name=coverPhotoId]').val(null);
-	        }
-	    });
+						$('input[name=coverPhotoId]').val(null);
+					}
+				});
+
+			}
 	    // $("#imageInput").val('');
 	})
 
