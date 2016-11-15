@@ -92,8 +92,8 @@ var defaultConfig = {
   'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
 
   'post /api/admin/eventallpay/find':  'api/admin/EventAllpayController.find',
-  'get /api/admin/eventallpay/export': 'api/admin/EventAllpayController.exportExcel',
-  'get /api/admin/eventallpay/exportSign': 'api/admin/EventAllpayController.exportSignExcel',
+  'post /api/admin/eventallpay/export': 'api/admin/EventAllpayController.exportExcel',
+  'post /api/admin/eventallpay/exportSign': 'api/admin/EventAllpayController.exportSignExcel',
   'get /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.findOne',
   // 'post /api/admin/eventallpay':       'api/admin/EventAllpayController.create',
   'put /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.update',
