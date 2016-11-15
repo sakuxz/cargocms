@@ -99,6 +99,7 @@ appMain.DataTableInitComplete = function() {
       filter_type: "range_date",
       filter_container_id: "external_filter_container",
       date_format: 'yy/mm/dd',
+      filter_default_label: ['From', 'To']
     },
   ]);
 
@@ -226,7 +227,8 @@ appMain.DataTableInitComplete = function() {
         title : "更新物流資料",
         content :
         "<select id='shipping' class='form-control'>" +
-          "<option value='HCT' selected>新竹貨運</option>" +
+          "<option value='EXPRESS' selected>順豐速運</option>" +
+          "<option value='HCT'>新竹貨運</option>" +
         "</select> <br/>" +
         "請輸入物流編號 :<br/>" +
         "<input id='trackingNumber' type='text' class='form-control'/>" +
