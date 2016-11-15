@@ -125,8 +125,9 @@ module.exports = {
       const include = {
         model: EventOrder,
         include: [
-          User,
           {
+            model: User
+          },{
             model: Event,
             include: [ {model: Post } ]
           }

@@ -184,30 +184,46 @@ appMain.customSearch = function() {
   if (searchProductionStatus == 'ALL'){
     searchProductionStatus = undefined;
   }
-  // only Event data
   appModel.pagingQuery.columns.push({
     data: 'EventOrderId',
     searchable: true,
     search: {
-         custom: {
-              where: {
-                 $not: null
-              }
-          }
-      }
-  });
-
-  appModel.pagingQuery.columns.push({
-    data: '',
-    searchable: true,
-    findInclude: true,
-    search: {
-      model: 'EventOrder',
-      where: {
-        productionStatus: searchProductionStatus,
+      custom: {
+        where: {
+          $not: null
+        }
       }
     }
-  })
+  });
+
+  if (searchProductionStatus) {
+    appModel.pagingQuery.columns.push({
+      data: '',
+      searchable: true,
+      findInclude: true,
+      search: {
+        model: 'EventOrder',
+        where: {
+          productionStatus: searchProductionStatus,
+        }
+      }
+    })
+  } else {
+    appModel.pagingQuery.columns.push({
+      data: '',
+      searchable: true,
+      findInclude: true,
+      search: {
+        model: 'EventOrder',
+        where: {
+          productionStatus: {
+            $not: null
+          },
+        }
+      }
+    })
+  }
+
 
   appModel.pagingQuery.columns.push({
     data: 'recipient',

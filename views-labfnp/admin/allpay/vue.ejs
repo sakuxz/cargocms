@@ -71,6 +71,26 @@ appMain.disableAllpay = function(){
   $('.allpay').attr('disabled', true);
   $('.allpaydisabled').addClass('state-disabled');
 }
+
+appMain.setupFileUpload = function () {
+  uploadFileApp.updateModel('itemLimit', 1);
+  uploadFileApp.updateModel('targetElement', 'uploadExcel');
+  uploadFileApp.updateModel('uploadEndpoint', '/api/admin/allpay/import/trackingNumber');
+  uploadFileApp.updateModel('onComplete', function(index, name, response){
+    // appModel.data.item.fileId = response.data.id;
+    $('#uploadExcelFileName').val(response.data)
+    // console.log(index, name, response);
+  })
+  uploadFileApp.updateModel('onDeleteComplete', function(index, name, response){
+    console.log(index, name, response);
+  })
+  uploadFileApp.setup();
+}
+
+appMain.onFileDelete = function() {
+  appModel.data.item.fileId = "";
+}
+
 appMain.DataTableInitComplete = function() {
   var api = this.api();
   this.yadcf([
@@ -94,6 +114,59 @@ appMain.DataTableInitComplete = function() {
     }
     return str.join("&");
   }
+
+  var importBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_1" title="匯入貨運編號" tabindex="0" aria-controls="main-table"><span>匯入</span></a>'
+  $(importBtn).prependTo('.DTTT_container');
+  $('#ToolTables_main-table_custom_1').on('click', function() {
+    $.SmartMessageBox({
+      title : "匯入",
+      content :'請選擇要匯入的物流 Excel，請確認 Ｃ 欄為交易編號、D 欄為運單號<br> <div id="uploadExcel"></div>' +
+      '<input type="hidden" id="uploadExcelFileName"></input>',
+      buttons : "[取消][確定]"
+    }, function(ButtonPress) {
+      if(ButtonPress === '確定') {
+        $.ajax({
+          url: '/api/admin/allpay/trackingNumber',
+          type: 'PUT',
+          data: {
+            fileName: $('#uploadExcelFileName').val(),
+          },
+          success: function(result) {
+            console.log(result);
+            messageApp.show({
+              desc: '更新資料成功！',
+              type: 'success'
+            });
+            var content = ''
+            if (result.data.notFound.length > 0) {
+              content += "交易編號: " + result.data.notFound.join(', ') + ' 未找到<br>';
+            }
+            if (result.data.updateError.length > 0) {
+              content += "交易編號: " + result.data.updateError.join(', ') + ' 更新失敗<br>';
+            }
+            if (content !== '') {
+              setTimeout(function(){
+                $.SmartMessageBox({
+                  title : "失敗交易編號",
+                  content : content,
+                  buttons : "[確認]"
+                });
+              }, 1000);
+            }
+            defaultTable.api().ajax.reload(null, false);
+          },
+          error: function(result) {
+            console.log('匯入失敗', result);
+            messageApp.show({
+              desc: '更新資料失敗！請確認 excel 格式',
+              type: 'error'
+            });
+          },
+        });
+      }
+    });
+    appMain.setupFileUpload();
+  });
 
   var exportBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_0" title="匯出地址寄送表、配方製作表" tabindex="0" aria-controls="main-table"><span>匯出</span></a>'
   $(exportBtn).prependTo('.DTTT_container');
@@ -263,12 +336,12 @@ appMain.customSearch = function() {
     data: 'RecipeOrderId',
     searchable: true,
     search: {
-         custom: {
-              where: {
-                 $not: null
-              }
-          }
+      custom: {
+        where: {
+          $not: null
+        }
       }
+    }
   });
 
   if (searchProductionStatus) {

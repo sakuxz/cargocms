@@ -1,5 +1,6 @@
 import stringify from 'csv-stringify';
 var nodeExcel = require('excel-export');
+import parseExcel from 'node-xlsx';
 import moment from 'moment';
 import fs from 'fs';
 import iconv from 'iconv-lite';
@@ -77,10 +78,31 @@ module.exports = {
   downloadExport: async(fileName) => {
     try {
       const filePath = `${__dirname}/../../.tmp/${fileName}`;
-      var buffer = fs.readFileSync(filePath);
+      const buffer = fs.readFileSync(filePath);
       return buffer;
     } catch (e) {
       throw e;
     }
-  }
+  },
+
+  parseExcel: async({fileName, columns, sheetIndex, startIndex}) => {
+    try {
+      const filePath = `${__dirname}/../../.tmp/${fileName}`;
+      const buffer = fs.readFileSync(filePath);
+      let workSheets = parseExcel.parse(buffer);
+      workSheets = workSheets[sheetIndex].data;
+      let result = [];
+      for(let index = startIndex; index < workSheets.length; index++) {
+        let data = workSheets[index];
+        const format =  {};
+        columns.forEach((scheme) => {
+          format[scheme.name] = data[scheme.index]
+        });
+        result.push(format);
+      }
+      return result;
+    } catch (e) {
+      throw e;
+    }
+  },
 }
