@@ -27,7 +27,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function () {
         try {
-          return moment(this.getDataValue('PaymentDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('PaymentDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -227,6 +227,55 @@ module.exports = {
         }
       }
     },
+    shipping: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
+          let shipping = '';
+          if(order && order.shipping){
+            shipping = order.shipping;
+          }
+          return shipping;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    shippingDesc: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
+          let shippingDesc = '';
+          if(order && order.shipping ){
+            shippingDesc = sails.__({
+              phrase: order.shipping,
+              locale: 'zh'
+            });
+          }
+          return shippingDesc;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    trackingNumber: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        try {
+          const order = this.getDataValue('RecipeOrder') || this.getDataValue('EventOrder');
+          let trackingNumber = '';
+          if(order && order.trackingNumber){
+            trackingNumber = order.trackingNumber;
+          }
+          return trackingNumber;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+
     PaymentTypeDesc:{
       type: Sequelize.VIRTUAL,
       get: function() {
@@ -249,7 +298,7 @@ module.exports = {
 			type: Sequelize.DATE,
 			get: function () {
 				try {
-					return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm");
+					return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm");
 				} catch (e) {
 					sails.log.error(e);
 				}
@@ -260,6 +309,7 @@ module.exports = {
   associations: function() {
   },
   options: {
+    paranoid: true,
     classMethods: {
       deleteById: async (id) => {
         try {

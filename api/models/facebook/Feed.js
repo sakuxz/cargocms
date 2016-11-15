@@ -9,10 +9,10 @@ module.exports = {
       type: Sequelize.STRING,
     },
     description: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
     },
     message: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
     },
     story: {
       type: Sequelize.STRING,
@@ -31,7 +31,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('createdTime')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('createdTime'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -45,7 +45,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('updatedAt')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -55,7 +55,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }

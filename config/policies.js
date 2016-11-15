@@ -16,7 +16,7 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.policies.html
  */
 import customConfigLoader from './util/customConfigLoader.js';
-var customConfig = customConfigLoader('mail.js');
+var customConfig = customConfigLoader('policies.js');
 
 var defaultConfig = {
   '*': ['nocache', 'passport', 'sessionAuth'],
@@ -24,34 +24,63 @@ var defaultConfig = {
     '*': ['passport'],
     'status': [],
   },
-  'UserController': {
-    'index': ['nocache'],
-    'findOne': ['nocache'],
-    'create': ['nocache'],
-    'update': ['nocache'],
-    'delete': ['nocache']
-  },
   ...customConfig,
   'BlogController': {
     'index': true
   },
   'WallController': true,
   'MainController': {
-    'index': ['nocache']
+    'index': ['nocache', 'passport'],
+    'portfolio': ['nocache', 'passport'],
   },
   'AdminController': {
     'index': ['passport', 'sessionAuth', 'isAdmin']
   },
-  'SloganController': {
-    'index': ['nocache'],
-    'findOne': ['nocache'],
-    'create': ['nocache'],
-    'update': ['nocache'],
-    'delete': ['nocache'],
-  },
   'EventController': {
     'allpay': ['passport', 'sessionAuth'],
   },
+  'api/admin/DownloadController': {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  'api/admin/AllpayController': {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/AllpayController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/ContactController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/EventController": {
+    'paid': [],
+    'paymentinfo': [],
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/facebook/FeedController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  // user using admin's ImageController to upload image...
+  "api/admin/ImageController": {
+    'upload': ['passport', 'sessionAuth'],
+    'destroy': ['passport', 'sessionAuth'],
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/MessageController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/MockController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/PostController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/SloganController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/UserController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+
   /***************************************************************************
   *                                                                          *
   * Default policy for all controllers and actions (`true` allows public     *

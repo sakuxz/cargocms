@@ -10,6 +10,7 @@ module.exports = {
 
   'get /api/labfnp/recipe/:id/feelings': 'api/labfnp/RecipeController.feelings',
 
+  'get /api/labfnp/user/feeling': 'api/labfnp/FeelingController.findByUser',
   'get /api/labfnp/feeling': 'api/labfnp/FeelingController.find',
   'get /api/labfnp/feeling/:id': 'api/labfnp/FeelingController.findOne',
   'post /api/labfnp/feeling': 'api/labfnp/FeelingController.create',
@@ -20,9 +21,16 @@ module.exports = {
   'get /api/labfnp/recipe/unlike/:id': 'api/labfnp/RecipeController.unlike',
   'post /api/labfnp/recipe/feedback': 'api/labfnp/RecipeController.saveFeedback',
 
+  'get /api/labfnp/order': 'api/labfnp/RecipeOrderController.find',
+
   'get /api/labfnp/scent/simpleList': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scent': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scentnote': 'api/labfnp/ScentNoteController.find',
+
+  'get /api/admin/labfnp/scentfeedback': 'api/admin/labfnp/ScentFeedbackController.find',
+  'get /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.findOne',
+  'delete /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.destroy',
+  'put /api/admin/labfnp/feedbackCheck/:id': 'api/admin/labfnp/ScentFeedbackController.feedbackCheck',
 
   // 這裡先相容舊版 api
   'post /api/allpay/paid':        'api/admin/labfnp/RecipeController.paid',
@@ -31,6 +39,9 @@ module.exports = {
   'post /api/recipe/paid':        'api/admin/labfnp/RecipeController.paid',
   'post /api/recipe/paymentinfo': 'api/admin/labfnp/RecipeController.paymentinfo',
   'get /api/admin/labfnp/recipe/export': 'api/admin/labfnp/RecipeController.export',
+
+  'put /api/admin/shipping/:id': 'api/admin/labfnp/RecipeOrderController.shippingUpdate',
+  'put /api/admin/labfnp/recipeorder/status/:id': 'api/admin/labfnp/RecipeOrderController.updateProductionStatus',
 
   '/recipe/done':     'labfnp/RecipeController.done',
   '/recipe/:id':      'labfnp/RecipeController.show',

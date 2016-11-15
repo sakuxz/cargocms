@@ -21,6 +21,8 @@ $(document).ready(function(){
                 }
 
                 $('.grid-boxes-in').width(box_width);
+                $('.grid-boxes-in').show();
+                $('.timeline-wrapper').hide();
 
                 return box_width;
               }

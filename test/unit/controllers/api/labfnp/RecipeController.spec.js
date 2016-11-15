@@ -1,10 +1,10 @@
 var sinon = require('sinon');
 describe('about LikeRecipe Controller operation.', function() {
 
-  let recipe;
+  let recipe, user;
   before(async (done) => {
     try {
-      let user = await User.create({
+      user = await User.create({
         username: 'likeRecipeUserController',
         email: 'likeRecipeUserController@gmail.com',
         password: ''
@@ -23,6 +23,24 @@ describe('about LikeRecipe Controller operation.', function() {
         message: 'this is love test',
         UserId: user.id,
       });
+      const scent = await Scent.create({name: 'A100'});
+      await Scent.bulkCreate([
+        { name: 'B100' },
+        { name: 'BA69' },
+        { name: 'BA70' },
+        { name: 'T14' },
+        { name: 'T29' }
+      ]);
+      await ScentFeedback.create({
+        feeling: 'test',
+        ScentId: scent.id,
+        UserId: user.id,
+      })
+      await ScentFeedback.create({
+        feeling: 'ABC',
+        ScentId: scent.id,
+        UserId: user.id,
+      })
       done()
     } catch (e) {
       done(e)
@@ -32,6 +50,39 @@ describe('about LikeRecipe Controller operation.', function() {
   after((done) => {
     AuthService.getSessionUser.restore();
     done();
+  });
+
+  it('Recipe create should be success.', async (done) => {
+    try {
+      const res = await request(sails.hooks.http.app)
+      .post(`/api/labfnp/recipe`)
+      .send({
+        authorName: 'Recipe create',
+        perfumeName: 'sdf',
+        formulaLogs: '',
+        formula:
+         [ { scent: 'T14',
+             drops: '1',
+             color: '#227059',
+             userFeeling: ['AAA', 'VVV', 'CCC'] },
+           { scent: 'T29',
+             drops: '1',
+             color: '#E5127F',
+             userFeeling: ['BB', 'VVV', 'A'] } ],
+        visibility: 'PRIVATE',
+        description: 'sdfsf',
+        coverPhotoId: '',
+        createdBy: 'scent',
+        feedback: [ 'sdasd' ],
+        UserId: user.id }
+      )
+      res.status.should.be.eq(200);
+      let check = await ScentFeedback.findAll();
+      check.length.should.be.above(0);
+      done();
+    } catch (e) {
+      done(e);
+    }
   });
 
   it('Recipe like action should be success.', async (done) => {
@@ -64,6 +115,7 @@ describe('about LikeRecipe Controller operation.', function() {
         invoiceNo: '123',
         tradeNo: 1608301610017019,
         feeling: '清香的植物味,123',
+        scentFeeling: { BA69: '水果香,蜂蜜', BA70: '冰淇淋' },
       });
       res.status.should.be.eq(200);
 
@@ -92,5 +144,43 @@ describe('about LikeRecipe Controller operation.', function() {
       done(e);
     }
   });
+
+
+  it('Recipe update should be success.', async (done) => {
+    try {
+      const res = await request(sails.hooks.http.app)
+      .put(`/api/labfnp/recipe/${recipe.id}`)
+      .send({
+        authorName: 'Recipe create',
+        perfumeName: 'sdf',
+        formulaLogs: '',
+        formula:
+         [ { scent: 'A100',
+             drops: '1',
+             color: '#227059',
+             userFeeling: ['test','123'] },
+           {
+             scent: 'B100',
+             drops: '1',
+             color: '#227059',
+             userFeeling: ['test','BBB']
+           }],
+        visibility: 'PRIVATE',
+        description: 'sdfsf',
+        coverPhotoId: '',
+        createdBy: 'scent',
+        feedback: [ 'sdfsfsdf' ],
+        UserId: user.id }
+      )
+      res.status.should.be.eq(200);
+      // let check = await ScentFeedback.findAll();
+      // console.log(check);
+      // check.length.should.be.above(0);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
 
 });

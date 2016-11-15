@@ -44,15 +44,31 @@
       </section>
     </div>
     <div class="row hidden scent-detail" data-index="<%= formula.index %>">
-      <div class="col-md-12">
+      <div class="col-md-12  margin-bottom-20">
         <div id="scent-content" class="funny-boxes bg-color-white">
           <h2 id="scent-title">AAA</h2>
           <p id="scent-description">BBB</p>
           <div class="tags" >
           </div>
         </div>
+        <% var scentAdj = typeof scentFeeling !== 'undefined' ? scentFeeling[formula.scentName] || {} : {} %>
+        <label>
+          您的感覺:
+        </label>
+        <input type="text" class="form-control userFeeling" name="userFeeling[<%= formula.index %>]" value="<%= scentAdj.feeling || '' %>">
       </div>
     </div>
 
   <% }); %>
+
+
 </fieldset>
+
+<% LayoutUtils.addScriptBlock(`
+  $(document).ready(function(){
+    $('.userFeeling').tagEditor({
+      forceLowercase: false,
+      placeholder: '這裡能新增你的感覺 (可填寫多個）例如: 水果香'
+    });
+  });
+`); %>

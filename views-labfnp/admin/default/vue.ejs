@@ -1,13 +1,23 @@
 var defaultTable = {};
 var defaultVueMathod = {
 	cancel: function (event) {
+		var callbackUrl = $('#main-form').data('callback') || '';
+		var url = '/admin/#/admin/' + modelName;
+		if (callbackUrl!== '') {
+			url = '/admin/#/admin' + callbackUrl;
+		}
 		appMain.onLeavePageEdit(function() {
-			location.href = '/admin/#/admin/' + modelName;
+			location.href = url;
 		});
 	},
 	save: function (event) {
 		var ajaxSuccess = function (result) {
-			location.href = '/admin/#/admin/' + modelName;
+			var callbackUrl = $('#main-form').data('callback') || '';
+			var url = '/admin/#/admin/' + modelName;
+			if (callbackUrl!== '') {
+				url = '/admin/#/admin' + callbackUrl;
+			}
+			location.href = url;
 			messageApp.show({
 				desc: '新增成功！',
 				type: 'success'
@@ -35,7 +45,12 @@ var defaultVueMathod = {
 	},
 	update: function (event) {
 		var ajaxSuccess = function (result) {
-			location.href = '/admin/#/admin/' + modelName;
+			var callbackUrl = $('#main-form').data('callback') || '';
+			var url = '/admin/#/admin/' + modelName;
+			if (callbackUrl!== '') {
+				url = '/admin/#/admin' + callbackUrl;
+			}
+			location.href = url;
 			messageApp.show({
 				desc: '更新資料成功！',
 				type: 'success'
@@ -154,12 +169,14 @@ var defaultVueMathod = {
 			tablet: 1024,
 			phone: 480
 		};
-
-		var url = '/api/' + prefix + modelName + "?serverSidePaging=" + serverSidePaging;
+		var option = appModel.data.option;
+		var customAjax = option.ajax || {};
+		var url = customAjax.url || '/api/' + prefix + modelName;
+		url = url + "?serverSidePaging=" + serverSidePaging;
 		var ajax = {
 	    "url": url,
+	    "type": customAjax.method || 'get',
 	    "data": function(data) {
-				// TODO: 這裡可以新增 startDate, endDate
 				appModel.pagingQuery = data;
 	      appModel.pagingQuery.startDate = $("#yadcf-filter--main-table-from-date-3").val() || '';
 	      appModel.pagingQuery.endDate = $("#yadcf-filter--main-table-to-date-3").val() || '';
@@ -205,7 +222,7 @@ var defaultVueMathod = {
 		var defaultTableConfig = {
 			"processing": false,
 			"serverSide": serverSidePaging,
-			"sDom": "<'dt-toolbar'<'row'r<'col-xs-12 col-md-7 col-sm-7'f><'col-xs-12 col-md-4 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
+			"sDom": "<'dt-toolbar'<'row'r<'col-xs-12 col-md-6 col-sm-7'f><'col-xs-12 col-md-5 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
 				"t" +
 				"<'dt-toolbar-footer'<'row'<'col-md-6 col-xs-12 hidden-xs'i><'col-md-6 col-xs-12'p>>>",
 			"oLanguage": {
@@ -370,8 +387,14 @@ var defaultVueMathod = {
 						desc: `刪除資料成功！`,
 						type: 'success'
 					});
+					var callbackUrl = $('#main-form').data('callback') || '';
+					var url = '/admin/#/admin/' + modelName;
+					if (callbackUrl!== '') {
+						url = '/admin/#/admin' + callbackUrl;
+					}
+					location.href = url;
 					setTimeout(function () {
-						location.href = '/admin/#/admin/' + modelName;
+						location.href = url;
 					}, 500);
 				}; // end ajaxSuccess
 

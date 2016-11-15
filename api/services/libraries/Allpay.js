@@ -56,7 +56,7 @@ export default class Allpay {
     return data;
   };
 
-  async getAllpayConfig({
+  async createAndgetAllpayConfig({
     relatedKeyValue,
     MerchantTradeNo,
     tradeDesc,
@@ -66,6 +66,7 @@ export default class Allpay {
     clientBackURL,
     returnURL,
     paymentInfoURL,
+    transaction,
   }) {
     clientBackURL = clientBackURL || this.ClientBackURL;
     returnURL = returnURL || this.ReturnURL;
@@ -83,12 +84,15 @@ export default class Allpay {
       ClientBackURL: `${this.resolve(this.domain, clientBackURL, true)}?t=${MerchantTradeNo}`,
       PaymentInfoURL: this.resolve(this.domain, this.PaymentInfoURL, true),
     };
-    await this.Allpay.create({
+    let allpay = await this.Allpay.create({
       ...relatedKeyValue,
       MerchantTradeNo: data.MerchantTradeNo,
       PaymentType: data.PaymentType,
-    });
-    return this.genCheckMacValue(data);
+    }, { transaction });
+    return {
+      config: this.genCheckMacValue(data),
+      allpay
+    }
   }
 
   async paymentinfo(callBackData) {

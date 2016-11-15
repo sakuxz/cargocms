@@ -1,5 +1,5 @@
 
-describe.only("ImageController test", function() {
+describe("ImageController test", function() {
   it("create image by file attachment", async function(done) {
 
     try {

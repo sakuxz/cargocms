@@ -52,7 +52,7 @@
   section {
     padding-bottom: 10px;
   }
-  .tag-editor {
+  .feeling .tag-editor {
     background: white;
     border-radius: 0;
     min-height: 120px;
@@ -88,7 +88,7 @@
 
         <h2 class="pull-left">
           <i class="fa fa-comment-o" aria-hidden="true"></i>感覺回饋</h2>
-        <a href="#!" onclick="window.history.back();return false;" class="btn-u btn-u-dark pull-right">返回</a>
+        <a href="/recipe/<%= recipe.hashId %>" class="btn-u btn-u-dark pull-right">返回</a>
 
       </div>
 
@@ -157,24 +157,32 @@
         <form class="orderForm" id="orderForm" action="/" method="post">
           <input type="hidden" class="form-control" name="UserId" value="<%= user.id %>" >
           <input type="hidden" class="form-control" name="RecipeId" value="<%= recipe.id %>" >
-          <section class="col">
-            <label for="reciverName">發票號碼
-            </label>
-            <input type="text" value="<%= recipeFeedback.invoiceNo %>" class="form-control" name="invoiceNo" placeholder="選填，有發票號碼請填寫" >
-          </section>
 
-          <section class="col">
-            <label for="phone">交易序號
-            </label>
-            <input type="text" value="<%= recipeFeedback.tradeNo %>" class="form-control" name="tradeNo" placeholder="選填，有交易序號請填寫" >
-          </section>
+          <% recipe.formula.forEach(function(formula) { %>
+            <section class="col">
+              <label for="scentFeeling"><%= formula.scent %> 感覺</label>
+              <input type="text" class="form-control userFeeling" value="<%= scentFeeling[formula.scent] ? scentFeeling[formula.scent].feeling : '' %>" name="scentFeeling[<%= formula.scent %>]" >
+            </section>
+          <% }); %>
 
-          <section class="col">
-            <label for="payment">感覺<span class="required">*</span>
+          <section class="col feeling">
+            <label for="payment">您覺得調配後的感覺<span class="required">*</span>
             </label>
             <input type="text" class="form-control" name="feeling" >
           </section>
           <label class="error-text">請填寫您的感覺</label>
+
+          <section class="col">
+            <label for="reciverName">發票號碼 (選填)
+            </label>
+            <input type="text" value="<%= recipeFeedback.invoiceNo %>" class="form-control" name="invoiceNo" placeholder="例：LB-12345678" >
+          </section>
+
+          <section class="col">
+            <label for="phone">交易序號 (選填)
+            </label>
+            <input type="text" value="<%= recipeFeedback.tradeNo %>" class="form-control" name="tradeNo" placeholder="例：86fbe12a" >
+          </section>
 
         </form>
 

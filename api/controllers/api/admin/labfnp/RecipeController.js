@@ -4,7 +4,7 @@ module.exports = {
   paid: async (req, res) => {
     try {
       const data = req.body;
-      sails.log.info(data);
+      sails.log.warn('歐付寶回傳付款完成資料', data);
       const allpay = await AllpayService.paid(data);
 
       //  create and send message
@@ -12,7 +12,9 @@ module.exports = {
       messageConfig.serialNumber = allpay.TradeNo;
       if (allpay.RecipeOrderId) {
         const recipeOrder = await RecipeOrder.findByIdHasJoin(allpay.RecipeOrderId);
-        recipeOrder.productionStatus = 'PAID';
+        if (parseInt(allpay.RtnCode, 10) === 1) {
+          recipeOrder.productionStatus = 'PAID';
+        }
         await recipeOrder.save();
         messageConfig.email = recipeOrder.email;
         messageConfig.username = recipeOrder.User.displayName;
@@ -20,9 +22,11 @@ module.exports = {
       messageConfig = await MessageService.paymentConfirm(messageConfig);
       const message = await Message.create(messageConfig);
       await MessageService.sendMail(message);
+      sails.log.warn('收到 歐付寶回傳付款完成 寄送Email id:', message.id);
 
       res.send('1|OK');
     } catch (e) {
+      sails.log.error('歐付寶回傳付款完成資料失敗', e.toString());
       res.serverError(e);
     }
   },
@@ -30,7 +34,7 @@ module.exports = {
   paymentinfo: async(req, res) => {
     try {
       const data = req.body;
-      sails.log.info(data);
+      sails.log.warn('歐付寶回傳付款資訊', data);
       const allpay = await AllpayService.paymentinfo(data);
 
       //  create and send message
@@ -58,6 +62,7 @@ module.exports = {
       messageConfig = await MessageService.orderConfirm(messageConfig);
       const message = await Message.create(messageConfig);
       await MessageService.sendMail(message);
+      sails.log.warn('收到 歐付寶回傳付款資訊 寄送Email id:', message.id);
 
       res.send('1|OK');
     } catch (e) {

@@ -17,11 +17,13 @@ var postAppModel = {
       tags: [],
       TagsArray: [],
       coverType: 'img',
+      eventId: [{id: 0}],
     },
     items: [],
     option: {
       originCoverType: '',
       originCoverUrl: '',
+      allevent: []
     }
   },
   view: {
@@ -55,7 +57,12 @@ var postApp = new Vue({
       });
 
       function ajaxSuccess(result) {
-        location.href = '/admin/#/admin/post';
+        var reload = $('#post-form').data('reload') || false;
+  			if (reload) {
+          location.href = '/admin/#/admin/post/edit/' + result.data.id;
+        } else {
+          location.href = '/admin/#/admin/post';
+        }
         messageApp.show({desc: '新增內容成功！', type: 'success'});
       } // end ajaxSuccess
 
@@ -79,7 +86,12 @@ var postApp = new Vue({
       });
 
       function ajaxSuccess(result) {
-        location.href = '/admin/#/admin/post';
+        var reload = $('#post-form').data('reload') || false;
+  			if (reload) {
+          location.reload();
+        } else {
+          location.href = '/admin/#/admin/post';
+        }
         messageApp.show({desc: '更新內容資料成功！', type: 'success'});
       } // end ajaxSuccess
 
@@ -96,6 +108,11 @@ var postApp = new Vue({
         console.log("loadItem result.data=>", result.data);
         if (result.success) {
           postAppModel.data.item = result.data;
+          if (result.data.eventId.length > 0){
+            postAppModel.data.item.eventId = result.data.eventId;
+          } else {
+            postAppModel.data.item.eventId = [{id: 0}]
+          }
           postAppModel.data.option.originCoverType = result.data.coverType;
           postAppModel.data.option.originCoverUrl = result.data.coverUrl;
         }
@@ -303,7 +320,8 @@ var postApp = new Vue({
        },
        "drawCallback" : function(oSettings) {
          responsiveHelper_datatable_tabletools.respond();
-       }
+       },
+       "order": [[ 0, 'desc' ]],
      });
 
      // selection
@@ -396,6 +414,44 @@ var postApp = new Vue({
         postAppModel.data.item.coverUrl = '';
       }
     },
+    onEventAddClick: function() {
+      console.log(postAppModel.data.item.eventId);
+
+      postAppModel.data.item.eventId.push({id: 0});
+    },
+    onEventSubtractClick: function(index) {
+      console.log(postAppModel.data.item.eventId);
+      postAppModel.data.item.eventId.splice(index, 1);
+
+    },
+    loadEventItem: function (type) {
+      if (type == 'create') {
+        $.get('/api/admin/event/new', ajaxSuccess);
+      } else if(type == 'edit') {
+        $.get('/api/admin/event/new/' + postAppModel.data.item.id, ajaxSuccess);
+
+      }
+      function ajaxSuccess(result) {
+        console.log("loadItem result.data=>", result.data.items);
+        if (result.success) {
+          postAppModel.data.option.allevent = result.data.items;
+        }
+      } // end ajaxSuccess
+    },
+    onEventEdit: function (id) {
+      var url = '/admin/#/admin/event/edit/' + id + '?callback=/post/edit/' + postAppModel.data.item.id;
+      $('#post-form').data('reload', true);
+      postApp.onLeavePageEdit(function() {
+        location.href = url;
+      });
+    },
+    onCreateNewEvet: function() {
+      var url = '/admin/#/admin/event/create?callback=/post/edit/' + postAppModel.data.item.id;
+      $('#post-form').data('reload', true);
+      postApp.onLeavePageEdit(function() {
+        location.href = url;
+      });
+    }
   },
 });
 

@@ -13,6 +13,31 @@ module.exports = {
           let recordsTotal = data.length
           let recordsFiltered =  result.count
           let draw = parseInt(req.draw) + 1
+
+          let user = AuthService.getSessionUser(req);
+          if (user) {
+            let scentFeedback = await ScentFeedback.findAll({
+              where: {
+                UserId: user.id,
+              },
+              include: {
+                model: Scent,
+                where: {
+                  name: query.search.value,
+                }
+              }
+            });
+            data = data.map((info) => info.toJSON());
+            scentFeedback = scentFeedback.map((info) => {
+              info = info.toJSON();
+              return {
+                ...info,
+                title: info.feeling
+              }
+            });
+            data = scentFeedback.concat(data);
+          }
+
           res.ok({draw, recordsTotal, recordsFiltered, data});
         }else {
           const feelings = await Feeling.findAll();
@@ -70,5 +95,21 @@ module.exports = {
     } catch (e) {
       res.serverError(e);
     }
-  }
+  },
+
+  findByUser: async (req, res) => {
+    try {
+      let user = AuthService.getSessionUser(req);
+      let scentItem =  [];
+      let recipeItem = [];
+      if (user) {
+        scentItem = await RecipeService.getUserFeeling({ userId: user.id });
+        recipeItem = await RecipeService.getUserRecipeFeeling({ userId: user.id });
+      }
+      let message = 'find user feeling';
+      res.ok({message, data: {scentItem, recipeItem}});
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
 }

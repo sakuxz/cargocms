@@ -29,6 +29,7 @@ var defaultConfig = {
   'post /api/admin/upload': 'api/admin/ImageController.upload',
   'delete /api/admin/upload/:id': 'api/admin/ImageController.destroy',
 
+  'post /api/admin/user/exportBirthday': 'api/user/UserController.exportBirthday',
   'get /api/admin/user': 'api/admin/UserController.find',
   'get /api/admin/user/:id': 'api/admin/UserController.findOne',
   'post /api/admin/user': 'api/admin/UserController.create',
@@ -48,8 +49,14 @@ var defaultConfig = {
   'put /api/admin/slogan/:id': 'api/admin/SloganController.update',
   'delete /api/admin/slogan/:id': 'api/admin/SloganController.destroy',
 
-  'get /api/admin/allpay':        'api/admin/AllpayController.find',
-  'get /api/admin/allpay/export': 'api/admin/AllpayController.export',
+  'post /api/admin/allpay/find':  'api/admin/AllpayController.find',
+  'post /api/admin/allpay/export': 'api/admin/AllpayController.export',
+  'post /api/admin/allpay/exportSend': 'api/admin/AllpayController.exportSend',
+  'post /api/admin/allpay/exportExcel': 'api/admin/AllpayController.exportExcel',
+  'post /api/admin/allpay/exportSendExcel': 'api/admin/AllpayController.exportSendExcel',
+  'post /api/admin/allpay/import/trackingNumber': 'api/admin/AllpayController.importTrackingNumberExcel',
+  'put /api/admin/allpay/trackingNumber': 'api/admin/AllpayController.updateTrackingNumberfromExcel',
+
   'get /api/admin/allpay/:id':    'api/admin/AllpayController.findOne',
   'post /api/admin/allpay':       'api/admin/AllpayController.create',
   'put /api/admin/allpay/:id':    'api/admin/AllpayController.update',
@@ -74,12 +81,31 @@ var defaultConfig = {
   // 'put /api/admin/contact/:id':    'api/admin/ContactController.update',
   'delete /api/admin/contact/:id': 'api/admin/ContactController.destroy',
 
+  'get /api/admin/event':        'api/admin/EventController.find',
+  'get /api/admin/event/new':    'api/admin/EventController.findNewEvent',
+  'get /api/admin/event/:id':    'api/admin/EventController.findOne',
+  'get /api/admin/event/new/:id':'api/admin/EventController.findByPostOrNew',
+  'post /api/admin/event':       'api/admin/EventController.create',
+  'put /api/admin/event/:id':    'api/admin/EventController.update',
+  'delete /api/admin/event/:id': 'api/admin/EventController.destroy',
+  'post /api/event/paid':        'api/admin/EventController.paid',
+  'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
+
+  'post /api/admin/eventallpay/find':  'api/admin/EventAllpayController.find',
+  'post /api/admin/eventallpay/export': 'api/admin/EventAllpayController.exportExcel',
+  'post /api/admin/eventallpay/exportSign': 'api/admin/EventAllpayController.exportSignExcel',
+  'get /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.findOne',
+  // 'post /api/admin/eventallpay':       'api/admin/EventAllpayController.create',
+  'put /api/admin/eventallpay/:id':    'api/admin/EventAllpayController.update',
+  'delete /api/admin/eventallpay/:id': 'api/admin/EventAllpayController.destroy',
+  'put /api/admin/eventorder/status/:id': 'api/admin/EventOrderController.updateProductionStatus',
+
+  'get /api/admin/download': 'api/admin/DownloadController.download',
+
   'get /api/admin/facebook/feed':        'api/admin/facebook/FeedController.find',
   'get /api/admin/facebook/import':        'api/admin/facebook/FeedController.import',
   'put /api/admin/facebook/update':        'api/admin/facebook/FeedController.update',
 
-  'post /api/event/paid':        'api/admin/EventController.paid',
-  'post /api/event/paymentinfo': 'api/admin/EventController.paymentinfo',
 
   //----- Event -----
   'get /events/:name': 'EventController.show',
@@ -109,6 +135,9 @@ var defaultConfig = {
 
   //----- Facebook -----
   'get /admin/facebook/:controller/:action/:id?': {},
+
+  //----- robots ---
+  'get /robots.txt': 'RobotsController.robots',
 };
 
 module.exports.routes = {

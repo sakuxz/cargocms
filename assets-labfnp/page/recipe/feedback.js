@@ -16,16 +16,26 @@ $.fn.serializeObject = function () {
 
 $(document).ready(function () {
 
-	$('input[name="feeling"]').tagEditor({
+  $('#orderFormWrapper').on("copy paste",".tag-editor",function(event) {
+    event.preventDefault();
+  });
+
+  $('.userFeeling').tagEditor({
+    forceLowercase: false,
+    placeholder: '你覺得這個分子是什麼味道？'
+  });
+
+  $('input[name="feeling"]').tagEditor({
     autocomplete: {
         delay: 0, // show suggestions immediately
         position: { collision: 'flip' }, // automatic menu position up/down
         source: feelingData,
     },
-		initialTags: initialTags,
+    initialTags: initialTags,
     forceLowercase: false,
-    placeholder: '請填寫您的感覺（可填寫多個）'
+    placeholder: '請填寫您的感覺，例：蘋果香味 <br/>(可填寫多個)'
   });
+
 
 	$('#orderForm').submit(function (event) {
 		if ($('input[name="feeling"]').val() === '') {

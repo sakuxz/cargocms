@@ -77,7 +77,7 @@
 
         <h2 class="pull-left">
           <i class="fa fa-shopping-cart " aria-hidden="true"></i>確認訂單</h2>
-        <a href="#!" onclick="window.history.back();return false;" class="btn-u btn-u-dark pull-right">返回</a>
+        <a href="javascript:void(0)" onclick="window.history.back();return false;" class="btn-u btn-u-dark pull-right">返回</a>
 
       </div>
 
@@ -162,6 +162,7 @@
             <label for="invoiceNo">發票號碼</label>
             <input type="text" id="invoiceNo" class="form-control" name="invoiceNo" value="" placeholder="請輸入發票號碼...">
           </section>-->
+          <input type="hidden" name="token" value="<%= token %>">
 
           <section class="col paymentMethod">
             <label for="paymentMethod">付款方式<span class="required">*</span>
@@ -178,16 +179,16 @@
 
       <section class="col">
         <% if (error.length > 0) { %>
-          <div class="margin-bottom-20 has-error">
-            <label class="col-md-6 control-label" for="password">
-              <span class="glyphicon glyphicon-remove"></span><%= error %>
+          <div class="margin-bottom-20 has-error" data-message="<%= error %>">
+            <label class="col-md-6 control-label" for="error">
+              <!--<span class="glyphicon glyphicon-remove"></span><%= error %>-->
             </label>
           </div>
         <% } %>
       </section>
 
-      <div class="text-center">
-        <button form="orderForm" id="submitOrder" type="sumbit" class="btn-u btn-u-green" data-id="<%= event.id %>">
+      <div class="text-center margin-top-20">
+        <button form="orderForm" id="submit-button" type="sumbit" class="btn-u btn-u-green" data-id="<%= event.id %>">
           <i class="fa fa-check" aria-hidden="true"></i>
           送出
         </button>
@@ -203,41 +204,12 @@
 </div>
 <!-- end row -->
 </div>
+<% LayoutUtils.addScripts('/assets/labfnp/lib/formSubmitHelper.js'); %>
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
 
     $.fn.preventDoubleSubmission = function() {
-      $(this).on("submit", function(event){
-        var $form = $(this);
-
-        if( $(this).valid() ) {
-          if ($form.data("submitted") === true){
-            event.preventDefault();
-          } else {
-            $form.data("submitted", true);
-            
-            $("#submitOrder").prop("disabled", true);
-            $("#submitOrder").text("處理中...");
-
-            setTimeout(function (){
-              $("#submitOrder").prop("disabled", false);
-              $("#submitOrder").text("送出");
-            }, 1000);
-
-            swal({
-              type: "info",
-              title: "訊息",
-              text: "訂單處理中...",
-              showConfirmButton: false,
-              timer: 5000,
-            });
-          }
-        } else {
-          event.preventDefault();
-        }
-
-      });
-
+      $(this).on("submit", defaultFormSubmit);
       return this;
     }
 

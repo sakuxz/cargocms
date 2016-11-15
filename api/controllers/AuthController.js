@@ -124,7 +124,10 @@ module.exports = {
         const userAgent = req.headers['user-agent'];
         user.loginSuccess({ userAgent });
 
-        return res.redirect(req.query.url || req.body.url || sails.config.urls.afterSignIn);
+        let url = req.query.url;
+        if (!url && req.body) url = req.body.url;
+        url = url || sails.config.urls.afterSignIn;
+        return res.redirect(url);
       });
     });
   },

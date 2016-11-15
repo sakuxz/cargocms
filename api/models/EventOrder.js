@@ -31,6 +31,11 @@ module.exports = {
       defaultValue: 'NEW',
     },
 
+		token: {
+      type: Sequelize.STRING(32),
+			unique: true,
+    },
+
     productionStatusDesc: {
       type: Sequelize.VIRTUAL,
       get: function() {
@@ -72,7 +77,7 @@ module.exports = {
 			type: Sequelize.DATE,
 			get: function () {
 				try {
-					return moment(this.getDataValue('updatedAt')).format("YYYY/MM/DD HH:mm:SS");
+					return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
 				} catch (e) {
 					sails.log.error(e);
 				}
@@ -83,12 +88,25 @@ module.exports = {
 			type: Sequelize.DATE,
 			get: function () {
 				try {
-					return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm:SS");
+					return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
 				} catch (e) {
 					sails.log.error(e);
 				}
 			}
 		},
+
+    ItemNameArray: {
+      type: Sequelize.VIRTUAL,
+      get: function () {
+        try {
+          const thisEvent = this.getDataValue('Event');
+          const event = thisEvent ? [thisEvent.title] : [];
+          return event;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
 
 	},
 	associations: () => {
@@ -100,7 +118,7 @@ module.exports = {
 		classMethods: {
 			findByIdHasJoin: async(id) => {
 				try {
-					return await RecipeOrder.findOne({
+					return await EventOrder.findOne({
 						where: {
 							id
 						},
@@ -113,7 +131,7 @@ module.exports = {
 			},
 			deleteById: async(id) => {
 				try {
-					return await RecipeOrder.destroy({
+					return await EventOrder.destroy({
 						where: {
 							id
 						}

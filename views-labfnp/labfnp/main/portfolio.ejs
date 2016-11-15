@@ -9,6 +9,7 @@
 
 <!-- CSS Page Style -->
 <% LayoutUtils.addStylesheets('/assets/unify/css/pages/shortcode_timeline1.css'); %>
+<% LayoutUtils.addStylesheets('/assets/labfnp/css/tagging.css'); %>
 <% LayoutUtils.addStylesheetBlock(`
 
 .user-profile-block h1 {
@@ -26,11 +27,14 @@
 
 .user-profile-block ul {
 	margin: auto;
+	display: flex;
+  justify-content: center;
 }
 
 .user-profile-block ul li {
   font-size: 11px;
   color: #999;
+	margin: auto;
 }
 
 .user-profile-block ul li strong {
@@ -55,6 +59,19 @@
 .well {
    background: #fff;
 }
+
+li.text-center a {
+  text-decoration: none;
+}
+.avatar-block {
+	position: relative;
+}
+.edit-profile-block {
+	position: absolute;
+	bottom: 0px;
+	right: 15px;
+	padding: 4px;
+}
 `); %>
 
 <div class="container content">
@@ -63,29 +80,32 @@
     <!--Left Sidebar-->
 		<div class="col-md-3 md-margin-bottom-40">
 
-			<div class="margin-bottom-20">
-	      <img class="img-responsive img-bordered" src="<%= user.avatar %>" alt="" style="margin: auto; width: 100%;" />
-			</div>
-
 			<div class="user-profile-block margin-bottom-20">
-				<div style="float:right">
-					<% if(isMe) {%>
-						<a id="edit-profile-button" data-user-id="<%= user.id %>" class="btn btn-primary" href="/edit/me">修改個人資料</a>
-					<% } else { %>
-						<button id="follow-button" data-user-id="<%= user.id %>" class="btn <%= isFollowing ? 'btn-default' : 'btn-primary' %>"><%= isFollowing ? '取消追蹤' : '追蹤' %></button>
-					<% } %>
+				<div class="row">
+					<div class="col-xs-6 col-md-12 col-lg-12 margin-bottom-20 avatar-block">
+						<img class="img-responsive img-bordered" src="<%= user.avatar %>" alt="" style="margin: auto; width: 100%;" />
+						<div class="edit-profile-block">
+							<% if(isMe) {%>
+								<a id="edit-profile-button" data-user-id="<%= user.id %>" class="btn btn-primary" href="/edit/me">修改個人資料</a>
+							<% } else { %>
+								<button id="follow-button" data-user-id="<%= user.id %>" class="btn <%= isFollowing ? 'btn-default' : 'btn-primary' %>"><%= isFollowing ? '取消追蹤' : '追蹤' %></button>
+							<% } %>
+						</div>
+					</div>
+					<div class="col-xs-6 col-md-12 col-lg-12">
+						<h1>
+							<div><%= user.displayName %></div>
+							<div><small>創作者</small></div>
+						</h1>
+						<hr />
+						<div>
+							<i class="fa fa-heart icon-weight"></i><span> <%= score %></span><br/>
+							<i class="fa fa-map-marker icon-weight "></i><span> Taiwan</span><br/>
+							<!-- <i class="fa fa-clock-o icon-weight " aria-hidden="true"></i> <%= user.createdAt %> -->
+						</div>
+						<hr />
+					</div>
 				</div>
-				<h1>
-					<div><%= user.displayName %></div>
-					<div><small>創作者</small></div>
-				</h1>
-				<hr />
-				<div>
-					<i class="fa fa-heart icon-weight"></i><span> <%= score %></span><br/>
-					<i class="fa fa-map-marker icon-weight "></i><span> Taiwan</span><br/>
-					<i class="fa fa-clock-o icon-weight " aria-hidden="true"></i> <%= user.createdAt %>
-				</div>
-				<hr />
 				<ul class="list-inline">
 					<li class="text-center">
 						<strong><%= followers %></strong>
@@ -93,9 +113,11 @@
 						Followers
 					</li>
 					<li class="text-center">
-						<strong><%= favorited %></strong>
-						<br/>
-						Favorited
+						<a href="/lab?type=like">
+              <strong><%= favorited %></strong>
+  						<br/>
+  						Favorited
+            </a>
 					</li>
 					<li class="text-center">
 						<strong><%= following %></strong>
@@ -106,14 +128,20 @@
 			</div>
 
 			<ul class="list-group sidebar-nav-v1 margin-bottom-40" id="sidebar-nav-1">
-				<li class="list-group-item">
-					<a href="/me"><i class="fa fa-bar-chart-o icon-weight"></i> 我的配方</a>
+				<li id="myRecipe" class="list-group-item active">
+					<a><i class="fa fa-bar-chart-o icon-weight"></i> 我的配方</a>
+				</li>
+				<li id="myOrder" class="list-group-item">
+					<a><i class="fa fa-book icon-weight"></i>我的訂單</a>
 				</li>
 				<li class="list-group-item">
 				  <a href="#" class="btn-create-recipe">
 				    <i class="fa fa-flask icon-weight"></i>
 				    創作一個新配方
 				  </a>
+				</li>
+				<li id="loadScentNote" class="list-group-item">
+					<a><i class="fa fa-book icon-weight"></i>香味筆記本</a>
 				</li>
 				<!-- <li class="list-group-item">
 					<a href="page_profile_users.html"><i class="fa fa-group"></i> 粉絲</a>
@@ -124,7 +152,7 @@
 		<!--End Left Sidebar-->
 
     <!-- Begin Content -->
-    <div class="col-md-9">
+    <div class="col-md-9" id="timeline">
 
 
 			<% if (recipes && recipes.length > 0) { %>
@@ -183,18 +211,47 @@
           </div>
 
 	    	<% } %>
-
     </div>
+
+		<div class="col-md-9" id="scentNote" style="display: none;"></div>
+		<div class="col-md-9" id="order" style="display: none;"></div>
     <!-- End Content -->
 
   </div>
 </div>
-
+<%- include userOrder.inc.ejs %>
+<%- include scentFeedback.inc.ejs %>
 <%- include recipeCreateBox.inc.ejs %>
 
 <% LayoutUtils.addScriptBlock(`
 jQuery(document).ready(function() {
 
+	$('#loadScentNote').on('click', function(){
+		loadScentNote();
+		$('#loadScentNote').toggleClass("active");
+		$('#myOrder').removeClass("active");
+		$('#myRecipe').removeClass("active");
+		$('#scentNote').fadeIn();
+		$('#timeline').hide();
+		$('#order').hide();
+	});
+	$('#myRecipe').on('click', function(){
+		$('#loadScentNote').removeClass("active");
+		$('#myOrder').removeClass("active");
+		$('#myRecipe').toggleClass("active");
+		$('#scentNote').hide();
+		$('#timeline').fadeIn();
+		$('#order').hide();
+	});
+	$('#myOrder').on('click', function(){
+		loadOrder();
+		$('#loadScentNote').removeClass("active");
+		$('#myOrder').toggleClass("active");
+		$('#myRecipe').removeClass("active");
+		$('#scentNote').hide();
+		$('#timeline').hide();
+		$('#order').fadeIn();
+	});
 
 	var userId = $("#follow-button").data("user-id");
 

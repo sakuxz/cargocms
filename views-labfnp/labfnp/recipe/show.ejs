@@ -68,10 +68,41 @@
   .fbButton {
     margin-top: 4px;
   }
+
+  .btn-custom-like {
+    background-color: #f27365 !important;
+    color: #FFF !important;
+  }
+  .btn-custom-feedback {
+    background-color: #ae8d6a !important;
+    color: #FFF !important;
+  }
+  .btn-custom-order {
+    background-color: #48acf0 !important;
+    color: #FFF !important;
+  }
+
+  .btn-custom-like:hover {
+    background-color: #f06657 !important;
+  }
+  .btn-custom-feedback:hover {
+    background-color: #b08a63 !important;
+  }
+  .btn-custom-order:hover {
+    background-color: #3aa8f4 !important;
+  }
+
 </style>
 
 <div class="container content profile">
   <input type="hidden" name="id" class="hidden" value="<%= recipe.id %>" disabled>
+
+  <% var socialData = social.data[0]; %>
+  <% var info = req.flash('info')[0] || null; %>
+  <% if(info === "Info.New.Recipe") { %>
+    <% var recipeShareUrl = encodeURI(socialData.url); %>
+    <a id="isNewRecipe" class="hidden" href="https://www.facebook.com/sharer.php?u=<%= recipeShareUrl %>&display=popup&ref=plugin&src=like&app_id=<%= SocialService.getFBAppId() %>"> New Recipe </a>
+  <% } %>
 
   <!-- begin row -->
   <div class="row">
@@ -80,7 +111,7 @@
 
       <div class="panel-heading overflow-h">
 
-        <h2 class="pull-left">
+        <h2 class="pull-left hidden-xs">
           <i class="fa fa-info-circle" aria-hidden="true"></i>配方內容</h2>
         <a href="/recipe/edit/<%= recipe.hashId %>?from=<%= recipe.createdBy%>"
           class="btn-u btn-u-dark pull-right <%= editable?'':'hidden' %>">編輯</a>
@@ -92,14 +123,14 @@
       <div class="profile-body">
 
         <div class="easy-block-v1">
-          <div class="easy-block-v1-badge rgba-red">精選</div>
+          <div class="easy-block-v1-badge rgba-red"><%= recipe.label %></div>
           <!--<img class="img-responsive cover-photo" src="http://loremflickr.com/640/480/perfume/all?<%= Math.random() * Date.now() %>" alt=""/>-->
           <img class="img-responsive cover-photo" src="<%= recipe.coverPhoto %>" alt="" onerror="this.src='/assets/labfnp/img/recipe-default-cover.<%= recipe.id % 7 %>.jpg';"/>
         </div>
         <div class="projects">
 
           <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-5 col-sm-5 col-xs-12">
               <h2>
                 <span class="padding-5"><%= recipe.perfumeName %></span>
               </h2>
@@ -115,30 +146,27 @@
                   <i class="fa fa-clock-o"></i>
                   <%=: recipe.createdAt | formatDate %>
                 </li>
-                <li>
-                  <i class="fa fa-heart-o"></i>
-                  <%= recipe.UserLikeRecipes.length %></li>
               </ul>
             </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-7 col-sm-7 col-xs-12">
               <div class="pull-right">
-                <button id="likeButton" class="btn-u btn-u-red" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
+                <button id="likeButton" class="btn-u btn-custom-like" data-id="<%= recipe.id %>" data-like="<%= recipe.currentUserLike %>">
                   <i class="fa <%= recipe.currentUserLike ? 'fa-heart': 'fa-heart-o' %>" aria-hidden="true"></i>
+                  <%= recipe.UserLikeRecipes.length %>
                   <span class="hidden-xs">收藏</span>
                 </button>
-                <a href="/recipe/feedback/<%= recipe.hashId %>" class="btn-u btn-u-orange">
+                <a href="/recipe/feedback/<%= recipe.hashId %>" class="btn-u btn-custom-feedback <%= !req.session.authenticated ? 'needLogin': '' %>">
                   <i class="fa fa-comment-o" aria-hidden="true"></i>
                   <span class="hidden-xs">感覺回饋</span>
                   <span class="hidden-lg hidden-md hidden-sm visable-xs">回饋</span>
                 </a>
-                <a href="/recipe/order/<%= recipe.hashId %>" id="orderButton" class="btn-u btn-u-blue" data-id="<%= recipe.hashId %>">
+                <a href="/recipe/order/<%= recipe.hashId %>" id="orderButton" class="btn-u btn-custom-order <%= !req.session.authenticated ? 'needLogin': '' %>" data-id="<%= recipe.hashId %>">
                   <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                   訂購
                 </a>
 
                 <div class="fbButton">
-                  <% var socialData = social.data[0] %>
                   <% include ../../lib/fbLikeShare.ejs %>
                 </div>
               </div>
@@ -228,3 +256,52 @@
 <% LayoutUtils.addScripts('/assets/labfnp/page/wordCloud.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/pieChart.js'); %>
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/favorite.js'); %>
+<% LayoutUtils.addScriptBlock(`
+  $(document).ready(function(){
+    if( $("#isNewRecipe").length > 0 ){
+      swal({
+        type: "info",
+        title: "新配方",
+        text: "是否要在 F B 分享呢 ?",
+        showCancelButton: true,
+        confirmButtonText: "分享",
+        cancelButtonText: "暫時不要"
+      },
+      function(){
+        var url = $("#isNewRecipe").attr("href");
+        window.open( url, "_blank");
+      }
+     );
+   }
+
+   $(".needLogin").on("click", function(event){
+     event.preventDefault();
+     swal({
+       title: '請先登入',
+       text: '此操作需為會員，請先進行登入。',
+       type: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: "#e6caa8",
+       confirmButtonText: "登入",
+       cancelButtonText: "註冊",
+       closeOnConfirm: false,
+       closeOnCancel: false,
+     },function(isConform){
+       if(isConform){
+         open('/login?url=/lab', '_self');
+       }else{
+         open('/register', '_self');
+       }
+     });
+     document.querySelector('.sweet-overlay').onclick = function(event) {
+       swal.close();
+     };
+     $(document).on('keydown', function(evt){
+       if(evt.keyCode == 27){
+         swal.close();
+       }
+     });
+   });
+
+  });
+`); %>

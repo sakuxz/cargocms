@@ -31,6 +31,11 @@ module.exports = {
       defaultValue: 'NEW',
     },
 
+		token: {
+      type: Sequelize.STRING(32),
+			unique: true,
+    },
+
     productionStatusDesc: {
       type: Sequelize.VIRTUAL,
       get: function() {
@@ -66,7 +71,12 @@ module.exports = {
         return desc;
       }
     },
-
+    shipping: {
+      type: Sequelize.STRING,
+    },
+    trackingNumber: {
+      type: Sequelize.STRING,
+    },
 		ItemNameArray: {
 			type: Sequelize.VIRTUAL,
 			get: function () {
@@ -84,7 +94,7 @@ module.exports = {
 			type: Sequelize.DATE,
 			get: function () {
 				try {
-					return moment(this.getDataValue('updatedAt')).format("YYYY/MM/DD HH:mm:SS");
+					return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
 				} catch (e) {
 					sails.log.error(e);
 				}
@@ -95,7 +105,7 @@ module.exports = {
 			type: Sequelize.DATE,
 			get: function () {
 				try {
-					return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm:SS");
+					return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
 				} catch (e) {
 					sails.log.error(e);
 				}
@@ -109,6 +119,7 @@ module.exports = {
 		Allpay.belongsTo(RecipeOrder);
 	},
 	options: {
+		paranoid: true,
 		classMethods: {
 			findByIdHasJoin: async(id) => {
 				try {

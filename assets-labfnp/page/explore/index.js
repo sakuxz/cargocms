@@ -24,7 +24,8 @@ $(document).ready(function(){
         }
 
         $('.grid-boxes-in').width(box_width);
-
+        $('.grid-boxes-in').show();
+        $('.timeline-wrapper').hide();
         return box_width;
       }
     });
@@ -128,6 +129,10 @@ $(document).ready(function(){
         append(recipe, result.data.social.data[i], result.data.social.targets);
       });
 
+      // setTimeout(function(){
+      //   $container.masonry();
+      // },0);
+
       setTimeout(function(){
         scrollLoad = true;
       }, 1000);
@@ -148,7 +153,6 @@ $(document).ready(function(){
         setTimeout(function(){
           scrollLoad = true;
         }, 1000);
-        console.log("getRecipe");
         var recipeLength =  $('.grid-boxes').children().length
         getRecipe({start: recipeLength, length: 50});
       }

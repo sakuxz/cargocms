@@ -4,6 +4,7 @@ module.exports = {
   process: async ({query, modelName, include}) => {
     try {
       const findQuery = FormatService.getQueryObj(query);
+
       if (include){
         include = FormatService.getIncudeQueryObj({ include, query });
         findQuery.include = include;

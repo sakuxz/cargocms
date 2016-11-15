@@ -32,6 +32,7 @@ module.exports = {
         clientID: '144219216008720',
         clientSecret: '',
         callbackURL: "",
+        scope: [ 'email', 'public_profile' ],
         profileFields: [
           'id', 'email', 'gender', 'link', 'locale',
           'name', 'timezone', 'updated_time', 'verified',
@@ -39,5 +40,21 @@ module.exports = {
         ]
       }
     }
+  },
+  storage: {
+    // locate can be s3 or local
+    locate: 'local',
+    s3: {
+      key: 'Access Key Id at local.js',
+      secret: 'Secret Access Key',
+      // region only can be us-standard
+      // other region will get InvalidRequest Error
+      region: 'region of bucket',
+      bucket: 'bucket name'
+    },
+  },
+  google: {
+    name: 'GoogleAPIKey',
+    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
   }
 };

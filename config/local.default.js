@@ -18,6 +18,7 @@ module.exports = {
         clientID: '',
         clientSecret: '',
         callbackURL: "http://localhost:5001/auth/facebook/callback",
+        scope: [ 'email', 'public_profile' ],
         profileFields: [
           'id', 'email', 'gender', 'link', 'locale',
           'name', 'timezone', 'updated_time', 'verified',
@@ -64,5 +65,21 @@ module.exports = {
   reCAPTCHA: {
     key: '',
     secret: ''
+  },
+  storage: {
+    // locate can be s3 or local
+    locate: 'local',
+    s3: {
+      key: 'Access Key Id at local.js',
+      secret: 'Secret Access Key',
+      // region only can be us-standard
+      // other region will get InvalidRequest Error
+      region: 'region of bucket',
+      bucket: 'bucket name'
+    }
+  },
+  google: {
+    name: 'GoogleAPIKey',
+    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
   }
 }

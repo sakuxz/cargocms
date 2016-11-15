@@ -32,6 +32,26 @@ module.exports = {
       type: Sequelize.ENUM('blog', 'internal-event', 'external-event'),
       defaultValue: 'blog',
     },
+    typeDesc: {
+      type: Sequelize.VIRTUAL,
+      get: function() {
+        let desc = '';
+        switch (this.type) {
+          case 'blog':
+            desc = '部落格';
+            break;
+          case 'internal-event':
+            desc = '活動';
+            break;
+          case 'external-event':
+            desc = '外部活動';
+            break;
+          default:
+            desc = '';
+        }
+        return desc;
+      }
+    },
 
     coverUrl: {
       type: Sequelize.STRING,
@@ -64,7 +84,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('updatedAt')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -74,7 +94,7 @@ module.exports = {
       type: Sequelize.DATE,
       get: function() {
         try {
-          return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }

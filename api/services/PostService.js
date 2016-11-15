@@ -12,6 +12,7 @@ module.exports = {
     latitude,
     alias,
     type,
+    eventId,
   }) {
     try {
       const post = await Post.create({
@@ -26,6 +27,11 @@ module.exports = {
         alias,
         type,
       });
+      for (const event of eventId) {
+        if ( event.id !== 0) {
+          await Event.update({ PostId: post.id }, { where: { id: event.id } });
+        }
+      }
       if (longitude && latitude) {
         // 不知道為什麼無法運作
         // let location = await Location.findOrCreate({
@@ -60,8 +66,26 @@ module.exports = {
     latitude,
     alias,
     type,
+    eventId,
   }) {
     try {
+      if ( type === 'internal-event') {
+        const id = eventId.map((event) => event.id);
+        const deleteEventPost = [];
+        deleteEventPost.push(
+          Event.update({PostId: null}, {
+            where: {
+              id: { $notIn: id }
+            }
+          })
+        );
+        await Promise.all(deleteEventPost);
+        for (const event of eventId) {
+          if ( event.id !== 0) {
+            await Event.update({ PostId: postId }, { where: { id: event.id } });
+          }
+        }
+      }
       let location = null;
       if (longitude && latitude) {
         // let location = await Location.findOrCreate({

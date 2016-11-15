@@ -1,14 +1,24 @@
 module.exports = {
+  'api/labfnp/RecipeOrderController': {
+    'find': ['passport', 'sessionAuth'],
+  },
   'api/labfnp/RecipeController': {
-    'index': ['nocache'],
-    'findOne': ['nocache'],
-    'create': ['nocache'],
-    'update': ['nocache'],
-    'delete': ['nocache'],
+    create: ['passport', 'sessionAuth'],
+    update: ['passport', 'sessionAuth'],
+    destroy: ['passport', 'sessionAuth'],
   },
   'labfnp/RecipeController': {
     'create': ['passport', 'sessionAuth'],
     'order': ['passport', 'sessionAuth'],
-    'update': ['nocache']
+    'feedback': ['passport', 'sessionAuth'],
+    'allpay': ['passport', 'sessionAuth'],
+    'done': ['passport', 'sessionAuth'],
+    'show': ['nocache', 'passport'],
+  },
+  'labfnp/MainController': {
+    'explore': ['nocache', 'passport'],
+    'portfolio': ['nocache'],
+    'editPofile': ['nocache'],
+
   },
 }

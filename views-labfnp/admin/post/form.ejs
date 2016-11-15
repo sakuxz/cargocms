@@ -2,6 +2,57 @@
 <fieldset>
 
   <section>
+    <label class="label">內容類型</label>
+    <label class="select">
+      <select v-model="data.item.type">
+        <option value="blog" selected>部落格</option>
+        <option value="internal-event">活動</option>
+        <option value="external-event">外部活動</option>
+      </select> <i></i> </label>
+  </section>
+
+  <section v-show="data.item.type === 'external-event'">
+    <label class="label">外連連結</label>
+    <label class="input">
+      <input type="text" name="url" placeholder="外連連結" v-model="data.item.url">
+      <b class="tooltip tooltip-bottom-right">輸入外連連結</b></label>
+  </section>
+
+  <section v-show="data.item.type === 'internal-event'">
+    <label class="label">活動票卷
+      <button type="button" class="btn btn-default btn-sm" style="margin: 10px;"
+      v-on:click="onCreateNewEvet()" >新增清單內沒有的票卷</button  >
+    </label>
+    <div class="row" v-for="event in data.item.eventId">
+      <section class="col col-lg-10 col-xs-10">
+        <label class="select">
+          <select v-model="data.item.eventId[$index].id">
+            <option value="0"></option>
+            <option v-for="info in data.option.allevent" v-bind:value="info.id">
+              {{ info.title }} - {{ info.limit }}張 - {{info.price}}元
+            </option>
+          </select> <i></i>
+        </label>
+      </section>
+      <section class="col col-lg-2 col-xs-2">
+        <label class='center'>
+          <button type="button"class="btn btn-default btn-sm"
+          v-on:click="onEventAddClick">+</button>
+        </label>
+        <label class='center'>
+          <button type="button" class="btn btn-default btn-sm"
+          v-bind:disabled="data.item.eventId.length == 1"
+          v-on:click="onEventSubtractClick($index)">-</button>
+        </label>
+        <label class='center'>
+          <button type="button" class="btn btn-default btn-sm"
+          v-on:click="onEventEdit(event.id)" >編輯</button  >
+        </label>
+      </section>
+    </div>
+  </section>
+
+  <section>
     <label class="label">封面類型</label>
     <label class="select">
       <select v-model="data.item.coverType" v-on:change="selectOnChange">
@@ -38,23 +89,6 @@
   </section>
 
   <section>
-    <label class="label">內容類型</label>
-    <label class="select">
-      <select v-model="data.item.type">
-        <option value="blog" selected>部落格</option>
-        <!--<option value="internal-event">活動</option>-->
-        <option value="external-event">外部活動</option>
-      </select> <i></i> </label>
-  </section>
-
-  <section v-show="data.item.type === 'external-event'">
-    <label class="label">外連連結</label>
-    <label class="input">
-      <input type="text" name="url" placeholder="外連連結" v-model="data.item.url">
-      <b class="tooltip tooltip-bottom-right">輸入外連連結</b></label>
-  </section>
-
-  <section>
     <label class="label">可讀的網址</label>
     <label class="input">
       <input type="text" name="alias" placeholder="輸入可讀的網址，只限英文、數字、符號'-' 例如: LFP-workshop-in-kaohsiung" v-model="data.item.alias">
@@ -77,3 +111,6 @@
 
 
 </fieldset>
+
+<template id="event-tmpl">
+</template>
