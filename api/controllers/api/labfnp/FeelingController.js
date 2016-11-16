@@ -54,7 +54,7 @@ module.exports = {
   findOne: async (req, res) => {
     try {
       const { id } = req.params;
-      const item = await Feeling.findOne({id})
+      const item = await Feeling.findById(id)
       res.ok({data: {item}});
     } catch (e) {
       res.serverError(e);
@@ -64,9 +64,22 @@ module.exports = {
   create: async (req, res) => {
     try {
       const data = req.body;
-      const item = await Feeling.create(data);
-      let message = 'Create success.';
-      res.ok({ message, data: { item } } );
+      let sameFeeling = await Feeling.findOne({
+        where:{
+          title: data.title,
+          scentName: data.scentName
+        }
+      });
+
+      if(sameFeeling){
+        throw new Error('Can not create same feeling with same scentName.');
+      } else {
+        const item = await FeelingService.create(data);
+
+        let message = 'Create success.';
+        res.ok({ message, data: { item } } );
+      }
+
     } catch (e) {
       res.serverError(e);
     }
@@ -76,10 +89,10 @@ module.exports = {
     try {
       const { id } = req.params;
       const data = req.body;
+
+      const item = await FeelingService.update(id, data);
+
       const message = 'Update success.';
-      const item = await Feeling.update(data ,{
-        where: { id, },
-      });
       res.ok({ message, data: { item } });
     } catch (e) {
       res.serverError(e);
@@ -89,7 +102,8 @@ module.exports = {
   destroy: async (req, res) => {
     try {
       const { id } = req.params;
-      const item = await Feeling.deleteById(id);
+      // const item = await Feeling.deleteById(id);
+      const item = await FeelingService.destroy(id);
       let message = 'Delete success';
       res.ok({message, data: {item}});
     } catch (e) {
