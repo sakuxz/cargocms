@@ -144,7 +144,8 @@ describe('about Recipe Controller operation.', function() {
         })
       );
       const result = await Promise.all(repetOrder);
-      sails.log.debug(result[0].status,result[1].status);
+      // sails.log.debug(result[0].status,result[1].status);
+      sails.log.debug(result[0].status);
 
       // await request(sails.hooks.http.app)
       // .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
