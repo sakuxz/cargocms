@@ -24,7 +24,7 @@ module.exports = {
 
         data.totalRepeat = newTotalRepeat;
       }
-      
+
       item = await Feeling.create(data);
 
       await ScentService.updateByFeeling(data);
@@ -42,8 +42,10 @@ module.exports = {
       let oldFeeling = await Feeling.findById(id);
       let item;
       const needDeleteScentKey = oldFeeling.title;
+      const newFeelingTitle = data.title;
+      const newFeelingScore = data.score;
 
-      if( oldFeeling.title !== data.title ){
+      if( oldFeeling.title !== newFeelingTitle ){
 
         if(oldFeeling.totalRepeat > 1){
           let oldTitleNewTotalRepeat = (Number(oldFeeling.totalRepeat) - 1).toString();
@@ -56,15 +58,15 @@ module.exports = {
           });
         }
 
-        let newTitleTotalRepeat = await Feeling.findOne({ where:{ title: data.title }});
+        let newTitleTotalRepeat = await Feeling.findOne({ where:{ title: newFeelingTitle }});
         if(newTitleTotalRepeat){
           newTitleTotalRepeat = (Number(newTitleTotalRepeat.totalRepeat) + 1).toString();
         } else {
           newTitleTotalRepeat = "1";
         }
 
-        oldFeeling.title = data.title;
-        oldFeeling.score = data.score;
+        oldFeeling.title = newFeelingTitle;
+        oldFeeling.score = newFeelingScore;
         item = await oldFeeling.save();
 
         await Feeling.update({
@@ -75,8 +77,8 @@ module.exports = {
           }
         });
 
-      } else if( oldFeeling.score !== data.score) {
-        oldFeeling.score = data.score;
+      } else if( oldFeeling.score !== newFeelingScore) {
+        oldFeeling.score = newFeelingScore;
         item = await oldFeeling.save();
       } else {
         item = oldFeeling;
