@@ -1,5 +1,5 @@
 describe.only('about admin api Feeling Controller operation.', function() {
-  describe('create a feeling with scent.', () => {
+  describe('create ,update, delete a feeling with scent.', () => {
     let feeling, feeling2;
     before( async(done) => {
       try{
@@ -20,6 +20,14 @@ describe.only('about admin api Feeling Controller operation.', function() {
           "feelings": [],
         });
 
+        await Scent.create({
+          "name": "BJ4",
+          "title": "不解釋",
+          "description": "不須多做解釋，大家都懂。",
+          "sequence": 4,
+          "feelings": [],
+        });
+
         feeling = await Feeling.create({
           "title": "木質",
           "scentName": "BU2",
@@ -29,7 +37,7 @@ describe.only('about admin api Feeling Controller operation.', function() {
 
         feeling2 = await Feeling.create({
           "title": "木質",
-          "scentName": "BJ4",
+          "scentName": "C4",
           "totalRepeat": "22",
           "score": "1",
         });
@@ -41,11 +49,11 @@ describe.only('about admin api Feeling Controller operation.', function() {
 
     });
 
-    it('Create a new Feeling with title 木質, scentName C4, 木質 totalRepeat should Add 1.', async (done) => {
+    it('Create a new Feeling with title 木質, scentName BJ4.', async (done) => {
       try{
         const data = {
           title: "木質",
-          scentName: "C4"
+          scentName: "BJ4"
         };
         const res = await request(sails.hooks.http.app)
         .post(`/api/labfnp/feeling`).send(data);
@@ -56,6 +64,7 @@ describe.only('about admin api Feeling Controller operation.', function() {
           }
         })
 
+        //木質 totalRepeat 22 should + 1 equal 23
         result.totalRepeat.should.be.equal("23");
 
         done();
@@ -64,5 +73,99 @@ describe.only('about admin api Feeling Controller operation.', function() {
       }
     });
 
+    it('update a Feeling title.', async (done) => {
+      try{
+        const data = {
+          title: "爆炸的味道",
+          score: "1"
+        }
+        // update feeling2 , 木質 > 爆炸的味道
+        const res = await request(sails.hooks.http.app)
+        .put(`/api/labfnp/feeling/${feeling2.id}`).send(data);
+
+        // 木質 totalRepeat should -1 ,equal 22
+        let result = await Feeling.findOne({
+          where: {title: "木質"}
+        });
+        result.totalRepeat.should.be.equal("22");
+        // 爆炸的味道 totalRepeat should equal 1
+        result = await Feeling.findById(feeling2.id);
+        result.totalRepeat.should.be.equal("1");
+        // scent C4 , feelings should have {key:爆炸的味道, value: 1}
+        result = await Scent.findOne({
+          where: {
+            name: feeling2.scentName
+          }
+        });
+
+        result.feelings[0].key.should.be.equal("爆炸的味道");
+        result.feelings[0].value.should.be.equal("1");
+
+        done();
+      } catch(e) {
+        done(e);
+      }
+    });
+
+    it('update a Feeling score.', async (done) => {
+      try{
+        const data = {
+          title: "爆炸的味道",
+          score: "87"
+        }
+        // update feeling2 爆炸的味道 score 1 >> 87
+        const res = await request(sails.hooks.http.app)
+        .put(`/api/labfnp/feeling/${feeling2.id}`).send(data);
+
+        //  C4 爆炸的味道 score should updated to 87
+        let result = await Feeling.findById(feeling2.id);
+        result.score.should.be.equal("87");
+
+        // scent C4 , feelings should have {key:爆炸的味道, value: 87}
+        result = await Scent.findOne({
+          where: {
+            name: feeling2.scentName
+          }
+        });
+
+        result.feelings[0].key.should.be.equal("爆炸的味道");
+        result.feelings[0].value.should.be.equal("87");
+
+        done();
+      } catch(e) {
+        done(e);
+      }
+    });
+
+    it('delete a Feeling title 木質, scentName BU2.', async (done) => {
+      try{
+        const res = await request(sails.hooks.http.app)
+        .delete(`/api/labfnp/feeling/${feeling.id}`);
+
+        sails.log.info(JSON.stringify(res.body, null, 2));
+        res.status.should.be.eq(200);
+        res.body.should.be.Object;
+
+        // Scent BU2, should remove {key:木質, value: 7}
+        let result = await Scent.findOne({
+          where: {
+            name: feeling.scentName
+          }
+        });
+
+        result = result.feelings;
+        result = result.filter(function(value,index){
+          return value.key === "木質";
+        });
+
+        result.length.should.be.equal(0);
+
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
+
   });
+
 });
