@@ -11,9 +11,7 @@ module.exports = {
       data.totalRepeat = "1";
       data.score = "1";
 
-      if (!sameTitle){
-        item = await Feeling.create(data);
-      } else {
+      if (sameTitle){
         let newTotalRepeat = ( Number(sameTitle.totalRepeat) + 1).toString();
 
         sameTitle = await Feeling.update({
@@ -25,8 +23,9 @@ module.exports = {
         });
 
         data.totalRepeat = newTotalRepeat;
-        item = await Feeling.create(data);
       }
+      
+      item = await Feeling.create(data);
 
       await ScentService.updateByFeeling(data);
 
