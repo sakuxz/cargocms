@@ -72,7 +72,7 @@ module.exports = {
       });
 
       if(sameFeeling){
-        sails.log.error('Can not create same feeling with same scentName.');
+        throw new Error('Can not create same feeling with same scentName.');
       } else {
         const item = await FeelingService.create(data);
 
