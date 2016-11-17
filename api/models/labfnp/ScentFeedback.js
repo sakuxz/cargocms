@@ -7,17 +7,6 @@ module.exports = {
       allowNull: false
     },
 
-    createdAt: {
-      type: Sequelize.DATE,
-      get: function () {
-        try {
-          return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm");
-        } catch (e) {
-          sails.log.error(e);
-        }
-      }
-    },
-
     feedbackCheck: {
       type: Sequelize.BOOLEAN,
       defaultValue: false

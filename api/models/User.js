@@ -136,26 +136,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       defaultValue: 0
     },
-    updatedAt: {
-      type: Sequelize.DATE,
-      get: function() {
-        try {
-          return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
-        } catch (e) {
-          sails.log.error(e);
-        }
-      }
-    },
-    createdAt: {
-      type: Sequelize.DATE,
-      get: function() {
-        try {
-          return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
-        } catch (e) {
-          sails.log.error(e);
-        }
-      }
-    },
+
     resetPasswordToken: {
       type: Sequelize.STRING(32),
     },

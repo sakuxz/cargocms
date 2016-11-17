@@ -294,16 +294,6 @@ module.exports = {
       }
     },
 
-    createdAt: {
-			type: Sequelize.DATE,
-			get: function () {
-				try {
-					return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm");
-				} catch (e) {
-					sails.log.error(e);
-				}
-			}
-		},
 
   },
   associations: function() {
