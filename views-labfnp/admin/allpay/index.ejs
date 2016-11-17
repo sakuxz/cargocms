@@ -238,7 +238,7 @@
         "render": function (data, type, row) {
           // return '<td>' + data.RecipeOrder.productionStatusDesc + '</td>';
 					var productionStatus =  row.RecipeOrder.productionStatus;
-					return '<select class="form-control input-xs" data-id="'+ row.RecipeOrderId +'" name="updateProductionStatus">' +
+					return '<select class="form-control input-xs" data-id="'+ row.id +'" name="updateProductionStatus">' +
 	          '<option value="NEW" '+ (productionStatus == 'NEW' ? 'selected' : '') + '>NEW</option>' +
 	          '<option value="SUBMITTED" '+ (productionStatus == 'SUBMITTED' ? 'selected' : '') +' >下訂單</option>' +
 	          '<option value="PAID" '+ (productionStatus == 'PAID' ? 'selected' : '') +'>已付款</option>' +
