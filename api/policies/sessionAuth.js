@@ -14,10 +14,12 @@ module.exports = function(req, res, next) {
   const user = AuthService.getSessionUser(req);
   console.log("req.session.authenticated", user);
   if (sails.config.offAuth || user) {
-    // const noEmail = !user.email;
-    // if (noEmail || user.email === '') {
-    //   return res.redirect('/edit/me');
-    // }
+    const noEmail = !user.email;
+    if (noEmail || user.email === '') {
+      sails.log.warn('使用者登入沒有 Email');
+      req.flash('info', '請補齊 Email 資料');
+      return res.redirect('/edit/me');
+    }
     return next();
   }
 

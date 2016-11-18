@@ -134,6 +134,8 @@ module.exports = {
     Passports,
     password,
     passwordConfirm,
+    updateEmailToken,
+    updateEmail,
   }) => {
     try {
       sails.log.info('updateByUser service=>', user);
@@ -156,7 +158,6 @@ module.exports = {
           }
         }
         updatedUser.username = user.username;
-        updatedUser.email = user.email;
         updatedUser.firstName = user.firstName;
         updatedUser.lastName = user.lastName;
         updatedUser.locale = user.locale;
@@ -164,6 +165,8 @@ module.exports = {
         updatedUser.phone2 = user.phone2;
         updatedUser.address = user.address;
         updatedUser.address2 = user.address2;
+        updatedUser.updateEmailToken = user.updateEmailToken;
+        updatedUser.updateEmail = user.updateEmail;
 
         if (user.birthday !== '') {
           updatedUser.birthday = user.birthday;

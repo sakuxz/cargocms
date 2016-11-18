@@ -41,24 +41,43 @@ module.exports = {
     const { id } = req.params;
     const data = req.body;
     try {
-      sails.log.info('update user controller id=>', id);
+      const loginUser = AuthService.getSessionUser(req);
+      if (!loginUser) res.forbidden();
+      sails.log.info('update user controller id=>', loginUser.id);
       sails.log.info('update user controller data=>', data);
       const { password, passwordConfirm } = data;
       const checkPwdEqual = password === passwordConfirm;
 
       if (checkPwdEqual) {
+        const checkLastName = loginUser.lastName === data.lastName;
+        const checkFirstName = loginUser.firstName === data.firstName;
+        const checkEmail = loginUser.email === data.email;
+        if (!checkEmail) {
+          const updateEmailToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
+          data.updateEmailToken = updateEmailToken;
+          data.updateEmail = data.email;
+          const token = jwt.sign({
+            exp: moment(new Date()).add(1, 'h').valueOf(),
+            userId: loginUser.id,
+            email: data.email,
+          }, updateEmailToken);
+          let messageConfig = await MessageService.checkNewEmail({
+            email: loginUser.email,
+            api: `/api/user/validate/email?token=${token}`,
+            username: loginUser.displayName,
+          });
+          let message = await Message.create(messageConfig);
+          await MessageService.sendMail(message);
+          req.flash('info', '修改 Email 後，請至信箱收驗證信');
+        }
         const user = await UserService.updateByUser({
-          id: id,
+          id: loginUser.id,
           ...data,
         });
-        const checkLastName = user.lastName === data.lastName;
-        const checkFirstName = user.firstName === data.firstName;
-        const checkEmail = user.email === data.email;
-        if (checkEmail && (checkFirstName && checkLastName)) {
+        if (checkFirstName && checkLastName) {
           req.session.passport.user.displayName = user.displayName;
           req.session.passport.user.lastName = user.lastName;
           req.session.passport.user.firstName = user.firstName;
-          req.session.passport.user.email = user.email;
           req.session.passport.user.local = user.local;
           req.session.passport.user.avatarThumb = user.avatarThumb;
           req.session.passport.user.avatar = user.avatar;
@@ -68,7 +87,7 @@ module.exports = {
           //   data: user,
           // });
         } else {
-          throw Error(`update user ${id} failed`);
+          throw Error(`update user ${loginUser.id} failed`);
         }
       } else {
         throw Error('error: user password and passwordConfirm is not equal!');
@@ -163,5 +182,54 @@ module.exports = {
       res.serverError(e, { redirect: '/update/password'});
     }
   },
+
+  validateEmail: async(req, res) => {
+    try {
+      const { token } = req.query;
+      const decoded = jwt.decode(token);
+      const timeout = moment(new Date()).valueOf() > decoded.exp;
+      if (timeout) throw Error('更新密碼連結已逾時');
+
+      let user = await User.findById(decoded.userId);
+      if (!user.updateEmailToken) throw Error('請點擊 Email 連結以更新密碼');
+
+      jwt.verify(token, user.updateEmailToken);
+      user.email = decoded.email;
+      user.updateEmailToken = '';
+      user.updateEmail = '';
+      await user.save();
+
+      req.flash('info', '更新 Email 成功');
+      return res.redirect('/edit/me');
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+
+  validateResend: async(req, res) => {
+    try {
+      const loginUser = AuthService.getSessionUser(req);
+      if (!loginUser) res.forbidden();
+      const user = await User.findById(loginUser.id);
+      const token = jwt.sign({
+        exp: moment(new Date()).add(1, 'h').valueOf(),
+        userId: user.id,
+        email: user.updateEmail,
+      }, user.updateEmailToken);
+      let messageConfig = await MessageService.checkNewEmail({
+        email: user.email,
+        api: `/api/user/validate/email?token=${token}`,
+        username: user.displayName,
+      });
+      let message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
+      res.ok({
+        message:`send emaill success.`,
+        data: {},
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
+  }
 
 }

@@ -70,9 +70,11 @@ var defaultConfig = {
 
   'post /api/user/follow/:id':    'api/UserController.follow',
   'post /api/user/unfollow/:id':  'api/UserController.unfollow',
-  'post /api/user/edit/:id':      'api/UserController.update',
+  'post /api/user/edit':      'api/UserController.update',
   'post /api/user/forgotPassword':'api/UserController.forgotPassword',
   'post /api/user/password':       'api/UserController.updatePassword',
+  'get /api/user/validate/email':  'api/UserController.validateEmail',
+  'get /api/user/validate/resend':  'api/UserController.validateResend',
 
   'post /api/contact':       'api/ContactController.create',
   'get /api/admin/contact':        'api/admin/ContactController.find',

@@ -31,7 +31,6 @@ module.exports = {
       if (!loginUser) return res.redirect('/login');
 
       const user = await User.findOneWithPassport({ id: loginUser.id });
-
       return res.view({
         user: user,
       });

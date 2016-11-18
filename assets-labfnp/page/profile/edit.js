@@ -65,7 +65,8 @@ var submitData = function (form) {
 			confirmButtonColor: "#2ecc71",
 			confirmButtonText: "ＯＫ",
 		}, function (isConform) {
-			open('/me', '_self');
+			location.reload();
+			// open('/me', '_self');
 		});
 	};
 	var catchFail = function (result) {
@@ -112,3 +113,15 @@ $('#userProfileForm').on('submit', function (event) {
 		time = setTimeout(submitData(form), 2000);
 	});
 });
+
+$('#resendCheckEmail').on('click', function() {
+	$.get('/api/user/validate/resend', function() {
+		swal({
+			title: '訊息',
+			text: '寄送成功！',
+			type: 'success',
+			confirmButtonColor: "#2ecc71",
+			confirmButtonText: "ＯＫ",
+		});
+	});
+})

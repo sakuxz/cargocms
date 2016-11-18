@@ -160,6 +160,13 @@ module.exports = {
       type: Sequelize.STRING(32),
     },
 
+    updateEmail: {
+      type: Sequelize.STRING,
+    },
+    updateEmailToken: {
+      type: Sequelize.STRING(32),
+    },
+
   },
   associations: function() {
     User.hasMany(Image, {
