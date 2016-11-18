@@ -88,7 +88,7 @@ li.text-center a {
 							<% if(isMe) {%>
 								<a id="edit-profile-button" data-user-id="<%= user.id %>" class="btn btn-primary" href="/edit/me">修改個人資料</a>
               <% } else if(isMe === null) { %>
-                <button class="btn btn-primary fn-signin-required">'追蹤'</button>
+                <button class="btn btn-primary fn-signin-required">追蹤</button>
 							<% } else { %>
 								<button id="follow-button" data-user-id="<%= user.id %>" class="btn <%= isFollowing ? 'btn-default' : 'btn-primary' %>"><%= isFollowing ? '取消追蹤' : '追蹤' %></button>
 							<% } %>
