@@ -38,7 +38,23 @@ $(document).ready(function () {
 
 
 	$('#orderForm').submit(function (event) {
-		if ($('input[name="feeling"]').val() === '') {
+
+    event.preventDefault();
+
+    var noAnyFeedback = true;
+    var userFeelings = $('.userFeeling');
+    for(var i = 0, len = userFeelings.length; i < len ; i++){
+      if(userFeelings[i].value !== ""){
+        noAnyFeedback = false;
+        break;
+      }
+    }
+
+    if(noAnyFeedback){
+      noAnyFeedback = $('input[name="feeling"]').val() === '';
+    }
+
+		if ( noAnyFeedback ) {
 			$('.error-text').addClass('show');
 		} else {
 			$('.error-text').removeClass('show');
