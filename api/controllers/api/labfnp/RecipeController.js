@@ -216,17 +216,19 @@ module.exports = {
   saveFeedback: async (req, res) => {
     const data = req.body;
     try {
-      data.feeling = data.feeling.split(',');
-      let {UserId, RecipeId} = data;
-      let feedback = await RecipeFeedback.findOne({where: {UserId, RecipeId}});
+      if(data.feeling !== ""){
+        data.feeling = data.feeling.split(',');
+        let {UserId, RecipeId} = data;
+        let feedback = await RecipeFeedback.findOne({where: {UserId, RecipeId}});
 
-      if(feedback != null){
-        feedback.invoiceNo = data.invoiceNo;
-        feedback.tradeNo = data.tradeNo;
-        feedback.feeling = data.feeling;
-        feedback = await feedback.save(data);
-      }else {
-        feedback = await RecipeFeedback.create(data);
+        if(feedback != null){
+          feedback.invoiceNo = data.invoiceNo;
+          feedback.tradeNo = data.tradeNo;
+          feedback.feeling = data.feeling;
+          feedback = await feedback.save(data);
+        }else {
+          feedback = await RecipeFeedback.create(data);
+        }
       }
 
       let updateformula = [];
@@ -252,7 +254,7 @@ module.exports = {
 
       res.ok({
         message: 'save feedback success.',
-        data: feedback,
+        data: true,
       });
     } catch (e) {
       res.serverError(e);
