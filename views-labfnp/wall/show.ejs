@@ -7,7 +7,7 @@
         <img src="<%= feed.fullPicture %>" alt="" class="img-responsive img-thumbnail" />
       </div>
     <% } %>
-    
+
     <div class="col-md-6">
 
       <% if (feed.type=='link') { %>
@@ -18,7 +18,7 @@
 
       <div class="margin-bottom-20">
         <i class="fa fa-clock-o"></i>
-        <%= feed.createdAt %>
+        <%= feed.createdDateTime.dateTime %>
       </div>
 
       <div class="blog-content margin-bottom-20">
