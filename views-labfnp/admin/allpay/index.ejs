@@ -151,7 +151,7 @@
       { "data": "Email" },
       { "data": "Phone" },
       { "data": "Address" },
-      { "data": "createdDateTime" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 22, 'desc' ]]
+      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 22, 'desc' ]]
       { "data": null },
       { "data": null },
 			{ "data": "Note" },
@@ -309,7 +309,7 @@
         "orderable": true,
         "targets": 22,
         "render": function (data, type, row) {
-          return '<td>' + data.dateTime + '</td>';
+          return '<td>' + row.createdDateTime.dateTime + '</td>';
         }
       },
 			{
