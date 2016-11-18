@@ -456,6 +456,13 @@ $(document).ready(function () {
 
 
 		var createSubmit = function() {
+			swal({
+		    type: "info",
+		    title: "訊息",
+		    text: "處理中...",
+		    showConfirmButton: false,
+		    timer: 5000,
+		  });
 
 			$("#imageInput").val('');
 
