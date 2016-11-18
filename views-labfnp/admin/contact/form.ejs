@@ -2,7 +2,7 @@
 
   <section>
     <label class="input state-disabled">時間
-      <input type="text" name="createdAt" placeholder="時間" v-model="data.item.createdAt" disabled>
+      <input type="text" name="createdDateTime" placeholder="時間" v-model="data.item.createdDateTime.dateTime" disabled>
       <b class="tooltip tooltip-bottom-right">時間</b></label>
   </section>
 
@@ -39,9 +39,6 @@
 </fieldset>
 <script>
 var formRules = {
-  createdAt: {
-    required: true
-  },
   name: {
     required: true
   },
@@ -61,9 +58,6 @@ var formRules = {
 
 // Messages for form validation
 var formMessages = {
-  createdAt : {
-    required : '請給予訊息傳送時間'
-  },
   name: {
     required: '請給予姓名'
   },
