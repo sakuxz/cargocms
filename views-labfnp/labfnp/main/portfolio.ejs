@@ -87,6 +87,8 @@ li.text-center a {
 						<div class="edit-profile-block">
 							<% if(isMe) {%>
 								<a id="edit-profile-button" data-user-id="<%= user.id %>" class="btn btn-primary" href="/edit/me">修改個人資料</a>
+              <% } else if(isMe === null) { %>
+                <button class="btn btn-primary fn-signin-required">'追蹤'</button>
 							<% } else { %>
 								<button id="follow-button" data-user-id="<%= user.id %>" class="btn <%= isFollowing ? 'btn-default' : 'btn-primary' %>"><%= isFollowing ? '取消追蹤' : '追蹤' %></button>
 							<% } %>
@@ -300,5 +302,34 @@ jQuery(document).ready(function() {
 			});
 		}
 	})
+
+  $(".fn-signin-required").on("click", function(event){
+    event.preventDefault();
+    swal({
+      title: '請先登入',
+      text: '此操作需為會員，請先進行登入。',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: "#e6caa8",
+      confirmButtonText: "登入",
+      cancelButtonText: "註冊",
+      closeOnConfirm: false,
+      closeOnCancel: false,
+    },function(isConform){
+      if(isConform){
+        open('/login?url=/lab', '_self');
+      }else{
+        open('/register', '_self');
+      }
+    });
+    document.querySelector('.sweet-overlay').onclick = function(event) {
+      swal.close();
+    };
+    $(document).on('keydown', function(evt){
+      if(evt.keyCode == 27){
+        swal.close();
+      }
+    });
+  });
 });
 `); %>
