@@ -202,7 +202,7 @@
 								<li>|</li>
 								<li>
 									<i class="fa fa-clock-o"></i>
-									<%=: recipe.createdAt | formatDate %>
+									<%=: recipe.createdDateTime.dateTime | formatDate %>
 								</li>
 								<li>|</li>
 								<li><i class="fa fa-heart-o"></i> <%= recipe.UserLikeRecipes.length %></li>
@@ -249,7 +249,7 @@
           <li>|</li>
           <li>
             <i class="fa fa-clock-o"></i>
-            ${recipe.createdAt.split(' ')[0]}
+            ${recipe.createdDateTime.dateTime}
           </li>
           <li>|</li>
           <li><i class="fa fa-heart-o"></i> ${recipe.UserLikeRecipes.length}</li>
