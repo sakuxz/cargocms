@@ -174,7 +174,7 @@ module.exports = {
           sails.log.error(e);
         }
       }
-    }
+    },
 
     createdAtIso: {
       type: Sequelize.VIRTUAL,
