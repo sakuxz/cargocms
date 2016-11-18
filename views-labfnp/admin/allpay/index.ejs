@@ -105,7 +105,7 @@
 					</a>
 				</div>
 			</td>
-			<td v-cloak>{{ item.createdAt }} </td>
+			<td v-cloak>{{ item.createdDateTime.dateTime }} </td>
 		</tr>
 	</tbody>
  </table>
@@ -151,7 +151,7 @@
       { "data": "Email" },
       { "data": "Phone" },
       { "data": "Address" },
-      { "data": "createdAt" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 22, 'desc' ]]
+      { "data": "createdDateTime" }, //這裡調整要記得去 vue.js 改 defaultSort: [[ 22, 'desc' ]]
       { "data": null },
       { "data": null },
 			{ "data": "Note" },
@@ -303,6 +303,14 @@
       {
         "searchable": false,
         "targets": 21
+      },
+      {
+        "searchable": false,
+        "orderable": true,
+        "targets": 22,
+        "render": function (data, type, row) {
+          return '<td>' + data.dateTime + '</td>';
+        }
       },
 			{
         "searchable": false,
