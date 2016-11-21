@@ -160,10 +160,7 @@ module.exports = {
       type: Sequelize.STRING(32),
     },
 
-    updateEmail: {
-      type: Sequelize.STRING,
-    },
-    updateEmailToken: {
+    verificationEmailToken: {
       type: Sequelize.STRING(32),
     },
 

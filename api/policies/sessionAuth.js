@@ -7,7 +7,7 @@
  * @docs        :: http://sailsjs.org/#!/documentation/concepts/Policies
  *
  */
-module.exports = function(req, res, next) {
+module.exports = async function(req, res, next) {
 
   // User is allowed, proceed to the next policy,
   // or if this is the last policy, the controller
@@ -20,6 +20,15 @@ module.exports = function(req, res, next) {
       req.flash('info', '請補齊 Email 資料');
       return res.redirect('/edit/me');
     }
+
+    if (sails.config.verificationEmail && user.verificationEmailToken) {
+      const modelUser = await User.findById(user.id);
+      if (modelUser.verificationEmailToken) {
+        req.flash('info', '請先驗證完您的 Email 才能使用此功能');
+        return res.redirect('/edit/me');
+      }
+    }
+
     return next();
   }
 

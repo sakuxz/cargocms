@@ -53,21 +53,15 @@ module.exports = {
         const checkFirstName = loginUser.firstName === data.firstName;
         const checkEmail = loginUser.email === data.email;
         if (!checkEmail) {
-          const updateEmailToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
-          data.updateEmailToken = updateEmailToken;
-          data.updateEmail = data.email;
-          const token = jwt.sign({
-            exp: moment(new Date()).add(1, 'h').valueOf(),
+          const verificationEmailToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
+
+          data.verificationEmailToken = verificationEmailToken;
+          await UserService.sendVerificationEmail({
             userId: loginUser.id,
             email: data.email,
-          }, updateEmailToken);
-          let messageConfig = await MessageService.checkNewEmail({
-            email: loginUser.email,
-            api: `/api/user/validate/email?token=${token}`,
-            username: loginUser.displayName,
-          });
-          let message = await Message.create(messageConfig);
-          await MessageService.sendMail(message);
+            displayName: loginUser.displayName,
+            signToken: verificationEmailToken,
+          })
           req.flash('info', '修改 Email 後，請至信箱收驗證信');
         }
         const user = await UserService.updateByUser({
@@ -78,6 +72,7 @@ module.exports = {
           req.session.passport.user.displayName = user.displayName;
           req.session.passport.user.lastName = user.lastName;
           req.session.passport.user.firstName = user.firstName;
+          req.session.passport.user.email = user.email;
           req.session.passport.user.local = user.local;
           req.session.passport.user.avatarThumb = user.avatarThumb;
           req.session.passport.user.avatar = user.avatar;
@@ -183,46 +178,17 @@ module.exports = {
     }
   },
 
-  validateEmail: async(req, res) => {
-    try {
-      const { token } = req.query;
-      const decoded = jwt.decode(token);
-      const timeout = moment(new Date()).valueOf() > decoded.exp;
-      if (timeout) throw Error('更新密碼連結已逾時');
-
-      let user = await User.findById(decoded.userId);
-      if (!user.updateEmailToken) throw Error('請點擊 Email 連結以更新密碼');
-
-      jwt.verify(token, user.updateEmailToken);
-      user.email = decoded.email;
-      user.updateEmailToken = '';
-      user.updateEmail = '';
-      await user.save();
-
-      req.flash('info', '更新 Email 成功');
-      return res.redirect('/edit/me');
-    } catch (e) {
-      res.serverError(e);
-    }
-  },
-
   validateResend: async(req, res) => {
     try {
       const loginUser = AuthService.getSessionUser(req);
       if (!loginUser) res.forbidden();
       const user = await User.findById(loginUser.id);
-      const token = jwt.sign({
-        exp: moment(new Date()).add(1, 'h').valueOf(),
+      await UserService.sendVerificationEmail({
         userId: user.id,
-        email: user.updateEmail,
-      }, user.updateEmailToken);
-      let messageConfig = await MessageService.checkNewEmail({
         email: user.email,
-        api: `/api/user/validate/email?token=${token}`,
-        username: user.displayName,
-      });
-      let message = await Message.create(messageConfig);
-      await MessageService.sendMail(message);
+        displayName: user.displayName,
+        signToken: user.verificationEmailToken,
+      })
       res.ok({
         message:`send emaill success.`,
         data: {},

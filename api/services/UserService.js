@@ -1,3 +1,6 @@
+import jwt from 'jsonwebtoken';
+import moment from 'moment';
+
 module.exports = {
   findAll: async () => {
     try {
@@ -134,8 +137,7 @@ module.exports = {
     Passports,
     password,
     passwordConfirm,
-    updateEmailToken,
-    updateEmail,
+    verificationEmailToken
   }) => {
     try {
       sails.log.info('updateByUser service=>', user);
@@ -158,6 +160,7 @@ module.exports = {
           }
         }
         updatedUser.username = user.username;
+        updatedUser.email = user.email;
         updatedUser.firstName = user.firstName;
         updatedUser.lastName = user.lastName;
         updatedUser.locale = user.locale;
@@ -165,8 +168,7 @@ module.exports = {
         updatedUser.phone2 = user.phone2;
         updatedUser.address = user.address;
         updatedUser.address2 = user.address2;
-        updatedUser.updateEmailToken = user.updateEmailToken;
-        updatedUser.updateEmail = user.updateEmail;
+        updatedUser.verificationEmailToken = user.verificationEmailToken;
 
         if (user.birthday !== '') {
           updatedUser.birthday = user.birthday;
@@ -179,4 +181,23 @@ module.exports = {
       throw e;
     }
   },
+
+  sendVerificationEmail: async({ userId, email,  displayName, signToken}) => {
+    try {
+      const token = jwt.sign({
+        exp: moment(new Date()).add(1, 'h').valueOf(),
+        userId,
+        email,
+      }, signToken);
+      let messageConfig = await MessageService.checkNewEmail({
+        email: email,
+        api: `/validate/email?token=${token}`,
+        username: displayName,
+      });
+      let message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

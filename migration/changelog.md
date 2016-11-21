@@ -79,3 +79,7 @@
 
 ### ScentFeedback 欄位變動
 * 新增 feedbackCheck 確認 回饋內容 寫入 Scent 資料庫
+
+## v6
+
+### 新增 verification Email Token
