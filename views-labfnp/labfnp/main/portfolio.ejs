@@ -220,6 +220,7 @@ li.text-center a {
   </div>
 </div>
 <%- include userOrder.inc.ejs %>
+<%- include userEventOrder.inc.ejs %>
 <%- include scentFeedback.inc.ejs %>
 <%- include recipeCreateBox.inc.ejs %>
 
@@ -244,7 +245,8 @@ jQuery(document).ready(function() {
 		$('#order').hide();
 	});
 	$('#myOrder').on('click', function(){
-		loadOrder();
+    loadOrder();
+		loadEventOrder();
 		$('#loadScentNote').removeClass("active");
 		$('#myOrder').toggleClass("active");
 		$('#myRecipe').removeClass("active");
