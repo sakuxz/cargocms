@@ -127,7 +127,7 @@ module.exports = {
           email: decoded.email,
         }
       });
-      if (!user.verificationEmailToken) throw Error('請點擊 Email 連結以驗證');
+      if (!user.verificationEmailToken) throw Error('請點擊 Email 驗證連結');
 
       jwt.verify(token, user.verificationEmailToken);
       user.verificationEmailToken = '';
