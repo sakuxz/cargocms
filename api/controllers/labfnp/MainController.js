@@ -119,7 +119,7 @@ module.exports = {
       const { token } = req.query;
       const decoded = jwt.decode(token);
       const timeout = moment(new Date()).valueOf() > decoded.exp;
-      if (timeout) throw Error('更新密碼連結已逾時');
+      if (timeout) throw Error('驗證連結已逾時');
 
       let user = await User.findOne({
         where: {
@@ -127,7 +127,7 @@ module.exports = {
           email: decoded.email,
         }
       });
-      if (!user.verificationEmailToken) throw Error('請點擊 Email 連結以更新密碼');
+      if (!user.verificationEmailToken) throw Error('請點擊 Email 連結以驗證');
 
       jwt.verify(token, user.verificationEmailToken);
       user.verificationEmailToken = '';
@@ -139,7 +139,6 @@ module.exports = {
       }
 
       req.flash('info', '您更新了 Email ，請至新信箱點擊認證連結');
-      // return res.ok('validateEmailSuccess');
       res.ok({});
     } catch (e) {
       res.serverError(e);
