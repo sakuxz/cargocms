@@ -66,6 +66,13 @@
       },
       {
         "searchable": false,
+        "targets": 4,
+        "render": function ( data, type, row ) {
+          return '<td>' + row.createdDateTime.dateTime + '</td>'
+        }
+      },
+      {
+        "searchable": false,
         "targets": 5,
         "render": function ( data, type, row ) {
           if(data){

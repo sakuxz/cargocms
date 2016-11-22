@@ -37,7 +37,7 @@ module.exports = {
             return thisFilePath;
           } else if (this.storage ==='s3') {
             let split = thisFilePath.split('/');
-            
+
             // check protocol
             if (!split[0]=='s3:') throw Error("non-S3 file but mark as S3");
 
@@ -59,6 +59,27 @@ module.exports = {
           }
         } catch (e) {
           salis.log.error(e);
+        }
+      }
+    },
+    createdDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    },
+
+    updatedDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
+        } catch(e){
+          sails.log.error(e);
         }
       }
     }
