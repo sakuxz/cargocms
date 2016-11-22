@@ -2,6 +2,13 @@ var restrictedUploader = new qq.FineUploader({
   element: document.getElementById("fine-uploader-validation"),
   template: 'qq-template-validation',
   autoUpload: true,
+  multiple: false,
+  scaling: {
+    sendOriginal: false,
+    sizes: [
+      { maxSize: 800 }
+    ]
+  },
   request: {
     endpoint: '/api/admin/upload',
     inputName: 'uploadPic'

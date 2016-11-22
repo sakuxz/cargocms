@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 module.exports = {
 
   isMobile: function(req) {
@@ -9,5 +11,14 @@ module.exports = {
   isMobileForFineUpload: function(req) {
     let ua = req.headers['user-agent'];
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  },
+
+  DataTimeFormat: function(dateTime) {
+    let dateAndTime = {};
+    dateAndTime.dateTime = moment(new Date(dateTime)).format("YYYY/MM/DD HH:mm");
+    dateAndTime.date = moment(new Date(dateTime)).format("YYYY/MM/DD");
+    dateAndTime.time = moment(new Date(dateTime)).format("HH:mm:SS");
+
+    return dateAndTime;
   }
 }
