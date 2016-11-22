@@ -79,3 +79,10 @@
 
 ### ScentFeedback 欄位變動
 * 新增 feedbackCheck 確認 回饋內容 寫入 Scent 資料庫
+
+## v6
+### RecipeOrder 欄位資料變動
+* productionStatus 增加 "PENDING"
+
+### EventOrder 欄位資料變動
+* productionStatus 增加 "PENDING"
