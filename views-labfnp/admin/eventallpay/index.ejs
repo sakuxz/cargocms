@@ -252,6 +252,13 @@
       },
       {
         "searchable": false,
+        "targets": 16,
+        "render": function ( data, type, row ) {
+          return '<td>'+ row.createdDateTime.dateTime +'</td>'
+        }
+      },
+      {
+        "searchable": false,
         "targets": 17
       },
 			{

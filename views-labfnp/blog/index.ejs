@@ -22,7 +22,7 @@
 					<% data.items.forEach(function(post){ %>
 						<li class="text-overflow">
 							<h3 class="text-overflow"><a href="/blogs/<%= post.alias || post.id %>"><%= post.title %></a></h3>
-							<small><%= post.createdAt %></small>
+							<small><%= post.createdDateTime.dateTime %></small>
 						</li>
 					<% }); %>
 				</ul>

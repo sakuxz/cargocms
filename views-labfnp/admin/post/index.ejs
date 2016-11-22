@@ -62,7 +62,7 @@
 									<td><a href="/admin/#/admin/post/show/{{post.id}}">{{ post.title }}</a></td>
 									<!-- <td class="col-xs-8 col-sm-8 col-md-8 col-lg-8">{{ post.abstract }}</td> -->
 									<td>{{ post.typeDesc }}</td>
-									<td>{{ post.updatedAt }}</td>
+									<td>{{ post.updatedDateTime.dateTime }}</td>
 									<td><a v-for="tag in post.TagsArray" style="margin-right: 10px; margin-top: 10px;"> {{ tag }}</a></td>
 									<!-- <td>{{ post.content }}</td> -->
 									<!-- <td>{{ post.cover }}</td> -->

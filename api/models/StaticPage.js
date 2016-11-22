@@ -20,5 +20,26 @@ module.exports = {
     javascript: {
       type: Sequelize.TEXT,
     },
+    createdDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    },
+
+    updatedDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    }
   },
 };
