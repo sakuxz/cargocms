@@ -138,6 +138,10 @@ var defaultConfig = {
 
   //----- robots ---
   'get /robots.txt': 'RobotsController.robots',
+
+  //---- mobile ----
+  'get /m': '/',
+  'get /mobile': '/',
 };
 
 module.exports.routes = {

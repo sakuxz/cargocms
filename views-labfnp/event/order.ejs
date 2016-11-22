@@ -109,6 +109,9 @@
             <li>
               <p class="padding-5"><%= event.description %></p>
             </li>
+            <li>
+              <p class="padding-5">價錢: <%= event.price === 0 ? '免費' : event.price %></p>
+            </li>
           </ul>
 
       </div>
@@ -164,15 +167,17 @@
           </section>-->
           <input type="hidden" name="token" value="<%= token %>">
 
-          <section class="col paymentMethod">
-            <label for="paymentMethod">付款方式<span class="required">*</span>
-            </label>
-            <select class="form-control" id="paymentMethod" class="form-control" name="paymentMethod" required>
-              <option value="Credit">信用卡</option>
-              <option value="ATM">ATM轉帳</option>
-              <!--<option value="gotoShop">現場付費</option>-->
-            </select>
-          </section>
+          <% if(event.price > 0)  {%>
+            <section class="col paymentMethod">
+              <label for="paymentMethod">付款方式<span class="required">*</span>
+              </label>
+              <select class="form-control" id="paymentMethod" class="form-control" name="paymentMethod" required>
+                <option value="Credit">信用卡</option>
+                <option value="ATM">ATM轉帳</option>
+                <!--<option value="gotoShop">現場付費</option>-->
+              </select>
+            </section>
+          <% } %>
 
         </form>
       </div>

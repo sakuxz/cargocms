@@ -230,8 +230,8 @@ module.exports = {
 
   allpay: async function(req, res) {
     sails.log.warn('新建訂單傳入資料', req.body);
-    const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
-    const transaction = await sequelize.transaction({ isolationLevel, autocommit: false });
+    // const isolationLevel = sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
+    // const transaction = await sequelize.transaction({ isolationLevel, autocommit: false });
     try {
       const { id } = req.params;
       const user = AuthService.getSessionUser(req);
@@ -271,7 +271,7 @@ module.exports = {
           model: RecipeOrder,
           where: { token },
         },
-      }, { transaction });
+      });
       if (findOrder && paymentMethod == 'gotoShop') {
         return res.redirect(`/recipe/done?t=${findOrder.MerchantTradeNo}`);
       }
@@ -287,11 +287,11 @@ module.exports = {
         invoiceNo,
         token,
         productionStatus: paymentMethod == 'gotoShop' ? 'PAID' : 'NEW',
-      }, { transaction }).catch(sequelize.UniqueConstraintError, function(err) {
+      }).catch(sequelize.UniqueConstraintError, function(err) {
         throw Error('此交易已失效，請重新下訂')
       });
 
-      // recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id, transaction);
+      // recipeOrder = await RecipeOrder.findByIdHasJoin(recipeOrder.id);
       // const formatName = recipeOrder.ItemNameArray.map((name) => {
       //   return name + ' 100 ml';
       // });
@@ -309,7 +309,6 @@ module.exports = {
         clientBackURL: '/recipe/done',
         returnURL: '/api/recipe/paid',
         paymentInfoURL: '/api/recipe/paymentinfo',
-        transaction,
       });
 
       sails.log.warn('訂單建立 RecipeOrder',
@@ -329,8 +328,8 @@ module.exports = {
         allPayData.allpay.TradeAmt = 1550;
         allPayData.allpay.PaymentType = '到店購買';
         allPayData.allpay.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
-        await allPayData.allpay.save({ transaction });
-        transaction.commit();
+        await allPayData.allpay.save();
+        // transaction.commit();
 
 
         try {
@@ -358,14 +357,14 @@ module.exports = {
 
       } else {
         sails.log.warn('歐付寶訂單建立完成 RecipeOrder');
-        transaction.commit();
+        // transaction.commit();
         return res.view({
           AioCheckOut: AllpayService.getPostUrl(),
           ...allPayData.config
         });
       }
     } catch (e) {
-      transaction.rollback();
+      // transaction.rollback();
       sails.log.error('訂單建立 RecipeOrder 失敗', e.toString());
       req.flash('error', e.toString());
       res.serverError(e, {redirect: '/recipe/order/' + req.query.hashId});
