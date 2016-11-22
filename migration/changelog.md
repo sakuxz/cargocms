@@ -79,3 +79,8 @@
 
 ### ScentFeedback 欄位變動
 * 新增 feedbackCheck 確認 回饋內容 寫入 Scent 資料庫
+
+## v6
+### Feed 欄位變動
+* 修改 fullPicture 欄位 型態 STRING 修改為 TEXT
+* type 欄位等於 'status'，將 publish欄位 修改為 false
