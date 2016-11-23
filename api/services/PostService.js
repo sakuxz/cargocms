@@ -12,6 +12,7 @@ module.exports = {
     latitude,
     alias,
     type,
+    publish,
     eventId,
   }) {
     try {
@@ -26,6 +27,7 @@ module.exports = {
         UserId,
         alias,
         type,
+        publish,
       });
       for (const event of eventId) {
         if ( event.id !== 0) {
@@ -66,6 +68,7 @@ module.exports = {
     latitude,
     alias,
     type,
+    publish,
     eventId,
   }) {
     try {
@@ -110,6 +113,7 @@ module.exports = {
         LocationId: location ? location.id : null,
         alias,
         type,
+        publish,
       }, {
         where: {
           id: postId,
