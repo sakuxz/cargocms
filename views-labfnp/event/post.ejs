@@ -20,7 +20,7 @@
       <% if (data.UserId) { %>
         <li>By <a href="#"><%= data.User.displayName %></a></li>
       <% } %>
-      <li><%= data.createdAt %></li>
+      <li><%= data.createdDateTime.dateTime %></li>
     </ul>
 
     <div class="row">
