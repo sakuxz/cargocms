@@ -317,7 +317,7 @@ $(document).ready(function () {
 		updatePieChart();
 	});
 
-	$('#recipeDeleteButton').on('click', function (event) {
+	$('button[name="recipeDeleteButton"]').on('click', function (event) {
 		event.preventDefault();
 		var id = $(this).data('id');
 
@@ -364,33 +364,43 @@ $(document).ready(function () {
 	    var base_url = '/api/admin/upload';
 
 	    var file_data = $("#imageInput").prop("files")[0];
-	    var form_data = new FormData();
-	    form_data.append("uploadPic", file_data);
-	    $.ajax({
-	        type: "POST",
-	        url: base_url,
-	        datatype: 'script',
-	        cache: false,
-	        contentType: false,
-	        processData: false,
-	        data: form_data,
-	        success: function(result) {
-	          console.log("success", result);
+			if (file_data.type.indexOf('image') === -1) {
+				swal('提示','僅能上傳圖片', 'warning');
+				$("#imageInput").val('');
+			} else {
+				var form_data = new FormData();
+				form_data.append("uploadPic", file_data);
+				$('.uploadLoaging').removeClass('hide')
+				$.ajax({
+					type: "POST",
+					url: base_url,
+					datatype: 'script',
+					cache: false,
+					contentType: false,
+					processData: false,
+					data: form_data,
+					success: function(result) {
+						$('.uploadLoaging').addClass('hide')
 						$('input[name=coverPhotoId]').val(result.data.id);
-	        },
-	        error: function(result) {
-            $('input[name=coverPhotoId]').val(null);
-	        }
-	    });
+					},
+					error: function(result) {
+						$('.uploadLoaging').addClass('hide')
+						$('input[name=coverPhotoId]').val(null);
+					}
+				});
+
+			}
 	    // $("#imageInput").val('');
 	})
 
+  /*
 	var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	if (isMobile) {
 		$('#fine-uploader-validation').remove()
 	} else {
 		$("#imageInput").remove()
 	}
+  */
 
 	$('#main-form').on('submit', function (event) {
 
@@ -444,40 +454,71 @@ $(document).ready(function () {
 
 		if (!formIsValid) return false;
 
-		$("#imageInput").val('');
 
-    var $form = $(this);
-    if ($form.data('submitted') === true) {
-      // Previously submitted - don't submit again
-      event.preventDefault();
-      return false;
-    } else {
-      // Mark it so that the next submit can be ignored
-      $form.data('submitted', true);
-      $('.submittedInfo').fadeIn();
-    }
+		var createSubmit = function() {
+			swal({
+		    type: "info",
+		    title: "訊息",
+		    text: "處理中...",
+		    showConfirmButton: false,
+		    timer: 5000,
+		  });
 
-		$.ajax({
-			url: endpoint,
-			method: method, //create
-			dataType: 'json',
-			//contentType: 'application/json',
-			cache: false,
-			data: {
-				authorName: authorName,
-				perfumeName: perfumeName,
-				formulaLogs: '',
-				formula: formula,
-				message: message,
-				visibility: visibility,
-				description: description,
-				coverPhotoId: coverPhotoId,
-				createdBy: createdBy,
-				feedback: feedback
+			$("#imageInput").val('');
+
+			var $form = $(this);
+			if ($form.data('submitted') === true) {
+				// Previously submitted - don't submit again
+				event.preventDefault();
+				return false;
+			} else {
+				// Mark it so that the next submit can be ignored
+				$form.data('submitted', true);
+				$('.submittedInfo').fadeIn();
 			}
-		}).done(function (result) {
-      location.href = '/recipe/' + result.data.hashId;
-		});
+
+			$.ajax({
+				url: endpoint,
+				method: method, //create
+				dataType: 'json',
+				//contentType: 'application/json',
+				cache: false,
+				data: {
+					authorName: authorName,
+					perfumeName: perfumeName,
+					formulaLogs: '',
+					formula: formula,
+					message: message,
+					visibility: visibility,
+					description: description,
+					coverPhotoId: coverPhotoId,
+					createdBy: createdBy,
+					feedback: feedback
+				}
+			}).done(function (result) {
+				location.href = '/recipe/' + result.data.hashId;
+			});
+		};
+
+		if ($('.uploadLoaging').hasClass('hide')) {
+			createSubmit();
+		} else {
+			swal({
+				title: '警告',
+				text: '封面圖片尚未上傳完成，是否略過上傳圖片？',
+				type: 'warning',
+				confirmButtonColor: "#e6caa8",
+				showCancelButton: true,
+				confirmButtonText: "確定",
+				cancelButtonText: "取消",
+			}, function (isConform) {
+				if (isConform) {
+					createSubmit();
+				} else {
+					$('.uploadLoaging').addClass('hide');
+				}
+			});
+		}
 
 	});
 
@@ -488,5 +529,9 @@ $(document).ready(function () {
 		forceLowercase: false,
 		placeholder: '請填寫您的感覺，例：蘋果香味 <br/>(可填寫多個)'
 	});
+
+  $('#main-form').on('copy paste', '.tag-editor', function(event){
+    event.preventDefault();
+  });
 
 });

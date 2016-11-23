@@ -220,6 +220,24 @@ var defaultVueMathod = {
 		}
 
 		var defaultTableConfig = {
+			"stateSave": true,
+			stateLoadParams: function (settings, data) {
+				if (appMain.customLoadParams) {
+					appMain.customLoadParams(data);
+				}
+				return true;
+		  },
+			stateSaveParams: function (settings, data) {
+				if (appMain.customSaveParams) {
+					appMain.customSaveParams(data);
+				}
+		  },
+			stateSaveCallback: function(settings,data) {
+      	localStorage.setItem( 'DataTables_' + modelName, JSON.stringify(data) )
+	    },
+		  stateLoadCallback: function(settings) {
+		    return JSON.parse( localStorage.getItem( 'DataTables_' + modelName ) )
+			},
 			"processing": false,
 			"serverSide": serverSidePaging,
 			"sDom": "<'dt-toolbar'<'row'r<'col-xs-12 col-md-6 col-sm-7'f><'col-xs-12 col-md-5 col-sm-4'T><'col-md-1 col-sm-1 hidden-xs'l>>>" +
@@ -331,7 +349,8 @@ var defaultVueMathod = {
 		if (appMain.DataTableInitComplete) {
 			defaultTableConfig.initComplete = appMain.DataTableInitComplete
 		}
-
+		
+		localStorage.removeItem('DataTablesResponsiveHelper_main-table');
 		defaultTable = $('#main-table').dataTable(defaultTableConfig);
 
 		if (!appModel.data.option.exportCSV) {

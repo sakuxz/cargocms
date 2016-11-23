@@ -119,14 +119,16 @@ module.exports = {
   },
   exportExcel: async (req, res) => {
     try {
-      let { query, options } = req;
+      let { body, options } = req;
+      let query = body;
       sails.log.info('export', query);
       const modelName = 'allpay';
       const include = {
         model: EventOrder,
         include: [
-          User,
           {
+            model: User
+          },{
             model: Event,
             include: [ {model: Post } ]
           }
@@ -177,8 +179,10 @@ module.exports = {
         format,
         columns,
       });
-      res.attachment(result.fileName);
-      res.end(result.data, 'UTF-8');
+      res.ok({
+        message: 'Get Excel export success.',
+        data: result.fileName,
+      })
     } catch (e) {
       res.serverError(e);
     }
@@ -186,7 +190,8 @@ module.exports = {
 
   exportSignExcel: async (req, res) => {
     try {
-      let { query, options } = req;
+      let { body, options } = req;
+      let query = body;
       sails.log.info('exportSign', query);
       const modelName = 'allpay';
       const include = {
@@ -237,8 +242,10 @@ module.exports = {
         format,
         columns,
       });
-      res.attachment(result.fileName);
-      res.end(result.data, 'UTF-8');
+      res.ok({
+        message: 'Get Excel export success.',
+        data: result.fileName,
+      })
     } catch (e) {
       res.serverError(e);
     }

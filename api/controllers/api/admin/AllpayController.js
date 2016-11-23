@@ -409,6 +409,7 @@ module.exports = {
         { caption: "check", type: "string"},
         { caption: "付款方式", type: "string"},
         { caption: "發票號碼", type: "string"},
+        { caption: "訂單編號", type: "string"},
         { caption: "訂購物品", type: "string"},
         { caption: "訂購人", type: "string"},
         { caption: "收件人", type: "string"},
@@ -428,6 +429,7 @@ module.exports = {
             '',
             data.PaymentTypeDesc,
             `${data.invoiceNo || ''}`,
+            data.MerchantTradeNo,
             data.ItemNameArray,
             data.UserName,
             data.RecipeOrder.recipient,
@@ -469,15 +471,83 @@ module.exports = {
     }
   },
 
-  download: async (req, res) => {
+  importTrackingNumberExcel: async (req, res) => {
     try {
-      let { query } = req;
-      const fileName = query.fileName
-      const result = await ExportService.downloadExport(fileName);
-      res.attachment(fileName);
-      res.end(result, 'UTF-8');
+      sails.log.info(req.body)
+      let uploadParam = {
+        dirname: '../../.tmp/'
+      };
+      let promise = new Promise((resolve, reject) => {
+        req.file('upload').upload(uploadParam, async(err, files) => {
+          resolve(files);
+        });
+      });
+      let files = await promise.then();
+      const { size, type, fd, extra } = files[0];
+      res.ok({
+        message: 'Get Excel export success.',
+        data: fd.split('.tmp/').pop(),
+      });
+    } catch (e) {
+      res.serverError(e);
+    }
+  },
+
+  updateTrackingNumberfromExcel: async (req, res) => {
+    try {
+      const { body } = req;
+      sails.log.info(body);
+
+      const columns = [{
+        name: 'merchantTradeNo',
+        index: 2,
+      }, {
+        name: 'trackingNumber',
+        index: 3,
+      }]
+
+      const result = await ExportService.parseExcel({
+        fileName: body.fileName,
+        startIndex: 1,
+        sheetIndex: 0,
+        columns,
+      });
+      sails.log.info("匯入貨運表", result);
+      let notFound = [];
+      let updateError = [];
+      for (let data of result) {
+        let allpay = await Allpay.findOne({
+          where: {
+            MerchantTradeNo: data.merchantTradeNo
+          },
+        });
+        if (allpay) {
+          let recipeOrder = await RecipeOrder.update({
+            trackingNumber: data.trackingNumber,
+            productionStatus: 'SHIPPED',
+          }, {
+            where: {
+              id : allpay.RecipeOrderId,
+            },
+          });
+          if (recipeOrder[0] !== 1) {
+            updateError.push(data.merchantTradeNo);
+          }
+        } else {
+          notFound.push(data.merchantTradeNo);
+        }
+      }
+
+      res.ok({
+        message: 'update trackingNumber',
+        data: {
+          updateError,
+          notFound,
+        },
+      })
     } catch (e) {
       res.serverError(e);
     }
   }
+
 }

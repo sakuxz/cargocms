@@ -21,7 +21,7 @@ module.exports.init = async () => {
       { href: '/admin/labfnp/recipe', title: '配方資料', sequence: 50, ParentMenuItemId: 2},
       { href: '/admin/labfnp/scent', title: '香味分子', sequence: 60, ParentMenuItemId: 2},
       { href: '/admin/labfnp/scentnote', title: '香調', sequence: 70, ParentMenuItemId: 2},
-      { href: '/admin/labfnp/scentfeedback', title: '香調回饋', sequence: 80, ParentMenuItemId: 2},
+      // { href: '/admin/labfnp/scentfeedback', title: '香調回饋', sequence: 80, ParentMenuItemId: 2},
       { href: '/admin/labfnp/feeling', title: '感覺', sequence: 90, ParentMenuItemId: 2},
       { href: '/admin/slogan', title: '口號', sequence: 100, ParentMenuItemId: 2},
       { href: '/admin/allpay', title: '訂單', sequence: 110, ParentMenuItemId: 2},

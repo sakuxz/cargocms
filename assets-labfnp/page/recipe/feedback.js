@@ -16,6 +16,10 @@ $.fn.serializeObject = function () {
 
 $(document).ready(function () {
 
+  $('#orderFormWrapper').on("copy paste",".tag-editor",function(event) {
+    event.preventDefault();
+  });
+
   $('.userFeeling').tagEditor({
     forceLowercase: false,
     placeholder: '你覺得這個分子是什麼味道？'
@@ -32,8 +36,25 @@ $(document).ready(function () {
     placeholder: '請填寫您的感覺，例：蘋果香味 <br/>(可填寫多個)'
   });
 
+
 	$('#orderForm').submit(function (event) {
-		if ($('input[name="feeling"]').val() === '') {
+
+    event.preventDefault();
+
+    var noAnyFeedback = true;
+    var userFeelings = $('.userFeeling');
+    for(var i = 0, len = userFeelings.length; i < len ; i++){
+      if(userFeelings[i].value !== ""){
+        noAnyFeedback = false;
+        break;
+      }
+    }
+
+    if(noAnyFeedback){
+      noAnyFeedback = $('input[name="feeling"]').val() === '';
+    }
+
+		if ( noAnyFeedback ) {
 			$('.error-text').addClass('show');
 		} else {
 			$('.error-text').removeClass('show');

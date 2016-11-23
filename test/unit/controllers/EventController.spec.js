@@ -91,7 +91,7 @@ describe('about Event Controller operation.', function() {
   });
 
 
-  it.only('Event over limit order action should be success.', async (done) => {
+  it('Event over limit order action should be success.', async (done) => {
     try {
       const eventOrder = [];
       await request(sails.hooks.http.app)
