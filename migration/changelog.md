@@ -79,3 +79,7 @@
 
 ### ScentFeedback 欄位變動
 * 新增 feedbackCheck 確認 回饋內容 寫入 Scent 資料庫
+
+## v6
+### Post 欄位增加
+* Post 增加 publish 型態 BOOLEAN，預設 true
