@@ -8,8 +8,11 @@ module.exports = {
         type: "blog"
       }
 
+      let posts = await Post.findAllHasJoin({order, where});
+      posts = posts.filter(function(post){
+        return post.publish === true;
+      });
 
-      const posts = await Post.findAllHasJoin({order, where});
       const social = SocialService.forPost({posts});
       const items = posts;
       const data = {items}

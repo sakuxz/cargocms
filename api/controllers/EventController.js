@@ -11,7 +11,11 @@ module.exports = {
         type: ["internal-event", "external-event"]
       }
 
-      const posts = await Post.findAllHasJoin({order, where});
+      let posts = await Post.findAllHasJoin({order, where});
+      posts = posts.filter(function(post){
+        return post.publish === true;
+      });
+      
       const social = SocialService.forPost({posts});
       const items = posts;
       const data = {items}
