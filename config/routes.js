@@ -39,6 +39,7 @@ var defaultConfig = {
   'get /api/admin/post': 'api/admin/PostController.find',
   'get /api/admin/post/:id': 'api/admin/PostController.findOne',
   'post /api/admin/post': 'api/admin/PostController.create',
+  'put /api/admin/post/changePublish/:id': 'api/admin/PostController.changePublish',
   'put /api/admin/post/:id': 'api/admin/PostController.update',
   'delete /api/admin/post/:id': 'api/admin/PostController.destroy',
 
