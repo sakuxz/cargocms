@@ -30,8 +30,8 @@ module.exports = {
         include: [ Tag, Image, User, Location]
       });
 
-      if(!data){
-        sails.log.error(`Post ID or Name: ${id || name}, data not found.`);
+      if(!data || !data.publish){
+        sails.log.error(`Post ID or Name: ${id || name}, data not found or not publish.`);
         return res.notFound();
       }
       const social = SocialService.forPost({posts: [data]});

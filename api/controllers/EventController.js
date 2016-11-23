@@ -15,7 +15,7 @@ module.exports = {
       posts = posts.filter(function(post){
         return post.publish === true;
       });
-      
+
       const social = SocialService.forPost({posts});
       const items = posts;
       const data = {items}
@@ -31,8 +31,8 @@ module.exports = {
       const {id, name} = req.params
       let data = await Post.findByIdHasJoinByEvent({id, name});
 
-      if(!data){
-        sails.log.error(`Event ID or Name: ${id || name} ,data not found.`);
+      if(!data || !data.publish){
+        sails.log.error(`Event ID or Name: ${id || name} ,data not found or not publish.`);
         return res.notFound();
       }
 
