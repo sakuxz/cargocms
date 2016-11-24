@@ -2,6 +2,7 @@ module.exports = {
   attributes: {
     content: Sequelize.STRING,
     source: Sequelize.STRING,
+    author: Sequelize.STRING,
     type: {
       type:Sequelize.ENUM('qoute', 'recommend'),
       defaultValue: 'qoute'
