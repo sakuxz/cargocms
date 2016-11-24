@@ -4,20 +4,22 @@
 	<thead>
 		<tr>
 			<th width="8%" class="" data-hide="phone"><i class="fa fa-fw text-muted fa-hashtag hidden-sm hidden-xs"/> ID</th>
-      <th widht="10%" class="">作者</th>
-			<th width="40%" class="" data-class="expand"><i class="fa fa-fw fa-user text-muted hidden-sm hidden-xs"/> 內容</th>
-			<th width="35%" class="">來源</th>
+      <th width="10%" class="" data-class="expand">作者</th>
+			<th width="35%" class=""><i class="fa fa-fw fa-user text-muted hidden-sm hidden-xs"/> 內容</th>
+      <th class="" data-hide="always">來源</th>
+			<th width="10%" class="">類型</th>
       <th data-hide="always">圖片</th>
-			<th width="78px" class="" data-hide="phone,tablet"></th>
+			<th width="10%" data-hide="phone,tablet"></th>
 		</tr>
 	</thead>
 	<!-- client only -->
 	<tbody>
 		<tr v-for="item in data.items">
       <td>{{ item.id }}</td>
-			<td>{{ item.author }}</td>
-			<td><a href="/admin/#/admin/{{modelName}}/show/{{item.id}}">{{ item.content }}</a></td>
+			<td><a href="/admin/#/admin/{{modelName}}/show/{{item.id}}">{{ item.author }}</a></td>
+			<td>{{item.content }}</td>
       <td>{{ item.source }}</td>
+      <td>{{ item.type }}</td>
 			<td>{{ item.imgUrl }}</td>
 			<td align="center" style="cursor: pointer;">
 				<div class="row">
@@ -43,6 +45,7 @@
 			{ "data": "author" },
 			{ "data": "content" },
       { "data": "source" },
+      { "data": "type" },
 			{ "data": "imgUrl" },
 			{ "data": null }
 		]
@@ -54,7 +57,7 @@
         "orderable": false,
       },
       {
-        "targets"  : 4,
+        "targets"  : 5,
         "orderable": false,
         "searchable": false,
         "render": function ( data, type, row ) {
@@ -62,7 +65,7 @@
         }
       },
 			{
-				"targets"  : 5,
+				"targets"  : 6,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
