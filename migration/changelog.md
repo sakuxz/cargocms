@@ -78,4 +78,4 @@
 
 ## v6
 ### Slogan 表格變更
-* Slogan 更換名稱為 Qoute
+* Slogan 更換名稱為 Quote

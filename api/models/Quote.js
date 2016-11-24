@@ -4,8 +4,8 @@ module.exports = {
     source: Sequelize.STRING,
     author: Sequelize.STRING,
     type: {
-      type:Sequelize.ENUM('qoute', 'recommend'),
-      defaultValue: 'qoute'
+      type:Sequelize.ENUM('quote', 'recommend'),
+      defaultValue: 'quote'
     },
     imgUrl:{
       type: Sequelize.VIRTUAL,
