@@ -21,7 +21,7 @@ module.exports = {
   findOne: async (req, res) => {
     try {
       const { id } = req.params;
-      const item = await Slogan.findById(id);
+      const item = await Quote.findById(id);
       res.ok({data: {item}});
     } catch (e) {
       res.serverError(e);
@@ -31,7 +31,7 @@ module.exports = {
   create: async (req, res) => {
     try {
       const data = req.body;
-      const item = await Slogan.create(data);
+      const item = await Quote.create(data);
       let message = 'Create success.';
       res.ok({ message, data: { item } } );
     } catch (e) {
@@ -44,7 +44,7 @@ module.exports = {
       const { id } = req.params;
       const data = req.body;
       const message = 'Update success.';
-      const item = await Slogan.update(data ,{
+      const item = await Quote.update(data ,{
         where: { id, },
       });
       res.ok({ message, data: { item } });
@@ -56,7 +56,7 @@ module.exports = {
   destroy: async (req, res) => {
     try {
       const { id } = req.params;
-      const item = await Slogan.deleteById(id);
+      const item = await Quote.deleteById(id);
       let message = 'Delete success';
       res.ok({message, data: {item}});
     } catch (e) {
