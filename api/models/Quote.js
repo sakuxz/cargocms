@@ -17,7 +17,7 @@ module.exports = {
           sails.log.error(e);
         }
       }
-    }
+    },
 
     createdDateTime:{
       type: Sequelize.VIRTUAL,
