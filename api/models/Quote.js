@@ -2,7 +2,22 @@ module.exports = {
   attributes: {
     content: Sequelize.STRING,
     source: Sequelize.STRING,
-    
+    type: {
+      type:Sequelize.ENUM('qoute', 'recommend'),
+      defaultValue: 'qoute'
+    },
+    imgUrl:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          const thisImage = this.getDataValue('Image');
+          return thisImage ? thisImage.url : '';
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    }
+
     createdDateTime:{
       type: Sequelize.VIRTUAL,
       get: function(){
@@ -25,12 +40,18 @@ module.exports = {
       }
     }
   },
-  associations: () => {},
+  associations: () => {
+    Quote.belongsTo(Image, {
+      foreignKey: {
+        name: 'img'
+      }
+    });
+  },
   options: {
     classMethods: {
       deleteById: async (id) => {
         try {
-          return await Slogan.destroy({ where: { id } });
+          return await Quote.destroy({ where: { id } });
         } catch (e) {
           sails.log.error(e);
           throw e;
