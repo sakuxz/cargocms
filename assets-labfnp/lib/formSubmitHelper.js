@@ -21,7 +21,8 @@ var defaultFormSubmit = function(event){
     title: "訊息",
     text: "處理中...",
     showConfirmButton: false,
-    timer: 5000,
+    allowEscapeKey: false,
+    timer: 5000
   });
 }
 
@@ -45,9 +46,10 @@ var defaultValidateSubmit = function(form){
   swal({
     type: "info",
     title: "訊息",
-    text: "處理中...",
+    text: "處理中...請勿進行任何操作!",
     showConfirmButton: false,
-    timer: 5000,
+    allowEscapeKey: false,
+    timer: 5000
   });
   form.submit();
 }
