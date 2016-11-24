@@ -75,3 +75,7 @@
 
 ### ScentFeedback 欄位變動
 * 新增 feedbackCheck 確認 回饋內容 寫入 Scent 資料庫
+
+## v6
+### Slogan 表格變更
+* Slogan 更換名稱為 Qoute
