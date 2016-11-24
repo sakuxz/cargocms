@@ -1,4 +1,19 @@
 <fieldset>
+  <section>
+    <label class="label">類型</label>
+    <label class="select">
+      <select v-model="data.item.type" disabled>
+        <option value="quote" selected>箴言</option>
+        <option value="recommend">推薦</option>
+      </select> <i></i> </label>
+  </section>
+
+  <section>
+    <label class="label">作者</label>
+    <label class="input state-disabled">
+      <input type="text" name="author" placeholder="" v-model="data.item.author" disabled>
+      <b class="tooltip tooltip-bottom-right">請輸入作者</b></label>
+  </section>
 
   <section>
     <label class="label">內容</label>
@@ -13,6 +28,12 @@
       <input type="text" name="source" placeholder="" v-model="data.item.source" disabled>
       <b class="tooltip tooltip-bottom-right">請輸入來源</b></label>
   </section>
+
+  <section>
+    <label class="label">圖片</label>
+    <%- include ../image/upload.ejs %>
+  </section>
+
 </fieldset>
 <script>
 var formRules = {
