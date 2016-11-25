@@ -1,4 +1,9 @@
 <fieldset>
+
+  <section class="fn-hidden-create">
+      <img src="{{data.item.imgUrl}}" class="img-responsive">
+  </section>
+
   <section>
     <label class="label">類型</label>
     <label class="select">
@@ -29,14 +34,14 @@
       <b class="tooltip tooltip-bottom-right">請輸入來源</b></label>
   </section>
 
-  <section class="fn-notForCreate">
+  <section class="fn-hidden-create fn-hidden-edit">
     <label class="label">圖片連結</label>
     <label class="input state-disabled">
       <input type="text" name="imgUrl" placeholder="" v-model="data.item.imgUrl" disabled>
       <b class="tooltip tooltip-bottom-right">圖片連結</b></label>
   </section>
 
-  <section>
+  <section class="fn-hidden-show">
     <label class="label">圖片</label>
     <%- include ../image/upload.ejs %>
   </section>
