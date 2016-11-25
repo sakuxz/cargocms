@@ -23,7 +23,7 @@
   <section>
     <label class="label">內容</label>
     <label class="input state-disabled">
-      <input type="text" name="content" placeholder="" v-model="data.item.content" disabled>
+      <textarea class="form-control" name="content" placeholder="" v-model="data.item.content" rows="5"  disabled></textarea>
       <b class="tooltip tooltip-bottom-right">請輸入內容</b></label>
   </section>
 
@@ -32,13 +32,6 @@
     <label class="input state-disabled">
       <input type="text" name="source" placeholder="" v-model="data.item.source" disabled>
       <b class="tooltip tooltip-bottom-right">請輸入來源</b></label>
-  </section>
-
-  <section class="fn-hidden-create fn-hidden-edit">
-    <label class="label">圖片連結</label>
-    <label class="input state-disabled">
-      <input type="text" name="imgUrl" placeholder="" v-model="data.item.imgUrl" disabled>
-      <b class="tooltip tooltip-bottom-right">圖片連結</b></label>
   </section>
 
   <section class="fn-hidden-show">
