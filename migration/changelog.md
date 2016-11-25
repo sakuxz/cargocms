@@ -77,5 +77,6 @@
 * 新增 feedbackCheck 確認 回饋內容 寫入 Scent 資料庫
 
 ## v6
-### Slogan 表格變更
-* Slogan 更換名稱為 Quote
+### Slogans 表格移除
+
+### 新增 Quotes 表格
