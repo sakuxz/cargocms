@@ -17,24 +17,21 @@ var appModel = {
       source: '',
       author: '',
       type:'',
-      imgUrl: '',
       img:'',
     },
     items: [],
     option: {
       imgUpload: {
-          itemLimit: 1,
-          onComplete: function(id, name, response){
-            appModel.data.item.img = response.data.id;
-            appModel.data.item.imgUrl = response.data.url;
-          },
-          onDeleteComplete: function(id, name, response){
-            console.log(id, name, response);
-            appModel.data.item.img = null;
-            appModel.data.item.imgUrl = '';
-          }
+        itemLimit: 1,
+        onComplete: function(id, name, response){
+          appModel.data.item.img = response.data.id;
+        },
+        onDeleteComplete: function(id, name, response){
+          console.log(id, name, response);
+          appModel.data.item.img = null;
         }
       }
+    }
   },
   view: {
     table: {
