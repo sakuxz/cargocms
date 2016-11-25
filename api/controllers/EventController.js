@@ -8,13 +8,11 @@ module.exports = {
       const {type} = req.query
       const order = 'DESC';
       let where = {
+        publish: true,
         type: ["internal-event", "external-event"]
       }
 
       let posts = await Post.findAllHasJoin({order, where});
-      posts = posts.filter(function(post){
-        return post.publish === true;
-      });
 
       const social = SocialService.forPost({posts});
       const items = posts;
