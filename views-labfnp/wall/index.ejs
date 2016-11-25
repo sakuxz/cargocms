@@ -49,11 +49,11 @@
 					</div>
 				</div>
 			<% } else if (c % random === 0 && quoteIndex < quotes.length ) {  %>
-          <% random =  Math.floor(Math.random() * (8 - 3 + 1)) + 3 ; %>
+          <% random = random + (Math.floor(Math.random() * (8 - 3 + 1)) + 3) ; %>
 
           <div class="grid-boxes-in grid-boxes-qoute" style="display: none;">
 
-            <% if( quotes[quoteIndex].imgUrl ) { %>
+            <% if( quotes[quoteIndex].imgUrl && index < 30) { %>
               <img class="img-responsive" src="<%= quotes[quoteIndex].imgUrl %>" />
             <% } %>
 
