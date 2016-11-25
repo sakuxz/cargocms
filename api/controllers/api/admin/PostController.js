@@ -84,9 +84,10 @@ module.exports = {
   changePublish: async (req, res) => {
     try {
       const { id } = req.params;
+      const publish = req.body;
       res.ok({
         message: 'update post success.',
-        data: await Post.update(req.body, {
+        data: await Post.update( publish , {
           where: { id }
         }),
       });
