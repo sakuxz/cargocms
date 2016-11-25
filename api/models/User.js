@@ -80,7 +80,7 @@ module.exports = {
         return displayName;
       }
     },
-    RolesArray: {
+    rolesArray: {
       type: Sequelize.VIRTUAL,
       get: function() {
         try {
