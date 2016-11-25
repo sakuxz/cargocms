@@ -18,8 +18,8 @@ var defaultFormSubmit = function(event){
 
   swal({
     type: "info",
-    title: "訊息",
-    text: "處理中...",
+    title: "處理中",
+    text: "請勿進行任何操作!",
     showConfirmButton: false,
     allowEscapeKey: false,
     timer: 5000
@@ -45,8 +45,8 @@ var defaultValidateSubmit = function(form){
 
   swal({
     type: "info",
-    title: "訊息",
-    text: "處理中...請勿進行任何操作!",
+    title: "處理中",
+    text: "請勿進行任何操作!",
     showConfirmButton: false,
     allowEscapeKey: false,
     timer: 5000
