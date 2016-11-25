@@ -29,6 +29,13 @@
       <b class="tooltip tooltip-bottom-right">請輸入來源</b></label>
   </section>
 
+  <section class="fn-notForCreate">
+    <label class="label">圖片連結</label>
+    <label class="input state-disabled">
+      <input type="text" name="imgUrl" placeholder="" v-model="data.item.imgUrl" disabled>
+      <b class="tooltip tooltip-bottom-right">圖片連結</b></label>
+  </section>
+
   <section>
     <label class="label">圖片</label>
     <%- include ../image/upload.ejs %>
