@@ -60,7 +60,11 @@ module.exports = {
       let form = req.flash('form')[0];
       if(form) user = form;
 
-      res.ok({user, errors: req.flash('error')});
+      res.ok({
+        user,
+        errors: req.flash('error'),
+        reCAPTCHAKey: sails.config.reCAPTCHA.key
+      });
     } catch (e) {
       res.serverError(e);
     }
