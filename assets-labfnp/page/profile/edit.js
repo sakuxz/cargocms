@@ -86,7 +86,9 @@ $('input[name="updatePwd"]').change(function(event) {
 });
 
 $('#birthday').datepicker({
+	changeYear: true,
   dateFormat: 'yy-mm-dd',
+	yearRange: "-100:+0",
   prevText: '<i class="fa fa-angle-left"></i>',
   nextText: '<i class="fa fa-angle-right"></i>'
 });

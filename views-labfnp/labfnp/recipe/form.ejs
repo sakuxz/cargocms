@@ -66,16 +66,15 @@
       <span class="uploadLoaging hide"><i class="fa fa-spinner" aria-hidden="true"></i> 檔案上傳中</span>
     </label>
     <% var isMobile = UtilsService.isMobileForFineUpload(req) %>
-    <% if (!isMobile)  { %>
-      <%- include ../../lib/fineuploader.ejs %>
-      <div id="fine-uploader-validation"></div>
-    <% } %>
+    <%- include ../../lib/fineuploader.ejs %>
+    <div id="fine-uploader-validation"></div>
   </section>
 
   <section>
+    <!--
     <% if (isMobile) { %>
-      <input type="file" id="imageInput" name="uploadPic">
-    <% } %>
+      <input type="file" id="imageInput" name="uploadPic" accept='image/*'>
+    <% } %> -->
     <input type="hidden" name="coverPhotoId" value="">
   </section>
 </fieldset>

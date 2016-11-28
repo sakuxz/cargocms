@@ -52,6 +52,8 @@ var defaultConfig = {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
   "api/admin/EventController": {
+    'paid': [],
+    'paymentinfo': [],
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
   "api/admin/facebook/FeedController": {

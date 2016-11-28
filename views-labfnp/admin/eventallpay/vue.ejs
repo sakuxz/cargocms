@@ -81,6 +81,7 @@ appMain.DataTableInitComplete = function() {
       filter_type: "range_date",
       filter_container_id: "external_filter_container",
       date_format: 'yy/mm/dd',
+      filter_default_label: ['From', 'To'],
     },
   ]);
 
@@ -100,21 +101,28 @@ appMain.DataTableInitComplete = function() {
   var exportBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_0" title="匯出地址寄送表、配方製作表" tabindex="0" aria-controls="main-table"><span>匯出</span></a>'
   $(exportBtn).prependTo('.DTTT_container');
   $('#ToolTables_main-table_custom_0').on('click', function() {
-    var download = function(url, id) {
-      $('<iframe>', { id: id, src:url }).hide().appendTo('body');
+    var download = function(url, data, id) {
+      $.post( url, data)
+      .done(function( result ) {
+        $('<iframe>', { id: id, src: '/api/admin/download?fileName=' + result.data }).hide().appendTo('body');
+      })
+      .fail(function( result ) {
+        console.log(result);
+      });
     }
     $.SmartMessageBox({
       title : "匯出",
       content :'請選擇要匯出的資料表',
       buttons : "[取消][匯出完整資訊表][匯出簽到資訊表][匯出兩種格式]"
     }, function(ButtonPress) {
+      console.log(appModel.pagingQuery);
       if(ButtonPress === '匯出完整資訊表') {
-        download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'exportExcel');
+        download('/api/admin/' + modelName + '/export', serialize(appModel.pagingQuery), 'exportExcel');
       } else if (ButtonPress === '匯出簽到資訊表') {
-        download('/api/admin/' + modelName + '/exportSign?' + serialize(appModel.pagingQuery), 'exportSignExcel');
+        download('/api/admin/' + modelName + '/exportSign', serialize(appModel.pagingQuery), 'exportSignExcel');
       } else if (ButtonPress === '匯出兩種格式') {
-        download('/api/admin/' + modelName + '/exportSign?' + serialize(appModel.pagingQuery), 'exportSend');
-        download('/api/admin/' + modelName + '/export?' + serialize(appModel.pagingQuery), 'export');
+        download('/api/admin/' + modelName + '/exportSign', serialize(appModel.pagingQuery), 'exportSend');
+        download('/api/admin/' + modelName + '/export', serialize(appModel.pagingQuery), 'export');
       }
     });
   });
@@ -143,14 +151,15 @@ appMain.DataTableInitComplete = function() {
 
   $("#main-table").delegate("[name='updateProductionStatus']", 'change', function() {
     var that = this;
-    var id = $(this).data("id")
+    var id = $(this).data("id");
+    var allpayId = $(this).attr("data-allpayId");
     var selectedDesc = $(this).find('option:selected').text();
     var oldVal = $(this).attr('data-oldValue');
     var newVal = $(this).val();
 
     var msgInfo = {
       title: '注意',
-      content: '確認更新訂單 ID: '+ id +' 訂單狀態為: '+ selectedDesc,
+      content: '確認更新訂單 ID: '+ allpayId +' 訂單狀態為: '+ selectedDesc,
       btnArray: ['確認', '取消'],
     };
     var action = function(ButtonPressed) {
@@ -183,16 +192,17 @@ appMain.DataTableInitComplete = function() {
 
 appMain.customSearch = function() {
   var searchProductionStatus = $('#productionStatus').val() || 'PAID';
-  if (searchProductionStatus == 'ALL'){
+  if (searchProductionStatus == 'ALL') {
     searchProductionStatus = undefined;
   }
+
   appModel.pagingQuery.columns.push({
     data: 'EventOrderId',
     searchable: true,
     search: {
       custom: {
         where: {
-          $not: null
+          '$not': ''
         }
       }
     }
@@ -219,7 +229,7 @@ appMain.customSearch = function() {
         model: 'EventOrder',
         where: {
           productionStatus: {
-            $not: null
+            '$not': ''
           },
         }
       }

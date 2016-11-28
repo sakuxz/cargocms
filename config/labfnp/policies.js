@@ -2,6 +2,11 @@ module.exports = {
   'api/labfnp/RecipeOrderController': {
     'find': ['passport', 'sessionAuth'],
   },
+  'api/labfnp/RecipeController': {
+    create: ['passport', 'sessionAuth'],
+    update: ['passport', 'sessionAuth'],
+    destroy: ['passport', 'sessionAuth'],
+  },
   'labfnp/RecipeController': {
     'create': ['passport', 'sessionAuth'],
     'order': ['passport', 'sessionAuth'],
