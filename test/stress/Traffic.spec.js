@@ -1,14 +1,14 @@
 describe("traffic test", function() {
   this.timeout(10000000);
   const spawn = require('child_process').spawn;
+  const baseURL = "http://"+sails.config.appUrl+"/";
 
-  it("make an simple traffic test", async function(done) {
+  it("make an simple traffic test on index", async function(done) {
 
     try {
-      const url = "http://"+sails.config.appUrl+"/";
-      //const ls = spawn('curl', [url]);
-      //console.log(url);
       var beforeTestMemoryUsage = process.memoryUsage();
+
+      const url = baseURL;
       const command = spawn('artillery', ['quick','--duration','60','--rate','10','-n','20',url]);
 
       command.stdout.on('data', (data) => {
