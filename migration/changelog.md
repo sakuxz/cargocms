@@ -82,11 +82,15 @@
 
 ## v6
 
+### Post 欄位增加
+* Post 增加 publish 型態 BOOLEAN，預設 true
+
 ### RecipeOrder 欄位資料變動
 * productionStatus 增加 "PENDING"
 
 ### EventOrder 欄位資料變動
 * productionStatus 增加 "PENDING"
+
 
 ### Feed 欄位變動
 * 修改 fullPicture 欄位 型態 STRING 修改為 TEXT
