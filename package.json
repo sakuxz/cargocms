@@ -80,7 +80,7 @@
     "test-e2e-docker": "npm run clean-e2e && make start-e2e-docker && chimp chimp-docker.js --mocha --path=test/e2e",
     "test-e2e-docker-watch": "npm run clean-e2e && make start-e2e-docker && chimp chimp-docker.js --mocha --path=test/e2e --watch",
     "test-e2e-watch": "npm run clean-e2e && chimp --mocha --path=test/e2e --watch",
-    "test-stress": "cp test/bootstrap.stress.js test/bootstrap.test.js && mocha test/stress --reporter spec && git checkout test/bootstrap.test.js",
+    "test-stress": "cp test/bootstrap.stress.js test/bootstrap.test.js && mocha test/stress --reporter spec && git checkout test/bootstrap.test.js || git checkout test/bootstrap.test.js && return 10",
     "clean-e2e": "rm -rf test/e2e/screenshot/*.png",
     "clean-stress": "rm -rf test/stress/output_server test/stress/output_client; mkdir test/stress/output_server && mkdir test/stress/output_client",
     "build": "npm i && node_modules/grunt-cli/bin/grunt build",
