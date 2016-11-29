@@ -29,9 +29,11 @@ module.exports = {
         type,
         publish,
       });
-      for (const event of eventId) {
-        if ( event.id !== 0) {
-          await Event.update({ PostId: post.id }, { where: { id: event.id } });
+      if (eventId) {
+        for (const event of eventId) {
+          if ( event.id !== 0) {
+            await Event.update({ PostId: post.id }, { where: { id: event.id } });
+          }
         }
       }
       if (longitude && latitude) {
