@@ -1,4 +1,5 @@
 
+ALTER TABLE Posts add `publish` tinyint(1) DEFAULT '1';
 DROP TABLE Slogans;
 
 CREATE TABLE `Quotes` (
