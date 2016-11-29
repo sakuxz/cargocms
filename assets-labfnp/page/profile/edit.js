@@ -54,7 +54,8 @@ var submitData = function (form) {
       phone1: values['phone1'],
       phone2: values['phone2'],
       address: values['address'],
-      address2: values['address2']
+      address2: values['address2'],
+      avatarImgId: values['coverPhotoId']
 		}
 	};
 	var catchDone = function (result) {

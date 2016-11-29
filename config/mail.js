@@ -174,7 +174,7 @@ var defaultConfig = {
 
         您的付款已經確認，
         請記得在時間內報到
-        並示此 Email
+        並出示此 Email
         訂單編號為： %(orderSerialNumber)s
 
         From %(storeName)s

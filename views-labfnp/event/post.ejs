@@ -20,7 +20,7 @@
       <% if (data.UserId) { %>
         <li>By <a href="#"><%= data.User.displayName %></a></li>
       <% } %>
-      <li><%= data.createdAt %></li>
+      <li><%= data.createdDateTime.dateTime %></li>
     </ul>
 
     <div class="row">
@@ -59,9 +59,9 @@
   							<td><%= Event.signupCount + "/" + Event.limit %></td>
   							<td class="hidden-sm"><%= Event.price %></td>
                 <% if (Event.open){ %>
-                  <td><a href="/event/order/<%= Event.id %>" data-id="<%= Event.id %>" class="btn btn-success btn-xs <%= !req.session.authenticated ? 'needLogin': '' %>"><%= Event.status %></a></td>
+                  <td><a href="/event/order/<%= Event.id %>" data-id="<%= Event.id %>" class="btn btn-success btn-xs"><%= Event.status %></a></td>
                 <% } else { %>
-                  <td><a data-id="<%= Event.id %>" class="btn btn-warming btn-xs <%= !req.session.authenticated ? 'needLogin': '' %>"><%= Event.status %></a></td>
+                  <td><a data-id="<%= Event.id %>" class="btn btn-warming btn-xs "><%= Event.status %></a></td>
                 <% } %>
                 </tr>
               <tr>

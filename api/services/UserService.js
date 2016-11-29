@@ -77,7 +77,7 @@ module.exports = {
     lastName,
     locale,
     Passports,
-    RolesArray,
+    rolesArray,
     birthday,
     phone1,
     phone2,
@@ -115,7 +115,7 @@ module.exports = {
 
         const userRoles = await Role.findAll({
           where: {
-            authority: user.RolesArray
+            authority: user.rolesArray
           }
         });
         await updatedUser.setRoles(userRoles);
@@ -137,7 +137,8 @@ module.exports = {
     Passports,
     password,
     passwordConfirm,
-    verificationEmailToken
+    verificationEmailToken,
+    avatarImgId,
   }) => {
     try {
       sails.log.info('updateByUser service=>', user);
@@ -159,6 +160,13 @@ module.exports = {
             await passport.save();
           }
         }
+
+        if(user.avatarImgId){
+          const userAvatar = await Image.findById(user.avatarImgId);
+          user.avatar = userAvatar.url;
+          user.avatarThumb = userAvatar.url;
+        }
+
         updatedUser.username = user.username;
         updatedUser.email = user.email;
         updatedUser.firstName = user.firstName;
@@ -169,6 +177,8 @@ module.exports = {
         updatedUser.address = user.address;
         updatedUser.address2 = user.address2;
         updatedUser.verificationEmailToken = user.verificationEmailToken;
+        updatedUser.avatar = user.avatar;
+        updatedUser.avatarThumb = user.avatarThumb;
 
         if (user.birthday !== '') {
           updatedUser.birthday = user.birthday;

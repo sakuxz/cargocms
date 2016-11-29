@@ -21,6 +21,8 @@ var appModel = {
       html: '',
       success: '',
       error: '',
+      createdAt: '',
+      createdDateTime:'',
     },
     items: [],
     option: {
@@ -42,4 +44,7 @@ var appModel = {
 appMain.enableSelect = function () {
   $('select').attr('disabled', false);
   $('.select').removeClass('state-disabled');
+}
+appMain.enableText = function () {
+  $('textarea').attr('disabled', false);
 }

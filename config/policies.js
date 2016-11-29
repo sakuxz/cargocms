@@ -85,6 +85,9 @@ var defaultConfig = {
   "api/admin/UserController": {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
+  "UtilsController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
 
   /***************************************************************************
   *                                                                          *

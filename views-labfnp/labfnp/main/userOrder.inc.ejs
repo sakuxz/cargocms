@@ -13,11 +13,11 @@
     th.center {text-align:center}
   </style>
   <div class="well">
-  <h2>訂購項目</h2>
+  <h2>配方訂購項目</h2>
   <table class="table">
   	<thead>
   		<tr>
-        <td>訂單編號</td>
+        <th>訂單編號</th>
   			<th class="hidden-sm">訂購商品</th>
         <th class="center hidden-sm">收件人</th>
   			<th class="center">訂單狀態</th>
@@ -74,7 +74,7 @@
                 <div class="margin-bottom-10">
                   <b>建立日期:</b>
                   <p class="ng-binding">
-                    ${createdAt}
+                    ${createdDateTime.dateTime}
                   </p>
                 </div>
               </div>

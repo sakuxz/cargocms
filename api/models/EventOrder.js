@@ -27,7 +27,7 @@ module.exports = {
     },
 
 		productionStatus: {
-      type: Sequelize.ENUM("NEW", "RECEIVED", "REQUESTED", "SUBMITTED", "PAID", "PROCESSING", "CANCELLED", "SHIPPED", "DELIVERED", "COMPLETED"),
+      type: Sequelize.ENUM("NEW", "PENDING", "RECEIVED", "REQUESTED", "SUBMITTED", "PAID", "PROCESSING", "CANCELLED", "SHIPPED", "DELIVERED", "COMPLETED"),
       defaultValue: 'NEW',
     },
 
@@ -73,28 +73,6 @@ module.exports = {
     },
 
 
-		updatedAt: {
-			type: Sequelize.DATE,
-			get: function () {
-				try {
-					return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
-				} catch (e) {
-					sails.log.error(e);
-				}
-			}
-		},
-
-		createdAt: {
-			type: Sequelize.DATE,
-			get: function () {
-				try {
-					return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
-				} catch (e) {
-					sails.log.error(e);
-				}
-			}
-		},
-
     ItemNameArray: {
       type: Sequelize.VIRTUAL,
       get: function () {
@@ -107,6 +85,27 @@ module.exports = {
         }
       }
     },
+    createdDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    },
+
+    updatedDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    }
 
 	},
 	associations: () => {
