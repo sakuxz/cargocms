@@ -134,6 +134,7 @@ module.exports = {
     Passports,
     password,
     passwordConfirm,
+    avatarImgId
   }) => {
     try {
       sails.log.info('updateByUser service=>', user);
@@ -155,6 +156,13 @@ module.exports = {
             await passport.save();
           }
         }
+
+        if(user.avatarImgId){
+          const userAvatar = await Image.findById(user.avatarImgId);
+          user.avatar = userAvatar.url;
+          user.avatarThumb = userAvatar.url;
+        }
+
         updatedUser.username = user.username;
         updatedUser.email = user.email;
         updatedUser.firstName = user.firstName;
@@ -164,6 +172,8 @@ module.exports = {
         updatedUser.phone2 = user.phone2;
         updatedUser.address = user.address;
         updatedUser.address2 = user.address2;
+        updatedUser.avatar = user.avatar;
+        updatedUser.avatarThumb = user.avatarThumb;
 
         if (user.birthday !== '') {
           updatedUser.birthday = user.birthday;
