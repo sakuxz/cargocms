@@ -73,6 +73,9 @@ appMain.disableAllpay = function(){
 }
 appMain.DataTableInitComplete = function() {
   var api = this.api();
+
+  $(".widget-body-toolbar").removeClass("hidden"); 
+
   this.yadcf([
     {        
       column_number: 3,
