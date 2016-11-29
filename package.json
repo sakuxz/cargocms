@@ -13,7 +13,6 @@
   "license": "MIT",
   "keywords": [],
   "dependencies": {
-    "artillery": "^1.5.0-17",
     "axios": "^0.14.0",
     "babel-plugin-syntax-async-functions": "^6.1.4",
     "babel-plugin-transform-regenerator": "^6.1.4",
@@ -108,6 +107,7 @@
     "url": "git://github.com/trunk-studio/cargocms.git"
   },
   "devDependencies": {
+    "artillery": "^1.5.0-17",
     "babel-preset-stage-0": "^6.5.0",
     "chai": "^3.4.1",
     "chimp": "^0.41.1",
