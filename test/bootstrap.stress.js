@@ -7,7 +7,7 @@ global.sinon = require("sinon");
 
 before(function(done) {
   var config = rc('sails');
-  config.environment = 'stress';
+  config.environment = 'production';
 
   Sails.lift(config, function(err, server) {
     sails = server;
