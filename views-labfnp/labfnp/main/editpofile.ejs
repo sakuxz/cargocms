@@ -18,6 +18,7 @@
   }
 
 </style>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/file-uploader/5.10.0/all.fine-uploader/fine-uploader-new.min.css">
 
 <div class="container content profile">
   <input type="hidden" name="id" class="hidden" value="<%= user.id %>" disabled>
@@ -43,6 +44,15 @@
             <img class="img-responsive img-bordered" src="<%= user.avatar %>" alt="" style="margin: auto; width: 100%;"/>
           </div>
           <form class="userProfileForm" id="userProfileForm" action="/api/user/edit/<%= user.id %>" method="post">
+
+            <section>
+              <label class="input">個人頭像
+                <span class="uploadLoaging hide"><i class="fa fa-spinner" aria-hidden="true"></i> 檔案上傳中</span>
+              </label>
+              <%- include ../../lib/fineuploader.ejs %>
+              <div id="fine-uploader-validation"></div>
+            </section>
+
             <input type="hidden" name="id" value="<%= user.id %>">
             <input type="hidden" name="username" value="<%= user.username %>">
 
@@ -199,3 +209,5 @@
   <!-- end row -->
 </div>
 <% LayoutUtils.addScripts('/assets/labfnp/page/profile/edit.js'); %>
+<% LayoutUtils.addScripts('/assets/admin/js/libs/fine-uploader.min.js'); %>
+<% LayoutUtils.addScripts('/assets/labfnp/lib/fineuploader.js'); %>

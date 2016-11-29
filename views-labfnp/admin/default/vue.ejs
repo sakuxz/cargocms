@@ -440,6 +440,15 @@ var defaultVueMathod = {
 	},
 	setupForm: function (type) {
 		var registerForm = $("#main-form");
+
+    if(appModel.data.option.imgUpload){
+      var imgUploadSteup = appModel.data.option.imgUpload;
+      Object.keys(imgUploadSteup).forEach(function (key) {
+         uploadImageApp.updateModel(key, imgUploadSteup[key]);
+      });
+      uploadImageApp.setup();
+    }
+
 		registerForm.validate({
 			rules: formRules,
 			messages: formMessages,
