@@ -59,7 +59,8 @@ module.exports = {
             type: feeds[index].type,
             link: feeds[index].link,
             createdTime: feeds[index].created_time,
-            sourceId: feeds[index].id
+            sourceId: feeds[index].id,
+            publish: (feeds[index].type === 'status') ? 0 : 1
           };
           results.push(row)
           return results;

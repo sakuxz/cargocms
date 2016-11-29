@@ -80,6 +80,24 @@ module.exports = {
   },
   google: {
     name: 'GoogleAPIKey',
-    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
+    key: ''
+  },
+  newrelic: {
+    /**
+     * Array of application names.
+     */
+    app_name: ['My Application'],
+    /**
+     * Your New Relic license key.
+     */
+    license_key: 'license key here',
+    logging: {
+      /**
+       * Level at which to log. 'trace' is most useful to New Relic when diagnosing
+       * issues with the agent, 'info' and higher will impose the least overhead on
+       * production applications.
+       */
+      level: 'info'
+    }
   }
 }

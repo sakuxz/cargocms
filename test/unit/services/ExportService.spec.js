@@ -318,7 +318,7 @@ describe('about export service operation.', function() {
         User: {
           birthday: "2016/11/02",
           displayName: "大明王",
-          RolesArray: [ ],
+          rolesArray: [ ],
           lastLogin: null,
           updatedAt: "2016/11/02 10:06:00",
           createdAt: "2016/11/02 10:06:00",

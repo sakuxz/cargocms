@@ -25,7 +25,7 @@ var appModel = {
       address2: '',
       password: '',
       Roles: [],
-      RolesArray: [],
+      rolesArray: [],
       Passports: [
         {
           password: ""
@@ -52,6 +52,8 @@ var appModel = {
 // appMain.log = function () {console.log("123")}
 appMain.DateOfBirthday = function () {
   $('input[name="birthday"]').datepicker({
+    changeYear: true,
+    yearRange: "-100:+0",
     dateFormat: 'yy-mm-dd',
     prevText: '<i class="fa fa-angle-left"></i>',
     nextText: '<i class="fa fa-angle-right"></i>'

@@ -74,7 +74,7 @@ module.exports = {
     lastName,
     locale,
     Passports,
-    RolesArray,
+    rolesArray,
     birthday,
     phone1,
     phone2,
@@ -112,7 +112,7 @@ module.exports = {
 
         const userRoles = await Role.findAll({
           where: {
-            authority: user.RolesArray
+            authority: user.rolesArray
           }
         });
         await updatedUser.setRoles(userRoles);

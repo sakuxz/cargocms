@@ -204,7 +204,8 @@ module.exports = {
           UserId: userId
         },
         include: {
-          model: Recipe
+          model: Recipe,
+          include: [ Image ],
         }
       });
       allUserRecipeFeedback.forEach( (feedback) => {
