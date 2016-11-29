@@ -44,9 +44,9 @@
 			<th width="9%" data-class="expand">訂單編號</th>
 			<th width="12%" data-hide="phone"><i class="fa fa-fw text-muted hidden-sm hidden-xs"/> 金流交易編號 </th>
       <th data-hide="always" class="hide">交易訊息</th>
-      <th width="9%" data-hide="phone,tablet">付款時間</th>
-      <th width="8%" class="no-sort no-over" data-hide="phone,tablet">付款方式</th>
-      <th width="5%">金額</th>
+      <th width="9%" data-hide="always">付款時間</th>
+      <th width="8%" class="no-sort no-over" data-hide="always">付款方式</th>
+      <th width="5%" data-hide="always">金額</th>
       <th data-hide="always" class="hide">付款帳號</th>
       <th data-hide="always" class="hide">訂購票券</th>
       <th width="11%" class="no-sort" data-hide="phone,tablet">活動名稱</th>
@@ -217,7 +217,8 @@
           if(row.EventOrder){
             var productionStatus =  row.EventOrder.productionStatus;
   					return '<select class="form-control input-xs" data-id="'+ row.EventOrderId +'" data-allpayId="'+ row.id +'"  name="updateProductionStatus">' +
-  	          '<option value="NEW" '+ (productionStatus == 'NEW' ? 'selected' : '') + '>NEW</option>' +
+            '<option value="NEW" '+ (productionStatus == 'NEW' ? 'selected' : '') + '>NEW</option>' +
+  	          '<option value="PENDING" '+ (productionStatus == 'PENDING' ? 'selected' : '') + '>待建立</option>' +
   	          '<option value="SUBMITTED" '+ (productionStatus == 'SUBMITTED' ? 'selected' : '') +' >下訂單</option>' +
   	          '<option value="PAID" '+ (productionStatus == 'PAID' ? 'selected' : '') +'>已付款</option>' +
   	          '<option value="PROCESSING"'+ (productionStatus == 'PROCESSING' ? 'selected' : '') +' >製作中</option>' +

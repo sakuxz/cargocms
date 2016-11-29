@@ -287,7 +287,7 @@ module.exports = {
           let notAdmin = true;
           let ownUserId = {};
           if (currentUser) {
-            notAdmin = currentUser.RolesArray.indexOf('admin') === -1;
+            notAdmin = currentUser.rolesArray.indexOf('admin') === -1;
             ownUserId.UserId = currentUser.id;
           }
           if (notAdmin) {

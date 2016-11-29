@@ -3,7 +3,7 @@ import moment from 'moment';
 module.exports = {
   attributes: {
     fullPicture: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
     },
     name: {
       type: Sequelize.STRING,

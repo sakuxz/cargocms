@@ -39,15 +39,16 @@ var defaultConfig = {
   'get /api/admin/post': 'api/admin/PostController.find',
   'get /api/admin/post/:id': 'api/admin/PostController.findOne',
   'post /api/admin/post': 'api/admin/PostController.create',
+  'put /api/admin/post/changePublish/:id': 'api/admin/PostController.changePublish',
   'put /api/admin/post/:id': 'api/admin/PostController.update',
   'delete /api/admin/post/:id': 'api/admin/PostController.destroy',
 
 
-  'get /api/admin/slogan': 'api/admin/SloganController.find',
-  'get /api/admin/slogan/:id': 'api/admin/SloganController.findOne',
-  'post /api/admin/slogan': 'api/admin/SloganController.create',
-  'put /api/admin/slogan/:id': 'api/admin/SloganController.update',
-  'delete /api/admin/slogan/:id': 'api/admin/SloganController.destroy',
+  'get /api/admin/quote': 'api/admin/QuoteController.find',
+  'get /api/admin/quote/:id': 'api/admin/QuoteController.findOne',
+  'post /api/admin/quote': 'api/admin/QuoteController.create',
+  'put /api/admin/quote/:id': 'api/admin/QuoteController.update',
+  'delete /api/admin/quote/:id': 'api/admin/QuoteController.destroy',
 
   'post /api/admin/allpay/find':  'api/admin/AllpayController.find',
   'post /api/admin/allpay/export': 'api/admin/AllpayController.export',
