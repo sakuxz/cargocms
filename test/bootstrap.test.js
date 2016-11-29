@@ -4,9 +4,6 @@ var rc = require("rc");
 global.request = require("supertest-as-promised");
 global.should = require("chai").should();
 global.sinon = require("sinon");
-if (process.env.TEST_MODE == "STRESS") 
-
-
   before(function(done) {
     var config = rc('sails');
     if (process.env.TEST_MODE == "STRESS")  {
