@@ -82,6 +82,11 @@
 
 ## v6
 
+### Slogans 表格移除
+
+### 新增 Quotes 表格
+
+
 ### RecipeOrder 欄位資料變動
 * productionStatus 增加 "PENDING"
 
