@@ -88,6 +88,9 @@ var defaultConfig = {
   "UtilsController": {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
+  "api/admin/labfnp/ScentFeedbackController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
 
   /***************************************************************************
   *                                                                          *
