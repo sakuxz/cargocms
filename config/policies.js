@@ -50,7 +50,7 @@ var defaultConfig = {
   'api/admin/AllpayController': {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
-  "api/admin/AllpayController": {
+  "api/admin/EventAllpayController": {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
   "api/admin/ContactController": {
