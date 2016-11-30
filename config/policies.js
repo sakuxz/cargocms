@@ -79,7 +79,7 @@ var defaultConfig = {
   "api/admin/PostController": {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
-  "api/admin/SloganController": {
+  "api/admin/QuoteController": {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
   "api/admin/UserController": {
