@@ -46,7 +46,7 @@ module.exports = {
     try {
       let data = req.body;
 
-      if(data.img === '') {
+      if(!data.img) {
         data.img = null;
       }
 
