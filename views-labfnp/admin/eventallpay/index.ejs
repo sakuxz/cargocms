@@ -160,9 +160,11 @@
           }else{
 						if (row.PaymentType === '到店購買') {
 							return '<td><span class="textbreak">到店購買</span></td>'
+						} else if (row.PaymentType === '免費活動'){
+							return '<td></td>';
 						} else {
-							return '<td><span class="textbreak">訂單尚未成立</span></td>';
-						}
+              return '<td><span class="textbreak">訂單尚未成立</span></td>';
+            }
           }
         }
       },
@@ -217,7 +219,8 @@
           if(row.EventOrder){
             var productionStatus =  row.EventOrder.productionStatus;
   					return '<select class="form-control input-xs" data-id="'+ row.EventOrderId +'" data-allpayId="'+ row.id +'"  name="updateProductionStatus">' +
-  	          '<option value="NEW" '+ (productionStatus == 'NEW' ? 'selected' : '') + '>NEW</option>' +
+            '<option value="NEW" '+ (productionStatus == 'NEW' ? 'selected' : '') + '>NEW</option>' +
+  	          '<option value="PENDING" '+ (productionStatus == 'PENDING' ? 'selected' : '') + '>待建立</option>' +
   	          '<option value="SUBMITTED" '+ (productionStatus == 'SUBMITTED' ? 'selected' : '') +' >下訂單</option>' +
   	          '<option value="PAID" '+ (productionStatus == 'PAID' ? 'selected' : '') +'>已付款</option>' +
   	          '<option value="PROCESSING"'+ (productionStatus == 'PROCESSING' ? 'selected' : '') +' >製作中</option>' +
@@ -249,6 +252,13 @@
       {
         "searchable": false,
         "targets": 15
+      },
+      {
+        "searchable": false,
+        "targets": 16,
+        "render": function ( data, type, row ) {
+          return '<td>'+ row.createdDateTime.dateTime +'</td>'
+        }
       },
       {
         "searchable": false,

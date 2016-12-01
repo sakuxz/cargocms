@@ -1,4 +1,4 @@
-describe.only('about admin api Feeling Controller operation.', function() {
+describe('about admin api Feeling Controller operation.', function() {
   describe('create ,update, delete a feeling with scent.', () => {
     let feeling, feeling2;
     before( async(done) => {

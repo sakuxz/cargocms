@@ -6,6 +6,7 @@
       <label class="select state-disabled">
         <select v-model="data.item.RecipeOrder.productionStatus" disabled>
           <option value="NEW" selected>NEW</option>
+          <option value="PENDING">待建立</option>
           <option value="SUBMITTED">下訂單</option>
           <option value="PAID">已付款</option>
           <option value="PROCESSING">製作中</option>
@@ -166,15 +167,15 @@
     <section class="col col-lg-6 col-xs-6">
       <label class="label">Created At</label>
       <label class="input state-disabled allpaydisabled">
-        <input class="allpay" type="text" name="createdAt" placeholder="createdAt" v-model="data.item.createdAt" disabled>
-        <b class="tooltip tooltip-bottom-right">CreatedAt</b></label>
+        <input class="allpay" type="text" name="createdDateTime" placeholder="createdDateTime" v-model="data.item.createdDateTime.dateTime" disabled>
+        <b class="tooltip tooltip-bottom-right">createdDateTime</b></label>
     </section>
 
     <section class="col col-lg-6 col-xs-6">
       <label class="label">Updated At</label>
       <label class="input state-disabled allpaydisabled">
-        <input class="allpay" type="text" name="updatedAt" placeholder="updatedAt" v-model="data.item.updatedAt" disabled>
-        <b class="tooltip tooltip-bottom-right">UpdatedAt</b></label>
+        <input class="allpay" type="text" name="updatedDateTime" placeholder="updatedDateTime" v-model="data.item.updatedDateTime.dateTime" disabled>
+        <b class="tooltip tooltip-bottom-right">updatedDateTime</b></label>
     </section>
   </div>
   <div class="row">

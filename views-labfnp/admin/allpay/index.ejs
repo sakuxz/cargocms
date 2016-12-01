@@ -105,7 +105,7 @@
 					</a>
 				</div>
 			</td>
-			<td v-cloak>{{ item.createdAt }} </td>
+			<td v-cloak>{{ item.createdDateTime.dateTime }} </td>
 		</tr>
 	</tbody>
  </table>
@@ -247,7 +247,8 @@
           // return '<td>' + data.RecipeOrder.productionStatusDesc + '</td>';
 					var productionStatus =  row.RecipeOrder.productionStatus;
 					return '<select class="form-control input-xs" data-id="'+ row.RecipeOrderId +'" data-allpayId="'+ row.id +'" name="updateProductionStatus">' +
-	          '<option value="NEW" '+ (productionStatus == 'NEW' ? 'selected' : '') + '>NEW</option>' +
+          '<option value="NEW" '+ (productionStatus == 'NEW' ? 'selected' : '') + '>NEW</option>' +
+	          '<option value="PENDING" '+ (productionStatus == 'PENDING' ? 'selected' : '') + '>待建立</option>' +
 	          '<option value="SUBMITTED" '+ (productionStatus == 'SUBMITTED' ? 'selected' : '') +' >下訂單</option>' +
 	          '<option value="PAID" '+ (productionStatus == 'PAID' ? 'selected' : '') +'>已付款</option>' +
 	          '<option value="PROCESSING"'+ (productionStatus == 'PROCESSING' ? 'selected' : '') +' >製作中</option>' +
@@ -311,6 +312,14 @@
       {
         "searchable": false,
         "targets": 21
+      },
+      {
+        "searchable": false,
+        "orderable": true,
+        "targets": 22,
+        "render": function (data, type, row) {
+          return '<td>' + row.createdDateTime.dateTime + '</td>';
+        }
       },
 			{
         "searchable": false,

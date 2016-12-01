@@ -144,7 +144,7 @@
                 </li>
                 <li>
                   <i class="fa fa-clock-o"></i>
-                  <%=: recipe.createdAt | formatDate %>
+                  <%=: recipe.createdDateTime.date | formatDate %>
                 </li>
               </ul>
             </div>
@@ -271,7 +271,7 @@
 <% LayoutUtils.addScripts('/assets/labfnp/page/recipe/favorite.js'); %>
 <% LayoutUtils.addScriptBlock(`
   $(document).ready(function(){
-    if( $("#isNewRecipe").length > 0 ){
+    if( $("#isNewRecipe").length > 0  && !isWebView){
       swal({
         type: "info",
         title: "新配方",

@@ -1,3 +1,6 @@
+import jwt from 'jsonwebtoken';
+import moment from 'moment';
+
 module.exports = {
   findAll: async () => {
     try {
@@ -74,7 +77,7 @@ module.exports = {
     lastName,
     locale,
     Passports,
-    RolesArray,
+    rolesArray,
     birthday,
     phone1,
     phone2,
@@ -112,7 +115,7 @@ module.exports = {
 
         const userRoles = await Role.findAll({
           where: {
-            authority: user.RolesArray
+            authority: user.rolesArray
           }
         });
         await updatedUser.setRoles(userRoles);
@@ -134,6 +137,8 @@ module.exports = {
     Passports,
     password,
     passwordConfirm,
+    verificationEmailToken,
+    avatarImgId,
   }) => {
     try {
       sails.log.info('updateByUser service=>', user);
@@ -155,6 +160,13 @@ module.exports = {
             await passport.save();
           }
         }
+
+        if(user.avatarImgId){
+          const userAvatar = await Image.findById(user.avatarImgId);
+          user.avatar = userAvatar.url;
+          user.avatarThumb = userAvatar.url;
+        }
+
         updatedUser.username = user.username;
         updatedUser.email = user.email;
         updatedUser.firstName = user.firstName;
@@ -164,6 +176,9 @@ module.exports = {
         updatedUser.phone2 = user.phone2;
         updatedUser.address = user.address;
         updatedUser.address2 = user.address2;
+        updatedUser.verificationEmailToken = user.verificationEmailToken;
+        updatedUser.avatar = user.avatar;
+        updatedUser.avatarThumb = user.avatarThumb;
 
         if (user.birthday !== '') {
           updatedUser.birthday = user.birthday;
@@ -176,4 +191,24 @@ module.exports = {
       throw e;
     }
   },
+
+  sendVerificationEmail: async({ userId, email,  displayName, signToken, message}) => {
+    try {
+      const token = jwt.sign({
+        exp: moment(new Date()).add(1, 'h').valueOf(),
+        userId,
+        email,
+      }, signToken);
+      let messageConfig = await MessageService.checkNewEmail({
+        email: email,
+        api: `/validate/email?token=${token}`,
+        username: displayName,
+        message,
+      });
+      let message = await Message.create(messageConfig);
+      await MessageService.sendMail(message);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

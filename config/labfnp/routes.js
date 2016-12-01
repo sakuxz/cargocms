@@ -22,6 +22,7 @@ module.exports = {
   'post /api/labfnp/recipe/feedback': 'api/labfnp/RecipeController.saveFeedback',
 
   'get /api/labfnp/order': 'api/labfnp/RecipeOrderController.find',
+  'get /api/labfnp/eventOrder': 'api/labfnp/EventOrderController.find',
 
   'get /api/labfnp/scent/simpleList': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scent': 'api/labfnp/ScentController.find',
@@ -55,6 +56,7 @@ module.exports = {
   '/me/:id?':         'labfnp/MainController.portfolio',
   '/edit/me':         'labfnp/MainController.editPofile',
   '/update/password': 'labfnp/MainController.updatePassword',
+  '/validate/email':  'labfnp/MainController.validateEmail',
 
   "/labfnp/:controller/:action/:id?": {}
 };

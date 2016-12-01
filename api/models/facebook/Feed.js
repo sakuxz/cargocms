@@ -3,7 +3,7 @@ import moment from 'moment';
 module.exports = {
   attributes: {
     fullPicture: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
     },
     name: {
       type: Sequelize.STRING,
@@ -41,26 +41,27 @@ module.exports = {
       type: Sequelize.BOOLEAN,
       defaultValue: true
     },
-    updatedAt: {
-      type: Sequelize.DATE,
-      get: function() {
-        try {
-          return moment(new Date(this.getDataValue('updatedAt'))).format("YYYY/MM/DD HH:mm:SS");
-        } catch (e) {
+    createdDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
+        } catch(e){
           sails.log.error(e);
         }
       }
     },
-    createdAt: {
-      type: Sequelize.DATE,
-      get: function() {
-        try {
-          return moment(new Date(this.getDataValue('createdAt'))).format("YYYY/MM/DD HH:mm:SS");
-        } catch (e) {
+
+    updatedDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
+        } catch(e){
           sails.log.error(e);
         }
       }
-    },
+    }
   },
   associations: function() {
 
