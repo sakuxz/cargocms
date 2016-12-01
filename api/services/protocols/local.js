@@ -71,6 +71,7 @@ exports.register = async (req, res, next) => {
       email: user.email,
       displayName: user.displayName,
       signToken: verificationEmailToken,
+      message: '註冊',
     });
     return next(null, user);
 
