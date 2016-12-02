@@ -211,6 +211,7 @@ var scentApp = new Vue({
       } else return cb();
     },
     loadItems: function (cb) {
+      $(".loading-wrapper").addClass('active');
       window.onbeforeunload = null;
       $.get('/api/labfnp/scent', ajaxSuccess);
 
@@ -325,6 +326,9 @@ var scentApp = new Vue({
        },
        "drawCallback" : function(oSettings) {
          responsiveHelper_datatable_tabletools.respond();
+       },
+       "initComplete": function(){
+         $('.loading-wrapper').removeClass('active');
        }
      });
 
