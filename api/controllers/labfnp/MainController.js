@@ -119,27 +119,45 @@ module.exports = {
       const { token } = req.query;
       const decoded = jwt.decode(token);
       const timeout = moment(new Date()).valueOf() > decoded.exp;
-      if (timeout) throw Error('驗證連結已逾時');
+      let message = '';
+      let valid = false;
 
-      let user = await User.findOne({
-        where: {
-          id: decoded.userId,
-          email: decoded.email,
+      // if (timeout) throw Error('驗證連結已逾時');
+      if (timeout){
+        message = 'E-Mail 驗證連結已逾時';
+        sails.log.error('E-Mail 驗證連結已逾時');
+      } else {
+        let user = await User.findOne({
+          where: {
+            id: decoded.userId,
+            email: decoded.email,
+          }
+        });
+        // if (!user.verificationEmailToken) throw Error('請點擊 Email 驗證連結');
+        if (!user.verificationEmailToken){
+          message = '此驗證連結已失效';
+          sails.log.error('此驗證連結已失效');
+        } else {
+
+          jwt.verify(token, user.verificationEmailToken);
+          user.verificationEmailToken = '';
+          await user.save();
+
+          if(AuthService.isAuthenticated(req)) {
+            req.session.passport.user.verificationEmailToken = '';
+            // res.send(req.session);
+          }
+
+          req.flash('info', '您更新了 Email ，請至新信箱點擊認證連結');
+          message = 'E-Mail 驗證成功';
+          valid = true;
         }
-      });
-      if (!user.verificationEmailToken) throw Error('請點擊 Email 驗證連結');
-
-      jwt.verify(token, user.verificationEmailToken);
-      user.verificationEmailToken = '';
-      await user.save();
-
-      if(AuthService.isAuthenticated(req)) {
-        req.session.passport.user.verificationEmailToken = '';
-        // res.send(req.session);
       }
 
-      req.flash('info', '您更新了 Email ，請至新信箱點擊認證連結');
-      res.ok({});
+      res.ok({
+        message,
+        valid
+      });
     } catch (e) {
       res.serverError(e);
     }
