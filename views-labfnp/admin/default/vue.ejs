@@ -341,11 +341,14 @@ var defaultVueMathod = {
 			defaultTableConfig.ajax = ajax;
 		}
 
-
-
 		if (appModel.data.option.defaultSort) {
 			defaultTableConfig.order = appModel.data.option.defaultSort
 		}
+
+    defaultTableConfig.initComplete = function(){
+      $('.loading-wrapper').removeClass('active');
+    }
+
 		if (appMain.DataTableInitComplete) {
 			defaultTableConfig.initComplete = appMain.DataTableInitComplete
 		}

@@ -421,7 +421,10 @@ appMain.renderTable = function () {
 				appMain.edit(id)
 			})
 			responsiveHelper_datatable_tabletools.respond();
-		}
+		},
+    "initComplete": function(){
+      $('.loading-wrapper').removeClass('active');
+    }
 	};
 
 	if (serverSidePaging) {
