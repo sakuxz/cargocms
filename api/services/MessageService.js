@@ -289,7 +289,7 @@ module.exports = {
     }
   },
 
-  checkNewEmail: ({username, api, email, message}) => {
+  checkNewEmail: ({username, api, email, type}) => {
     try {
       let checkEmailTemplete = sails.config.mail.templete.checkNewEmail;
       let mailSendConfig = {...checkEmailTemplete, to: email};
@@ -298,7 +298,7 @@ module.exports = {
 
       mailSendConfig.subject = sprintf(mailSendConfig.subject, { username });
       mailSendConfig.html = sprintf(mailSendConfig.html, {
-        message,
+        type,
         username,
         url,
         storeName: 'LFP',
