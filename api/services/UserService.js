@@ -203,7 +203,7 @@ module.exports = {
         email: email,
         api: `/validate/email?token=${token}`,
         username: displayName,
-        type,
+        type: type,
       });
       let message = await Message.create(messageConfig);
       await MessageService.sendMail(message);
