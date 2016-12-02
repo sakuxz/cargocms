@@ -61,7 +61,6 @@ module.exports = {
             email: data.email,
             displayName: loginUser.displayName,
             signToken: verificationEmailToken,
-            register: false,
             type: '更新',
           })
           req.flash('info', '修改 Email 後，請至信箱收驗證信');
