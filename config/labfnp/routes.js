@@ -1,7 +1,7 @@
 module.exports = {
 
   'get /api/labfnp/recipe/findForLab': 'api/labfnp/RecipeController.findForLab',
-  'get /api/labfnp/recipe': 'api/labfnp/RecipeController.find',
+  // 'get /api/labfnp/recipe': 'api/labfnp/RecipeController.find',
   'post /api/labfnp/recipe': 'api/labfnp/RecipeController.create',
   'get /api/labfnp/recipe/new': 'api/labfnp/RecipeController.topNew',
   'get /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.findOne',
@@ -32,6 +32,8 @@ module.exports = {
   'get /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.findOne',
   'delete /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.destroy',
   'put /api/admin/labfnp/feedbackCheck/:id': 'api/admin/labfnp/ScentFeedbackController.feedbackCheck',
+
+  'get /api/labfnp/recipe': 'api/admin/labfnp/RecipeController.find',
 
   // 這裡先相容舊版 api
   'post /api/allpay/paid':        'api/admin/labfnp/RecipeController.paid',
