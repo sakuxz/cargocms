@@ -23,5 +23,9 @@ module.exports = {
   },
   'api/admin/labfnp/RecipeController': {
     'find': ['passport', 'sessionAuth', 'isAdmin'],
+    'findOne': ['passport', 'sessionAuth', 'isAdmin'],
+    'create': ['passport', 'sessionAuth', 'isAdmin'],
+    'update': ['passport', 'sessionAuth', 'isAdmin'],
+    'destroy': ['passport', 'sessionAuth', 'isAdmin'],
   }
 }

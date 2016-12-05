@@ -33,7 +33,11 @@ module.exports = {
   'delete /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.destroy',
   'put /api/admin/labfnp/feedbackCheck/:id': 'api/admin/labfnp/ScentFeedbackController.feedbackCheck',
 
-  'get /api/labfnp/recipe': 'api/admin/labfnp/RecipeController.find',
+  'get /api/admin/labfnp/recipe':     'api/admin/labfnp/RecipeController.find',
+  'get /api/admin/labfnp/recipe/:id': 'api/admin/labfnp/RecipeController.findOne',
+  'post /api/admin/labfnp/recipe':    'api/admin/labfnp/RecipeController.create',
+  'put /api/admin/labfnp/recipe/:id':     'api/admin/labfnp/RecipeController.update',
+  'delete /api/admin/labfnp/recipe/:id':  'api/admin/labfnp/RecipeController.destroy',
 
   // 這裡先相容舊版 api
   'post /api/allpay/paid':        'api/admin/labfnp/RecipeController.paid',
