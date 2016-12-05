@@ -118,6 +118,12 @@ module.exports = {
     try {
       const { token } = req.query;
       const decoded = jwt.decode(token);
+
+      if(!decoded){
+        sails.log.error('Email 驗證 token 不合法');
+        return res.notFound();
+      }
+
       const timeout = moment(new Date()).valueOf() > decoded.exp;
       let message = '';
       let valid = false;
