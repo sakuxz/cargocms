@@ -27,5 +27,8 @@ module.exports = {
     'create': ['passport', 'sessionAuth', 'isAdmin'],
     'update': ['passport', 'sessionAuth', 'isAdmin'],
     'destroy': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  'api/admin/labfnp/FeelingController': {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
   }
 }
