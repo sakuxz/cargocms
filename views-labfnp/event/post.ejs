@@ -13,7 +13,11 @@
     font-family: 'FontAwesome';
     content: "\f077"; /* fa-chevron-up */
   }
-
+  
+  .ng-binding {
+    margin-top: 5px;
+    margin-left: 5px;
+  }
 </style>
 
 <div class="news-v3 bg-color-white margin-bottom-60">
@@ -101,7 +105,10 @@
                           <b>票券說明：</b>
                       </div>
                       <div ng-show="ticket.description" class="ng-binding">
-                          <%= Event.description %>
+                        <% var description = Event.description.replace(/[\r\n|\n]/g,"<br/>").split('<br/>');%>
+                        <% description.forEach(function( desc ){ %>
+                          <%= desc %><br/>
+                        <% }); %>
                       </div>
                     </div>
                   </td>
