@@ -318,7 +318,7 @@ describe('about export service operation.', function() {
         User: {
           birthday: "2016/11/02",
           displayName: "大明王",
-          RolesArray: [ ],
+          rolesArray: [ ],
           lastLogin: null,
           updatedAt: "2016/11/02 10:06:00",
           createdAt: "2016/11/02 10:06:00",
@@ -399,6 +399,27 @@ describe('about export service operation.', function() {
     } catch (e) {
       done(e);
     }
+  });
+
+  describe.skip('about export service operation.', function() {
+    it('parse excel ', async (done) => {
+      try {
+        const columns = [{
+          name: 'MerchantTradeNo',
+          index: 2,
+        }]
+        const result = await ExportService.parseExcel({
+          fileName: '順豐form.xlsx',
+          startIndex: 1,
+          sheetIndex: 0,
+          columns,
+         });
+         sails.log.info(result);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
   });
 
 });

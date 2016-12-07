@@ -27,10 +27,10 @@ module.exports = {
     },
 
 		productionStatus: {
-      type: Sequelize.ENUM("NEW", "RECEIVED", "REQUESTED", "SUBMITTED", "PAID", "PROCESSING", "CANCELLED", "SHIPPED", "DELIVERED", "COMPLETED"),
+      type: Sequelize.ENUM("NEW", "PENDING", "RECEIVED", "REQUESTED", "SUBMITTED", "PAID", "PROCESSING", "CANCELLED", "SHIPPED", "DELIVERED", "COMPLETED"),
       defaultValue: 'NEW',
     },
-		
+
 		token: {
       type: Sequelize.STRING(32),
 			unique: true,
@@ -73,27 +73,39 @@ module.exports = {
     },
 
 
-		updatedAt: {
-			type: Sequelize.DATE,
-			get: function () {
-				try {
-					return moment(this.getDataValue('updatedAt')).format("YYYY/MM/DD HH:mm:SS");
-				} catch (e) {
-					sails.log.error(e);
-				}
-			}
-		},
+    ItemNameArray: {
+      type: Sequelize.VIRTUAL,
+      get: function () {
+        try {
+          const thisEvent = this.getDataValue('Event');
+          const event = thisEvent ? [thisEvent.title] : [];
+          return event;
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    createdDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    },
 
-		createdAt: {
-			type: Sequelize.DATE,
-			get: function () {
-				try {
-					return moment(this.getDataValue('createdAt')).format("YYYY/MM/DD HH:mm:SS");
-				} catch (e) {
-					sails.log.error(e);
-				}
-			}
-		},
+    updatedDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    }
 
 	},
 	associations: () => {
@@ -105,7 +117,7 @@ module.exports = {
 		classMethods: {
 			findByIdHasJoin: async(id) => {
 				try {
-					return await RecipeOrder.findOne({
+					return await EventOrder.findOne({
 						where: {
 							id
 						},
@@ -118,7 +130,7 @@ module.exports = {
 			},
 			deleteById: async(id) => {
 				try {
-					return await RecipeOrder.destroy({
+					return await EventOrder.destroy({
 						where: {
 							id
 						}

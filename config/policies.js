@@ -36,12 +36,68 @@ var defaultConfig = {
   'AdminController': {
     'index': ['passport', 'sessionAuth', 'isAdmin']
   },
+  'api/UserController': {
+    '*': ['passport', 'sessionAuth'],
+    'forgotPassword': [],
+    'updatePassword': [],
+  },
   'EventController': {
     'allpay': ['passport', 'sessionAuth'],
   },
-  'api/admin/AllpayController': {
-    'download': ['passport', 'sessionAuth', 'isAdmin'],
+  'api/admin/DownloadController': {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
+  'api/admin/AllpayController': {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/EventAllpayController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/ContactController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/EventController": {
+    'paid': [],
+    'paymentinfo': [],
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/facebook/FeedController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  // user using admin's ImageController to upload image...
+  "api/admin/ImageController": {
+    'upload': ['passport', 'sessionAuth'],
+    'destroy': ['passport', 'sessionAuth'],
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/MessageController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/MockController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/PostController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/QuoteController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/UserController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "UtilsController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/labfnp/ScentFeedbackController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/labfnp/ScentController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/labfnp/ScentNoteController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+
   /***************************************************************************
   *                                                                          *
   * Default policy for all controllers and actions (`true` allows public     *

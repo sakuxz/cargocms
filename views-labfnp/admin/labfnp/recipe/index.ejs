@@ -85,6 +85,13 @@
         "targets": "no-search",
         "searchable": false
       },
+      {
+				"targets"  : 3,
+				"searchable": false,
+				"render": function ( data, type, row ) {
+          return '<td>'+ row.createdDateTime.dateTime +'</td>'
+        }
+      },
 			{
 				"targets"  : 7,
 				"orderable": false,

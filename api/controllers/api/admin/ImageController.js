@@ -40,7 +40,6 @@ module.exports = {
         });
       });
       let files = await promise.then();
-
       const { size, type, fd, extra } = files[0];
       const user = AuthService.getSessionUser(req);
       const UserId = user ? user.id : null;
@@ -51,11 +50,11 @@ module.exports = {
       } else {
         filePath = 's3://'+extra.Bucket+'/'+extra.Key;
       }
-      
+
       const upload = await Image.create(
-        { filePath: filePath, 
-          size, type, UserId, 
-          storage: storageLocate 
+        { filePath: filePath,
+          size, type, UserId,
+          storage: storageLocate
         });
 
       res.ok({

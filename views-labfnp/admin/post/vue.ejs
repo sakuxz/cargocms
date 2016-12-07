@@ -320,7 +320,8 @@ var postApp = new Vue({
        },
        "drawCallback" : function(oSettings) {
          responsiveHelper_datatable_tabletools.respond();
-       }
+       },
+       "order": [[ 0, 'desc' ]],
      });
 
      // selection
@@ -399,6 +400,7 @@ var postApp = new Vue({
           ['height', ['height']],
           ['table', ['table']],
           // ['insert', ['link', 'picture', 'hr']],
+          ['insert', ['picture']],
           ['view', ['fullscreen', 'codeview', 'help']]
         ]
       });

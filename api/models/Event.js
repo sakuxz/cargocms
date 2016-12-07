@@ -24,7 +24,7 @@ module.exports = {
       allowNull: false,
       get: function () {
         try {
-          return moment(this.getDataValue('sellStartDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('sellStartDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -35,7 +35,7 @@ module.exports = {
       allowNull: false,
       get: function () {
         try {
-          return moment(this.getDataValue('sellEndDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('sellEndDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -46,7 +46,7 @@ module.exports = {
       allowNull: false,
       get: function () {
         try {
-          return moment(this.getDataValue('eventStartDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('eventStartDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
           sails.log.error(e);
         }
@@ -57,8 +57,29 @@ module.exports = {
       allowNull: false,
       get: function () {
         try {
-          return moment(this.getDataValue('eventEndDate')).format("YYYY/MM/DD HH:mm:SS");
+          return moment(new Date(this.getDataValue('eventEndDate'))).format("YYYY/MM/DD HH:mm:SS");
         } catch (e) {
+          sails.log.error(e);
+        }
+      }
+    },
+    createdDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    },
+
+    updatedDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
+        } catch(e){
           sails.log.error(e);
         }
       }
@@ -68,7 +89,7 @@ module.exports = {
 
   associations: function() {
     Post.hasMany(Event);
-
+    Event.belongsTo(Post,{ foreignKey: "PostId" } );
     // Event.belongsToMany(User, {
     //
     //   through: 'UserEvent',

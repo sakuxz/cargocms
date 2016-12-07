@@ -8,8 +8,12 @@
 	var pagefunction = function() {
 		<%- include vue.ejs %>
 		appMain.$mount("#main-edit");
-		appMain.loadItem(appMain.onEnterPageEdit);
+    appMain.loadItem( function(){
+      appMain.onEnterPageEdit();
+      appMain.enableText();
+    });
 		appMain.setupForm("edit");
+    appMain.hideSubmit();
 	};
 
 </script>

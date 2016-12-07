@@ -13,7 +13,7 @@
 	<div class="container content-sm">
 		<div class="row">
 			<!-- Blog Sidebar -->
-			<div class="col-md-3">
+			<div class="col-md-3 hidden-xs native-hide">
 				<div class="headline-v2">
 					<h2>精選文章</h2>
 				</div>
@@ -22,7 +22,7 @@
 					<% data.items.forEach(function(post){ %>
 						<li class="text-overflow">
 							<h3 class="text-overflow"><a href="/blogs/<%= post.alias || post.id %>"><%= post.title %></a></h3>
-							<small><%= post.createdAt %></small>
+							<small><%= post.createdDateTime.dateTime %></small>
 						</li>
 					<% }); %>
 				</ul>

@@ -46,16 +46,20 @@ appMain.enableText = function () {
 
 appMain.enterDatetime = function () {
   $("input[name='sellStartDate']").datetimepicker({
-    format: 'YYYY/MM/DD HH:mm'
+    format: 'YYYY/MM/DD HH:mm',
+    sideBySide: true
   });
   $("input[name='sellEndDate']").datetimepicker({
-    format: 'YYYY/MM/DD HH:mm'
+    format: 'YYYY/MM/DD HH:mm',
+    sideBySide: true
   });
   $("input[name='eventStartDate']").datetimepicker({
-    format: 'YYYY/MM/DD HH:mm'
+    format: 'YYYY/MM/DD HH:mm',
+    sideBySide: true
   });
   $("input[name='eventEndDate']").datetimepicker({
-    format: 'YYYY/MM/DD HH:mm'
+    format: 'YYYY/MM/DD HH:mm',
+    sideBySide: true
   });
 }
 
@@ -65,4 +69,17 @@ appMain.loadDateTimeScript = function(){
     loadScript("/assets/admin/js/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js", appMain.enterDatetime );
   });
 
+}
+
+appMain.createDateInit = function(){
+  $("input[name='signupCount']").val(0);
+  $("input[name='sellStartDate']").val( "<%= data.StartDate %>");
+  $("input[name='eventStartDate']").val( "<%= data.StartDate %>");
+  $("input[name='sellEndDate']").val( "<%= data.EndDate %>");
+  $("input[name='eventEndDate']").val( "<%= data.EndDate %>");
+  appModel.data.item.signupCount = 0;
+  appModel.data.item.sellStartDate = "<%= data.StartDate %>";
+  appModel.data.item.eventStartDate = "<%= data.StartDate %>";
+  appModel.data.item.sellEndDate = "<%= data.EndDate %>";
+  appModel.data.item.eventEndDate = "<%= data.EndDate %>";
 }

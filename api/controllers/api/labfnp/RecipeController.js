@@ -23,24 +23,6 @@ module.exports = {
     }
   },
 
-  find: async (req, res) => {
-    try {
-      const { query } = req;
-      const { serverSidePaging } = query;
-      const modelName = req.options.controller.split("/").reverse()[0];
-      let result;
-      if (serverSidePaging) {
-        result = await PagingService.process({query, modelName});
-      } else {
-        const items = await sails.models[modelName].findAll();
-        result = { data: { items } };
-      }
-      res.ok(result);
-    } catch (e) {
-      res.serverError(e);
-    }
-  },
-
   findOne: async (req, res) => {
     const { id } = req.params;
     try {
@@ -216,43 +198,47 @@ module.exports = {
   saveFeedback: async (req, res) => {
     const data = req.body;
     try {
-      data.feeling = data.feeling.split(',');
-      let {UserId, RecipeId} = data;
-      let feedback = await RecipeFeedback.findOne({where: {UserId, RecipeId}});
+      if(data.feeling !== ""){
+        data.feeling = data.feeling.split(',');
+        let {UserId, RecipeId} = data;
+        let feedback = await RecipeFeedback.findOne({where: {UserId, RecipeId}});
 
-      if(feedback != null){
-        feedback.invoiceNo = data.invoiceNo;
-        feedback.tradeNo = data.tradeNo;
-        feedback.feeling = data.feeling;
-        feedback = await feedback.save(data);
-      }else {
-        feedback = await RecipeFeedback.create(data);
+        if(feedback != null){
+          feedback.invoiceNo = data.invoiceNo;
+          feedback.tradeNo = data.tradeNo;
+          feedback.feeling = data.feeling;
+          feedback = await feedback.save(data);
+        }else {
+          feedback = await RecipeFeedback.create(data);
+        }
       }
 
       let updateformula = [];
-      Object.keys(data.scentFeeling).forEach(function (key) {
-        if (data.scentFeeling[key]) {
-          let feeling = data.scentFeeling[key].split(',') ;
-          updateformula.push({
-            scent: key,
-            userFeeling: feeling,
-          })
-        } else {
-          updateformula.push({
-            scent: key,
-            userFeeling: [],
-          })
-        }
-      });
-      const user = AuthService.getSessionUser(req);
-      await RecipeService.updateUserFeeling({
-        formula: updateformula,
-        userId: user ? user.id : null,
-      });
+      if(data.scentFeeling){
+        Object.keys(data.scentFeeling).forEach(function (key) {
+          if (data.scentFeeling[key]) {
+            let feeling = data.scentFeeling[key].split(',') ;
+            updateformula.push({
+              scent: key,
+              userFeeling: feeling,
+            })
+          } else {
+            updateformula.push({
+              scent: key,
+              userFeeling: [],
+            })
+          }
+        });
+        const user = AuthService.getSessionUser(req);
+        await RecipeService.updateUserFeeling({
+          formula: updateformula,
+          userId: user ? user.id : null,
+        });
+      }
 
       res.ok({
         message: 'save feedback success.',
-        data: feedback,
+        data: true,
       });
     } catch (e) {
       res.serverError(e);

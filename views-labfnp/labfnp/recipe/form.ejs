@@ -6,6 +6,20 @@
   border: 1px solid #ccc;
   padding-top: 2px;
 }
+
+@media (max-width: 768px) {
+  .submit-footer {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    z-index: 999;
+    width: 100%;
+    padding: 10px;
+    background: #fff;
+    border-top: 1px solid #eee;
+  }
+}
+
 </style>
 <% if (recipe.createdBy === 'scent') { %>
   <header>新香水配方 - 自訂香味分子</header>
@@ -48,13 +62,19 @@
   </section>
 
   <section>
-    <label class="label">封面圖片</label>
+    <label class="label">封面圖片
+      <span class="uploadLoaging hide"><i class="fa fa-spinner" aria-hidden="true"></i> 檔案上傳中</span>
+    </label>
+    <% var isMobile = UtilsService.isMobileForFineUpload(req) %>
     <%- include ../../lib/fineuploader.ejs %>
     <div id="fine-uploader-validation"></div>
   </section>
 
   <section>
-    <input type="file" id="imageInput" name="uploadPic">
+    <!--
+    <% if (isMobile) { %>
+      <input type="file" id="imageInput" name="uploadPic" accept='image/*'>
+    <% } %> -->
     <input type="hidden" name="coverPhotoId" value="">
   </section>
 </fieldset>
@@ -84,10 +104,21 @@
 </fieldset> -->
 
 <footer>
+  <div class="alert alert-warning submittedInfo uploadLoaging hide">
+    <label class="text-info"> 封面上傳中...</label>
+  </div>
   <div class="alert alert-warning submittedInfo" style="display:none;">
     <label class="text-info"> <strong>注意！</strong>配方更新中...</label>
   </div>
+  <div class="hidden-xs">
+    <button type="submit" class="btn-u">送出資料</button>
+    <button type="button" class="btn-u btn-u-default" onclick="window.history.back();return false;">返回</button>
+    <button name="recipeDeleteButton" data-id="<%= recipe.id %>" type="button" class="btn-u btn-u-red pull-right <%= req.options.action== 'edit'?'':'hidden' %>" >刪除</button>
+  </div>
+</footer>
+
+<div class="hidden-sm hidden-md hidden-lg submit-footer">
   <button type="submit" class="btn-u">送出資料</button>
   <button type="button" class="btn-u btn-u-default" onclick="window.history.back();return false;">返回</button>
-  <button id="recipeDeleteButton" data-id="<%= recipe.id %>" type="button" class="btn-u btn-u-red pull-right <%= req.options.action== 'edit'?'':'hidden' %>" >刪除</button>
-</footer>
+  <button name="recipeDeleteButton" data-id="<%= recipe.id %>" type="button" class="btn-u btn-u-red pull-right <%= req.options.action== 'edit'?'':'hidden' %>" >刪除</button>
+</div>

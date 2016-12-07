@@ -26,8 +26,10 @@
 <script id="recipeFeedback" type="text/x-jquery-tmpl">
   <div class="col-md-6">
     <div id="scent-content" class="well funny-boxes bg-color-white">
-      <img class="img-responsive" src="${coverPhoto}" alt="" onerror="this.onerror=null;this.src='${coverPhoto2}';"/>
-      <h2 id="scent-title" style="margin-top: 20px;">配方：${name}</h2>
+      <a href="/recipe/${hashId}">
+        <img class="img-responsive" src="${coverPhoto}" alt="" onerror="this.onerror=null;this.src='${coverPhoto2}';"/>
+        <h2 id="scent-title" style="margin-top: 20px;">配方：${name}</h2>
+      </a>
       <p style="border-top: 2px solid #CD853F;" id="scent-description">${description}</p>
       <div class="tags">
       您的感覺:
@@ -42,34 +44,41 @@
   // $(document).ready(function(){
     var successCatch = function(e) {
       $('#scentNote').empty();
-      if(Object.keys(e.data.scentItem).length === 0 || Object.keys(e.data.recipeItem).length === 0){
+      if(Object.keys(e.data.scentItem).length === 0 && Object.keys(e.data.recipeItem).length === 0){
         $('#scentNote').append($('#noneScentFeedback').tmpl());
       } else {
-        $('#scentNote').append('<h2>香味分子筆記</h2>');
-        Object.keys(e.data.scentItem).forEach(function(key){
-          var data = e.data.scentItem[key];
-          var scentFeedback = $('#scentFeedback').tmpl({
-            name: data.Scent.name,
-            title: data.Scent.title,
-            description: data.Scent.description,
-            color: data.Scent.ScentNote.color,
-            feeling: data.info
+        if(Object.keys(e.data.scentItem).length > 0){
+          $('#scentNote').append('<h2>香味分子筆記</h2>');
+          Object.keys(e.data.scentItem).forEach(function(key){
+            var data = e.data.scentItem[key];
+            var scentFeedback = $('#scentFeedback').tmpl({
+              name: data.Scent.name,
+              title: data.Scent.title,
+              description: data.Scent.description,
+              color: data.Scent.ScentNote.color,
+              feeling: data.info
+            });
+            $('#scentNote').append(scentFeedback);
           });
-          $('#scentNote').append(scentFeedback);
-        });
+        }
 
-        $('#scentNote').append('<h2>配方感覺筆記</h2>');
-        Object.keys(e.data.recipeItem).forEach(function(key){
-          var data = e.data.recipeItem[key];
-          var recipeFeedback = $('#recipeFeedback').tmpl({
-            name: data.Recipe.perfumeName,
-            description: data.Recipe.description,
-            feeling: data.info,
-            coverPhoto: data.Recipe.coverPhoto,
-            coverPhoto2: '/assets/labfnp/img/recipe-default-cover.'+ data.Recipe.id % 7 + '.jpg'
+        if(Object.keys(e.data.recipeItem).length > 0){
+          $('#scentNote').append('<h2>配方感覺筆記</h2>');
+          Object.keys(e.data.recipeItem).forEach(function(key){
+            var data = e.data.recipeItem[key];
+            console.log(data.Recipe.coverPhoto);
+            var recipeFeedback = $('#recipeFeedback').tmpl({
+              name: data.Recipe.perfumeName,
+              description: data.Recipe.description,
+              feeling: data.info,
+              coverPhoto: data.Recipe.coverPhoto,
+              coverPhoto2: '/assets/labfnp/img/recipe-default-cover.'+ data.Recipe.id % 7 + '.jpg',
+              hashId: data.Recipe.hashId,
+            });
+            $('#scentNote').append(recipeFeedback);
           });
-          $('#scentNote').append(recipeFeedback);
-        });
+        }
+
       }
     }
     var failCatch = function(e) {
