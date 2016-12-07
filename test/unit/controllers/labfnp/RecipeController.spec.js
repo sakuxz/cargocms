@@ -36,10 +36,79 @@ describe('about Recipe Controller operation.', function() {
     done();
   });
 
-  it('Recipe like action should be success.', async (done) => {
+  it.only('Recipe like action should be success.', async (done) => {
     try {
       const token = '8178e7c8e66a68421af84bc7b77e2e40'
       const repetOrder = [];
+
+      repetOrder.push(request(sails.hooks.http.app)
+        .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
+        .send({
+          id: 1,
+          perfumeName: 'love',
+          description: 'this is love',
+          message: 'test',
+          recipient: 'admin',
+          phone: '0900000000',
+          address: 'taiwan',
+          email: 'admin@example.com',
+          note: 1,
+          paymentMethod: 'gotoShop',
+          invoiceNo: 'LB-12345678',
+          token,
+        })
+      );
+      repetOrder.push(request(sails.hooks.http.app)
+        .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
+        .send({
+          id: 1,
+          perfumeName: 'love',
+          description: 'this is love',
+          message: 'test',
+          recipient: 'admin',
+          phone: '0900000000',
+          address: 'taiwan',
+          email: 'admin@example.com',
+          note: 1,
+          paymentMethod: 'gotoShop',
+          invoiceNo: 'LB-12345678',
+          token,
+        })
+      );
+      repetOrder.push(request(sails.hooks.http.app)
+        .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
+        .send({
+          id: 1,
+          perfumeName: 'love',
+          description: 'this is love',
+          message: 'test',
+          recipient: 'admin',
+          phone: '0900000000',
+          address: 'taiwan',
+          email: 'admin@example.com',
+          note: 1,
+          paymentMethod: 'gotoShop',
+          invoiceNo: 'LB-12345678',
+          token,
+        })
+      );
+      repetOrder.push(request(sails.hooks.http.app)
+        .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
+        .send({
+          id: 1,
+          perfumeName: 'love',
+          description: 'this is love',
+          message: 'test',
+          recipient: 'admin',
+          phone: '0900000000',
+          address: 'taiwan',
+          email: 'admin@example.com',
+          note: 1,
+          paymentMethod: 'gotoShop',
+          invoiceNo: 'LB-12345678',
+          token,
+        })
+      );
       repetOrder.push(request(sails.hooks.http.app)
         .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
         .send({
@@ -177,7 +246,8 @@ describe('about Recipe Controller operation.', function() {
         })
       );
       const result = await Promise.all(repetOrder);
-      sails.log.debug(result[0].status,result[1].status);
+      // sails.log.debug(result[0].status,result[1].status);
+      sails.log.debug(result[0].status);
 
       // await request(sails.hooks.http.app)
       // .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
