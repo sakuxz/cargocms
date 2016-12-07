@@ -232,25 +232,27 @@ module.exports = {
       }
 
       let updateformula = [];
-      Object.keys(data.scentFeeling).forEach(function (key) {
-        if (data.scentFeeling[key]) {
-          let feeling = data.scentFeeling[key].split(',') ;
-          updateformula.push({
-            scent: key,
-            userFeeling: feeling,
-          })
-        } else {
-          updateformula.push({
-            scent: key,
-            userFeeling: [],
-          })
-        }
-      });
-      const user = AuthService.getSessionUser(req);
-      await RecipeService.updateUserFeeling({
-        formula: updateformula,
-        userId: user ? user.id : null,
-      });
+      if(data.scentFeeling){
+        Object.keys(data.scentFeeling).forEach(function (key) {
+          if (data.scentFeeling[key]) {
+            let feeling = data.scentFeeling[key].split(',') ;
+            updateformula.push({
+              scent: key,
+              userFeeling: feeling,
+            })
+          } else {
+            updateformula.push({
+              scent: key,
+              userFeeling: [],
+            })
+          }
+        });
+        const user = AuthService.getSessionUser(req);
+        await RecipeService.updateUserFeeling({
+          formula: updateformula,
+          userId: user ? user.id : null,
+        });
+      }
 
       res.ok({
         message: 'save feedback success.',
