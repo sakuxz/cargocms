@@ -12,7 +12,7 @@ node {
 
       if(BRANCH_NAME == "release-labfnp"){
         deploy = true;
-        skiptest = true;
+        // skiptest = true;
         preview = false;
       } else {
         timeout(time:10, unit:'SECONDS') {
