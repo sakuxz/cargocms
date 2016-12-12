@@ -33,6 +33,7 @@ module.exports = {
   'delete /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.destroy',
   'put /api/admin/labfnp/feedbackCheck/:id': 'api/admin/labfnp/ScentFeedbackController.feedbackCheck',
 
+  'get /api/admin/labfnp/recipe/export': 'api/admin/labfnp/RecipeController.export',
   'get /api/admin/labfnp/recipe':     'api/admin/labfnp/RecipeController.find',
   'get /api/admin/labfnp/recipe/:id': 'api/admin/labfnp/RecipeController.findOne',
   'post /api/admin/labfnp/recipe':    'api/admin/labfnp/RecipeController.create',
@@ -45,7 +46,6 @@ module.exports = {
   //
   'post /api/recipe/paid':        'api/admin/labfnp/RecipeController.paid',
   'post /api/recipe/paymentinfo': 'api/admin/labfnp/RecipeController.paymentinfo',
-  'get /api/admin/labfnp/recipe/export': 'api/admin/labfnp/RecipeController.export',
 
   'put /api/admin/shipping/:id': 'api/admin/labfnp/RecipeOrderController.shippingUpdate',
   'put /api/admin/labfnp/recipeorder/status/:id': 'api/admin/labfnp/RecipeOrderController.updateProductionStatus',

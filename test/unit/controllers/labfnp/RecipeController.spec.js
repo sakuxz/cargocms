@@ -1,5 +1,5 @@
 var sinon = require('sinon');
-describe('about Recipe Controller operation.', function() {
+describe.skip('about Recipe Controller operation.', function() {
 
   let recipe, user;
   before(async (done) => {
@@ -36,7 +36,7 @@ describe('about Recipe Controller operation.', function() {
     done();
   });
 
-  it.only('Recipe like action should be success.', async (done) => {
+  it('Recipe like action should be success.', async (done) => {
     try {
       const token = '8178e7c8e66a68421af84bc7b77e2e40'
       const repetOrder = [];
