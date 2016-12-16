@@ -89,7 +89,7 @@ module.exports = {
             data.feeling,
             data.userName,
             data.createdDateTime.dateTime,
-            data.feedbackCheck
+            data.feedbackCheck ? 'Yes':'No'
           ]
 
           result.push(formatted);
