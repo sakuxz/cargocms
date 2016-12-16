@@ -29,6 +29,7 @@ module.exports = {
   'get /api/labfnp/scent': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scentnote': 'api/labfnp/ScentNoteController.find',
 
+  'post /api/admin/labfnp/scentfeedback/exportFeedback': 'api/admin/labfnp/ScentFeedbackController.exportFeedback',
   'get /api/admin/labfnp/scentfeedback': 'api/admin/labfnp/ScentFeedbackController.find',
   'get /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.findOne',
   'delete /api/admin/labfnp/scentfeedback/:id': 'api/admin/labfnp/ScentFeedbackController.destroy',
