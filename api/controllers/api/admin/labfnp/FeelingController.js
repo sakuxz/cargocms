@@ -113,11 +113,11 @@ module.exports = {
 
   exportFeeling: async (req, res) => {
     try {
-      let { body } = req;
-      sails.log.info('export Feelings');
-      const modelName = 'user';
-
-      let content = await Feeling.findAll();
+      let { options, body } = req;
+      let query = body;
+      sails.log.info('export', query);
+      const modelName = options.controller.split("/").reverse()[0];
+      const content = await ExportService.query({ query, modelName });
 
       const columns = [
         { caption: "感覺", type: "string"},
