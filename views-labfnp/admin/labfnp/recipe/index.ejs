@@ -92,7 +92,10 @@
         "targets"  : 3,
         "searchable": false,
         "render": function ( data, type, row ) {
-          return '<td>'+ (data === 'scent') ? '香味分子': '感覺' +'</td>'
+          if(row.createdBy === 'scent'){
+            return '<td>'+ '香味分子' +'</td>'
+          }
+          return '<td>'+ '感覺' +'</td>'
         }
       },
       {
