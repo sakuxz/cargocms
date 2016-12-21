@@ -5,7 +5,7 @@ var COMMON = {
 };
 
 var itemBeforeEdit = {};
-var prefix = '';
+var prefix = 'admin/';
 var modelName = "labfnp/recipe";
 var appModel = {
 	modelName: modelName,
@@ -39,7 +39,7 @@ var appModel = {
 		scentColor: {},
 		option: {
 			exportCSV: true,
-			defaultSort: [[ 3, 'desc' ]]
+			defaultSort: [[ 4, 'desc' ]]
 		}
 	},
 	view: {
@@ -421,7 +421,10 @@ appMain.renderTable = function () {
 				appMain.edit(id)
 			})
 			responsiveHelper_datatable_tabletools.respond();
-		}
+		},
+    "initComplete": function(){
+      $('.loading-wrapper').removeClass('active');
+    }
 	};
 
 	if (serverSidePaging) {
