@@ -12,6 +12,7 @@ module.exports = {
 
   'post /api/admin/labfnp/feeling/exportFeeling': 'api/admin/labfnp/FeelingController.exportFeeling',
   'get /api/labfnp/user/feeling': 'api/labfnp/FeelingController.findByUser',
+  'get /api/labfnp/feeling': 'api/admin/labfnp/FeelingController.find',
   'get /api/admin/labfnp/feeling': 'api/admin/labfnp/FeelingController.find',
   'get /api/admin/labfnp/feeling/:id': 'api/admin/labfnp/FeelingController.findOne',
   'post /api/admin/labfnp/feeling': 'api/admin/labfnp/FeelingController.create',
