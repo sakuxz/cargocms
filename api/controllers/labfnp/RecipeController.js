@@ -307,7 +307,7 @@ module.exports = {
           },
           MerchantTradeNo,
           tradeDesc: `配方名稱：${perfumeName} 100 ml, (備註：${message})`,
-          totalAmount: 1550,
+          totalAmount: 1560,
           paymentMethod: paymentMethod,
           itemArray: formatName,
           clientBackURL: '/recipe/done',
@@ -348,8 +348,8 @@ module.exports = {
       let goshopInfo = {};
       if (paymentMethod == 'gotoShop') {
         goshopInfo.RtnMsg = '到店購買';
-        goshopInfo.ShouldTradeAmt = 1550;
-        goshopInfo.TradeAmt = 1550;
+        goshopInfo.ShouldTradeAmt = 1560;
+        goshopInfo.TradeAmt = 1560;
         goshopInfo.PaymentType = '到店購買';
         goshopInfo.PaymentDate = moment(new Date()).format("YYYY/MM/DD");
       }
@@ -370,7 +370,7 @@ module.exports = {
       if (paymentMethod == 'gotoShop') {
         let messageConfig = {};
         messageConfig.serialNumber = MerchantTradeNo;
-        messageConfig.paymentTotalAmount = 1550;
+        messageConfig.paymentTotalAmount = 1560;
         messageConfig.productName = perfumeName + ' 100 ml';
         messageConfig.email = recipeOrder.email;
         messageConfig.username = user.displayName;
