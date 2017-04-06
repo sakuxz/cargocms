@@ -419,7 +419,8 @@ module.exports = {
         { caption: "電話", type: "string"},
         { caption: "住址", type: "string"},
         { caption: "訂單建立時間", type: "string"},
-        { caption: '香味清單', type: "string"}
+        { caption: '香味清單', type: "string"},
+        { caption: 'URL', type: "string"}
       ]
       const format = (items) => {
         let result = [];
@@ -450,6 +451,7 @@ module.exports = {
             });
           }
           formatted.push(scentList);
+          formatted.push(`http://labfnp.com/recipe/${data.RecipeOrder.Recipe ? data.RecipeOrder.Recipe.hashId : ''}`);
 
           result.push(formatted);
         };
