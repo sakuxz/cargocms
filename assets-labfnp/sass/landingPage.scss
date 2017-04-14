@@ -1,0 +1,10 @@
+@import "_mixin";
+@import "swiper.min";
+@import "header";
+@import "footer";
+@import "index";
+
+
+.remove {
+  @include gg();
+}
