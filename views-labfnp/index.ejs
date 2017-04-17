@@ -9,7 +9,11 @@
 
 <div class="cover-wrapper">
   <div class="cover-video"></div>
-  <a class="login-btn" href="/login">Log in</a>
+  <% if (!req.session.authenticated) { %>
+    <a class="login-btn" href="/login">Log in</a>
+  <% } else { %>
+    <a class="login-btn logout-link">Log out</a>
+  <% } %>
   <div class="cover-content">
     <img src="/assets/labfnp/img/img.index/logo-with-texts.png" alt="" />
     <div class="button-group">

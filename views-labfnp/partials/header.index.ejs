@@ -30,7 +30,7 @@
           <% } %>
           <li class="<%= (req.path=='/login')?'active':'' %>"><a id="login" href="/login<%= loginBackUrl %>">登入</a></li>
         <% } else { %>
-          <li><a id="logout-link" href="#" >登出</a></li>
+          <li><a id="logout-link" class="logout-link" href="#" >登出</a></li>
           <li class="<%= (req.path=='/me')?'active':'' %>" >
             <a href="/me">
               <%= req.session.passport.user.displayName %>
@@ -44,7 +44,7 @@
 
 
 <% LayoutUtils.addScriptBlock(`
-  $('#logout-link').click(function(){
+  $('.logout-link').click(function(){
     swal({
       title: '確認',
       text: '您確定要登出了嗎？',
