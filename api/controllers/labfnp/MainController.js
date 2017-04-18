@@ -3,6 +3,12 @@ import moment from 'moment';
 
 module.exports = {
 
+  index: async (req, res) => {
+    res.view('index', {
+      layout: 'layout.index'
+    });
+  },
+
   explore: async function(req, res) {
     try {
       const { userId } = req.query;

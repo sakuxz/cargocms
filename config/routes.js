@@ -149,9 +149,7 @@ var defaultConfig = {
 };
 
 module.exports.routes = {
-  '/': {
-    view: 'index'
-  },
+  '/': 'labfnp/MainController.index',
   ...customConfig,
   ...defaultConfig,
   "/admin/:controller/:action/:id?": {},
