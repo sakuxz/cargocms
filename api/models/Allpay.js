@@ -27,7 +27,12 @@ module.exports = {
       type: Sequelize.DATE,
       get: function () {
         try {
-          return moment(new Date(this.getDataValue('PaymentDate'))).format("YYYY/MM/DD HH:mm:SS");
+          let PaymentDate = this.getDataValue('PaymentDate');
+          if (PaymentDate) {
+            return moment(new Date(PaymentDate)).format("YYYY/MM/DD HH:mm:SS");
+          } else {
+            return '';
+          }
         } catch (e) {
           sails.log.error(e);
         }
@@ -60,6 +65,18 @@ module.exports = {
     // 過期日期
     ExpireDate: {
       type: Sequelize.STRING(20),
+      get: function () {
+        try {
+          let ExpireDate = this.getDataValue('ExpireDate');
+          if (ExpireDate) {
+            return moment(new Date(ExpireDate)).format("YYYY/MM/DD 23:59:59");
+          } else {
+            return '';
+          }
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
     },
     // 支付交易編號
     PaymentNo: {

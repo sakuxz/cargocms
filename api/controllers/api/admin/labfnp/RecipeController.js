@@ -201,21 +201,27 @@ module.exports = {
         description: '香水描述',
         message: '額外資訊',
         scent0: '香味分子 1',
+        scentFeeling0: '香味分子 1 感覺',
         scentml0: '香味分子 1 滴數',
         scentPercent0: '香味分子 1 比例',
         scent1: '香味分子 2',
+        scentFeeling1: '香味分子 2 感覺',
         scentml1: '香味分子 2 滴數',
         scentPercent1: '香味分子 2 比例',
         scent2: '香味分子 3',
+        scentFeeling2: '香味分子 3 感覺',
         scentml2: '香味分子 3 滴數',
         scentPercent2: '香味分子 3 比例',
         scent3: '香味分子 4',
+        scentFeeling3: '香味分子 4 感覺',
         scentml3: '香味分子 4 滴數',
         scentPercent3: '香味分子 4 比例',
         scent4: '香味分子 5',
+        scentFeeling4: '香味分子 5 感覺',
         scentml4: '香味分子 5 滴數',
         scentPercent4: '香味分子 5 比例',
         scent5: '香味分子 6',
+        scentFeeling5: '香味分子 6 感覺',
         scentml5: '香味分子 6 滴數',
         scentPercent5: '香味分子 6 比例',
       }
@@ -235,6 +241,10 @@ module.exports = {
               formatted[`scent${index}`] = `${formula.scent}`;
               formatted[`scentml${index}`] = `${formula.drops}`;
               formatted[`scentPercent${index}`] = Math.ceil(formula.drops / data.formulaTotalDrops * 10000)/10000;
+            }
+            formatted[`scentFeeling${index}`] = '';
+            if(data.createdBy === 'feeling' && formula.feeling ) {
+              formatted[`scentFeeling${index}`] = formula.feeling;
             }
           });
           return formatted;

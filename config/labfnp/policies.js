@@ -30,5 +30,6 @@ module.exports = {
   },
   'api/admin/labfnp/FeelingController': {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
+    'find': ['passport', 'sessionAuth'],
   }
 }

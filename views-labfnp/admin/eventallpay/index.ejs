@@ -45,6 +45,7 @@
 			<th width="12%" data-hide="phone"><i class="fa fa-fw text-muted hidden-sm hidden-xs"/> 金流交易編號 </th>
       <th data-hide="always" class="hide">交易訊息</th>
       <th width="9%" data-hide="always">付款時間</th>
+      <th data-hide="always" class="hide">付款截止日期</th>
       <th width="8%" class="no-sort no-over" data-hide="always">付款方式</th>
       <th width="5%" data-hide="always">金額</th>
       <th data-hide="always" class="hide">付款帳號</th>
@@ -123,6 +124,7 @@
       { "data": "TradeNo"}, //TradeNo
       { "data": "RtnMsg" },
       { "data": "PaymentDate" }, //PaymentDate
+      { "data": "ExpireDate" }, //ExpireDate
       { "data": "PaymentTypeDesc" },
       { "data": "TradeAmt" },
       { "data": "vAccount" },
@@ -181,7 +183,7 @@
       },
       {
         "searchable": false,
-        "targets": 5,
+        "targets": 6,
         "render": function(data, type, row) {
           var data = data || ""
           return '<td><p class="textOver">' + data +'</p></td>';
@@ -189,11 +191,11 @@
       },
       {
         "searchable": false,
-        "targets": 8
+        "targets": 9
       },
       {
         "searchable": false,
-        "targets": 9,
+        "targets": 10,
         "render": function(data, type, row) {
           if(data.EventOrder && data.EventOrder.Event && data.EventOrder.Event.Post){
             return '<td><p class="textOver">' + data.EventOrder.Event.Post.title + '</p></td>';
@@ -203,7 +205,7 @@
       },
       {
         "searchable": false,
-        "targets": 10,
+        "targets": 11,
         "render": function(data, type, row) {
           if(data.EventOrder){
             return '<td>' + data.EventOrder.recipient + '</td>';
@@ -213,7 +215,7 @@
       },
 			{
         "searchable": false,
-        "targets": 11,
+        "targets": 12,
         "render": function (data, type, row) {
           // return '<td>' + data.RecipeOrder.productionStatusDesc + '</td>';
           if(row.EventOrder){
@@ -236,14 +238,10 @@
       },
       {
         "searchable": false,
-        "targets": 12,
+        "targets": 13,
         "render": function(data, type, row) {
           return '<td>' + data +'</td>';
         }
-      },
-      {
-        "searchable": false,
-        "targets": 13
       },
       {
         "searchable": false,
@@ -255,17 +253,21 @@
       },
       {
         "searchable": false,
-        "targets": 16,
+        "targets": 16
+      },
+      {
+        "searchable": false,
+        "targets": 17,
         "render": function ( data, type, row ) {
           return '<td>'+ row.createdDateTime.dateTime +'</td>'
         }
       },
       {
         "searchable": false,
-        "targets": 17
+        "targets": 18
       },
 			{
-				"targets"  : 18,
+				"targets"  : 19,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {

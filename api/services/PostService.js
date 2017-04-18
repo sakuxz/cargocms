@@ -80,7 +80,10 @@ module.exports = {
         deleteEventPost.push(
           Event.update({PostId: null}, {
             where: {
-              id: { $notIn: id }
+              PostId: postId,
+              id: {
+                $notIn: id
+              }
             }
           })
         );
