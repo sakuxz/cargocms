@@ -90,4 +90,19 @@
     alignContent();
     $(window).on('resize', alignContent);
   })
+
+  $(function () {
+    $('.scroll-to-content').click(function () {
+      $('html, body').animate({
+        scrollTop: $('.feature-block').offset().top - 50
+      }, 800);
+    });
+    $('.scroll-to-map').click(function () {
+      var offset = $('.lfp-map').offset().top > $('.xs-location-info').offset().top ?
+        $('.lfp-map').offset().top : $('.xs-location-info').offset().top - 30;
+      $('html, body').animate({
+        scrollTop: offset - 50
+      }, 800);
+    });
+  })
 </script>
