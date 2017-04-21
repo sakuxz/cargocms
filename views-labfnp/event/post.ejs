@@ -13,10 +13,14 @@
     font-family: 'FontAwesome';
     content: "\f077"; /* fa-chevron-up */
   }
-  
+
   .ng-binding {
     margin-top: 5px;
     margin-left: 5px;
+  }
+
+  .accordian-body {
+    padding-top: 10px;
   }
 </style>
 
@@ -59,7 +63,7 @@
               <th></th>
 							<th>票券名稱</th>
 							<th class="hidden-sm">發售狀態</th>
-							<th>票價</th>
+							<th >票價</th>
 							<th>訂購</th>
 
 						</tr>
@@ -71,8 +75,8 @@
                 <td>
                   <%= Event.title %>
                 </td>
-  							<td><%= Event.signupCount + "/" + Event.limit %></td>
-  							<td class="hidden-sm"><%= Event.price %></td>
+  							<td class="hidden-sm"><%= Event.signupCount + "/" + Event.limit %></td>
+  							<td><%= Event.price %></td>
                 <% if (Event.open){ %>
                   <td><a href="/event/order/<%= Event.id %>" data-id="<%= Event.id %>" class="btn btn-success btn-xs"><%= Event.status %></a></td>
                 <% } else { %>
@@ -83,6 +87,24 @@
               <tr>
                   <td colspan="5" class="hiddenRow">
                     <div class="accordian-body collapse" id="event<%= Event.id %>">
+                      <div>
+                          <b>票券名稱：</b>
+                      </div>
+                      <p class="ng-binding">
+                          <%= Event.title %>
+                      </p>
+                      <div>
+                          <b>發售狀態：</b>
+                      </div>
+                      <p class="ng-binding">
+                          <%= Event.signupCount + "/" + Event.limit %>
+                      </p>
+                      <div>
+                          <b>票價：</b>
+                      </div>
+                      <p class="ng-binding">
+                          <%= Event.price %>
+                      </p>
                       <div>
                           <b>票券名稱：</b>
                       </div>
