@@ -45,6 +45,9 @@ body {
     &.loaded {
       opacity: 1;
     }
+    iframe {
+      max-width: 1440px;
+    }
   }
   .login-btn {
     position: absolute;
