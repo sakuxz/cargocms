@@ -104,5 +104,11 @@
         scrollTop: offset - 50
       }, 800);
     });
+    $('.feature-box').click(function () {
+      var offset = $($(this).data('target')).offset().top;
+      $('html, body').animate({
+        scrollTop: offset - 50
+      }, 800);
+    });
   })
 </script>
