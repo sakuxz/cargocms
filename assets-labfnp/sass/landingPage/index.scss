@@ -61,6 +61,11 @@ body {
     color: #FFFFFF;
     border-radius: 3px;
     text-decoration: none;
+    transition: 0.2s;
+    &:hover {
+      background: #FFFFFF;
+      color: #222;
+    }
     @media screen and (max-width: 991px) and (min-width: 768px) {
       right: 30px;
     }
@@ -109,6 +114,10 @@ body {
       .btn-brown {
         background-color: #98795D;
         color: white;
+        transition: 0.2s;
+        &:hover {
+          background-color: #7f654d;
+        }
       }
       button {
         margin: 0 9px;
@@ -156,7 +165,8 @@ body {
   }
   .feature-box {
     margin: 0 32px;
-    padding: 35px 0 32px;
+    min-height: 233px;
+    padding: 35px 0 24px;
     background: #FFFFFF;
     box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
     border-radius: 2px;
@@ -196,6 +206,7 @@ body {
 }
 
 .value-block {
+  position: relative;
   padding: 20px 47px 90px;
   @media screen and (max-width: 991px) and (min-width: 768px) {
     padding-left: 26px;
@@ -218,6 +229,18 @@ body {
     line-height: 27px;
     color: #94795B;
     letter-spacing: 0;
+  }
+  .fb-like {
+    position: absolute;
+    top: 17px;
+    left: 38em;
+    @media screen and (max-width: 1199px) {
+      left: 34em;
+    }
+    @media screen and (max-width: 767px) {
+      position: static;
+      margin-top: 1.5em;
+    }
   }
 }
 
