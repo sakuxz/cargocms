@@ -70,8 +70,8 @@ body {
       right: 30px;
     }
     @media screen and (max-width: 767px) {
-      top: 24px;
-      right: 16px;
+      top: 29px;
+      right: 34px;
     }
   }
   .cover-content {
@@ -92,8 +92,8 @@ body {
       @media screen and (max-width: 767px) {
         float: none;
         display: block;
-        max-width: 92%;
-        margin: 0 auto 28px;
+        max-width: 78%;
+        margin: 0 auto 23px;
       }
     }
     .button-group {
@@ -119,8 +119,16 @@ body {
           background-color: #7f654d;
         }
       }
+      @media screen and (max-width: 767px) {
+        a {
+          letter-spacing: 7.9px !important;
+        }
+        .btn {
+          font-size: 12px;    
+        }
+      }
       button {
-        margin: 0 9px;
+        margin: 0 8px;
       }
     }
     .slogan {
@@ -134,12 +142,13 @@ body {
       text-align: right;
       letter-spacing: 0.26px;
       color: #E3C399;
+      text-align: center;
       @media screen and (max-width: 991px) and (min-width: 768px) {
         margin-right: 30px;
       }
       @media screen and (max-width: 767px) {
-        margin-right: 0.8em;
-        margin-bottom: 2.5em;
+        margin-right: 32px;
+        margin-bottom: 1.2em;
       }
     }
   }
