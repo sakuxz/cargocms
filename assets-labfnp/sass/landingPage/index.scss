@@ -6,6 +6,7 @@ body {
   max-width: 1440px;
   margin: auto;
   box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.22);
+  font-family: 'Noto Sans TC',"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .cover-wrapper {
@@ -116,7 +117,7 @@ body {
       right: 0;
       margin-bottom: 50px;
       margin-right: 49px;
-      font-family: 'Bell MT', 'Lora', serif;
+      font-family: 'Bell MT Bold', 'Bell MT', 'Lora', serif;
       font-size: 16px;
       text-align: right;
       letter-spacing: 0.26px;
@@ -185,7 +186,7 @@ body {
     p {
       margin: 0;
       font-size: 14px;
-      color: #000000;
+      color: #94795B;
       line-height: 19px;
     }
   }
@@ -212,7 +213,7 @@ body {
   p {
     font-size: 16px;
     line-height: 27px;
-    color: #000000;
+    color: #94795B;
     letter-spacing: 0;
   }
 }
@@ -410,7 +411,7 @@ body {
     margin: 0;
     margin-top: 140px;
     white-space: nowrap;
-    font-family: 'Bell MT', 'Lora', serif;
+    font-family: 'Bell MT Bold', 'Bell MT', 'Lora', serif;
     font-size: 42.59px;
     color: #BB9F73;
     letter-spacing: 0.01px;
@@ -436,7 +437,7 @@ body {
     &:before {
       content: '';
       position: absolute;
-      top: 7px;
+      top: 3px;
       left: -24px;
       display: block;
       width: 6.9px;
