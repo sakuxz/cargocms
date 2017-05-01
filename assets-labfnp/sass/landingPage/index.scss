@@ -667,9 +667,9 @@ hr.divider {
     background: rgba(148, 121, 91, 1);
   }
   &-no-dot {
-    top: 1px;
+    top: 0;
     z-index: 0;
-    height: 5px;
+    height: 2px;
     border: none;
     background: url('/assets/labfnp/img/img.index/dotted-line.png');
     background-repeat: repeat-x;
