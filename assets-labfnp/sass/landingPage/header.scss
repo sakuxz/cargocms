@@ -10,6 +10,10 @@
   opacity: 0;
   transform: translateY(-8px);
 
+  .navbar-toggle:hover, .navbar-toggle:focus {
+    background-color: #fff7f7;
+  }
+
   &.show {
     visibility: visible;
     opacity: 1;
