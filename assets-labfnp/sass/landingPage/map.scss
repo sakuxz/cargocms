@@ -3,8 +3,15 @@
     float: left;
     width: 150px;
     margin: 0 15px 0 0;
+    @media screen and (max-width: 991px) {
+      display: none;
+    }
   }
   &-content {
+    @media screen and (max-width: 991px) {
+      margin-left: 0;
+      padding-bottom: 2.5em;
+    }
     margin-left: 165px;
     h2 {
       font-weight: bold;
@@ -44,6 +51,10 @@
       cursor: pointer;
 
       transition: 0.3s;
+      @media screen and (max-width: 991px) {
+        width: 221px;
+        padding-left: 15px;
+      }
       span:last-child {
         border-left: 2px solid #94795B;
         padding-left: 1em;
