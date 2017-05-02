@@ -10,6 +10,10 @@
   opacity: 0;
   transform: translateY(-8px);
 
+  .navbar-toggle:hover, .navbar-toggle:focus {
+    background-color: #fff7f7;
+  }
+
   &.show {
     visibility: visible;
     opacity: 1;
@@ -17,6 +21,8 @@
   }
 
   .navbar-brand {
+    height: 55px;
+    padding-top: 22px;
     font-size: 1.8em;
     font-weight: 600;
     font-family: 'Bell MT Bold', 'Bell MT', 'Lora', serif;
@@ -30,7 +36,7 @@
   .navbar-nav > li > a {
     padding-top: 20px;
     font-size: 14px;
-    color: #4A4A4A;
+    color: #4A4A4A !important;
   }
 
   .navbar-nav > li > a:hover,

@@ -1,0 +1,55 @@
+body {
+  font-family: 'Noto Sans TC',"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.LFP-navbar {
+  background: #FBEFEF;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  .header {
+    height: 55px;
+    background: #FBEFEF;
+    border: none;
+    > .container {
+      margin-bottom: -46px;
+    }
+    .navbar-collapse {
+      @media screen and (max-width: 991px) {
+        background: #FBEFEF;
+        position: relative;
+        top: 46px;
+      }
+      .container {
+        padding: 0;
+      }
+    }
+    .logo {
+      position: relative;
+      top: 5px;
+      height: 55px;
+      color: #604C3F;
+      font-size: 25.2px;
+      font-weight: 600;
+      font-family: 'Bell MT Bold', 'Bell MT', 'Lora', serif;
+      text-decoration: none;
+    }
+    .navbar-nav {
+      li {
+        a {
+          padding-left: 15px;
+          padding-right: 15px;
+          padding-bottom: 11px;
+          color: #4A4A4A !important;
+          background: transparent !important;
+          font-size: 14px;
+          cursor: pointer;
+        }
+        &.active a, &:hover a {
+          border-bottom-color: #615A54;
+          &:focus {
+            color: #4A4A4A !important;
+          }
+        }
+      }
+    }
+  }
+}
