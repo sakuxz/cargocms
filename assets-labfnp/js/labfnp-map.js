@@ -175,9 +175,9 @@ var mapTheme = [
     }
 ]
 
-// $.fn.tinyMapConfigure({
-//   'key': 'Google Maps API KEY'
-// });
+$.fn.tinyMapConfigure({
+  'key': googleMapKey
+});
 
 var init = false;
 
