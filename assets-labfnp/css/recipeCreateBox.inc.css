@@ -63,15 +63,13 @@ section.description, section.mode, section.title {
   border-bottom: 0;
 }
 
-.box-byFeeling img {
-  -webkit-box-shadow: 0 0 5px 5px rgba(129, 103, 75, 0.5);
-  -moz-box-shadow: 0 0 5px 5px rgba(129, 103, 75, 0.5);
-  box-shadow: 0 0 5px 5px rgba(129, 103, 75, 0.5);
+.box-byFeeling .img-wrapper a {
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
 }
 
 .box-byFeeling label {
   font-weight: bold;
-  color: #6f0f0f;
+  color: #604C3F;
 }
 
 .box-byScent {
@@ -89,14 +87,26 @@ section.description, section.mode, section.title {
   opacity: 1;
 }
 
-.img-wrapper:hover {
+.img-wrapper:hover a {
   opacity: 0.7;
-  background-color: rgba(129, 103, 75, 0.5);
+  box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.30);
+}
+
+.img-wrapper a {
+  display: block;
+  width: 200px;
+  height: 200px;
+  padding-top: 2.3em;
+  text-align: center;
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  transition: 0.2s;
 }
 
 .img-wrapper img {
-  width: 200px;
-  height: 200px;
+  height: 80px;
 }
 
 article.description {
