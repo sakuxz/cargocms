@@ -1,0 +1,11 @@
+@import "landingPage/_mixin";
+@import "landingPage/swiper.min";
+@import "landingPage/header";
+@import "landingPage/footer";
+@import "landingPage/index";
+@import "landingPage/map";
+
+
+.remove {
+  @include gg();
+}

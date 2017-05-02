@@ -1,0 +1,48 @@
+.LFP-navbar {
+  max-width: 1440px;
+  margin: auto;
+  background: #FBEFEF;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+
+  transition: 0.2s all ease-in;
+  will-change: transform;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+
+  .navbar-toggle:hover, .navbar-toggle:focus {
+    background-color: #fff7f7;
+  }
+
+  &.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .navbar-brand {
+    height: 55px;
+    padding-top: 22px;
+    font-size: 1.8em;
+    font-weight: 600;
+    font-family: 'Bell MT Bold', 'Bell MT', 'Lora', serif;
+    color: #604C3F;
+    img {
+      height: 18px;
+      margin-top: 4px;
+    }
+  }
+
+  .navbar-nav > li > a {
+    padding-top: 20px;
+    font-size: 14px;
+    color: #4A4A4A !important;
+  }
+
+  .navbar-nav > li > a:hover,
+  .navbar-nav > li.active > a {
+    padding-bottom: 11px;
+    border-bottom: 4px solid #615A54;
+    background: transparent !important;
+  }
+}
