@@ -1,5 +1,5 @@
 body {
-  font-family: 'Noto Sans TC',"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Noto Sans TC Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .LFP-navbar {
@@ -13,6 +13,7 @@ body {
       margin-bottom: -46px;
     }
     .navbar-collapse {
+      font-family: "Noto Sans TC DemiLight", "Helvetica Neue", Helvetica, Arial, sans-serif; 
       @media screen and (max-width: 991px) {
         background: #FBEFEF;
         position: relative;
@@ -34,6 +35,7 @@ body {
     }
     .navbar-nav {
       li {
+        font-family: 'Noto Sans TC DemiLight', "Helvetica Neue", Helvetica, Arial, sans-serif;
         a {
           padding-left: 15px;
           padding-right: 15px;
