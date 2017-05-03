@@ -180,20 +180,20 @@ article.description {
   }
   .box-content {
     background: white;
-    margin-top: -50px;
-    height: 100%;
+    margin-top: -60px;
+    height: calc(100% - 100px);
   }
   .img-wrapper {
-    width: 180px;
-    /*padding: 0;*/
+    width: 150px;
+    padding: 0;
   }
   .img-wrapper h2{
   font-size: 13px;
   margin: 5px 0 -3px;
   }
   .img-wrapper a {
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
     padding-top: 0.8em;
   }
   .img-wrapper img {
