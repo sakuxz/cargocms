@@ -38,6 +38,14 @@ article.title {
   margin-bottom: 10px;
 }
 
+article.title h2 {
+  font-family: 'Noto Sans TC', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+article.title label {
+  font-family: 'Noto Sans TC Light', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 #btn-cancel {
   opacity: 0.5;
   background-color: transparent;
@@ -49,7 +57,9 @@ article.title {
   opacity: 1;
 }
 
-section.description, section.mode, section.title {
+section.description,
+section.mode,
+section.title {
   padding-left: 60px;
   padding-right: 60px;
 }
@@ -69,16 +79,17 @@ section.description, section.mode, section.title {
 
 .box-byFeeling label {
   font-weight: bold;
-  color: #604C3F;
+  color: #94795B;
 }
 
-.box-byScent {
+
+/*.box-byScent {
   opacity: 0.8;
 }
 
 .box-byScent:hover {
   opacity: 1;
-}
+}*/
 
 .img-wrapper {
   text-align: center;
@@ -87,9 +98,26 @@ section.description, section.mode, section.title {
   opacity: 1;
 }
 
-.img-wrapper:hover a {
-  opacity: 0.7;
-  box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.30);
+.img-wrapper img {
+  height: 80px;
+}
+
+.img-wrapper h2 {
+  position: relative;
+  left: 2.5px;
+  margin: 11px 0 -3px;
+  font-size: 16px;
+  color: #533D3D;
+  letter-spacing: 5px;
+  font-family: 'Noto Sans TC', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.img-wrapper p {
+  margin: 0;
+  font-size: 12px;
+  color: #94795B;
+  line-height: 19px;
+  font-family: 'Noto Sans TC Light', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .img-wrapper a {
@@ -105,8 +133,23 @@ section.description, section.mode, section.title {
   transition: 0.2s;
 }
 
-.img-wrapper img {
-  height: 80px;
+.img-wrapper+label {
+  font-family: 'Noto Sans TC Light', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-
+}
+
+.box-byFeeling .img-wrapper:hover a {
+  opacity: 0.7;
+  box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.30);
+}
+
+.box-byScent .img-wrapper a {
+  opacity: 0.5;
+}
+
+.box-byScent .img-wrapper a:hover {
+  opacity: 1;
+  box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.30);
 }
 
 article.description {
