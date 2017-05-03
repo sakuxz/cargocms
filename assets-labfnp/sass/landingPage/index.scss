@@ -6,7 +6,15 @@ body {
   max-width: 1440px;
   margin: auto;
   box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.22);
-  font-family: 'Noto Sans TC',"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Noto Sans TC Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  h1,
+  h2,
+  h3 {
+    font-family: "Noto Sans TC Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  p {
+    font-family: "Noto Sans TC Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
 }
 
 .cover-wrapper {
@@ -110,21 +118,33 @@ body {
         float: none;
         text-align: center;
         margin: auto;
+        padding-right: 8px;
       }
       .btn-brown {
         background-color: #98795D;
         color: white;
         transition: 0.2s;
+        font-family: "Noto Sans TC DemiLight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        @media screen and (max-width: 767px) {
+          width: 38%;
+        }
         &:hover {
           background-color: #7f654d;
         }
       }
+      .view-more {
+        font-family: 'Bell MT Bold', 'Bell MT', 'Lora', serif;
+        line-height: 24px;
+        height: 34px;
+        vertical-align: middle;
+      }
+      .lab {}
       @media screen and (max-width: 767px) {
         a {
           letter-spacing: 7.9px !important;
         }
         .btn {
-          font-size: 12px;    
+          font-size: 12px;
         }
       }
       button {
@@ -138,7 +158,7 @@ body {
       margin-bottom: 30px;
       margin-right: 55px;
       font-family: 'Bell MT Bold', 'Bell MT', 'Lora', serif;
-      font-size: 16px;
+      font-size: 14px;
       text-align: right;
       letter-spacing: 0.26px;
       color: #E3C399;
@@ -174,6 +194,7 @@ body {
     }
   }
   .feature-box {
+    cursor: pointer;
     margin: 0 32px;
     min-height: 233px;
     padding: 35px 0 24px;
@@ -280,7 +301,7 @@ body {
   }
   transform: skewY(-3deg);
   overflow: hidden;
-  background: #605a54;
+  // background: #605a54;
   .swiper-container {
     width: 100%;
     height: 600px;
@@ -385,7 +406,7 @@ body {
   }
   &-link {
     display: block;
-    margin-top: 14.5px;
+    margin-top: 23.5px;
     height: 28px;
     width: auto !important;
   }
@@ -451,11 +472,13 @@ body {
     font-size: 42.59px;
     color: #BB9F73;
     letter-spacing: 0.01px;
-    text-shadow: 0 0 2px rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 15px rgb(255, 255, 255);
     @media screen and (max-width: 1250px) {
+      margin-bottom: 1.5em;
       margin-top: 93px;
     }
     @media screen and (max-width: 767px) {
+      margin-bottom: 1em;
       float: none !important;
       display: inline-block !important;
       margin-bottom: 0 !important;
@@ -473,16 +496,27 @@ body {
     &:before {
       content: '';
       position: absolute;
-      top: 4px;
+      top: 2px;
       left: -24px;
       display: block;
       width: 6.9px;
       height: 100%;
-      height: calc(100% - 0.45em);
+      height: calc(100% - 0.41em);
       background: #BB9F73;
       @media screen and (max-width: 767px) {
         top: 2px;
       }
+    }
+  }
+  .intro-title-2 {
+    @media screen and (max-width: 1250px) {
+      margin-bottom: 1.5em;
+    }
+    @media screen and (min-width: 1500px) {
+      margin-bottom: 1.5em;
+    }
+    @media screen and (max-width: 767px) {
+      margin-bottom: 1em;
     }
   }
   .intro-content {
@@ -504,6 +538,8 @@ body {
       font-size: 16px;
       color: #604C3F;
       letter-spacing: 16px;
+      height: 24px;
+      margin-bottom: 4px !important;
     }
     p {
       font-size: 12px;
@@ -521,6 +557,7 @@ body {
       margin: 66px auto 28px;
     }
     h3 {
+      font-family: "Noto Sans TC DemiLight", "Helvetica Neue", Helvetica, Arial, sans-serif;
       width: 630px;
       max-width: 90%;
       margin: 0 auto;
@@ -589,6 +626,7 @@ body {
         font-size: 14px;
         letter-spacing: 2px;
         color: #604C3F;
+        padding-bottom: 1px;
       }
       &:before {
         height: calc(100% - 0.2em);
@@ -648,7 +686,7 @@ body {
 hr.divider {
   position: relative;
   z-index: 2;
-  margin: -3.5px auto 0;
+  margin: -2.0px auto 0;
   width: 70%;
   transform: rotate(-3deg);
   // border-top: 3px dotted #94795b;
@@ -701,15 +739,16 @@ hr.divider {
     margin-bottom: 26px;
     padding: 14px 20px 17px;
     background-color: #FBEFEF;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.50);
     font-size: 18px;
     color: #94795B;
-    > span:first-child {
+    >span:first-child {
       margin-right: 1em;
       padding-right: 0.8em;
       border-right: 1px solid #94795B;
     }
-    > a, > time {
+    >a,
+    >time {
       font-size: 14px;
       font-weight: 300;
       display: block;

@@ -8,12 +8,14 @@
     }
   }
   &-content {
+    font-family: "Noto Sans TC Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
     @media screen and (max-width: 991px) {
       margin-left: 0;
       padding-bottom: 2.5em;
     }
     margin-left: 165px;
     h2 {
+      font-family: "Noto Sans TC", "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-weight: bold;
       padding-top: 8px;
     }
@@ -32,6 +34,7 @@
 .map-wrapper {
   position: relative;
   .map-locations {
+    font-family: "Noto Sans TC DemiLight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
