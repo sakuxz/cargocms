@@ -44,6 +44,7 @@ article.title h2 {
 
 article.title label {
   font-family: 'Noto Sans TC Light', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
 }
 
 #btn-cancel {
@@ -78,7 +79,7 @@ section.title {
 }
 
 .box-byFeeling label {
-  font-weight: bold;
+  font-weight: normal;
   color: #94795B;
 }
 
@@ -135,7 +136,7 @@ section.title {
 
 .img-wrapper+label {
   font-family: 'Noto Sans TC Light', "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-
+  font-weight: normal;
 }
 
 .box-byFeeling .img-wrapper:hover a {
@@ -182,8 +183,21 @@ article.description {
     margin-top: -50px;
     height: 100%;
   }
+  .img-wrapper {
+    width: 180px;
+    /*padding: 0;*/
+  }
+  .img-wrapper h2{
+  font-size: 13px;
+  margin: 5px 0 -3px;
+  }
+  .img-wrapper a {
+    width: 180px;
+    height: 180px;
+    padding-top: 0.8em;
+  }
   .img-wrapper img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
   }
 }
