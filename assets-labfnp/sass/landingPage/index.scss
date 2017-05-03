@@ -125,6 +125,9 @@ body {
         color: white;
         transition: 0.2s;
         font-family: "Noto Sans TC DemiLight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        line-height: 24px;
+        height: 34px;
+        vertical-align: middle;
         @media screen and (max-width: 767px) {
           width: 38%;
         }
@@ -134,9 +137,9 @@ body {
       }
       .view-more {
         font-family: 'Bell MT Bold', 'Bell MT', 'Lora', serif;
-        line-height: 24px;
-        height: 34px;
-        vertical-align: middle;
+        // line-height: 24px;
+        // height: 34px;
+        // vertical-align: middle;
       }
       .lab {}
       @media screen and (max-width: 767px) {
@@ -239,6 +242,7 @@ body {
 .value-block {
   position: relative;
   padding: 20px 47px 90px;
+  font-family: "Noto Sans TC DemiLight", "Helvetica Neue", Helvetica, Arial, sans-serif;
   @media screen and (max-width: 991px) and (min-width: 768px) {
     padding-left: 26px;
   }
@@ -477,6 +481,10 @@ body {
       margin-bottom: 1.5em;
       margin-top: 93px;
     }
+    @media screen and (max-width: 1500px) {
+      margin-bottom: 1.5em;
+      margin-top: 93px;
+    }
     @media screen and (max-width: 767px) {
       margin-bottom: 1em;
       float: none !important;
@@ -513,7 +521,7 @@ body {
       margin-bottom: 1.5em;
     }
     @media screen and (min-width: 1500px) {
-      margin-bottom: 1.5em;
+      margin-bottom: 2em;
     }
     @media screen and (max-width: 767px) {
       margin-bottom: 1em;
