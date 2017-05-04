@@ -184,20 +184,25 @@ article.description {
     height: calc(100% - 100px);
   }
   .img-wrapper {
-    width: 150px;
+    width: 140px;
     padding: 0;
-  }
-  .img-wrapper h2{
-  font-size: 13px;
-  margin: 5px 0 -3px;
-  }
-  .img-wrapper a {
-    width: 150px;
-    height: 150px;
-    padding-top: 0.8em;
+    margin-bottom: 5px;
   }
   .img-wrapper img {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
+  }
+  .img-wrapper h2 {
+    font-size: 1em;
+    margin: 0px 0 -3px;
+  }
+  .img-wrapper p {
+    visibility: hidden;
+  }
+  .img-wrapper a {
+    width: 140px;
+    height: 140px;
+    padding-top: 30px;
+    opacity: 1;
   }
 }
