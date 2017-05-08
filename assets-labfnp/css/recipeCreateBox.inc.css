@@ -157,7 +157,7 @@ article.description {
   padding: 10px;
 }
 
-@media (max-width: 990px) {
+@media (max-width: 991px) {
   .box-wrapper {
     background: white;
   }
@@ -186,7 +186,7 @@ article.description {
   .img-wrapper {
     width: 140px;
     padding: 0;
-    margin-bottom: 5px;
+    margin-bottom: 18px;
   }
   .img-wrapper img {
     width: 70px;
@@ -202,7 +202,7 @@ article.description {
   .img-wrapper a {
     width: 140px;
     height: 140px;
-    padding-top: 30px;
+    padding-top: 23px;
     opacity: 1;
   }
 }
