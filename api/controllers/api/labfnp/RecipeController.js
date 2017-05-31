@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 module.exports = {
 
   findForLab: async (req, res) => {
@@ -47,6 +49,9 @@ module.exports = {
         data.UserId = loginedUser.id;
       }
       sails.log.info('create recipe controller=>', data);
+      if (!_.isArray(data.formula)) {
+        throw new Error('required param formula as an array!');
+      }
       const recipe = await RecipeService.create(data);
       await RecipeService.createUserFeeling({
         formula: data.formula,
