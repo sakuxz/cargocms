@@ -1,5 +1,6 @@
 import moment from 'moment';
 import axios from 'axios';
+import _ from 'lodash';
 
 module.exports = {
 
@@ -35,4 +36,20 @@ module.exports = {
       throw e
     }
   },
+
+  checkRequiredParams(requiredArray) {
+    try {
+      requiredArray.forEach((param, i) => {
+        const key = Object.keys(requiredArray[i]).toString();
+        const item = requiredArray[i][key];
+        if (_.isNil(item)) {
+          throw new Error(`No required param '${key}' was entered.`);
+        }
+      });
+      return true;
+    } catch (e) {
+      throw e;
+    }
+  },
+
 }
