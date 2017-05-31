@@ -22,7 +22,8 @@ var defaultConfig = {
   '*': ['nocache', 'passport', 'sessionAuth'],
   'AuthController': {
     '*': ['passport'],
-    'status': [],
+    status: [],
+    callback: ['passport', 'jwtEncode'],
   },
   ...customConfig,
   'BlogController': {
