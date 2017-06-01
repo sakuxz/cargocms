@@ -20,7 +20,7 @@ module.exports = {
       res.ok({
         //layout: false,
         user,
-        error: req.flash('error'),
+        errors: req.flash('error'),
         url: req.query.url || '/lab',
       });
     } catch (e){
@@ -74,7 +74,7 @@ module.exports = {
 
       res.ok({
         user,
-        error: req.flash('error'),
+        errors: req.flash('error'),
         reCAPTCHAKey: sails.config.reCAPTCHA.key,
         url: req.query.url || '/lab',
       });

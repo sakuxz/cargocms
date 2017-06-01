@@ -60,6 +60,11 @@ em.invalid{
           <p>如果已經註冊帳號，請直接<a href="/login" class="color-green">登入</a>即可。</p>
         </div>
 
+        <% var error = data.error[0]; %>
+        <% if(error === 'the email or user name has been registered.' ){ %>
+            <div class="alert alert-warning" role="alert"> 此 Email 或使用者名稱已被註冊，請更換後重試！</div>
+        <% }%>  
+
         <div class="row">
           <div class="col-sm-6">
             <label>姓氏 <span class="color-red">*</span></label>
@@ -77,22 +82,12 @@ em.invalid{
             <input type="text" name="email" value="<%= data.user.email %>" class="form-control margin-bottom-20">
           </div>
         </div>
-
-        <% var error = data.errors[0]; %>
-        <% if(error === 'email must be unique' ){ %>
-            <div class="alert alert-warning" role="alert"> 此 Email 已被註冊，請更換 Email！</div>
-        <% }%>
-
         <div class="row">
           <div class="col-sm-12">
             <label>帳號 <span class="color-red">*</span></label>
             <input type="text" name="username" value="<%= data.user.username %>" class="form-control margin-bottom-20">
           </div>
         </div>
-
-        <% if(error === 'username must be unique' ){ %>
-            <div class="alert alert-warning" role="alert">此 帳號 已被使用，請更換帳號</div>
-        <% }%>
 
         <div class="row">
           <div class="col-sm-6">
@@ -149,11 +144,6 @@ em.invalid{
             <button id="submit-button" class="btn-u" type="submit">註冊</button>
           </div>
         </div>
-
-        <% var error = req.flash('error')[0]; %>
-        <% if (error) { %>
-          <div class="alert alert-warning" role="alert"><%= error %></div>
-        <% } %>
       </form>
     </div>
   </div>

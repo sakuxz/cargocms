@@ -33,7 +33,7 @@ label.error{
 <div class="container content">
   <div class="row">
     <div class="login-block col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-      <form id="registerForm" class="reg-page" method='post' action="/auth/local/register">
+      <form id="registerForm" class="reg-page" method='post' action="/auth/local/register?url=/lab">
 
         <div class="social-login">
           <ul class="list-unstyled">
@@ -99,6 +99,10 @@ label.error{
           <div class="col-lg-6 text-right">
             <button class="btn-u" type="submit">註冊</button>
           </div>
+          <% if (data.message) { %>
+            <div class="alert alert-warning" role="alert">帳號或密碼錯誤！(<%- data.message %>)</div>
+          <% } %>
+          <hr>
         </div>
       </form>
     </div>
