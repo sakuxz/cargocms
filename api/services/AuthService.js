@@ -60,7 +60,7 @@ module.exports = {
       const isWebView = AuthService.isWebView(req.headers['user-agent']);
       if ((req.session.needJwt || isWebView) && user) {
         try {
-          jwtToken = jwt.sign((user.toJSON()), 'secret');
+          jwtToken = jwt.sign((JSON.stringify(user)), 'secret');
         } catch (e) {
           sails.log.error(e);
           throw new Error(e);
