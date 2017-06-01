@@ -43,40 +43,34 @@ module.exports.bootstrap = async (cb) => {
 
     }
 
-    let adminRole = await Role.findOrCreate({
+    const adminRole = await Role.findOrCreate({
       where: {authority: 'admin'},
       defaults: {authority: 'admin'}
     });
 
-    let userRole = await Role.findOrCreate({
+    const userRole = await Role.findOrCreate({
       where: {authority: 'user'},
       defaults: {authority: 'user'}
     });
-
-    User.findOrCreate({
-      where: {
-        username: 'admin'
-      },
-      defaults: {
+    
+    const adminUser = await User.create({
         username: 'admin',
         email: 'admin@example.com',
         firstName: '李仁',
         lastName: '管'
-      }
-    }).then(function(adminUsers) {
-      Passport.findOrCreate({
-        where: {
-          provider: 'local',
-          UserId: adminUsers[0].id
-        },
-        defaults: {
-          provider: 'local',
-          password: 'admin',
-          UserId: adminUsers[0].id
-        }
-      });
-      adminUsers[0].addRole(adminRole[0]);
     });
+    
+    if (!adminUser) {
+      throw new Error('create admin user failed.');
+    }
+
+    const adminPassport = await Passport.create({
+        provider: 'local',
+        password: 'admin',
+        UserId: adminUser.id
+    });
+    await adminUser.addRole(adminRole[0]);
+    await adminUser.save();
 
 
     /*
