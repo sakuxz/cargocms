@@ -15,15 +15,13 @@ module.exports = {
         password: ''
       }
       let form = req.flash('form')[0];
-      if(form) user = form;
-
-      let url = req.query.url || '/';
+      if (form) user = form;
 
       res.ok({
         //layout: false,
         user,
-        errors: req.flash('error')[0],
-        url
+        error: req.flash('error'),
+        url: req.query.url || '/lab',
       });
     } catch (e){
       sails.log.error(e);
@@ -56,6 +54,7 @@ module.exports = {
       sails.log.error(e);
     }
   },
+
   register: async (req, res) => {
     if(req.session.authenticated) return res.redirect('/');
     try {
@@ -75,13 +74,15 @@ module.exports = {
 
       res.ok({
         user,
-        errors: req.flash('error'),
-        reCAPTCHAKey: sails.config.reCAPTCHA.key
+        error: req.flash('error'),
+        reCAPTCHAKey: sails.config.reCAPTCHA.key,
+        url: req.query.url || '/lab',
       });
     } catch (e) {
       res.serverError(e);
     }
   },
+
   status: (req, res) => {
     let authenticated = AuthService.isAuthenticated(req)
     let sessionUser = AuthService.getSessionUser(req)

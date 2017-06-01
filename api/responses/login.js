@@ -1,5 +1,6 @@
 import urlGetter from 'url';
 import _ from 'lodash';
+
 /**
  * res.login([inputs])
  *
@@ -12,14 +13,17 @@ import _ from 'lodash';
 
 module.exports = async function login(role, inputs) {
   const params = inputs || {};
-  const queryUrl = params.queryUrl === 'undefined' ? null : params.queryUrl;
+  const queryUrl = _.isNil(params.queryUrl) ? null : params.queryUrl;
+  sails.log('====================================');
+  sails.log('after login/register query url=>', queryUrl);
+  sails.log('====================================');
   params.successRedirect = queryUrl || sails.config.urls.successRedirect || '/';
-  params.siginedRedirect = queryUrl || sails.config.urls.siginedRedirect || '/user';
+  params.siginedRedirect = queryUrl || sails.config.urls.siginedRedirect || '/';
   params.invalidRedirect = sails.config.urls.invalidRedirect || '/login';
   params.shouldVerifyEmail = sails.config.verificationEmail === 'true';
 
   sails.log('====================================');
-  sails.log(`\n role=>"${role.toString().split(':')[1].replace(']', '')}"`);
+  sails.log(`\n logined role=>"${role.toString().split(':')[1].replace(']', '')}"`);
   sails.log('\n params=>\n', params);
   sails.log('====================================');
 
@@ -31,8 +35,10 @@ module.exports = async function login(role, inputs) {
     const flashError = req.flash('error')[0];
     if (err && !flashError) {
       req.flash('error', 'Error.Passport.Generic');
-    } else if (flashError) {
+    } else if (!err && flashError) {
       req.flash('error', flashError);
+    } else {
+      req.flash('error', err.message);
     }
     req.flash('form', req.body);
     let reference = '';
@@ -58,6 +64,7 @@ module.exports = async function login(role, inputs) {
       if (req.wantsJSON) {
         return res.negotiate({
           message: `Bad Request or Invalid username/password combination.(${err})`,
+          error: err.message,
         });
       }
       return tryAgain(err);
