@@ -50,7 +50,7 @@ module.exports = {
 
       FB.setAccessToken(sails.config.facebook.accessToken);
 
-      const feedUrl = "/"+sails.config.facebook.pageId+"/feed?limit=100&fields=full_picture,name,message,story,description,type,link,created_time";
+      const feedUrl = "/"+sails.config.facebook.pageId+"/feed?limit=50&fields=full_picture,name,message,story,description,type,link,created_time";
       //?fields=full_picture,name,message,story,description,type
 
       sails.log.debug('Feed URL: ' + feedUrl);
@@ -60,7 +60,8 @@ module.exports = {
             if (response && !response.error) {
               resolve(response.data)
             } else {
-              throw new Error("can not get feed data.");
+              console.log(response);
+              reject("can not get feed data.");
             }
           }
         );
