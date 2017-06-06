@@ -53,31 +53,33 @@ module.exports.bootstrap = async (cb) => {
       defaults: {authority: 'user'}
     });
 
-    User.findOrCreate({
+    let adminUser = await User.findOne({
       where: {
         username: 'admin'
-      },
-      defaults: {
+      }
+    });
+
+    if (adminUser === null) {
+      adminUser = await User.create({
         username: 'admin',
         email: 'admin@example.com',
         firstName: '李仁',
-        lastName: '管'
-      }
-    }).then(function(adminUsers) {
-      Passport.findOrCreate({
+        lastName: '管',
+      });
+      await Passport.findOrCreate({
         where: {
           provider: 'local',
-          UserId: adminUsers[0].id
+          UserId: adminUser.id
         },
         defaults: {
           provider: 'local',
           password: 'admin',
-          UserId: adminUsers[0].id
+          UserId: adminUser.id
         }
       });
-      adminUsers[0].addRole(adminRole[0]);
-    });
-
+      await adminUser.addRole(adminRole[0]);
+      await adminUser.addRole(userRole[0]);
+    }
 
     /*
      * 是否要匯入的判斷必須交給 init 定義的程式負責
