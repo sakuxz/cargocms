@@ -5,7 +5,22 @@ module.exports = {
 
   index: async (req, res) => {
     res.view('index', {
-      layout: 'layout.index'
+      layout: 'layout.index',
+      imageList: {
+        icon1: sails.config.imageList.icon1,
+        icon2: sails.config.imageList.icon2,
+        icon3: sails.config.imageList.icon3,
+        slides1: sails.config.imageList.slides1,
+        slides2: sails.config.imageList.slides2,
+        slides3: sails.config.imageList.slides3,
+        slidesm1: sails.config.imageList.slidesm1,
+        slidesm2: sails.config.imageList.slidesm2,
+        slidesm3: sails.config.imageList.slidesm3,
+        backgroundImage1: sails.config.imageList.backgroundImage1,
+        backgroundImage2: sails.config.imageList.backgroundImage2,
+        backgroundImage3: sails.config.imageList.backgroundImage3,
+        avatar: sails.config.imageList.avatar,
+      }
     });
   },
 

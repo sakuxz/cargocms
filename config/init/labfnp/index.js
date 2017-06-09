@@ -14,6 +14,8 @@ module.exports.init = async () => {
       { icon: 'home', href: '/admin/dashboard', title: '控制台', sequence: 0},
       { icon: 'wrench', href: '#', title: '資料維護', sequence: 1},
       { icon: 'puzzle-piece', href: '#', title: '實驗室', sequence: 2},
+      { icon: 'sliders', href: '#', title: '設定', sequence: 3},
+      
 
       { href: '/admin/user', title: '會員資料', sequence: 20, ParentMenuItemId: 2},
       { href: '/admin/post', title: '內容資料', sequence: 30, ParentMenuItemId: 2},
@@ -30,6 +32,7 @@ module.exports.init = async () => {
       { href: '/admin/message', title: '訊息', sequence: 140, ParentMenuItemId: 2},
       { href: '/admin/contact', title: '聯繫訊息', sequence: 150, ParentMenuItemId: 2},
       { href: '/admin/mock', title: '隨機資料表', sequence: 20, ParentMenuItemId: 3},
+      { href: '/admin/imagelist?imageList', title: '版位圖片設定', sequence: 30, ParentMenuItemId: 4},
 
     ]
 

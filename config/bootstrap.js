@@ -114,6 +114,9 @@ module.exports.bootstrap = async (cb) => {
       sails.log.error('Facebook Page ID or App ID not exist!!');
     }
 
+    await ConfigService.sync();
+    await ConfigService.load();
+
     cb();
   } catch (e) {
     sails.log.error(e.stack);

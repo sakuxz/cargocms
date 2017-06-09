@@ -128,7 +128,9 @@
 			loadScript("/assets/admin/js/plugin/datatables/dataTables.tableTools.min.js", function(){
 				loadScript("/assets/admin/js/plugin/datatables/dataTables.bootstrap.min.js", function(){
 					loadScript("/assets/admin/js/plugin/datatable-responsive/datatables.responsive.min.js", function() {
-            loadScript("/assets/admin/js/plugin/yadcf/jquery.dataTables.yadcf.js", pagefunction)
+            loadScript("/assets/admin/js/libs/lodash.min.js", function() {
+              loadScript("/assets/admin/js/plugin/yadcf/jquery.dataTables.yadcf.js", pagefunction)
+            });
           });
 				});
 			});
