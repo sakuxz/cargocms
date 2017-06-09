@@ -20,8 +20,9 @@ module.exports = {
       if (existUser) {
         throw new Error('the email or user name has been registered.');
       }
-
+      
       // create User
+      if(userData.birthday === '') delete userData.birthday
       let user = await User.create(userData);
       if (!user) {
         throw new Error('create User failed.');
