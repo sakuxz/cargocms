@@ -89,7 +89,7 @@
 				"searchable": false,
 				"render": function ( data, type, row ) {
 					if(data){
-            return `<div class="text-center"><img width="60" src='${data}'/></div>`;
+            return `<div class="text-center"><img width="60" src='${JSON.parse(data)[0].url}'/></div>`;
           }
           return '';
 				}
@@ -122,6 +122,5 @@
       appMain.hideIndex();
       appMain.createDisablede();
     });
-      appMain.taxrateOnly();
   };
 </script>

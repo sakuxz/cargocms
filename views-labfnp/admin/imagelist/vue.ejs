@@ -52,58 +52,115 @@ appMain.createHide = function () {
   $('.fn-create-hide').hide();
 };
 
-appMain.DataTableInitComplete = function()  {
-  var reloadConfigBtn = '<a class="DTTT_button DTTT_button_text" id="ToolTables_main-table_custom_1" title="重新載入 Config" tabindex="0" aria-controls="main-table"><span>重新載入 Config</span></a>'
-  $(reloadConfigBtn).prependTo('.DTTT_container');
-  $('#ToolTables_main-table_custom_1').on('click', function() {
-    $.SmartMessageBox({
-      title : "重新載入 Config",
-      buttons : "[取消][確定]"
-    }, function(ButtonPress) {
-      if(ButtonPress === '確定') {
-        $.ajax({
-          url: '/api/admin/config/reload',
-          type: 'POST',
-          success: function(result) {
-            console.log(result);
-            messageApp.show({
-              desc: '更新 Config 成功！',
-              type: 'success'
-            });
-            defaultTable.api().ajax.reload(null, false);
-            location.reload();
-          },
-          error: function(result) {
-            console.log('更新失敗', result);
-            messageApp.show({
-              desc: '更新 Config 失敗！'+ result.responseJSON.message,
-              type: 'error'
-            });
-          },
-        });
-      }
-    });
-  });
-  $('.loading-wrapper').removeClass('active');
-};
-
-
 appMain.save = function (event, getQuery, extraModelName) {
-  	var ajaxSuccess = function (result) {
-  		var callbackUrl = $('#main-form').data('callback') || '';
-  		var url = '/admin/#/admin/imagelist';
-       if(getQuery !== '') {
-         getQuery = '?' + getQuery;
-       }
-  		if (callbackUrl!== '') {
-  			url = '/admin/#/admin' + callbackUrl + getQuery;
-  		}
-  		location.href = url + getQuery;
-  		messageApp.show({
-  		desc: '新增成功！',
-  		type: 'success'
-  	});
+  appMain.data.item.value = '[{"url": "' + appMain.data.item.value + '", "dimension": "' + appMain.data.item.description + '"}]';
+  var ajaxSuccess = function (result) {
+    var callbackUrl = $('#main-form').data('callback') || '';
+    var url = '/admin/#/admin/imagelist';
+      if(getQuery !== '') {
+        getQuery = '?' + getQuery;
+      }
+      if (callbackUrl!== '') {
+        url = '/admin/#/admin' + callbackUrl + getQuery;
+      }
+
+      $.ajax({
+        url: '/api/admin/config/reload',
+        type: 'POST',
+        success: function(result) {
+          console.log(result);
+          messageApp.show({
+            desc: '更新 Config 成功！',
+            type: 'success'
+          });
+          defaultTable.api().ajax.reload(null, false);
+          location.reload();
+        },
+        error: function(result) {
+          console.log('更新失敗', result);
+          messageApp.show({
+            desc: '更新 Config 失敗！'+ result.responseJSON.message,
+            type: 'error'
+          });
+        },
+      });
+
+      location.href = url + getQuery;
+      messageApp.show({
+      desc: '新增成功！',
+      type: 'success'
+    });
   }
+}
+
+appMain.update = function (event, getQuery, extraModelName) {
+  appMain.data.item.value = '[{"url": "' + appMain.data.item.value + '", "dimension": "' + appMain.data.item.description + '"}]';
+  var ajaxSuccess = function (result) {
+    var callbackUrl = $('#main-form').data('callback') || '';
+    if(typeof extraModelName === 'undefined') {
+      var url = '/admin/#/admin/' + modelName;
+    } else {
+      var url = '/admin/#/admin/' + extraModelName;
+    }
+    if(getQuery !== '') {
+      getQuery = '?' + getQuery;
+    }
+    if (callbackUrl!== '') {
+      url = '/admin/#/admin' + callbackUrl + getQuery;
+    }
+    $.ajax({
+      url: '/api/admin/config/reload',
+      type: 'POST',
+      success: function(result) {
+        console.log(result);
+        messageApp.show({
+          desc: '更新 Config 成功！',
+          type: 'success'
+        });
+        defaultTable.api().ajax.reload(null, false);
+        location.reload();
+      },
+      error: function(result) {
+        console.log('更新失敗', result);
+        messageApp.show({
+          desc: '更新 Config 失敗！'+ result.responseJSON.message,
+          type: 'error'
+        });
+      },
+    });
+    location.href = url + getQuery;
+    messageApp.show({
+      desc: '更新資料成功！',
+      type: 'success'
+    });
+  }; // end ajaxSuccess
+
+  var ajaxError = function (result) {
+    messageApp.show({
+      desc: '更新資料失敗！errorMessage: ' + result.responseJSON.message,
+      type: 'error'
+    });
+  };
+
+  $.ajax({
+    url: '/api/' + prefix + modelName + '/' + appModel.data.item.id,
+    type: 'PUT',
+    dataType: 'json',
+    data: appModel.data.item,
+    xhrFields: {
+      withCredentials: true,
+    },
+    success: ajaxSuccess,
+    error: ajaxError,
+  });
+}
+
+appMain.getDescription = function() {
+  appMain.data.item.description = JSON.parse(appMain.data.item.value)[0].dimension;
+}
+
+appMain.setImage = function() {
+  appMain.data.item.value = JSON.parse(appMain.data.item.value)[0].url;
 }
 
 appMain.setupForm = function (type) {
@@ -255,15 +312,6 @@ appMain.delete = function (event) {
 appMain.hideIndex = function() {  // 暫時權限擋連結
   if(getConfig() === '') {
     window.location.href = '/admin/#/admin/dashboard';
-  }
-}
-
-appMain.taxrateOnly = function() {
-  if(getconfig() === 'taxrate') {
-    $('.key').attr('data-hide', 'always');
-    $('.type').attr('data-hide', 'always');
-    document.getElementsByClassName('name')[0].innerHTML = '名稱';
-    document.getElementsByClassName('value')[0].innerHTML = '稅率';
   }
 }
 

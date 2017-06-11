@@ -5,15 +5,17 @@
 <script type="text/javascript">
 
 
-	var pagefunction = function() {
-		<%- include vue.ejs %>
-		appMain.$mount("#main-edit");
-		appMain.loadItem(function() {
-      appMain.onEnterPageEdit();
-      appMain.editDisabled();
-      appMain.hideIndex();
-    }, 'imagelist');
-		appMain.setupForm("edit");
-	};
+var pagefunction = function() {
+  <%- include vue.ejs %>
+  appMain.$mount("#main-edit");
+  appMain.loadItem(function() {
+    appMain.getDescription();
+    appMain.setImage();
+    appMain.onEnterPageEdit();
+    appMain.editDisabled();
+    appMain.hideIndex();
+  }, 'imagelist');
+  appMain.setupForm("edit");
+};
 
 </script>

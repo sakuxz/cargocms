@@ -32,7 +32,7 @@ module.exports.init = async () => {
       { href: '/admin/message', title: '訊息', sequence: 140, ParentMenuItemId: 2},
       { href: '/admin/contact', title: '聯繫訊息', sequence: 150, ParentMenuItemId: 2},
       { href: '/admin/mock', title: '隨機資料表', sequence: 20, ParentMenuItemId: 3},
-      { href: '/admin/imagelist?imageList', title: '版位圖片設定', sequence: 30, ParentMenuItemId: 4},
+      { href: '/admin/imagelist?layoutImages', title: '版位圖片設定', sequence: 30, ParentMenuItemId: 4},
 
     ]
 

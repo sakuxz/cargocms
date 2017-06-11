@@ -126,9 +126,15 @@ module.exports = {
   },
 
 
-  getPath: (data, path, result) => {
+  getPath: (data, path, result, allData, nowPointer) => {
     try {
       if(_.isEmpty(data)) {
+        for(var item in allData) {
+          if(!_.isEmpty(allData[item])) {
+            ConfigService.getPath(allData[item], item, result, allData, item);
+            break;
+          }
+        }
         return result;
       } else {
         for (const key of Object.keys(data)) {
@@ -142,7 +148,7 @@ module.exports = {
             delete data[key];
             return ConfigService.getPath(data, path, result);
           } else if (_.isObject(data[key])) {
-            return ConfigService.getPath(data[key], `${path}${path ? '.': ''}${key}`, result)
+            return ConfigService.getPath(data[key], `${path}${path ? '.': ''}${key}`, result, data, key)
           } else {
             const value = data[key];
             result.push({
@@ -151,7 +157,7 @@ module.exports = {
               type: 'text'
             });
             delete data[key];
-            return ConfigService.getPath(data, path, result);
+            return ConfigService.getPath(data, path, result, allData, nowPointer);
           }
         }
       }
