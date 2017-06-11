@@ -9,7 +9,10 @@
 
 		appMain.$mount("#main-edit");
     appMain.hideIndex();
-		appMain.loadItem();
+    appMain.loadItem(function() {
+      appMain.getDescription();
+      appMain.setImage();
+    });
 	};
 
 </script>
