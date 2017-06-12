@@ -9,7 +9,8 @@ const url = require('url');
 module.exports = {
   login: function(req, res) {
     try{
-      if(req.session.authenticated) return res.redirect('/');
+      const url = req.query.url || '/';
+      if(req.session.authenticated) return res.redirect(req.query.url);
       let user = {
         identifier: '',
         password: ''
