@@ -9,15 +9,18 @@ const url = require('url');
 module.exports = {
   login: function(req, res) {
     try{
-      if(req.session.authenticated) return res.redirect('/');
+      const url = req.query.url || '/';
+
+      console.log('====================================');
+      console.log('req.query=>', req.query);
+      console.log('====================================');
+      if(req.session.authenticated) return res.redirect(req.query.url);
       let user = {
         identifier: '',
         password: ''
       }
       let form = req.flash('form')[0];
       if(form) user = form;
-
-      let url = req.query.url || '/';
 
       res.ok({
         //layout: false,
