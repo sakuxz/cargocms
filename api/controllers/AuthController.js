@@ -37,18 +37,6 @@ module.exports = {
     req.session.authenticated = false;
     try {
       req.logout();
-
-      console.log('====================================');
-      console.log('req.wantsJSON=>', req.wantsJSON);
-      console.log('====================================');
-      console.log('req.body=>', req.body);
-      console.log('====================================');
-      console.log('====================================');
-      const token = req.headers['jwt-token']
-      console.log('====================================');
-      console.log('token=>', token.replace('Bearer ', ''));
-      console.log('====================================');
-
       const configUrl = sails.config.urls.successRedirect || sails.config.urls.afterLogout;
       if (req.wantsJSON) {
         return res.ok({

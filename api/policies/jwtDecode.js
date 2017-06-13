@@ -13,14 +13,15 @@ module.exports = function(req, res, next) {
 
   try {
     let token = req.headers['jwt-token'];
-
-    if (token.includes('Bearer')) {
-      token = token.replace('Bearer ', '');
+    if (token) {
+      if (token && token.includes('Bearer')) {
+        token = token.replace('Bearer ', '');
+      }
+      const decoded = jwt.verify(token, 'secret');
+      sails.log.info("decoded jwt", decoded);
+      req.session.authenticated = true;
+      req.session.passport = decoded;
     }
-    const decoded = jwt.verify(token, 'secret');
-    sails.log.info("decoded jwt", decoded);
-    req.session.authenticated = true;
-    req.session.passport = decoded;
     return next();
   } catch(err) {
     sails.log.error(err);
