@@ -251,10 +251,14 @@ passport.callback = async function (role, req, res, next) {
           try {
             return await this.protocols.local.register(role, req, res, next);
           } catch (e) {
+            sails.log.error('passport.callback=>', e.stack);
             throw e;
           }
         }
-        throw new Error('Can not register another user when an user has been logged.');
+        sails.log('====================================');
+        sails.log('logged user=>', req.user.username);
+        sails.log('====================================');
+        throw new Error('Can not register another user when an user has been logged in.');
       } else if (action === 'connect' && req.user) {
         return this.protocols.local.connect(req, res, next);
       } else if (action === 'disconnect' && req.user) {

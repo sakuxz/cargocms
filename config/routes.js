@@ -124,6 +124,7 @@ var defaultConfig = {
   //----- AuthController -----
   'get /login': 'AuthController.login',
   'get /logout': 'AuthController.logout',
+  'post /logout': 'AuthController.logout',
   'get /register': 'AuthController.register',
   'get /forgot': 'AuthController.forgot',
 

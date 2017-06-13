@@ -12,13 +12,18 @@ import jwt from 'jsonwebtoken';
 module.exports = function(req, res, next) {
 
   try {
-    const token = req.headers['jwt-token']
-    let decoded = jwt.verify(token, 'secret');
+    let token = req.headers['jwt-token'];
+
+    if (token.includes('Bearer')) {
+      token = token.replace('Bearer ', '');
+    }
+    const decoded = jwt.verify(token, 'secret');
     sails.log.info("decoded jwt", decoded);
     req.session.authenticated = true;
     req.session.passport = decoded;
     return next();
   } catch(err) {
+    sails.log.error(err);
     return next();
   }
 
