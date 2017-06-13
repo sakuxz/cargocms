@@ -18,6 +18,15 @@
 <% LayoutUtils.addMeta({ property:"article:tag", content:"LFP" }); %>
 <% LayoutUtils.addMeta({ property:"article:tag", content:"LabFnP" }); %>
 
+
+<style>
+  .post-container img {
+    width: 100% !important;
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+</style>
 <!--=== Blog Show ===-->
 <div class="bg-color-light">
 	<div class="container content-sm">
@@ -57,7 +66,7 @@
 				</div>
 			</div> -->
 
-			<div class="col-md-10 col-md-offset-1">
+			<div class="post-container col-md-10 col-md-offset-1">
 
 				<%- include post.ejs %>
 

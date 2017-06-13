@@ -52,26 +52,34 @@ module.exports.bootstrap = async (cb) => {
       where: {authority: 'user'},
       defaults: {authority: 'user'}
     });
-    
-    const adminUser = await User.create({
+
+    let adminUser = await User.findOne({
+      where: {
+        username: 'admin'
+      }
+    });
+
+    if (adminUser === null) {
+      adminUser = await User.create({
         username: 'admin',
         email: 'admin@example.com',
         firstName: '李仁',
-        lastName: '管'
-    });
-    
-    if (!adminUser) {
-      throw new Error('create admin user failed.');
+        lastName: '管',
+      });
+      await Passport.findOrCreate({
+        where: {
+          provider: 'local',
+          UserId: adminUser.id
+        },
+        defaults: {
+          provider: 'local',
+          password: 'admin',
+          UserId: adminUser.id
+        }
+      });
+      await adminUser.addRole(adminRole[0]);
+      await adminUser.addRole(userRole[0]);
     }
-
-    const adminPassport = await Passport.create({
-        provider: 'local',
-        password: 'admin',
-        UserId: adminUser.id
-    });
-    await adminUser.addRole(adminRole[0]);
-    await adminUser.save();
-
 
     /*
      * 是否要匯入的判斷必須交給 init 定義的程式負責

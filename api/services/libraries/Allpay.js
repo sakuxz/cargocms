@@ -44,8 +44,8 @@ export default class Allpay {
     uri = util.format('HashKey=%s&%s&HashIV=%s', this.hashKey, uri, this.hashIV);
     uri = encodeURIComponent(uri);
     let regex;
-    const find = ['%2d', '%5f', '%2e', '%21', '%2a', '%28', '%29', '%20'];
-    const replace = ['-', '_', '.', '!', '*', '(', ')', '+'];
+    const find = ['%2d', '%5f', '%2e', '%21', '%2a', '%28', '%29', '%20', "'"];
+    const replace = ['-', '_', '.', '!', '*', '(', ')', '+', '%27'];
     for (let i = 0; i < find.length; i++) {
       regex = new RegExp(find[i], 'g');
       uri = uri.replace(regex, replace[i]);

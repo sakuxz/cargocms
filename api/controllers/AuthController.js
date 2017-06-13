@@ -10,12 +10,15 @@ module.exports = {
   login: function(req, res) {
     try{
       const url = req.query.url || '/';
-      if(req.session.authenticated) return res.redirect(req.query.url);
+      if (req.session.authenticated) {
+        return res.redirect(req.query.url);
+      }
+
       let user = {
         identifier: '',
         password: ''
       }
-      let form = req.flash('form')[0];
+      const form = req.flash('form')[0];
       if (form) user = form;
 
       res.ok({
