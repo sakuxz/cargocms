@@ -10,6 +10,7 @@ var pagefunction = function() {
   appMain.$mount("#main-edit");
   appMain.loadItem(function() {
     appMain.getDescription();
+    appMain.getLink();
     appMain.setImage();
     appMain.onEnterPageEdit();
     appMain.editDisabled();

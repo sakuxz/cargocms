@@ -13,11 +13,11 @@ var appModel = {
   data: {
     item: {
       name: '',
-      key: ' ',
+      key: '',
       description: '',
       value: '',
       type: 'text',
-
+      link: '',
     },
     items: [],
     option: {}
@@ -53,7 +53,7 @@ appMain.createHide = function () {
 };
 
 appMain.save = function (event, getQuery, extraModelName) {
-  appMain.data.item.value = '[{"url": "' + appMain.data.item.value + '", "dimension": "' + appMain.data.item.description + '"}]';
+  appMain.data.item.value = '[{"url": "' + appMain.data.item.value + '", "dimension": "' + appMain.data.item.description + '", "link": "' + appMain.data.item.link + '"}]';
   var ajaxSuccess = function (result) {
     var callbackUrl = $('#main-form').data('callback') || '';
     var url = '/admin/#/admin/imagelist';
@@ -94,7 +94,7 @@ appMain.save = function (event, getQuery, extraModelName) {
 }
 
 appMain.update = function (event, getQuery, extraModelName) {
-  appMain.data.item.value = '[{"url": "' + appMain.data.item.value + '", "dimension": "' + appMain.data.item.description + '"}]';
+  appMain.data.item.value = '[{"url": "' + appMain.data.item.value + '", "dimension": "' + appMain.data.item.description + '", "link": "' + appMain.data.item.link + '"}]';
   var ajaxSuccess = function (result) {
     var callbackUrl = $('#main-form').data('callback') || '';
     if(typeof extraModelName === 'undefined') {
@@ -157,6 +157,11 @@ appMain.update = function (event, getQuery, extraModelName) {
 
 appMain.getDescription = function() {
   appMain.data.item.description = JSON.parse(appMain.data.item.value)[0].dimension;
+}
+
+appMain.getLink = function() {
+  $('input[name="link"]').val(JSON.parse(appMain.data.item.value)[0].link)
+  appMain.data.item.link = JSON.parse(appMain.data.item.value)[0].link;
 }
 
 appMain.setImage = function() {
