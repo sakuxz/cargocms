@@ -129,8 +129,9 @@ module.exports = {
   getPath: (data, path, result, allData, nowPointer) => {
     try {
       if(_.isEmpty(data)) {
+        // 判斷該物件內是否還有其他的物件
         for(var item in allData) {
-          if(!_.isEmpty(allData[item])) {
+          if(!_.isEmpty(allData[item]) && _.isObject(allData[item])) {
             ConfigService.getPath(allData[item], item, result, allData, item);
             break;
           }
