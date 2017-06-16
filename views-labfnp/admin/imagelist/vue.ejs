@@ -94,6 +94,7 @@ appMain.save = function (event, getQuery, extraModelName) {
 }
 
 appMain.update = function (event, getQuery, extraModelName) {
+  var originData = appMain.data.item.value;
   appMain.data.item.value = '[{"url": "' + appMain.data.item.value + '", "dimension": "' + appMain.data.item.description + '", "link": "' + appMain.data.item.link + '"}]';
   var ajaxSuccess = function (result) {
     var callbackUrl = $('#main-form').data('callback') || '';
@@ -142,17 +143,39 @@ appMain.update = function (event, getQuery, extraModelName) {
     });
   };
 
-  $.ajax({
-    url: '/api/' + prefix + modelName + '/' + appModel.data.item.id,
-    type: 'PUT',
-    dataType: 'json',
-    data: appModel.data.item,
-    xhrFields: {
-      withCredentials: true,
-    },
-    success: ajaxSuccess,
-    error: ajaxError,
-  });
+  if(appMain.data.item.key.indexOf('slides') !== -1) {
+    if(appMain.data.item.link.indexOf('http') === -1) {
+      messageApp.show({
+        desc: '連結的 URL 填上完整網址(包含 http 或 https)！',
+        type: 'error'
+      });
+      appMain.data.item.value = originData;
+    } else {
+      $.ajax({
+        url: '/api/' + prefix + modelName + '/' + appModel.data.item.id,
+        type: 'PUT',
+        dataType: 'json',
+        data: appModel.data.item,
+        xhrFields: {
+          withCredentials: true,
+        },
+        success: ajaxSuccess,
+        error: ajaxError,
+      });
+    }
+  } else {
+    $.ajax({
+      url: '/api/' + prefix + modelName + '/' + appModel.data.item.id,
+      type: 'PUT',
+      dataType: 'json',
+      data: appModel.data.item,
+      xhrFields: {
+        withCredentials: true,
+      },
+      success: ajaxSuccess,
+      error: ajaxError,
+    });
+  }
 }
 
 appMain.getDescription = function() {
@@ -324,3 +347,8 @@ appMain.createDisablede = function() {
   $('#ToolTables_main-table_2').hide();
 }
 
+appMain.slideLinkOnly = function() {
+  if(appMain.data.item.key.indexOf('slides') === -1) {
+    document.getElementsByClassName('link')[0].parentNode.style.display = 'none';
+  }
+}
