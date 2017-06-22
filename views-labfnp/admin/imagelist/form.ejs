@@ -1,0 +1,62 @@
+<fieldset>
+
+		<section>
+			<img src="{{data.item.value}}" alt="" class="img-responsive">
+		</section>
+		<section>
+			<label class="label">產品圖片</label>
+			<%- include ../image/upload.ejs %>
+    </section>
+
+    <section row="">
+      <label class="label key">版位</label>
+      <label class="input state-disabled ">
+      <input type="text" name="key" placeholder="" v-model="data.item.key" readonly disabled>
+    </section>
+
+    <section row="">
+      <label class="label">尺寸</label>
+      <label class="input state-disabled ">
+      <input type="text" name="description" placeholder="" v-model="data.item.description" readonly disabled>
+    </section>
+
+		<section row="" class="hidden">
+      <label class="label">Image</label>
+      <label class="input state-disabled">
+        <input type="text" name="value" placeholder="" v-model="data.item.value" disabled>
+        <b class="tooltip tooltip-bottom-right">請輸入Image</b></label>
+    </section>
+
+    <section row="">
+      <label class="label link">連結網頁</label>
+      <label class="input state-disabled ">
+      <input type="text" name="link" placeholder="" v-model="data.item.link" disabled>
+    </section>
+
+</fieldset>
+<script>
+var formRules = {
+    key:{
+      required: true,
+    },
+    description:{
+      required: true,
+    }
+  };
+
+  var formMessages = {
+    key:{
+      required: "請給予 版位",
+    },
+    description:{
+      required: "請給予 描述",
+    },
+  };
+  function getconfig() {
+    var query = location.hash.split('/').reverse()[0].split('?')[1];
+    if(typeof query === 'undefined') {
+      query = '';
+    }
+    return query;
+  }
+</script>

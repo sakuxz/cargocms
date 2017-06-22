@@ -62,6 +62,59 @@ module.exports = {
   google: {
     name: 'GoogleAPIKey',
     key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
+  },
+  layoutImages: {
+    icon1: [{
+      url: '/assets/labfnp/img/img.index/features-icon-1.png',
+      dimension: '568x658',
+    }],
+    icon2: [{
+      url: '/assets/labfnp/img/img.index/features-icon-2.png',
+      dimension: '568x658',
+    }],
+    icon3: [{
+      url: '/assets/labfnp/img/img.index/features-icon-3.png',
+      dimension: '568x658',
+    }],
+    slides1: [{
+      url: '/assets/labfnp/img/img.index/event-slides/1.jpg',
+      dimension: '2048x1074',
+    }],
+    slides2: [{
+      url: '/assets/labfnp/img/img.index/event-slides/2.jpg',
+      dimension: '2048x1074',
+    }],
+    slides3: [{
+      url: '/assets/labfnp/img/img.index/event-slides/3.jpg',
+      dimension: '2048x1074',
+    }],
+    slidesm1: [{
+      url: '/assets/labfnp/img/img.index/event-slides/1.m.jpg',
+      dimension: '1280x1280',
+    }],
+    slidesm2: [{
+      url: '/assets/labfnp/img/img.index/event-slides/2.m.jpg',
+      dimension: '1280x1280',
+    }],
+    slidesm3: [{
+      url: '/assets/labfnp/img/img.index/event-slides/3.m.jpg',
+      dimension: '1280x1280',
+    }],
+    backgroundImage1: [{
+      url: '/assets/labfnp/img/img.index/lab-background-image.jpg',
+      dimension: '1122x1122',
+    }],
+    backgroundImage2: [{
+      url: '/assets/labfnp/img/img.index/why-image.jpg',
+      dimension: '1122x1122',
+    }],
+    backgroundImage3: [{
+      url: '/assets/labfnp/img/img.index/believe-image.png',
+      dimension: '1122x1122',
+    }],
+    avatar: [{
+      url: '/assets/labfnp/img/img.index/Amy.jpg',
+      dimension: '430x430',
+    }],
   }
-
 };

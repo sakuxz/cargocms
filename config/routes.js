@@ -110,6 +110,13 @@ var defaultConfig = {
 
   'get /api/admin/labfnp/scent':  'api/admin/labfnp/ScentController.find',
   'get /api/admin/labfnp/scentnote':  'api/admin/labfnp/ScentNoteController.find',
+  
+  'get /api/admin/config': 'api/admin/ConfigController.find',
+  'get /api/admin/config/:id': 'api/admin/ConfigController.findOne',
+  'post /api/admin/config': 'api/admin/ConfigController.create',
+  'put /api/admin/config/:id': 'api/admin/ConfigController.update',
+  'delete /api/admin/config/:id': 'api/admin/ConfigController.destroy',
+  'post /api/admin/config/reload': 'api/admin/ConfigController.reload',
 
   //----- Event -----
   'get /events/:name': 'EventController.show',
@@ -119,7 +126,7 @@ var defaultConfig = {
 
   //----- Admin -----
   '/admin':           'AdminController.index',
-  '/admin/config.js': 'AdminController.config',
+  '/admin/config.js': 'AdminController.configJson',
 
   //----- AuthController -----
   'get /login': 'AuthController.login',
