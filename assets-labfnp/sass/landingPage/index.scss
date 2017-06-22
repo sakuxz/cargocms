@@ -352,14 +352,15 @@ body {
       transition: 0.1s color;
       text-align: center;
       vertical-align: middle;
-      height: 700px;
-      line-height: 700px;
+      height: calc(100vw / 1024 * 535);
+      line-height: calc(100vw / 1024 * 535);
       width: 60px;
       z-index: 999999;
-      // margin-top: -376px;
       margin-top: calc(-1 * (100vw / 1024 * 535) / 2);
       @media screen and (min-width: 1440px) {
         margin-top: calc(-1 * (1440px / 1024 * 535) / 2);
+        height: calc(1440px / 1024 * 535);
+        line-height: calc(1440px / 1024 * 535);
       }
       &:hover {
         background-color: rgba(138, 138, 138, 0.28);
