@@ -71,9 +71,27 @@
 <div class="slider-wrapper">
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" style="background-image: url('<%- layoutImages.slides1.url %>'); cursor:pointer;" onclick="window.open('<%- layoutImages.slides1.link %>', '_blank');"></div>
-      <div class="swiper-slide" style="background-image: url('<%- layoutImages.slides2.url %>'); cursor:pointer;" onclick="window.open('<%- layoutImages.slides2.link %>', '_blank');"></div>
-      <div class="swiper-slide" style="background-image: url('<%- layoutImages.slides3.url %>'); cursor:pointer;" onclick="window.open('<%- layoutImages.slides3.link %>', '_blank');"></div>
+      <div class="swiper-slide" 
+        style="background-image: url('<%= layoutImages.slides1.url %>');
+        <% if (layoutImages.slides1.link) { %> cursor:pointer; <% } %>"     
+        <% if (layoutImages.slides1.link) { %>
+          onclick="window.open('<%- layoutImages.slides1.link %>', '_blank');"
+        <% } %>
+      ></div>
+      <div class="swiper-slide"
+        style="background-image: url('<%= layoutImages.slides2.url %>');
+        <% if (layoutImages.slides2.link) { %> cursor:pointer; <% } %>"
+        <% if (layoutImages.slides2.link) { %>
+          onclick="window.open('<%- layoutImages.slides2.link %>', '_blank');"
+        <% } %>
+      ></div>
+      <div class="swiper-slide"
+        style="background-image: url('<%= layoutImages.slides3.url %>');
+        <% if (layoutImages.slides3.link) { %> cursor:pointer; <% } %>"     
+        <% if (layoutImages.slides3.link) { %>
+          onclick="window.open('<%- layoutImages.slides3.link %>', '_blank');"
+        <% } %>
+      ></div>
     </div>
     <!-- 如果需要分页器 -->
     <div class="swiper-pagination"></div>
