@@ -337,14 +337,34 @@ body {
         font-size: 200px;
       }
     }
+    .swiper-button-prev {
+      left: 0px;
+    }
+    .swiper-button-next {
+      right: 0px;
+    }
     .swiper-button-prev,
     .swiper-button-next {
-      margin-top: -42px;
       font-size: 3em;
       background: transparent;
       color: #2e2f31;
       text-shadow: 0 0 5px rgb(255, 255, 255);
       transition: 0.1s color;
+      text-align: center;
+      vertical-align: middle;
+      height: 700px;
+      line-height: 700px;
+      width: 60px;
+      z-index: 999999;
+      // margin-top: -376px;
+      margin-top: calc(-1 * (100vw / 1024 * 535) / 2);
+      @media screen and (min-width: 1440px) {
+        margin-top: calc(-1 * (1440px / 1024 * 535) / 2);
+      }
+      &:hover {
+        background-color: rgba(138, 138, 138, 0.28);
+        color: #fbefef;
+      }
     }
     .swiper-pagination {
       bottom: 74px;

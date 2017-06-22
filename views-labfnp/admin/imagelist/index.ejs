@@ -1,40 +1,38 @@
-
 <!-- client -->
 <table id="main-table" class="table table-striped table-bordered table-hover" width="100%">
   <thead>
     <tr>
 
+      <th data-hide="phone,tablet" data-class="" class="no-sort name">
+        版位
+      </th>
 
-        <th data-hide="phone,tablet"
-        data-class="" class="no-sort name">
-          版位
-        </th>
+      <th data-hide="" data-class="" class="no-sort key">
+        尺寸
+      </th>
 
+      <th data-hide="" data-class="" class="link no-sort">
+        連結網址
+      </th>
 
-        <th data-hide=""
-        data-class="" class="no-sort key">
-          尺寸
-        </th>
+      <th data-hide="" data-class="" class="image no-sort">
+        Image
+      </th>
 
-
-        <th data-hide=""
-        data-class="" class="image no-sort">
-          Image
-        </th>
-
-
-      <th width="80" data-hide="phone,tablet"></th>
+      <th width="80" class="button" data-hide="phone,tablet"></th>
     </tr>
   </thead>
   <!-- client only -->
   <tbody>
     <tr v-for="item in data.items">
 
-        <td>{{ item.key}}</td>
+      <td>{{ item.key}}</td>
 
-        <td>{{ item.description}}</td>
+      <td>{{ item.description}}</td>
 
-        <td>{{ item.value}}</td>
+      <td>{{ item.link}}</td>
+
+      <td>{{ item.value}}</td>
 
       <td align="center" valign="center" style="cursor: pointer;">
         <div class="row">
@@ -42,84 +40,84 @@
             <i class="fa-fw fa fa-eye text-muted" />
           </a>
           <a class="btn btn-default btn-xs" role="button" v-on:click="edit(item.id)">
-            <i class="fa-fw fa fa-pencil-square-o text-muted"/>
+            <i class="fa-fw fa fa-pencil-square-o text-muted" />
           </a>
         </div>
       </td>
     </tr>
   </tbody>
- </table>
+</table>
 
 
 <script type="text/javascript">
   var pagefunction = function() {
 
     // server only
-    var columns = [
-
-
-          { "data": "key" }, // 名稱
-
-
-
-          { "data": "description" }, // 版位
-
-
-
-          { "data": "value" }, // Image
-
-
-        { "data": null },
+    var columns = [{
+        "data": "key"
+      }, // 名稱
+      {
+        "data": "description"
+      }, // 版位
+      {
+        "data": "link"
+      }, // 版位
+      {
+        "data": "value"
+      }, // Image
+      {
+        "data": null
+      },
     ]
 
     // server only
-    var columnDefs = [
-
-
-
-
-
-
-
-
-
-      {
-				"targets"  : 1,
-				"orderable": false,
-				"searchable": false,
-				"render": function ( data, type, row ) {
-          return '<div class="key">' + JSON.parse(row.value)[0].dimension + '</div>';
-				}
-			},
-      {
-				"targets"  : 'image',
-				"orderable": false,
-				"searchable": false,
-				"render": function ( data, type, row ) {
-					if(data){
-            return `<div class="text-center"><img width="60" src='${JSON.parse(data)[0].url}'/></div>`;
-          }
-          return '';
-				}
-			},
-      {
-        "targets"  : 3,
-        "orderable": false,
-        "searchable": false,
-        "render": function ( data, type, row ) {
-          var colBody =
-          '<div class="row-action-buttons hidden-xs hidden-sm">'+
-          '<a name="showDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
-          '<i class="fa-fw fa fa-eye text-muted" />'+
-          '</a>'+
-          '<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="'+row.id+'">'+
-          '<i class="fa-fw fa fa-pencil-square-o text-muted"/>'+
-          '</a>'+
-          '</div>';
-          return colBody;
+    var columnDefs = [{
+      "targets": 1,
+      "orderable": false,
+      "searchable": false,
+      "render": function(data, type, row) {
+        return '<div class="key">' + JSON.parse(row.value)[0].dimension + '</div>';
+      }
+    }, {
+      "targets": 'link',
+      "orderable": false,
+      "searchable": false,
+      "render": function(data, type, row) {
+        var isSlide = row.key.indexOf('slide') !== 0;
+        var link = JSON.parse(row.value)[0].link;
+        var result = '';
+        if (isSlide) result = '本版位不支援連結';
+        else if (!link) result = '未設定';
+        else if (link) result = link;
+        return result;
+      }
+    }, {
+      "targets": 'image',
+      "orderable": false,
+      "searchable": false,
+      "render": function(data, type, row) {
+        if (data) {
+          return '<div class="text-center"><img width="60" src="' + JSON.parse(data)[0].url + '" /></div>';
         }
-      },
-    ]
+        return '';
+      }
+    }, {
+      "targets": 'button',
+      "orderable": false,
+      "searchable": false,
+      "render": function(data, type, row) {
+        var colBody =
+          '<div class="row-action-buttons hidden-xs hidden-sm">' +
+          '<a name="showDataButton" class="btn btn-default btn-xs" role="button" data-id="' + row.id + '">' +
+          '<i class="fa-fw fa fa-eye text-muted" />' +
+          '</a>' +
+          '<a name="editDataButton" class="btn btn-default btn-xs" role="button" data-id="' + row.id + '">' +
+          '<i class="fa-fw fa fa-pencil-square-o text-muted"/>' +
+          '</a>' +
+          '</div>';
+        return colBody;
+      }
+    }, ]
     var serverSidePaging = <%= (data.serverSidePaging != null)?data.serverSidePaging:false %>;
     <%- include vue.ejs %>
     appMain.$mount("#main-index");
