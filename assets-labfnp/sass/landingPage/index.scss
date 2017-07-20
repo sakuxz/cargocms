@@ -38,7 +38,9 @@ body {
       display: none;
     }
   }
-  background-color: #3a3c41;
+  background-image: url('/assets/labfnp/img/video.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
   &.image-cover {
     background-color: #796958;
     background-image: url('/assets/labfnp/img/img.index/hero-background.png');
