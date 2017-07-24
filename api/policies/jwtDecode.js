@@ -18,6 +18,7 @@ module.exports = function (req, res, next) {
     if (typeof token !== 'undefined' && token) {
       if (token.includes('Bearer')) {
         token = token.replace('Bearer ', '');
+        sails.log('`Bearer` replaced!');
       }
       const decoded = jwt.verify(token, 'secret');
       sails.log('decoded jwt resule=>', decoded);

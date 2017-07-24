@@ -37,7 +37,7 @@ module.exports = {
     try {
       const isAuthenticated = req.session.authenticated;
       const user = AuthService.getSessionUser(req);
-      sails.log(`=== logout isAuthenticated:${isAuthenticated} === user=>${user} ===`)
+      sails.log(`=== logout === \nisAuthenticated:${isAuthenticated}\nuser=>${user}`)
       let message = 'Logout succeed.';
       if (isAuthenticated || user) {
         req.session.authenticated = false;
