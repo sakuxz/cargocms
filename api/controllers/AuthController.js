@@ -38,12 +38,16 @@ module.exports = {
       const isAuthenticated = req.session.authenticated;
       const user = AuthService.getSessionUser(req);
       sails.log(`=== logout === \nisAuthenticated:${isAuthenticated}\nuser=>${user}`)
+
+      const configUrl = sails.config.urls.successRedirect || sails.config.urls.afterLogout;
+      let redirectUrl = req.query.url || configUrl;
       let message = 'Logout succeed.';
       if (isAuthenticated || user) {
         req.session.authenticated = false;
         req.logout();
       } else {
         message = 'No needs to logout.';
+        redirectUrl = '/';
       }
       if (req.wantsJSON) {
         return res.ok({
@@ -51,8 +55,7 @@ module.exports = {
           message,
         });
       }
-      const configUrl = sails.config.urls.successRedirect || sails.config.urls.afterLogout;
-      return res.redirect(req.query.url || configUrl);
+      return res.redirect(redirectUrl);
     } catch (e) {
       sails.log.error(e);
       return res.negotiate(e);
