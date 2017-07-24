@@ -106,21 +106,16 @@ module.exports = async function login(role, inputs) {
       }
       sails.log('====================================');
       sails.log('req.wantsJSON=>', req.wantsJSON);
-      sails.log('====================================');
       if (req.wantsJSON) {
-        sails.log('====================================');
         sails.log('req.session.needJwt=>', req.session.needJwt);
-        sails.log('====================================');
         try {
           const jwtToken = AuthService.getSessionEncodeToJWT(req);
-          sails.log('====================================');
-          sails.log('jwtToken=>', jwtToken);
-          sails.log('====================================');
+          sails.log('Authorization(jwtToken)=>', jwtToken);
           return res.ok({
             success: true,
             message: jsonMessage,
             data: {
-              jwtToken,
+              Authorization: jwtToken,
               url: params.successRedirect,
             },
           });
@@ -129,6 +124,7 @@ module.exports = async function login(role, inputs) {
           return res.negotiate(e);
         }
       }
+      sails.log('====================================');
       return res.redirect(targetUrl);
     });
   });
