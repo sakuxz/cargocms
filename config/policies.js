@@ -19,7 +19,7 @@ import customConfigLoader from './util/customConfigLoader.js';
 var customConfig = customConfigLoader('policies.js');
 
 var defaultConfig = {
-  '*': ['nocache', 'passport', 'sessionAuth'],
+  '*': ['nocache', 'passport', 'sessionAuth', 'jwtDecode'],
   'AuthController': {
     '*': ['passport'],
     status: [],

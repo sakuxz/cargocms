@@ -34,16 +34,24 @@ module.exports = {
   },
 
   logout(req, res) {
-    req.session.authenticated = false;
     try {
-      req.logout();
-      const configUrl = sails.config.urls.successRedirect || sails.config.urls.afterLogout;
+      const isAuthenticated = req.session.authenticated;
+      const user = AuthService.getSessionUser(req);
+      sails.log(`=== logout isAuthenticated:${isAuthenticated} === user=>${user} ===`)
+      let message = 'Logout succeed.';
+      if (isAuthenticated || user) {
+        req.session.authenticated = false;
+        req.logout();
+      } else {
+        message = 'No needs to logout.';
+      }
       if (req.wantsJSON) {
         return res.ok({
           success: true,
-          message: 'Logout succeed.',
+          message,
         });
       }
+      const configUrl = sails.config.urls.successRedirect || sails.config.urls.afterLogout;
       return res.redirect(req.query.url || configUrl);
     } catch (e) {
       sails.log.error(e);

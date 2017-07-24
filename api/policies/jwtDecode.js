@@ -7,25 +7,30 @@
  * @docs        :: http://sailsjs.org/#!/documentation/concepts/Policies
  *
  */
-
 import jwt from 'jsonwebtoken';
-module.exports = function(req, res, next) {
 
+module.exports = function (req, res, next) {
   try {
     let token = req.headers['jwt-token'];
-    if (token) {
-      if (token && token.includes('Bearer')) {
+    sails.log('====================================');
+    sails.log('JwtDecode token=>', token);
+    sails.log('====================================');
+    if (typeof token !== 'undefined' && token) {
+      if (token.includes('Bearer')) {
         token = token.replace('Bearer ', '');
       }
       const decoded = jwt.verify(token, 'secret');
-      sails.log.info("decoded jwt", decoded);
+      sails.log('decoded jwt resule=>', decoded);
       req.session.authenticated = true;
-      req.session.passport = decoded;
+      req.session.passport = {
+        user: {
+          ...decoded,
+        },
+      };
     }
     return next();
-  } catch(err) {
+  } catch (err) {
     sails.log.error(err);
     return next();
   }
-
 };
