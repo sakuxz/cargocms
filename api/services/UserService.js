@@ -20,7 +20,7 @@ module.exports = {
       if (existUser) {
         throw new Error('the email or user name has been registered.');
       }
-      
+
       // create User
       if(userData.birthday === '') delete userData.birthday
       let user = await User.create(userData);
@@ -77,7 +77,7 @@ module.exports = {
       throw e;
     }
   },
-  
+
   findAll: async () => {
     try {
       return await User.findAll();
@@ -277,7 +277,7 @@ module.exports = {
       }, signToken);
       let messageConfig = await MessageService.checkNewEmail({
         email: email,
-        api: `/validate/email?token=${token}`,
+        api: `validate/email?token=${token}`,
         username: displayName,
         type: type,
       });
