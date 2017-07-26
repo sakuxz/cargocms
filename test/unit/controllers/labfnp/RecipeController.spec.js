@@ -276,7 +276,7 @@ describe('about Recipe Controller operation.', function() {
   it('get user recipe success.', async (done) => {
     try {
       const res = await request(sails.hooks.http.app)
-      .get('/api/labfnp/me/recipe');
+      .get(`/api/labfnp/me/recipe?id=${user.id}`);
       res.body.data.should.be.Object;
       res.body.data.recipes[0].message.should.be.String;
       res.body.data.recipes[0].UserId.should.be.equal(user.id)
@@ -293,7 +293,7 @@ describe('about Recipe Controller operation.', function() {
 
       const res = await request(sails.hooks.http.app)
       .get('/api/labfnp/me/fav');
-      res.body.recipes[0].id.should.be.equal(recipe.id)
+      res.body.data.recipes[0].id.should.be.equal(recipe.id)
       done();
     } catch (e) {
       done(e);
