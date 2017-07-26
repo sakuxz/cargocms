@@ -1,4 +1,4 @@
-describe.only('about Config Service operation.', function() {
+describe('about Config Service operation.', function() {
 
   before('測試用 config', async(done) => {
     try {

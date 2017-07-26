@@ -225,14 +225,6 @@ module.exports = {
       let notShowPrivateRecipe = {};
       if(!isMe) notShowPrivateRecipe = { visibility: { $not: 'PRIVATE' } };
 
-      const recipes = await Recipe.findAll({
-        where: {
-          UserId: user.id
-        },
-        order: 'Recipe.updatedAt desc',
-        include: Image
-      })
-
       const followers = await Follow.count({ where: { following: user.id } });
       const favorited = await UserLikeRecipe.count({ where: { UserId: user.id } });
       const following = await Follow.count({ where: { follower: user.id } });
@@ -240,7 +232,7 @@ module.exports = {
       return res.ok({
         message: 'get user profile success.',
         data: {
-          user, recipes, followers, favorited, following, isMe, score
+          user, followers, favorited, following, isMe, score
         },
       });
     } catch (e) {

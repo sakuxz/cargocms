@@ -249,5 +249,60 @@ module.exports = {
       res.serverError(e);
     }
   },
+  async findMyRecipe(req, res) {
+    try {
+      const loginUser = AuthService.getSessionUser(req);
+
+      if (!loginUser) return res.forbidden('permission denied'); 
+
+      const user = await User.findById(loginUser.id);
+      const userRecipes = await Recipe.findAll({ where: { UserId: user.id } });
+      const userRecipesIds = userRecipes.map((recipe) => recipe.id);
+
+      const recipes = await Recipe.findAll({
+        where: {
+          UserId: user.id
+        },
+        order: 'Recipe.updatedAt desc',
+        include: [Image, UserLikeRecipe]
+      })
+
+      res.ok({
+        message: 'get user recipe success.',
+        data: {
+          recipes,
+        },
+      });
+    } catch (e) {
+      sails.log.error(e);
+      res.negotiate(e);
+    }
+  },
+
+  async findMyFavorite(req, res) {
+    try {
+      const { userId } = req.query;
+      const currentUser = AuthService.getSessionUser(req);
+
+      if (!currentUser) return res.forbidden('permission denied');  
+
+      const recipes = await Recipe.findAndIncludeUserLike({
+        findByUserId: userId,
+        currentUser,
+        start: 0,
+        length: 100,
+        likeUser: currentUser
+      });
+
+      let social = await SocialService.forRecipe({recipes});
+
+      const message = 'get user favorite recipe success';
+      res.ok({recipes, social});
+    }
+    catch (e) {
+      sails.log.error(e);
+      res.negotiate(e);
+    }
+  },
 
 }
