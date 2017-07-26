@@ -249,55 +249,65 @@ module.exports = {
       res.serverError(e);
     }
   },
-  async findMyRecipe(req, res) {
+  
+  async findUserRecipe(req, res) {
+    sails.log('=== findMyRecipe ===');
     try {
-      const loginUser = AuthService.getSessionUser(req);
+      const { 
+        id,
+        offset = 0,
+        limit = 20,
+      } = req.query;
+      const currentUser = AuthService.getSessionUser(req);
+      if (!currentUser) throw new Error('can not find user by giving user id `id` or not login yet.');
 
-      if (!loginUser) return res.forbidden('permission denied'); 
+      const recipes = await Recipe.findAndIncludeUserLike({
+        findByUserId: id,
+        currentUser,
+        start: parseInt(offset),
+        length: parseInt(limit),
+        likeUser: null
+      });
 
-      const user = await User.findById(loginUser.id);
-      const userRecipes = await Recipe.findAll({ where: { UserId: user.id } });
-      const userRecipesIds = userRecipes.map((recipe) => recipe.id);
-
-      const recipes = await Recipe.findAll({
-        where: {
-          UserId: user.id
-        },
-        order: 'Recipe.updatedAt desc',
-        include: [Image, UserLikeRecipe]
-      })
-
-      res.ok({
-        message: 'get user recipe success.',
+      const message = 'get user recipes success';
+      return res.ok({
         data: {
           recipes,
         },
+        message,
       });
-    } catch (e) {
+    }
+    catch (e) {
       sails.log.error(e);
       res.negotiate(e);
     }
   },
 
   async findMyFavorite(req, res) {
+    sails.log('=== findMyFavorite ===');
     try {
-      const { userId } = req.query;
+      const { 
+        offset = 0,
+        limit = 20,
+      } = req.query;
       const currentUser = AuthService.getSessionUser(req);
-
-      if (!currentUser) return res.forbidden('permission denied');  
+      if (!currentUser) throw new Error('can not find user by giving user id `id`.');
 
       const recipes = await Recipe.findAndIncludeUserLike({
-        findByUserId: userId,
+        findByUserId: currentUser.id,
         currentUser,
-        start: 0,
-        length: 100,
-        likeUser: currentUser
+        start: parseInt(offset) || 0,
+        length: parseInt(limit) || 20,
+        likeUser: currentUser,
       });
 
-      let social = await SocialService.forRecipe({recipes});
-
-      const message = 'get user favorite recipe success';
-      res.ok({recipes, social});
+      const message = 'get user favorite recipes success';
+      return res.ok({
+        data: {
+          recipes,
+        },
+        message,
+      });
     }
     catch (e) {
       sails.log.error(e);

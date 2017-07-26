@@ -8,7 +8,7 @@ module.exports = {
   'put /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.update',
   'delete /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.destroy',
 
-  'get /api/labfnp/me/recipe': 'api/labfnp/RecipeController.findMyRecipe',
+  'get /api/labfnp/me/recipe': 'api/labfnp/RecipeController.findUserRecipe',
   'get /api/labfnp/me/fav': 'api/labfnp/RecipeController.findMyFavorite',
 
   'get /api/labfnp/recipe/:id/feelings': 'api/labfnp/RecipeController.feelings',
