@@ -100,7 +100,7 @@ describe('about Auth Controller operation.', function() {
 
         let result2 = await request(sails.hooks.http.app)
         .post('/api/labfnp/recipe')
-        .auth(result.body.data.jwtToken)
+        .auth(result.body.data.Authorization)
         .send(recipeInfo);
 
 

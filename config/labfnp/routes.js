@@ -8,11 +8,14 @@ module.exports = {
   'put /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.update',
   'delete /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.destroy',
 
+  'get /api/labfnp/me/recipe': 'api/labfnp/RecipeController.findUserRecipe',
+  'get /api/labfnp/me/fav': 'api/labfnp/RecipeController.findMyFavorite',
+
   'get /api/labfnp/recipe/:id/feelings': 'api/labfnp/RecipeController.feelings',
 
   'post /api/admin/labfnp/feeling/exportFeeling': 'api/admin/labfnp/FeelingController.exportFeeling',
   'get /api/labfnp/user/feeling': 'api/labfnp/FeelingController.findByUser',
-  'get /api/labfnp/profile': 'api/UserController.getProfile',
+  'get /api/user/me': 'api/UserController.getProfile',
   'get /api/labfnp/feeling': 'api/admin/labfnp/FeelingController.find',
   'get /api/admin/labfnp/feeling': 'api/admin/labfnp/FeelingController.find',
   'get /api/admin/labfnp/feeling/:id': 'api/admin/labfnp/FeelingController.findOne',

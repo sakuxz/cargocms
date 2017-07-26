@@ -198,40 +198,23 @@ module.exports = {
   },
 
   getProfile: async(req, res) => {
-    let user = null;
-    let isMe = false;
+    sails.log('=== getProfile ===');
     try {
       const { id } = req.params;
       const loginUser = AuthService.getSessionUser(req);
+      if (!loginUser) throw new Error('can not find user by giving user id `id`.');
 
-      let score = 0;
-      if (id) {
-        user = await User.findOne({ where: { id } });
-        if (!user) return res.notFound("NotFound");
-        score = user.score;
-      }else {
-        user = loginUser;
-        if(!user) return res.redirect("/login");
+      const query = { where: { UserId: (id || loginUser.id), }};
+      const user = await User.findById(loginUser.id);
+      const isMe = (loginUser && (loginUser.id === user.id));
+      if (isMe) query.where.visibility = { $not: 'PRIVATE' };
+      const userRecipes = await Recipe.findAll(query);
+      const userRecipesIds = userRecipes.map((recipe) => recipe.id);
 
-        user = await User.findById(loginUser.id);
-        const userRecipes = await Recipe.findAll({ where: { UserId: user.id } });
-        const userRecipesIds = userRecipes.map((recipe) => recipe.id);
-        score = await UserLikeRecipe.count({ where: { RecipeId: userRecipesIds } });
-        user.score = score;
-        await user.save();
-      }
-      isMe = (loginUser && (loginUser.id === user.id));
-
-      let notShowPrivateRecipe = {};
-      if(!isMe) notShowPrivateRecipe = { visibility: { $not: 'PRIVATE' } };
-
-      const recipes = await Recipe.findAll({
-        where: {
-          UserId: user.id
-        },
-        order: 'Recipe.updatedAt desc',
-        include: Image
-      })
+      // update user star score
+      const score = await UserLikeRecipe.count({ where: { RecipeId: userRecipesIds } });
+      user.score = score;
+      await user.save();
 
       const followers = await Follow.count({ where: { following: user.id } });
       const favorited = await UserLikeRecipe.count({ where: { UserId: user.id } });
@@ -240,7 +223,7 @@ module.exports = {
       return res.ok({
         message: 'get user profile success.',
         data: {
-          user, recipes, followers, favorited, following, isMe, score
+          user, followers, favorited, following, isMe, score,
         },
       });
     } catch (e) {

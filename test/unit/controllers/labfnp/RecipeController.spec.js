@@ -1,5 +1,6 @@
 var sinon = require('sinon');
-describe.skip('about Recipe Controller operation.', function() {
+// describe.skip('about Recipe Controller operation.', function() {
+describe('about Recipe Controller operation.', function() {
 
   let recipe, user;
   before(async (done) => {
@@ -247,7 +248,7 @@ describe.skip('about Recipe Controller operation.', function() {
       // );
       const result = await Promise.all(repetOrder);
       // sails.log.debug(result[0].status,result[1].status);
-      sails.log.debug(result[0].status);
+      // sails.log.debug(result[0].status);
 
       // await request(sails.hooks.http.app)
       // .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
@@ -272,6 +273,30 @@ describe.skip('about Recipe Controller operation.', function() {
       done(e);
     }
   });
+  it('get user recipe success.', async (done) => {
+    try {
+      const res = await request(sails.hooks.http.app)
+      .get(`/api/labfnp/me/recipe?id=${user.id}`);
+      res.body.data.should.be.Object;
+      res.body.data.recipes[0].message.should.be.String;
+      res.body.data.recipes[0].UserId.should.be.equal(user.id)
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+  it('get user favorite recipe success.', async (done) => {
+    try {
+      const reqlike = await request(sails.hooks.http.app)
+      .post(`/api/labfnp/recipe/like/${recipe.id}`);
+      reqlike.body.success.should.be.true;
 
-
+      const res = await request(sails.hooks.http.app)
+      .get('/api/labfnp/me/fav');
+      res.body.data.recipes[0].id.should.be.equal(recipe.id)
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
 });
