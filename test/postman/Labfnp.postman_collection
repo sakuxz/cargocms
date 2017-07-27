@@ -11,7 +11,7 @@
 			"name": "Logout",
 			"request": {
 				"url": "{{host}}logout",
-				"method": "GET",
+				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -29,10 +29,7 @@
 						"description": ""
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
+				"body": {},
 				"description": ""
 			},
 			"response": []
@@ -41,6 +38,42 @@
 			"name": "Login User",
 			"request": {
 				"url": "{{host}}auth/local",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "identifier",
+							"value": "{{username}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Login User by Facebook",
+			"request": {
+				"url": "{{host}}auth/facebook ",
 				"method": "POST",
 				"header": [
 					{
@@ -172,7 +205,21 @@
 			"response": []
 		},
 		{
-			"name": "取得最新的配方",
+			"name": "Create Feeling feedback",
+			"request": {
+				"url": "{{host}}api/labfnp/recipe/feedback",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Newest 5 Recipes",
 			"request": {
 				"url": "{{host}}api/labfnp/recipe/new",
 				"method": "GET",
@@ -291,20 +338,6 @@
 			"response": []
 		},
 		{
-			"name": "新增感覺回饋",
-			"request": {
-				"url": "{{host}}api/labfnp/recipe/feedback",
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
 			"name": "刪除特定配方",
 			"request": {
 				"url": "{{host}}api/labfnp/recipe/2",
@@ -347,9 +380,34 @@
 			"response": []
 		},
 		{
-			"name": "取得已登入使用者的配方清單",
+			"name": "Get logined user's recipe list",
 			"request": {
-				"url": "{{host}}api/labfnp/me/recipe",
+				"url": {
+					"raw": "{{host}}api/labfnp/user/recipe?offset=0&limit=20",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"labfnp",
+						"user",
+						"recipe"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "limit",
+							"value": "20",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -358,16 +416,53 @@
 			"response": []
 		},
 		{
-			"name": "取得已登入使用者的我的最愛清單",
+			"name": "Get user's recipe list by ID",
 			"request": {
 				"url": {
-					"raw": "{{host}}api/labfnp/me/fav?offset=0&limit=5",
+					"raw": "{{host}}api/labfnp/user/recipe/{{userId}}?offset=0&limit=20",
 					"host": [
 						"{{host}}api"
 					],
 					"path": [
 						"labfnp",
-						"me",
+						"user",
+						"recipe",
+						"{{userId}}"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "limit",
+							"value": "20",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get logined user's fav list",
+			"request": {
+				"url": {
+					"raw": "{{host}}api/labfnp/user/fav?offset=0&limit=5",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"labfnp",
+						"user",
 						"fav"
 					],
 					"query": [
@@ -394,9 +489,93 @@
 			"response": []
 		},
 		{
-			"name": "取得已登入的使用者 profile",
+			"name": "Get user's fav list by ID",
 			"request": {
-				"url": "{{host}}api/user/me",
+				"url": {
+					"raw": "{{host}}api/labfnp/user/fav/{{userId}}?offset=0&limit=5",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"labfnp",
+						"user",
+						"fav",
+						"{{userId}}"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "limit",
+							"value": "5",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get user profile by ID",
+			"request": {
+				"url": "{{host}}api/labfnp/user/profile/{{userId}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get logined user profile",
+			"request": {
+				"url": "{{host}}api/labfnp/user/profile",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get all recipes in lab",
+			"request": {
+				"url": {
+					"raw": "{{host}}api/labfnp/recipe/findForLab?offset=0&limit=5",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"labfnp",
+						"recipe",
+						"findForLab"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "limit",
+							"value": "5",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
 				"method": "GET",
 				"header": [],
 				"body": {},
