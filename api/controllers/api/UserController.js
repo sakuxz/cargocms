@@ -201,11 +201,12 @@ module.exports = {
     sails.log('=== getProfile ===');
     try {
       const { id } = req.params;
+      console.log('id=>', id)
       const loginUser = AuthService.getSessionUser(req);
       if (!loginUser) throw new Error('can not find user by giving user id `id`.');
 
-      const query = { where: { UserId: (id || loginUser.id), }};
-      const user = await User.findById(loginUser.id);
+      const query = { where: { id: (id || loginUser.id), }};
+      const user = await User.findOne(query);
       const isMe = (loginUser && (loginUser.id === user.id));
       if (isMe) query.where.visibility = { $not: 'PRIVATE' };
       const userRecipes = await Recipe.findAll(query);

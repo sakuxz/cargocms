@@ -254,15 +254,16 @@ module.exports = {
     sails.log('=== findMyRecipe ===');
     try {
       const { 
-        id,
         offset = 0,
         limit = 20,
       } = req.query;
+      const { id } = req.params;
+      console.log('findUserRecipe id=>', id)
       const currentUser = AuthService.getSessionUser(req);
       if (!currentUser) throw new Error('can not find user by giving user id `id` or not login yet.');
 
       const recipes = await Recipe.findAndIncludeUserLike({
-        findByUserId: id,
+        findByUserId: id === null ? currentUser.id : id,
         currentUser,
         start: parseInt(offset),
         length: parseInt(limit),
@@ -283,18 +284,20 @@ module.exports = {
     }
   },
 
-  async findMyFavorite(req, res) {
+  async findUserFavorite(req, res) {
     sails.log('=== findMyFavorite ===');
     try {
       const { 
         offset = 0,
         limit = 20,
       } = req.query;
+      const { id } = req.params;
+      console.log('findUserFavorite id=>', id)
       const currentUser = AuthService.getSessionUser(req);
       if (!currentUser) throw new Error('can not find user by giving user id `id`.');
 
       const recipes = await Recipe.findAndIncludeUserLike({
-        findByUserId: currentUser.id,
+        findByUserId: id === null ? currentUser.id : id,
         currentUser,
         start: parseInt(offset) || 0,
         length: parseInt(limit) || 20,
