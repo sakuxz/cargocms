@@ -7,7 +7,7 @@ module.exports = {
     update: ['passport', 'sessionAuth', 'jwtDecode'],
     destroy: ['passport', 'sessionAuth', 'jwtDecode'],
     findUserRecipe: ['passport', 'sessionAuth'],
-    findMyFavorite: ['passport', 'sessionAuth'],
+    findUserFavorite: ['passport', 'sessionAuth'],
   },
   'labfnp/RecipeController': {
     'create': ['passport', 'sessionAuth', 'jwtDecode'],
