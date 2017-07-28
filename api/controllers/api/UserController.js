@@ -211,7 +211,7 @@ module.exports = {
       if (isMe) query.where.visibility = { $not: 'PRIVATE' };
       const userRecipes = await Recipe.findAll(query);
       const userRecipesIds = userRecipes.map((recipe) => recipe.id);
-      
+
       // update user star score
       const score = await UserLikeRecipe.count({ where: { RecipeId: userRecipesIds } });
       user.score = score;
