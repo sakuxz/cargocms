@@ -279,6 +279,17 @@ module.exports = {
     } catch (e) {
       throw e;
     }
-  }
+  },
+
+  async getRecipeOderCounts(recipeId) {
+    let getCount = 0;
+    await RecipeOrder.findAndCountAll({
+      where: { RecipeId: recipeId }
+    })
+    .then(result => {
+      getCount = result.count;
+    });
+    return getCount;
+  },
 
 }

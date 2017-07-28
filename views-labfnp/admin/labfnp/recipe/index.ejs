@@ -10,6 +10,9 @@
       <th width="10%" data-hide="phone,tablet" style="">製作方式</th>
       <th width="15%" data-hide="phone,tablet" style="">建立日期</th>
       <th width="15%" class="no-search" data-hide="">公開狀態</th>
+      <th class="no-search" data-hide="always">
+        <i class="fa fa-fw fa-comment text-muted hidden-xs" /> 購買次數
+      </th>
       <th class="no-search" data-hide="always" style="width: 30%;">
 				<i class="fa fa-fw fa-comment text-muted hidden-xs" /> 香水描述
 			</th>
@@ -33,6 +36,7 @@
       <td>{{ item.authorName }}</td>
       <td>{{ item.createdBy }}</td>
       <td>{{ item.createdAt }}</td>
+      <td>{{ item.orderCount }}</td>
       <td>{{ item.visibilityDesc }}</td>
       <td>{{ item.description }}</td>
       <td>{{ item.message }}</td>
@@ -67,6 +71,7 @@
 			{ "data": "createdBy" },
 			{ "data": "createdAt" },
       { "data": "visibilityDesc" },
+      { "data": "orderCount" },
       { "data": "description" },
       { "data": "message" },
 			{ "data": null },
@@ -106,7 +111,7 @@
         }
       },
 			{
-				"targets"  : 8,
+				"targets"  : 9,
 				"orderable": false,
 				"searchable": false,
 				"render": function ( data, type, row ) {
@@ -123,7 +128,7 @@
 				}
 			},
 			{
-				"targets"  : 9, "orderable": false, "searchable": false,
+				"targets"  : 10, "orderable": false, "searchable": false,
 				"render": function ( data, type, row ) {
 					var json = typeof data.displayFormula === 'undefined' ? '' : data.displayFormula;
 					var colBody = typeof json[0] === 'undefined' ? '' : json[0].value;
@@ -131,7 +136,7 @@
 				}
 			},
 			{
-				"targets"  : 10, "orderable": false, "searchable": false,
+				"targets"  : 11, "orderable": false, "searchable": false,
 				"render": function ( data, type, row ) {
 					var json = typeof data.displayFormula === 'undefined' ? '' : data.displayFormula;
 					var colBody = typeof json[1] === 'undefined' ? '' : json[1].value;
@@ -139,7 +144,7 @@
 				}
 			},
 			{
-				"targets"  : 11, "orderable": false, "searchable": false,
+				"targets"  : 12, "orderable": false, "searchable": false,
 				"render": function ( data, type, row ) {
 					var json = typeof data.displayFormula === 'undefined' ? '' : data.displayFormula;
 					var colBody = typeof json[2] === 'undefined' ? '' : json[2].value;
@@ -147,7 +152,7 @@
 				}
 			},
 			{
-				"targets"  : 12, "orderable": false, "searchable": false,
+				"targets"  : 13, "orderable": false, "searchable": false,
 				"render": function ( data, type, row ) {
 					var json = typeof data.displayFormula === 'undefined' ? '' : data.displayFormula;
 					var colBody = typeof json[3] === 'undefined' ? '' : json[3].value;
@@ -155,7 +160,7 @@
 				}
 			},
 			{
-				"targets"  : 13, "orderable": false, "searchable": false,
+				"targets"  : 14, "orderable": false, "searchable": false,
 				"render": function ( data, type, row ) {
 					var json = typeof data.displayFormula === 'undefined' ? '' : data.displayFormula;
 					var colBody = typeof json[4] === 'undefined' ? '' : json[4].value;
@@ -163,7 +168,7 @@
 				}
 			},
 			{
-				"targets"  : 14, "orderable": false, "searchable": false,
+				"targets"  : 15, "orderable": false, "searchable": false,
 				"render": function ( data, type, row ) {
 					var json = typeof data.displayFormula === 'undefined' ? '' : data.displayFormula;
 					var colBody = typeof json[5] === 'undefined' ? '' : json[5].value;
