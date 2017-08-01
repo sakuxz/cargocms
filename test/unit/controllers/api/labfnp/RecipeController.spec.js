@@ -1,7 +1,7 @@
 var sinon = require('sinon');
 describe('about LikeRecipe Controller operation.', function() {
 
-  let recipe, user;
+  let recipe, user, recipeNew, userNew;
   before(async (done) => {
     try {
       user = await User.create({
@@ -41,6 +41,25 @@ describe('about LikeRecipe Controller operation.', function() {
         ScentId: scent.id,
         UserId: user.id,
       })
+
+      userNew = await User.create({
+        username: 'Test',
+        email: 'test@test.com',
+        password: ''
+      });
+      recipeNew = await Recipe.create({
+        formula:[
+          {"drops":"1","scent":"BA69","color":"#E87728"},
+          {"drops":"2","scent":"BA70","color":"#B35721"}
+        ],
+        formulaLogs: '',
+        authorName: 'Test',
+        perfumeName: 'Hello World',
+        visibility: 'PUBLIC',
+        message: 'Testing',
+        UserId: userNew.id,
+      });
+
       done()
     } catch (e) {
       done(e)
@@ -171,6 +190,60 @@ describe('about LikeRecipe Controller operation.', function() {
       // let check = await ScentFeedback.findAll();
       // console.log(check);
       // check.length.should.be.above(0);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+  it('get user recipe success.', async (done) => {
+    try {
+      const res = await request(sails.hooks.http.app)
+      .get(`/api/labfnp/user/recipe`);
+      res.body.data.should.be.Object;
+      res.body.data.recipes[0].message.should.be.String;
+      res.body.data.recipes[0].UserId.should.be.equal(user.id)
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+  it('get another user recipe success.', async (done) => {
+    try {
+      const res = await request(sails.hooks.http.app)
+      .get(`/api/labfnp/user/recipe/${userNew.id}`);
+      res.body.data.should.be.Object;
+      res.body.data.recipes[0].message.should.be.String;
+      res.body.data.recipes[0].UserId.should.be.equal(userNew.id)
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+  it('get user favorite recipe success.', async (done) => {
+    try {
+      await UserLikeRecipe.create({
+        RecipeId: recipe.id,
+        UserId: user.id,
+      })
+
+      const res = await request(sails.hooks.http.app)
+      .get('/api/labfnp/user/fav');
+      res.body.data.recipes[0].id.should.be.equal(recipe.id)
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+  it('get another user favorite recipe success.', async (done) => {
+    try {
+      await UserLikeRecipe.create({
+        RecipeId: recipeNew.id,
+        UserId: userNew.id,
+      })
+
+      const res = await request(sails.hooks.http.app)
+      .get(`/api/labfnp/user/fav/${userNew.id}`);
+      res.body.data.recipes[0].id.should.be.equal(recipeNew.id)
       done();
     } catch (e) {
       done(e);

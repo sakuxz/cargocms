@@ -261,9 +261,8 @@ module.exports = {
       console.log('findUserRecipe id=>', id)
       const currentUser = AuthService.getSessionUser(req);
       if (!currentUser) throw new Error('can not find user by giving user id `id` or not login yet.');
-
       const recipes = await Recipe.findAndIncludeUserLike({
-        findByUserId: id === null ? currentUser.id : id,
+        findByUserId: _.isNil(id) ? currentUser.id : id,
         currentUser,
         start: parseInt(offset),
         length: parseInt(limit),
@@ -292,16 +291,16 @@ module.exports = {
         limit = 20,
       } = req.query;
       const { id } = req.params;
-      console.log('findUserFavorite id=>', id)
       const currentUser = AuthService.getSessionUser(req);
       if (!currentUser) throw new Error('can not find user by giving user id `id`.');
 
+      const findUser = (_.isNil(id)) ? (currentUser) : (await User.findById(id));
       const recipes = await Recipe.findAndIncludeUserLike({
-        findByUserId: id === null ? currentUser.id : id,
+        findByUserId: _.isNil(id) ? currentUser.id : id,
         currentUser,
         start: parseInt(offset) || 0,
         length: parseInt(limit) || 20,
-        likeUser: currentUser,
+        likeUser: findUser,
       });
 
       const message = 'get user favorite recipes success';

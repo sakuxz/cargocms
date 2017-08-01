@@ -273,30 +273,4 @@ describe('about Recipe Controller operation.', function() {
       done(e);
     }
   });
-  it('get user recipe success.', async (done) => {
-    try {
-      const res = await request(sails.hooks.http.app)
-      .get(`/api/labfnp/me/recipe?id=${user.id}`);
-      res.body.data.should.be.Object;
-      res.body.data.recipes[0].message.should.be.String;
-      res.body.data.recipes[0].UserId.should.be.equal(user.id)
-      done();
-    } catch (e) {
-      done(e);
-    }
-  });
-  it('get user favorite recipe success.', async (done) => {
-    try {
-      const reqlike = await request(sails.hooks.http.app)
-      .post(`/api/labfnp/recipe/like/${recipe.id}`);
-      reqlike.body.success.should.be.true;
-
-      const res = await request(sails.hooks.http.app)
-      .get('/api/labfnp/me/fav');
-      res.body.data.recipes[0].id.should.be.equal(recipe.id)
-      done();
-    } catch (e) {
-      done(e);
-    }
-  });
 });
