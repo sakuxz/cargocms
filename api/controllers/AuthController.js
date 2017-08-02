@@ -75,6 +75,7 @@ module.exports = {
       return passport.endpoint(req, res);
     } catch (e) {
       sails.log.error(e);
+      return res.negotiate(e);
     }
   },
 
