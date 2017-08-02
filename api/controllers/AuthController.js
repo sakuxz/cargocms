@@ -63,10 +63,19 @@ module.exports = {
   },
 
   provider: function(req, res) {
+    sails.log('=== oauth login provider ===');
     try {
-      passport.endpoint(req, res);
+      const isAuthenticated = req.session.authenticated;
+      const user = AuthService.getSessionUser(req);
+      if (isAuthenticated || user) {
+        sails.log.warn(`found logined user! force loging out user ${user.username}.`);
+        req.session.authenticated = false;
+        req.logout();
+      }
+      return passport.endpoint(req, res);
     } catch (e) {
       sails.log.error(e);
+      return res.negotiate(e);
     }
   },
 
