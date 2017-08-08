@@ -52,4 +52,27 @@ module.exports = {
     }
   },
 
+	getUrl (api) {
+    try {
+      const DOMAIN_HOST = sails.config.appUrl;
+      let url = `${DOMAIN_HOST}/${api}`;
+      if (url.indexOf('http://') === 0) {
+        url = url.replace(/^http:\/\//g, '');
+        sails.log('url=>', url)
+        url = url.replace(/\/\//g, '/');
+        sails.log('url=>', url)
+        return `http://${url}`;
+      } else if (url.indexOf('https://') === 0) {
+        url = url.replace(/^https:\/\//g, '');
+        sails.log('url=>', url)
+        url = url.replace(/\/\//g, '/');
+        sails.log('url=>', url)
+        return `https://${url}`;
+      }
+      return url.replace(/\/\//g, '/');
+    } catch (e) {
+      throw e;
+    }
+  },
+
 }
