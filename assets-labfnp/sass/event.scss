@@ -1,0 +1,72 @@
+
+h2,h3,p {
+  color: #000000;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+section {
+  height: 180px;
+  p {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
+.icon-img {
+  width: 5%;
+  margin-right: 10px;
+}
+
+.fb-icon {
+  padding-top: 6px;
+}
+
+.btn-active {
+  width: 35%;
+  border: 2px solid #5CB85C;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  color: #5CB85C;
+}
+
+.btn-disable {
+  width: 35%;
+  border: 2px solid #F3F3F3;
+  border-radius: 8px;
+  background-color: #F3F3F3;
+  color: #727272;
+}
+
+.card-wrapper {
+  border-radius: 5px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  background-color: #FFFFFF;
+  margin-bottom: 60px;
+  @media screen and (min-width: 991px) {
+    .img {
+      height: 277.5px;
+    }
+    .allpostsImg {
+      height: 180px;
+    }
+  }
+  .img-responsive {
+    border-radius: 5px 5px 0 0;
+  }
+  .card-box {
+    padding: 24px;
+    h3 {
+      color: #4A4A4A;
+      font-size: 1.3em;
+      margin: 0 0 16px;
+      .icon-img {
+        width: 4%;
+      }
+    }
+  }
+}

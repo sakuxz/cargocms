@@ -1,12 +1,17 @@
 import moment from 'moment';
+
 module.exports = {
   attributes: {
     title: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     content: {
       type: Sequelize.TEXT,
+    },
+    chosen: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
     },
     url: {
       type: Sequelize.STRING,
@@ -17,9 +22,9 @@ module.exports = {
       validate: {
         is: {
           args: /^[a-zA-Z0-9-]+$/i,
-          msg: '可讀網址只允許英文、數字、符號"-"'
+          msg: '可讀網址只允許英文、數字、符號"-"',
         },
-      }
+      },
     },
     abstract: {
       type: Sequelize.STRING,
@@ -34,7 +39,7 @@ module.exports = {
     },
     typeDesc: {
       type: Sequelize.VIRTUAL,
-      get: function() {
+      get() {
         let desc = '';
         switch (this.type) {
           case 'blog':
@@ -50,95 +55,105 @@ module.exports = {
             desc = '';
         }
         return desc;
-      }
+      },
     },
 
     coverUrl: {
       type: Sequelize.STRING,
-      get: function() {
+      get() {
         try {
           if (this.coverType === 'img') {
             const thisImage = this.getDataValue('Image');
             return thisImage ? thisImage.url : '';
-          } else {
-            return this.getDataValue('coverUrl');
           }
+          return this.getDataValue('coverUrl');
         } catch (e) {
           sails.log.error(e);
         }
-      }
+      },
     },
 
     publish: {
       type: Sequelize.BOOLEAN,
-      defaultValue: true
+      defaultValue: true,
     },
 
     TagsArray: {
       type: Sequelize.VIRTUAL,
-      get: function() {
+      get() {
         try {
           const thisTags = this.getDataValue('Tags');
-          const tags = thisTags ? thisTags.map((tag) => tag.title) : [];
+          const tags = thisTags ? thisTags.map(tag => tag.title) : [];
           return tags;
         } catch (e) {
           sails.log.error(e);
         }
-      }
+      },
     },
-    createdDateTime:{
+    createdDateTime: {
       type: Sequelize.VIRTUAL,
-      get: function(){
-        try{
+      get() {
+        try {
           return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
-        } catch(e){
+        } catch (e) {
           sails.log.error(e);
         }
-      }
+      },
     },
 
-    updatedDateTime:{
+    updatedDateTime: {
       type: Sequelize.VIRTUAL,
-      get: function(){
-        try{
+      get() {
+        try {
           return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
-        } catch(e){
+        } catch (e) {
           sails.log.error(e);
         }
-      }
-    }
+      },
+    },
 
   },
   associations: () => {
-    Post.belongsToMany(Tag,  {
+    Post.belongsToMany(Tag, {
       through: 'PostTag',
       foreignKey: {
         name: 'PostId',
-        as: 'Tags'
-      }
-    }),
+        as: 'Tags',
+      },
+    });
     Post.belongsTo(Image, {
       foreignKey: {
-        name: 'cover'
-      }
+        name: 'cover',
+      },
     });
     Post.belongsTo(User, {
       foreignKey: {
-        name: 'UserId'
-      }
+        name: 'UserId',
+      },
     });
     Post.belongsTo(Location);
   },
   options: {
     classMethods: {
-      findAllHasJoin: async ({order, offset, limit, where}) => {
+      findAllHasJoin: async ({ order, offset, limit, where }) => {
         try {
-          if(where == undefined) where = {};
+          if (where === undefined) where = {};
           return await Post.findAll({
             where,
             offset,
             limit,
             order: [['createdAt', order || 'DESC']],
+            include: [Tag, Image, User, Location, Event],
+          });
+        } catch (e) {
+          sails.log.error(e);
+          throw e;
+        }
+      },
+      findByIdHasJoin: async ({ id }) => {
+        try {
+          return await Post.findOne({
+            where: { id },
             include: [Tag, Image, User, Location],
           });
         } catch (e) {
@@ -146,22 +161,11 @@ module.exports = {
           throw e;
         }
       },
-      findByIdHasJoin: async ({id}) => {
-        try {
-          return await Post.findOne({
-            where: { id },
-            include: [ Tag, Image, User, Location]
-          });
-        } catch (e) {
-          sails.log.error(e);
-          throw e;
-        }
-      },
-      findByIdHasJoinByEvent: async ({id, name}) => {
+      findByIdHasJoinByEvent: async ({ id, name }) => {
         try {
           return await Post.findOne({
             where: { $or: [{ id: id || name }, { alias: name }] },
-            include: [ Tag, Image, User, Location, Event]
+            include: [Tag, Image, User, Location, Event],
           });
         } catch (e) {
           sails.log.error(e);
@@ -175,7 +179,7 @@ module.exports = {
             include: {
               model: Tag,
               where: { id },
-            }
+            },
           });
         } catch (e) {
           sails.log.error(e);
@@ -192,6 +196,6 @@ module.exports = {
       },
     },
     instanceMethods: {},
-    hooks: {}
-  }
+    hooks: {},
+  },
 };

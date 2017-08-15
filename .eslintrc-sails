@@ -1,6 +1,11 @@
 {
 	"globals": {
 		"sails": true,
-		"passport": true
+		"passport": true,
+    "Post": true,
+    "Sequelize": true,
+    "Image": true,
+    "Event": true,
+    "SocialService": true
   }
 }
