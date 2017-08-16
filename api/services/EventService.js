@@ -53,9 +53,12 @@ module.exports = {
         ],
       });
 
+      const popular = popularPosts[0] || posts[posts.length - 1];
+      const chosen = chosenPosts ? chosenPosts.toJSON() : posts[posts.length - 2];
+
       return {
-        popular: popularPosts[0] || posts[posts.length - 1],
-        chosen: chosenPosts || posts[posts.length - 2],
+        popular,
+        chosen,
         allposts: posts,
       };
     } catch (e) {

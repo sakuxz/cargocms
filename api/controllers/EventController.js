@@ -14,9 +14,9 @@ module.exports = {
       // const posts = await Post.findAllHasJoin({ order, where });
 
       const { popular, chosen, allposts } = await EventService.getEvent();
-      const popularSocial = SocialService.forPost({ popular: [popular] });
-      const chosenSocial = SocialService.forPost({ chosen: [chosen] });
-      const social = SocialService.forPost({ allposts });
+      const popularSocial = SocialService.forPost([popular]);
+      const chosenSocial = SocialService.forPost([chosen]);
+      const social = SocialService.forPost(allposts);
       // const items = posts;
       // const data = {items}
 
@@ -51,7 +51,7 @@ module.exports = {
       if (data.url) {
         return res.redirect(data.url);
       }
-      const social = SocialService.forPost({ posts: [data] });
+      const social = SocialService.forPost([data]);
 
       data.Events.forEach((e) => {
         e = Object.assign(e, EventService.getTicketStatus(e, new Date()));

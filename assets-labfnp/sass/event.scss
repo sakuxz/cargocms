@@ -7,16 +7,6 @@ h2 {
   font-size: 1.5em;
 }
 
-section {
-  height: 180px;
-  p {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-}
-
 .icon-img {
   width: 5%;
   margin-right: 10px;
@@ -60,6 +50,15 @@ section {
   }
   .card-box {
     padding: 24px;
+    section {
+      height: 180px;
+      p {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+    }
     h3 {
       color: #4A4A4A;
       font-size: 1.3em;

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 
 module.exports = {
   getShareUrl() {
@@ -39,22 +39,24 @@ module.exports = {
     }
   },
 
-  forPost: ({ popular, chosen, allposts, blogposts }) => {
+  forPost: (posts) => {
     try {
       const socialsConfig = sails.config.socials;
-      let posts;
+      // let posts;
 
-      if (!_.isNil(popular)) {
-        posts = popular;
-      } else if (!_.isNil(chosen)) {
-        posts = chosen;
-      } else if (!_.isNil(allposts)) {
-        posts = allposts;
-      } else {
-        posts = blogposts;
-      }
+      // if (!_.isNil(popular)) {
+      //   posts = popular;
+      // } else if (!_.isNil(chosen)) {
+      //   posts = chosen;
+      // } else if (!_.isNil(allposts)) {
+      //   posts = allposts;
+      // } else {
+      //   posts = blogposts;
+      // }
+      const socialsPosts = JSON.parse(JSON.stringify(posts));
+      sails.log('posts=>', socialsPosts);
 
-      const socialData = posts.map((post) => {
+      const socialData = socialsPosts.map((post) => {
         const { id, title, type, alias } = post;
         const description = '';
         let url = '';

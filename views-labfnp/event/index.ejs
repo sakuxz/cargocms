@@ -2,17 +2,64 @@
 <!--=== Event Card ===-->
 <div class="bg-color-light">
 	<div class="container content-sm">
-		<div class="row">
-			<!-- Popular Event -->
-			<div class="col-md-6 col-xs-12 native-hide">
-					<h2><img class="icon-img" src="/assets/labfnp/img/popular.png" alt="">熱門活動</h2>
-            <% if (data.popular !== null) { %>
+		  <div class="row">
+      	  <!-- Popular Event -->
+          <div class="col-md-6 col-xs-12 native-hide">
+              <h2><img class="icon-img" src="/assets/labfnp/img/popular.png" alt="">熱門活動</h2>
+                <% if (data.popular !== null) { %>
+                  <div class="card-wrapper">
+                    <img class="img img-responsive full-width" src="<%= data.popular.cover ? data.popular.coverUrl : '' %>" alt="">
+                    <div class="card-box">
+                      <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt=""><%= data.popular.title %></h3>
+                      <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt=""><%= `${data.popular.createdAt.getFullYear()}/${data.popular.createdAt.getMonth() + 1}/${data.popular.createdAt.getDate()}` %></h3>
+                      <a class="btn btn-success btn-active btn-lg" href="/events/<%= data.popular.alias || data.popular.id %>" <%= data.popular.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
+                      <div class="fb-icon pull-right">
+                        <% var socialData = social.popularSocial.data[0] %>
+                        <%- include ../lib/fbLikeShare.ejs %>
+                      </div>
+                    </div>
+                  </div>
+                <% } %>
+          </div>
+          <!-- End Popular Event -->
+          <!-- Chosen Event -->
+          <div class="col-md-6 col-xs-12 native-hide">
+              <h2><img class="icon-img" src="/assets/labfnp/img/featured.png" alt="">精選活動</h2>
+                <% if (data.chosen !== null) { %>
+                    <div class="card-wrapper">
+                      <img class="img img-responsive full-width" src="<%= data.chosen.cover ? data.chosen.coverUrl : '' %>" alt="">
+                      <div class="card-box">
+                        <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt=""><%= data.chosen.title %></h3>
+                        <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt=""><%= `${data.chosen.createdAt.getFullYear()}/${data.chosen.createdAt.getMonth() + 1}/${data.chosen.createdAt.getDate()}` %></h3>
+                        <a class="btn btn-success btn-active btn-lg" href="/events/<%= data.chosen.alias || data.chosen.id %>" <%= data.chosen.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
+                        <div class="fb-icon pull-right">
+                          <% var socialData = social.chosenSocial.data[0] %>
+                          <%- include ../lib/fbLikeShare.ejs %>
+                        </div>
+                      </div>
+                    </div>
+                <% } %>
+          </div>
+          <!-- End Chosen Event -->
+			</div>
+      <div class="row">
+        <!-- All Event -->
+        <div class="col-md-6 col-xs-12 native-hide">
+          <h2><img class="icon-img" src="/assets/labfnp/img/campaign.png" alt="">其他豐富活動</h2>
+        </div>
+      </div>
+      <div class="row">
+          <% data.allposts.forEach(function(item, index) { %>
+            <div class="col-md-4 col-xs-12 native-hide">
               <div class="card-wrapper">
                 <img class="img img-responsive full-width" src="<%= data.popular.cover ? data.popular.coverUrl : '' %>" alt="">
                 <div class="card-box">
-                  <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt=""><%= data.popular.title %></h3>
-                  <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt=""><%= `${data.popular.createdAt.getFullYear()}/${data.popular.createdAt.getMonth() + 1}/${data.popular.createdAt.getDate()}` %></h3>
-                  <a class="btn btn-success btn-active btn-lg" href="">訂購</a>
+                  <section>
+                    <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt=""><%= item.title %></h3>
+                    <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt=""><%= `${item.createdAt.getFullYear()}/${item.createdAt.getMonth() + 1}/${item.createdAt.getDate()}` %></h3>
+                    <p><%= item.abstract %></p>
+                  </section>
+                  <a class="btn btn-success btn-active btn-lg" href="/events/<%= item.alias || item.id %>" <%= item.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
                   <div class="fb-icon pull-right">
                     <% var socialData = social.popularSocial.data[0] %>
                     <%- include ../lib/fbLikeShare.ejs %>
