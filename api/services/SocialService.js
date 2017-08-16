@@ -54,7 +54,6 @@ module.exports = {
       //   posts = blogposts;
       // }
       const socialsPosts = JSON.parse(JSON.stringify(posts));
-      sails.log('posts=>', socialsPosts);
 
       const socialData = socialsPosts.map((post) => {
         const { id, title, type, alias } = post;
