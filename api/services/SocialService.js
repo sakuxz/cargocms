@@ -42,17 +42,6 @@ module.exports = {
   forPost: (posts) => {
     try {
       const socialsConfig = sails.config.socials;
-      // let posts;
-
-      // if (!_.isNil(popular)) {
-      //   posts = popular;
-      // } else if (!_.isNil(chosen)) {
-      //   posts = chosen;
-      // } else if (!_.isNil(allposts)) {
-      //   posts = allposts;
-      // } else {
-      //   posts = blogposts;
-      // }
       const socialsPosts = JSON.parse(JSON.stringify(posts));
 
       const socialData = socialsPosts.map((post) => {
