@@ -126,7 +126,13 @@ module.exports = {
     },
     avatar: {
       type: Sequelize.STRING,
-      defaultValue: '/assets/admin/img/avatars/default.png'
+      get: function() {
+        try {
+          return UtilsService.getUrl('assets/admin/img/avatars/default.png');
+        } catch (e) {
+          sails.log.error(e);
+        }
+      }
     },
     avatarThumb: {
       type: Sequelize.STRING,
