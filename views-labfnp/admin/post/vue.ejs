@@ -1,15 +1,16 @@
-var COMMON = {
+let COMMON = {
   DOUBLE_CLICK_TIME_PERIOD: 250,
   DEFAULT_INDEX: -1,
-  DEFAULT_AVATAR: "img/avatars/default.png",
+  DEFAULT_AVATAR: 'img/avatars/default.png',
 };
 
-var itemBeforeEdit = {};
-var postAppModel = {
+let itemBeforeEdit = {};
+let postAppModel = {
   data: {
     item: {
       title: '',
       content: '',
+      chosen: '',
       cover: '',
       coverUrl: '',
       url: '',
@@ -17,31 +18,31 @@ var postAppModel = {
       tags: [],
       TagsArray: [],
       coverType: 'img',
-      eventId: [{id: 0}],
+      eventId: [{ id: 0 }],
     },
     items: [],
     option: {
       originCoverType: '',
       originCoverUrl: '',
-      allevent: []
-    }
+      allevent: [],
+    },
   },
   view: {
     table: {
       selectIndex: COMMON.DEFAULT_INDEX,
     },
-  }
-}
+  },
+};
 
 var postApp = new Vue({
   data: postAppModel,
   methods: {
-    cancel: function (event) {
+    cancel (event) {
       postApp.onLeavePageEdit(function() {
         location.href = '/admin/#/admin/post';
       });
     },
-    save: function (event) {
+    save (event) {
       postAppModel.data.item.TagsArray = $('#tagsinput').tagsinput('items');
       postAppModel.data.item.content = $('.summernote').summernote('code');
       $.ajax({
@@ -70,7 +71,7 @@ var postApp = new Vue({
         messageApp.show({desc: '新增資料失敗！errorMessage: ' + result.responseJSON.message, type: 'error'});
       }
     },
-    update: function (event) {
+    update (event) {
       postAppModel.data.item.TagsArray = $('#tagsinput').tagsinput('items');
       postAppModel.data.item.content = $('.summernote').summernote('code');
       $.ajax({
@@ -100,7 +101,7 @@ var postApp = new Vue({
         messageApp.show({desc: '更新資料失敗！errorMessage: ' + result.responseJSON.message, type: 'error'});
       }
     },
-    loadItem: function (cb) {
+    loadItem (cb) {
       window.onbeforeunload = null;
       $.get('/api/admin/post/' + postAppModel.data.item.id, ajaxSuccess);
 
@@ -120,7 +121,7 @@ var postApp = new Vue({
         console.log("loadItem postAppModel.data.item=>", postAppModel.data.item);
       } // end ajaxSuccess
     },
-    setupForm: function(type) {
+    setupForm(type) {
       uploadImageApp.updateModel('itemLimit', 1);
       uploadImageApp.updateModel('onComplete', function(id, name, response){
         postAppModel.data.item.cover = response.data.id;
@@ -178,13 +179,13 @@ var postApp = new Vue({
       });
       $('#wid-id-4').fadeIn();
     },
-    isPageEditDataModified: function() {
+    isPageEditDataModified() {
       var itemBeforeLeave = JSON.stringify(postAppModel.data.item);
       var isDataModified = itemBeforeEdit !== itemBeforeLeave;
       if (!isDataModified) window.onbeforeunload = null;
       return isDataModified;
     },
-    onEnterPageEdit: function() {
+    onEnterPageEdit() {
       postAppModel.data.item.TagsArray.forEach(function(tag){
         $('#tagsinput').tagsinput('add', tag);
       })
@@ -198,7 +199,7 @@ var postApp = new Vue({
         }
       };
     },
-    onLeavePageEdit: function(cb) {
+    onLeavePageEdit(cb) {
       if (postApp.isPageEditDataModified()) {
         var msgInfo = {
           title: '注意',
@@ -215,7 +216,7 @@ var postApp = new Vue({
         messageApp.confirm(msgInfo, action);
       } else return cb();
     },
-    loadItems: function (cb) {
+    loadItems (cb) {
       $(".loading-wrapper").addClass('active');
       window.onbeforeunload = null;
       $.get('/api/admin/post', ajaxSuccess);
@@ -225,7 +226,7 @@ var postApp = new Vue({
         if (typeof cb !== 'undefined') setTimeout(cb, 0);
       } // end ajaxSuccess
     },
-    renderTable: function() {
+    renderTable() {
       /* BASIC ;*/
      var responsiveHelper_post_table = undefined;
      var responsiveHelper_datatable_fixed_column = undefined;
@@ -340,11 +341,11 @@ var postApp = new Vue({
 
      $('#main-table-widget').fadeIn();
     },
-    dblclick: function(index) {
+    dblclick(index) {
       var postId = postAppModel.data.items[index].id;
       this.show(postId);
     },
-    selection: function (index) {
+    selection (index) {
       if (index !== postAppModel.view.table.selectIndex) {
         postAppModel.view.table.selectIndex = index;
         console.log("postAppModel.view.table.selectIndex", postAppModel.view.table.selectIndex);
@@ -352,13 +353,13 @@ var postApp = new Vue({
         postAppModel.view.table.selectIndex = COMMON.DEFAULT_INDEX;
       }
     },
-    show: function (postId) {
+    show (postId) {
       location.href = '/admin/#/admin/post/show/' + postId;
     },
-    edit: function (postId) {
+    edit (postId) {
       location.href = '/admin/#/admin/post/edit/' + postId;
     },
-    delete: function() {
+    delete() {
       messageApp.confirm({
         title: '刪除',
         content: '確認刪除此筆資料？',
@@ -391,7 +392,7 @@ var postApp = new Vue({
         }
       });
     },
-    newSummernote: function() {
+    newSummernote() {
       $('.summernote').summernote({
         height: 300,
         placeholder: '請輸入內容',
@@ -409,7 +410,7 @@ var postApp = new Vue({
         ]
       });
     },
-    selectOnChange: function() {
+    selectOnChange() {
       var originCoverType = postAppModel.data.option.originCoverType;
       console.log(postAppModel.data.option);
       console.log(originCoverType == postAppModel.data.item.coverType)
@@ -419,17 +420,17 @@ var postApp = new Vue({
         postAppModel.data.item.coverUrl = '';
       }
     },
-    onEventAddClick: function() {
+    onEventAddClick() {
       console.log(postAppModel.data.item.eventId);
 
       postAppModel.data.item.eventId.push({id: 0});
     },
-    onEventSubtractClick: function(index) {
+    onEventSubtractClick(index) {
       console.log(postAppModel.data.item.eventId);
       postAppModel.data.item.eventId.splice(index, 1);
 
     },
-    loadEventItem: function (type) {
+    loadEventItem (type) {
       if (type == 'create') {
         $.get('/api/admin/event/new', ajaxSuccess);
       } else if(type == 'edit') {
@@ -443,27 +444,27 @@ var postApp = new Vue({
         }
       } // end ajaxSuccess
     },
-    onEventEdit: function (id) {
+    onEventEdit (id) {
       var url = '/admin/#/admin/event/edit/' + id + '?callback=/post/edit/' + postAppModel.data.item.id;
       $('#post-form').data('reload', true);
       postApp.onLeavePageEdit(function() {
         location.href = url;
       });
     },
-    onCreateNewEvet: function() {
+    onCreateNewEvet() {
       var url = '/admin/#/admin/event/create?callback=/post/edit/' + postAppModel.data.item.id;
       $('#post-form').data('reload', true);
       postApp.onLeavePageEdit(function() {
         location.href = url;
       });
-    }
+    },
   },
 });
 
 Vue.directive('summernote', {
-  update: function (value) {
+  update (value) {
     if (value !== '') {
       setTimeout(postApp.newSummernote,0);
     }
-  }
-})
+  },
+});

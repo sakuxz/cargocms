@@ -2,19 +2,19 @@ module.exports = {
 
   index: async (req, res) => {
     try {
-      const {type} = req.query
+      const { type } = req.query;
       const order = 'DESC';
-      let where = {
+      const where = {
         publish: true,
-        type: "blog"
-      }
+        type: 'blog',
+      };
 
-      let posts = await Post.findAllHasJoin({order, where});
+      const posts = await Post.findAllHasJoin({ order, where });
 
-      const social = SocialService.forPost({posts});
+      const social = SocialService.forPost(posts);
       const items = posts;
-      const data = {items}
-      res.view('blog/index', {data, social});
+      const data = { items };
+      res.view('blog/index', { data, social });
     } catch (e) {
       res.serverError(e);
     }
