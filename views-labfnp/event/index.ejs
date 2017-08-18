@@ -12,7 +12,7 @@
                     <div class="card-box">
                       <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt=""><%= data.popular.title %></h3>
                       <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt=""><%= `${data.popular.createdAt.getFullYear()}/${data.popular.createdAt.getMonth() + 1}/${data.popular.createdAt.getDate()}` %></h3>
-                      <a class="btn btn-success btn-active btn-lg" href="/events/<%= data.popular.alias || data.popular.id %>" <%= data.popular.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
+                      <a class="btn btn-success btn-active btn-lg" href="/events/<%= data.popular.alias || data.popular.id %> #order" <%= data.popular.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
                       <div class="fb-icon pull-right">
                         <% var socialData = social.popularSocial.data[0] %>
                         <%- include ../lib/fbLikeShare.ejs %>
@@ -31,7 +31,7 @@
                       <div class="card-box">
                         <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt=""><%= data.chosen.title %></h3>
                         <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt=""><%= `${data.chosen.createdAt.getFullYear()}/${data.chosen.createdAt.getMonth() + 1}/${data.chosen.createdAt.getDate()}` %></h3>
-                        <a class="btn btn-success btn-active btn-lg" href="/events/<%= data.chosen.alias || data.chosen.id %>" <%= data.chosen.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
+                        <a class="btn btn-success btn-active btn-lg" href="/events/<%= data.chosen.alias || data.chosen.id %> #order" <%= data.chosen.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
                         <div class="fb-icon pull-right">
                           <% var socialData = social.chosenSocial.data[0] %>
                           <%- include ../lib/fbLikeShare.ejs %>
@@ -59,7 +59,7 @@
                     <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt=""><%= `${item.createdAt.getFullYear()}/${item.createdAt.getMonth() + 1}/${item.createdAt.getDate()}` %></h3>
                     <p><%= item.abstract %></p>
                   </section>
-                  <a class="btn btn-success btn-active btn-lg" href="/events/<%= item.alias || item.id %>" <%= item.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
+                  <a class="btn btn-success btn-active btn-lg" href="/events/<%= item.alias || item.id %> #order" <%= item.type == 'external-event' ? 'target="_blank"' : '' %> >訂購</a>
                   <div class="fb-icon pull-right">
                     <% var socialData = social.social.data[0] %>
                     <%- include ../lib/fbLikeShare.ejs %>
