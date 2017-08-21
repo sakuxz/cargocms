@@ -14,9 +14,9 @@ module.exports = {
       const social = SocialService.forPost(posts);
       const items = posts;
       const data = { items };
-      res.view('blog/index', { data, social });
+      return res.view('blog/index', { data, social });
     } catch (e) {
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 
@@ -33,9 +33,9 @@ module.exports = {
         return res.notFound();
       }
       const social = SocialService.forPost([data]);
-      res.view('blog/show', { data, social });
+      return res.view('blog/show', { data, social });
     } catch (e) {
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 };
