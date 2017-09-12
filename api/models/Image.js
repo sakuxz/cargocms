@@ -32,7 +32,7 @@ module.exports = {
           if (this.storage === 'local') {
             // return last part after split prevent install on
             // /public/cargocms or /public_html/cargocms will not return current path
-            return thisFilePath.split('/.tmp/public').pop();
+            return thisFilePath.split('/.tmp/public/').pop();
           } else if (this.storage ==='url') {
             return thisFilePath;
           } else if (this.storage ==='s3') {
