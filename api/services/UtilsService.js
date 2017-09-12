@@ -57,9 +57,9 @@ module.exports = {
       let DOMAIN_HOST = sails.config.appUrl;
       let apiPath = api.replace(/\/\//g, '');
       if (api.startsWith('/')) {
-        apiPath = apiPath.substr(1, apiPath.length);
+        apiPath = api.substr(1, api.length);
       } else if (api.startsWith('//')) {
-        apiPath = apiPath.substr(2, apiPath.length);
+        apiPath = api.substr(2, api.length);
       }
       if (DOMAIN_HOST.indexOf('http://') === 0) {
         DOMAIN_HOST = DOMAIN_HOST.replace(/^http:\/\//g, '');
@@ -70,7 +70,7 @@ module.exports = {
         sails.log('url=>', `http://${DOMAIN_HOST}${apiPath}`);
         return `https://${DOMAIN_HOST}${apiPath}`;
       }
-      return `https://${DOMAIN_HOST}${apiPath}`;
+      return apiPath.replace(/\/\//g, '/');
     } catch (e) {
       throw e;
     }
