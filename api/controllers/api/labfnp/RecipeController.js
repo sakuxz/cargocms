@@ -278,10 +278,22 @@ module.exports = {
         likeUser: null,
       });
 
+      const formatItems = [];
+      for (const item of recipes) {
+        const newItem = JSON.parse(JSON.stringify(item));
+        if (item.UserLikeRecipes && item.UserLikeRecipes.length > 0) {
+          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === user.id);
+          if (isSessionUserLiked.length > 0) {
+            newItem.isFaved = true;
+          } else newItem.isFaved = false;
+        } else newItem.isFaved = false;
+        formatItems.push(newItem);
+      }
+
       const message = 'get user recipes success';
       return res.ok({
         data: {
-          recipes,
+          recipes: formatItems,
         },
         message,
       });
@@ -311,10 +323,22 @@ module.exports = {
         likeUser: findUser,
       });
 
+      const formatItems = [];
+      for (const item of recipes) {
+        const newItem = JSON.parse(JSON.stringify(item));
+        if (item.UserLikeRecipes && item.UserLikeRecipes.length > 0) {
+          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === user.id);
+          if (isSessionUserLiked.length > 0) {
+            newItem.isFaved = true;
+          } else newItem.isFaved = false;
+        } else newItem.isFaved = false;
+        formatItems.push(newItem);
+      }
+
       const message = 'get user favorite recipes success';
       return res.ok({
         data: {
-          recipes,
+          recipes: formatItems,
         },
         message,
       });
