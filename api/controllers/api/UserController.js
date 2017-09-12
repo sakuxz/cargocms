@@ -205,17 +205,25 @@ module.exports = {
       const loginUser = AuthService.getSessionUser(req);
       if (!loginUser) throw new Error('can not find user by giving user id `id`.');
 
-      const query = { where: { id: (id || loginUser.id), }};
-      const user = await User.findOne(query);
+      const user = await User.findOne({ where: { id: (id || loginUser.id) } });
       const isMe = (loginUser && (loginUser.id === user.id));
+      
+      const query = { where: {} };
       if (isMe) query.where.visibility = { $not: 'PRIVATE' };
       const userRecipes = await Recipe.findAll(query);
-      const userRecipesIds = userRecipes.map((recipe) => recipe.id);
+      const userRecipesIds = userRecipes.map(recipe => recipe.id);
 
       // update user star score
       const score = await UserLikeRecipe.count({ where: { RecipeId: userRecipesIds } });
       user.score = score;
       await user.save();
+
+      const coverPhotoArray = userRecipes.filter(e => e.coverPhoto && e.coverPhoto.length > 0);
+      const max = coverPhotoArray.length;
+      const min = 1;
+      const seed = Math.floor(Math.random() * (max - min + 1) + min);
+      // get a cover
+      const coverPhoto = coverPhotoArray[seed - 1].coverPhoto;
 
       const followers = await Follow.count({ where: { following: user.id } });
       const favorited = await UserLikeRecipe.count({ where: { UserId: user.id } });
@@ -224,7 +232,7 @@ module.exports = {
       return res.ok({
         message: 'get user profile success.',
         data: {
-          user, followers, favorited, following, isMe, score,
+          user, followers, favorited, following, isMe, score, coverPhoto,
         },
       });
     } catch (e) {

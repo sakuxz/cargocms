@@ -33,9 +33,16 @@ module.exports = {
   'get /api/labfnp/order': 'api/labfnp/RecipeOrderController.find',
   'get /api/labfnp/eventOrder': 'api/labfnp/EventOrderController.find',
 
+  // 取得全部的感覺
+  'get /api/labfnp/feelings': 'api/labfnp/FeelingController.getAll',
+
+  // 取得香味分子
   'get /api/labfnp/scent/simpleList': 'api/labfnp/ScentController.find',
-  'get /api/labfnp/scent': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scentnote': 'api/labfnp/ScentNoteController.find',
+  // 清單
+  'get /api/labfnp/scent': 'api/labfnp/ScentController.getAll',
+  // 依據分子名稱搜尋
+  'get /api/labfnp/scent/:name': 'api/labfnp/ScentController.findBy',
 
   'post /api/admin/labfnp/scentfeedback/exportFeedback': 'api/admin/labfnp/ScentFeedbackController.exportFeedback',
   'get /api/admin/labfnp/scentfeedback': 'api/admin/labfnp/ScentFeedbackController.find',
