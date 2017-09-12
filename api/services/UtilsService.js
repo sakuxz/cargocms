@@ -70,7 +70,7 @@ module.exports = {
         sails.log('url=>', `http://${DOMAIN_HOST}${apiPath}`);
         return `https://${DOMAIN_HOST}${apiPath}`;
       }
-      return apiPath.replace(/\/\//g, '/');
+      return `https://${DOMAIN_HOST}${apiPath}`;
     } catch (e) {
       throw e;
     }
