@@ -127,8 +127,11 @@ module.exports = {
       type: Sequelize.STRING,
       get() {
         try {
-          const defaultAvatar = '/assets/admin/img/avatars/default.png';
-          return this.getDataValue('avatar') || UtilsService.getUrl(defaultAvatar);
+          const value = this.getDataValue('avatar');
+          if (value.startsWith('http')) {
+            return value;
+          }
+          return UtilsService.getUrl(value);
         } catch (e) {
           sails.log.error(e);
           throw e;
@@ -139,8 +142,11 @@ module.exports = {
       type: Sequelize.STRING,
       get() {
         try {
-          const defaultAvatar = '/assets/admin/img/avatars/default.png';
-          return this.getDataValue('avatarThumb') || UtilsService.getUrl(defaultAvatar);
+          const value = this.getDataValue('avatarThumb');
+          if (value.startsWith('http')) {
+            return value;
+          }
+          return UtilsService.getUrl(value);
         } catch (e) {
           sails.log.error(e);
           throw e;
