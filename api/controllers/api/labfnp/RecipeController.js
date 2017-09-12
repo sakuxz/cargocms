@@ -282,7 +282,7 @@ module.exports = {
       for (const item of recipes) {
         const newItem = JSON.parse(JSON.stringify(item));
         if (item.UserLikeRecipes && item.UserLikeRecipes.length > 0) {
-          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === user.id);
+          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
           if (isSessionUserLiked.length > 0) {
             newItem.isFaved = true;
           } else newItem.isFaved = false;
@@ -299,7 +299,7 @@ module.exports = {
       });
     } catch (e) {
       sails.log.error(e);
-      res.negotiate(e);
+      return res.negotiate(e);
     }
   },
 
@@ -327,7 +327,7 @@ module.exports = {
       for (const item of recipes) {
         const newItem = JSON.parse(JSON.stringify(item));
         if (item.UserLikeRecipes && item.UserLikeRecipes.length > 0) {
-          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === user.id);
+          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
           if (isSessionUserLiked.length > 0) {
             newItem.isFaved = true;
           } else newItem.isFaved = false;
@@ -344,7 +344,7 @@ module.exports = {
       });
     } catch (e) {
       sails.log.error(e);
-      res.negotiate(e);
+      return res.negotiate(e);
     }
   },
 
