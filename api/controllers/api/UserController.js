@@ -230,6 +230,7 @@ module.exports = {
       const following = await Follow.count({ where: { follower: user.id } });
 
       return res.ok({
+        success: true,
         message: 'get user profile success.',
         data: {
           user, followers, favorited, following, isMe, score, coverPhoto,
