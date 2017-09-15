@@ -128,10 +128,10 @@ module.exports = {
       get() {
         try {
           const value = this.getDataValue('avatar');
-          if (value.startsWith('http')) {
-            return value;
+          if (value && value.startsWith('http')) {
+            return UtilsService.getUrl(value);
           }
-          return UtilsService.getUrl(value);
+          return value;
         } catch (e) {
           sails.log.error(e);
           throw e;
@@ -143,10 +143,10 @@ module.exports = {
       get() {
         try {
           const value = this.getDataValue('avatarThumb');
-          if (value.startsWith('http')) {
-            return value;
+          if (value && value.startsWith('http')) {
+            return UtilsService.getUrl(value);
           }
-          return UtilsService.getUrl(value);
+          return value;
         } catch (e) {
           sails.log.error(e);
           throw e;
