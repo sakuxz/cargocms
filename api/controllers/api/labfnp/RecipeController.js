@@ -40,20 +40,29 @@ module.exports = {
     try {
       const currentUser = AuthService.getSessionUser(req);
       const isAdmin = AuthService.isAdmin(req);
-      const { recipe } = await RecipeService.loadRecipe(id, currentUser, isAdmin);
-
+      let recipe = {};
+      try {
+        recipe = await RecipeService.loadRecipe(id, currentUser, isAdmin);
+      } catch (error) {
+        if (error.message === 'can not find recipe') {
+          return res.notFound({
+            message: 'no recipe founded.',
+            success: false,
+          });
+        }
+      }
       let isFaved = false;
-      if (recipe.UserLikeRecipes && recipe.UserLikeRecipes.length > 0) {
+      if (recipe && recipe.UserLikeRecipes && recipe.UserLikeRecipes.length > 0) {
         const isSessionUserLiked = recipe.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
         if (isSessionUserLiked.length > 0) {
           isFaved = true;
         } else isFaved = false;
       }
-
       sails.log.info('get recipe =>', recipe);
       return res.ok({
         message: 'Get recipe success.',
         data: {
+          success: true,
           item: recipe,
           isFaved,
         },
