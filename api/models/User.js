@@ -128,6 +128,9 @@ module.exports = {
       get() {
         try {
           const value = this.getDataValue('avatar') || '/assets/admin/img/avatars/default.png';
+          if (value.startsWith('//') || value.includes('http')) {
+            return value;
+          }
           return UtilsService.getUrl(value);
         } catch (e) {
           sails.log.error(e);
@@ -140,6 +143,9 @@ module.exports = {
       get() {
         try {
           const value = this.getDataValue('avatarThumb') || '/assets/admin/img/avatars/default.png';
+          if (value.startsWith('//') || value.includes('http')) {
+            return value;
+          }
           return UtilsService.getUrl(value);
         } catch (e) {
           sails.log.error(e);
