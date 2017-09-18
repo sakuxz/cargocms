@@ -40,31 +40,31 @@ module.exports = {
     try {
       const currentUser = AuthService.getSessionUser(req);
       const isAdmin = AuthService.isAdmin(req);
-      let recipe = {};
+      let targetRecipe = {};
       try {
-        recipe = await RecipeService.loadRecipe(id, currentUser, isAdmin);
-      } catch (error) {
-        if (error.message === 'can not find recipe') {
+        const { recipe } = await RecipeService.loadRecipe(id, currentUser, isAdmin);
+        if (!recipe) { throw new Error('can not find recipe'); }
+        targetRecipe = JSON.parse(JSON.stringify(recipe));
+        targetRecipe.isFaved = false;
+        const hasUserLikeRecipes = targetRecipe.UserLikeRecipes && targetRecipe.UserLikeRecipes.length > 0;
+        if (targetRecipe && hasUserLikeRecipes) {
+          const isSessionUserLiked = targetRecipe.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
+          if (isSessionUserLiked.length > 0) { targetRecipe.isFaved = true; }
+        }
+      } catch (e) {
+        if (e.message === 'can not find recipe') {
           return res.notFound({
             message: 'no recipe founded.',
             success: false,
           });
         }
       }
-      let isFaved = false;
-      if (recipe && recipe.UserLikeRecipes && recipe.UserLikeRecipes.length > 0) {
-        const isSessionUserLiked = recipe.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
-        if (isSessionUserLiked.length > 0) {
-          isFaved = true;
-        } else isFaved = false;
-      }
-      sails.log.info('get recipe =>', recipe);
+      sails.log.info('get recipe =>', targetRecipe);
       return res.ok({
         message: 'Get recipe success.',
         data: {
           success: true,
-          item: recipe,
-          isFaved,
+          item: targetRecipe,
         },
       });
     } catch (e) {
