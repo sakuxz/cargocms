@@ -35,6 +35,8 @@ module.exports = {
 
   // 取得全部的感覺
   'get /api/labfnp/feelings': 'api/labfnp/FeelingController.getAll',
+  // 取得全部的感覺以及對應的全部香味分子
+  'get /api/labfnp/feelings/scents': 'api/labfnp/FeelingController.getAllWithAllScents',
 
   // 取得香味分子
   'get /api/labfnp/scent/simpleList': 'api/labfnp/ScentController.find',
