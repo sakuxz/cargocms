@@ -11,7 +11,8 @@ import jwt from 'jsonwebtoken';
 
 module.exports = function (req, res, next) {
   try {
-    let token = req.headers['jwt-token'];
+    let token = req.headers['jwt-token'] || req.headers.authorization;
+    console.log('req.headers=>', req.headers);
     sails.log('====================================');
     sails.log('JwtDecode token=>', token);
     sails.log('====================================');
@@ -32,6 +33,6 @@ module.exports = function (req, res, next) {
     return next();
   } catch (err) {
     sails.log.error(err);
-    return next();
+    return res.negotiate(err);
   }
 };

@@ -1,37 +1,38 @@
 module.exports = {
   'api/labfnp/RecipeOrderController': {
-    'find': ['passport', 'sessionAuth', 'jwtDecode'],
+    find: ['jwtDecode', 'passport', 'sessionAuth'],
   },
   'api/labfnp/RecipeController': {
-    create: ['passport', 'sessionAuth', 'jwtDecode'],
-    update: ['passport', 'sessionAuth', 'jwtDecode'],
-    destroy: ['passport', 'sessionAuth', 'jwtDecode'],
-    findUserRecipe: ['passport', 'sessionAuth'],
-    findUserFavorite: ['passport', 'sessionAuth'],
+    create: ['jwtDecode', 'passport', 'sessionAuth'],
+    update: ['jwtDecode', 'passport', 'sessionAuth'],
+    destroy: ['jwtDecode', 'passport', 'sessionAuth'],
+    findUserRecipe: ['jwtDecode', 'passport', 'sessionAuth'],
+    findUserFavorite: ['jwtDecode', 'passport', 'sessionAuth'],
   },
   'labfnp/RecipeController': {
-    'create': ['passport', 'sessionAuth', 'jwtDecode'],
-    'order': ['passport', 'sessionAuth'],
-    'feedback': ['passport', 'sessionAuth'],
-    'allpay': ['passport', 'sessionAuth'],
-    'done': ['passport', 'sessionAuth'],
-    'show': ['nocache', 'passport'],
+    create: ['jwtDecode', 'passport', 'sessionAuth'],
+    order: ['jwtDecode', 'passport', 'sessionAuth'],
+    feedback: ['jwtDecode', 'passport', 'sessionAuth'],
+    allpay: ['jwtDecode', 'passport', 'sessionAuth'],
+    done: ['jwtDecode', 'passport', 'sessionAuth'],
+    show: ['jwtDecode', 'nocache', 'passport'],
   },
   'labfnp/MainController': {
-    'explore': ['nocache', 'passport', 'jwtDecode'],
-    'portfolio': ['nocache'],
-    'editPofile': ['nocache'],
-    'validateEmail': [],
+    explore: ['jwtDecode', 'nocache', 'passport'],
+    portfolio: ['jwtDecode', 'nocache'],
+    editPofile: ['jwtDecode', 'nocache'],
+    validateEmail: [],
   },
   'api/admin/labfnp/RecipeController': {
-    'find': ['passport', 'sessionAuth', 'isAdmin'],
-    'findOne': ['passport', 'sessionAuth', 'isAdmin'],
-    'create': ['passport', 'sessionAuth', 'isAdmin'],
-    'update': ['passport', 'sessionAuth', 'isAdmin'],
-    'destroy': ['passport', 'sessionAuth', 'isAdmin'],
+    find: ['passport', 'sessionAuth', 'isAdmin'],
+    findOne: ['passport', 'sessionAuth', 'isAdmin'],
+    create: ['passport', 'sessionAuth', 'isAdmin'],
+    update: ['passport', 'sessionAuth', 'isAdmin'],
+    destroy: ['passport', 'sessionAuth', 'isAdmin'],
   },
   'api/admin/labfnp/FeelingController': {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
-    'find': ['passport', 'sessionAuth'],
-  }
-}
+    find: ['passport', 'sessionAuth'],
+  },
+};
+
