@@ -6,6 +6,11 @@
     "Sequelize": true,
     "Image": true,
     "Event": true,
-    "SocialService": true
+    "SocialService": true,
+    "AuthService": true,
+    "Scent": true,
+    "ScentFeedback": true,
+    "Feeling": true,
+    "RecipeService": true
   }
 }
