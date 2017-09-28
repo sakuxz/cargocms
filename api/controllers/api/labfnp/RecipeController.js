@@ -2,15 +2,18 @@ import _ from 'lodash';
 
 module.exports = {
 
-  findForLab: async (req, res) => {
-    console.log('=== findForLab ===');
+  async findForLab(req, res) {
+    sails.log('=== findForLab ===');
     try {
+      // sails.log('req.query=>', req.query)
+      const keyword = req.query.search || null;
       const user = AuthService.getSessionUser(req);
       const recipes = await Recipe.findAndIncludeUserLike({
         currentUser: user,
         start: parseInt(req.query.start, 10) || 0,
         length: parseInt(req.query.length, 10) || 5,
         likeUser: req.query.type === 'like' ? user : null,
+        search: keyword,
       });
       const social = SocialService.forRecipe({ recipes });
       const formatItems = [];
@@ -28,10 +31,12 @@ module.exports = {
         data: {
           items: formatItems,
           social,
+          keyword,
+          length: formatItems.length,
         },
       });
     } catch (e) {
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 
@@ -52,12 +57,13 @@ module.exports = {
           if (isSessionUserLiked.length > 0) { targetRecipe.isFaved = true; }
         }
       } catch (e) {
-        if (e.message === 'can not find recipe') {
-          return res.notFound({
-            message: 'no recipe founded.',
-            success: false,
-          });
-        }
+        // if (e.message === 'can not find recipe') {
+        //   return res.notFound({
+        //     message: 'no recipe founded.',
+        //     success: false,
+        //   });
+        // }
+        return res.serverError(e);
       }
       sails.log.info('get recipe =>', targetRecipe);
       return res.ok({
