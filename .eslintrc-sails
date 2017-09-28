@@ -11,6 +11,12 @@
     "Scent": true,
     "ScentFeedback": true,
     "Feeling": true,
-    "RecipeService": true
+    "RecipeService": true,
+    "UtilsService": true,
+    "ScentNote": true,
+    "User": true,
+    "Passport": true,
+    "UserLikeRecipe": true,
+    "Recipe": true
   }
 }
