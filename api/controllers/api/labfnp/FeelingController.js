@@ -17,6 +17,7 @@ module.exports = {
       });
     } catch (e) {
       res.serverError(e);
+      return res.serverError(e);
     }
   },
 
@@ -60,21 +61,19 @@ module.exports = {
   async getAllWithAllScents(req, res) {
     sails.log.info('=== FeelingController getAllWithAllScents ===');
     try {
+      let feelingArray = [];
       // 取出全部的感覺並格式化，而且不要群組
-      // const feelingCount = await Feeling.count();
-      // console.log('feelingCount=>', feelingCount)
-      const feelings = (await Feeling.findAll({
+      let feelings = await Feeling.findAll({
         attributes: ['title', 'scentName'],
-      }))
+      });
+      feelings = feelings
         .sort(() => (0.5 - Math.random()))
-        .slice(0, 200)
+        // .slice(0, (feelings.length / 2))
+        .filter(e => e.title.length < 4)
         .map(e => ({
           title: e.title,
           scentName: e.scentName,
         }));
-        // console.log('feelings=>', feelings)
-      console.log('feelings.length=>', feelings.length)
-      let feelingArray = [];
 
       // 取出已登入的使用者的感覺
       const user = AuthService.getSessionUser(req);
@@ -90,9 +89,9 @@ module.exports = {
         feelingArray = scentFeedback.concat(feelings);
       } else feelingArray = feelings;
 
-      const result = [];
       // 取出全部的氣味分子
       const scentObjs = await Scent.findAll({
+        include: [ScentNote],
         attributes: {
           exclude: [
             'feelings',
@@ -102,12 +101,12 @@ module.exports = {
       });
 
       // 由氣味分子名稱查出對應的氣味分子資料，並且塞回 array
-      let count = 18;
+      const result = [];
+      let count = 20;
       for (const item of feelingArray) {
         const scents = feelingArray
           .filter(g => g.title === item.title)
           .map(f => f.scentName);
-        console.log('scents=>', scents)
         let scentObjArray = [];
         // 取出氣味分子資料
         scents.forEach((s) => {
@@ -117,18 +116,27 @@ module.exports = {
               id: obj.id,
               name: obj.name,
               title: obj.title,
+              coverUrl: obj.coverUrl,
               sequence: obj.sequence,
-              ScentNoteId: obj.ScentNoteId,
               description: obj.description,
+              ScentNote: {
+                id: obj.ScentNote.id,
+                notes: obj.ScentNote.notes,
+                color: obj.ScentNote.color,
+                title: obj.ScentNote.title,
+                title2: obj.ScentNote.title2,
+                keywords: obj.ScentNote.keywords,
+                description: obj.ScentNote.description,
+              },
             }));
           scentObjArray = scentObjArray.concat(arr);
         });
-        count -= 1;
-        if (count <= 0) break;
         result.push({
           feeling: item.title,
           scents: scentObjArray,
         });
+        count -= 1;
+        if (count === 0) break;
       }
       return res.ok({
         success: true,
