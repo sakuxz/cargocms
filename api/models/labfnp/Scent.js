@@ -1,91 +1,104 @@
 module.exports = {
   attributes: {
     name: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     title: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     description: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     sequence: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
     feelings: {
       type: Sequelize.TEXT,
-      set: function (val) {
+      set(val) {
         if (val) {
           this.setDataValue('feelings', JSON.stringify(val));
-        }
-        else {
-          this.setDataValue('feelings', "[]");
+        } else {
+          this.setDataValue('feelings', '[]');
         }
       },
-      get: function () {
+      get() {
         try {
-          var feelings = this.getDataValue('feelings');
+          let feelings = this.getDataValue('feelings');
           if (feelings) {
             return JSON.parse(feelings);
           }
-          else {
-            return [];
-          }
-        }
-        catch (e) {
+
+          return [];
+        } catch (e) {
           console.log(e);
           return [];
         }
-      }
+      },
     },
     displayFeeling: {
       type: Sequelize.VIRTUAL,
-      get: function () {
+      get() {
         try {
           const feelings = this.getDataValue('feelings');
 
           if (feelings) {
-            let dataJson = JSON.parse(feelings);
-            let NumOfData = dataJson.length;
-            let displayFeeling = [];
-            for(var i=0 ; i<NumOfData ; i++){
-              displayFeeling.push(dataJson[i]["key"]);
+            const dataJson = JSON.parse(feelings);
+            const NumOfData = dataJson.length;
+            const displayFeeling = [];
+            for (let i = 0; i < NumOfData; i++) {
+              displayFeeling.push(dataJson[i].key);
             }
             return displayFeeling;
           }
-          else {
-            return [];
-          }
-        }
-        catch (e) {
-          console.log(e);
+          return [];
+        } catch (e) {
+          sails.log.error(e);
           return [];
         }
-      }
+      },
     },
-    createdDateTime:{
+    createdDateTime: {
       type: Sequelize.VIRTUAL,
-      get: function(){
-        try{
+      get() {
+        try {
           return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
-        } catch(e){
+        } catch (e) {
           sails.log.error(e);
+          return null;
         }
-      }
+      },
     },
 
-    updatedDateTime:{
+    updatedDateTime: {
       type: Sequelize.VIRTUAL,
-      get: function(){
-        try{
+      get() {
+        try {
           return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
-        } catch(e){
+        } catch (e) {
           sails.log.error(e);
+          return null;
         }
-      }
-    }
+      },
+    },
+
+    coverUrl: {
+      type: Sequelize.STRING,
+      defaultValue: '',
+      get() {
+        try {
+          // const thisId = this.getDataValue('id');
+          // const thisImage = this.getDataValue('Image');
+          const thisName = this.getDataValue('name');
+          const imageUrl = `assets/labfnp/img/scent-cover/${thisName}.jpg`;
+          return UtilsService.getUrl(imageUrl);
+        } catch (e) {
+          sails.log.error(e);
+          throw e;
+        }
+      },
+    },
   },
-  associations: function() {
+  associations() {
     Scent.belongsTo(ScentNote);
     // Scent.hasMany(Feeling, {
     //   foreignKey: {
@@ -101,21 +114,20 @@ module.exports = {
       /**
        * 查詢所有香味分子
        */
-      findAllWithRelation: async function() {
+      async findAllWithRelation() {
         return await Scent.findAll({
           include: [
-            ScentNote
+            ScentNote,
           ],
           order: 'sequence ASC',
         });
       },
 
-      formatForApp: async function({scents}) {
-
-        let result = scents.map((scent) => {
-          const {id, name, sequence, feelings, title, description, displayFeeling } = scent
-          let color = ""
-          let scentNote = ""
+      async formatForApp({ scents }) {
+        const result = scents.map((scent) => {
+          const { id, name, sequence, feelings, title, description, displayFeeling } = scent;
+          let color = '';
+          let scentNote = '';
           if (scent.ScentNote) {
             scentNote = scent.ScentNote.toJSON();
             color = scent.ScentNote.color;
@@ -126,20 +138,20 @@ module.exports = {
           //   return {id, title}
           // });
 
-          return {id, sequence, name, color, feelings, title, description, scentNote, displayFeeling}
+          return { id, sequence, name, color, feelings, title, description, scentNote, displayFeeling };
         });
 
-        return result
+        return result;
       },
 
-      findAllWithRelationFormatForApp: async function(){
-        let scents = await Scent.findAllWithRelation();
-        let result = await Scent.formatForApp({scents});
+      async findAllWithRelationFormatForApp() {
+        const scents = await Scent.findAllWithRelation();
+        const result = await Scent.formatForApp({ scents });
         return result;
-      }
+      },
 
     },
     instanceMethods: {},
-    hooks: {}
-  }
+    hooks: {},
+  },
 };
