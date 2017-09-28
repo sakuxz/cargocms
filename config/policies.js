@@ -25,6 +25,7 @@ var defaultConfig = {
     status: [],
     callback: ['passport', 'jwtEncode'],
     logout: ['passport', 'jwtDecode'],
+    provider: ['passport', 'jwtEncode'],
   },
   ...customConfig,
   'BlogController': {
