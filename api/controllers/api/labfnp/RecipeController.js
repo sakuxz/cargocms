@@ -51,21 +51,17 @@ module.exports = {
         if (!recipe) { throw new Error('can not find recipe'); }
         targetRecipe = JSON.parse(JSON.stringify(recipe));
         targetRecipe.isFaved = false;
-        const hasUserLikeRecipes = targetRecipe.UserLikeRecipes && targetRecipe.UserLikeRecipes.length > 0;
+        const hasUserLikeRecipes =
+          targetRecipe.UserLikeRecipes && targetRecipe.UserLikeRecipes.length > 0;
         if (targetRecipe && hasUserLikeRecipes) {
-          const isSessionUserLiked = targetRecipe.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
+          const isSessionUserLiked =
+            targetRecipe.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
           if (isSessionUserLiked.length > 0) { targetRecipe.isFaved = true; }
         }
       } catch (e) {
-        // if (e.message === 'can not find recipe') {
-        //   return res.notFound({
-        //     message: 'no recipe founded.',
-        //     success: false,
-        //   });
-        // }
         return res.serverError(e);
       }
-      sails.log.info('get recipe =>', targetRecipe);
+      sails.log.info(`get recipe id '${id}' name=> '${targetRecipe.perfumeName}'.`);
       return res.ok({
         message: 'Get recipe success.',
         data: {
@@ -167,17 +163,27 @@ module.exports = {
     try {
       const { id } = req.params;
       const loginUser = AuthService.getSessionUser(req);
-      if (!loginUser) throw Error('permission denied');
+      if (!loginUser) {
+        throw new Error('permission denied');
+      }
       const recipe = await Recipe.findById(id);
-      await UserLikeRecipe.createIfNotExist({ RecipeId: id, UserId: loginUser.id });
-
-      res.ok({
+      if (!recipe) {
+        throw new Error(`giving recipe id '${id}' not exists`);
+      }
+      const result = await UserLikeRecipe.createIfNotExist({
+        RecipeId: id,
+        UserId: loginUser.id,
+      });
+      if (!result || result.RecipeId !== recipe.id) {
+        throw new Error(`try to like recipe id '${id}' failed`);
+      }
+      return res.ok({
         message: 'success like recipe',
         data: true,
       });
     } catch (e) {
       sails.log.error(e);
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 
@@ -185,19 +191,32 @@ module.exports = {
     try {
       const { id } = req.params;
       const loginUser = AuthService.getSessionUser(req);
-      if (!loginUser) throw Error('permission denied');
-
+      if (!loginUser) {
+        throw new Error('permission denied');
+      }
       const recipe = await Recipe.findById(id);
-      await UserLikeRecipe.destroy({
+      if (!recipe) {
+        throw new Error(`giving recipe id '${id}' not exists`);
+      }
+      const findLike = await UserLikeRecipe.findOne({
+        where: { RecipeId: id },
+      });
+      if (!findLike) {
+        throw new Error(`recipe id '${id}' is not liked yet.`);
+      }
+      const result = await UserLikeRecipe.destroy({
         where: { RecipeId: id, UserId: loginUser.id },
       });
-      res.ok({
+      if (!result || result === 0) {
+        throw new Error(`try to like recipe id '${id}' failed`);
+      }
+      return res.ok({
         message: 'success dislike recipe',
-        data: true,
+        data: false,
       });
     } catch (e) {
       sails.log.error(e);
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 

@@ -117,20 +117,57 @@ module.exports = {
       const formula = JSON.parse(JSON.stringify(recipe.formula));
       let recipeFeelings = [];
       for (const item of formula) {
-        const feelings = await Feeling.findAll({
+        const feelings = [];
+        const rawFeelings = await Feeling.findAll({
           where: { scentName: item.scent },
         });
-        console.log('find feelings=>', feelings)
+        for (const feeling of rawFeelings) {
+          const scent = await Scent.findOne({
+            where: { name: feeling.scentName },
+            attributes: [
+              'id',
+              'name',
+              'title',
+              'coverUrl',
+              'sequence',
+              'ScentNoteId',
+            ],
+            include: [ScentNote],
+          });
+          feelings.push({
+            id: feeling.id,
+            title: feeling.title,
+            score: feeling.score,
+            scentName: feeling.scentName,
+            totalRepeat: feeling.totalRepeat,
+            Scent: {
+              id: scent.id,
+              name: scent.name,
+              title: scent.title,
+              coverUrl: scent.coverUrl,
+              sequence: scent.sequence,
+              ScentNote: {
+                id: scent.ScentNote.id,
+                notes: scent.ScentNote.notes,
+                color: scent.ScentNote.color,
+                'keywords': scent.ScentNote.keywords,
+                'title': scent.ScentNote.title,
+                'title2': scent.ScentNote.title2,
+              },
+            },
+          });
+        }
+        // console.log('find feelings=>', feelings);
         recipeFeelings = recipeFeelings.concat(recipeFeelings, feelings);
       }
       recipeFeelings.sort(() => (0.5 - Math.random()))
-      .filter(e => e.title.length < 4)
+        .filter(e => e.title.length < 4)
       // .map(e => ({
       //   title: e.title,
       //   scentName: e.scentName,
       // }))
-      .slice(0, 20);
-      console.log('recipe total feeling=>', recipeFeelings)
+        .slice(0, 20);
+      console.log('recipe total feeling=>', recipeFeelings);
 
       let editable = false;
       let userId = null;
@@ -144,7 +181,7 @@ module.exports = {
       const RecipeId = recipe.id;
       const UserId = userId;
       let recipeFeedback = await RecipeFeedback.findOne({ where: { RecipeId, UserId } });
-      if (recipeFeedback == null) {recipeFeedback = RecipeFeedback.build();}
+      if (recipeFeedback == null) { recipeFeedback = RecipeFeedback.build(); }
 
       const recipeOrder = await RecipeOrder.findOne({ where: { RecipeId, UserId } });
 
@@ -152,11 +189,10 @@ module.exports = {
         recipeFeedback.invoiceNo = recipeOrder.invoiceNo;
         const RecipeOrderId = recipeOrder.id;
         const allpay = await Allpay.findOne({ where: { RecipeOrderId } });
-        if (allpay != null)
-          {recipeFeedback.tradeNo = allpay.TradeNo};
+        if (allpay != null) { recipeFeedback.tradeNo = allpay.TradeNo; }
       }
 
-      return { 
+      return {
         editable,
         social,
         recipeFeedback,
@@ -176,12 +212,12 @@ module.exports = {
       for (const item of formula) {
         if (!item.userFeeling) continue;
         const scent = await Scent.findOne({ where: { name: item.scent } });
-        const data = item.userFeeling.map((word) => ({
-            feeling: word,
-            // scentName: item.scent,
-            ScentId: scent.id,
-            UserId: userId,
-          }));
+        const data = item.userFeeling.map(word => ({
+          feeling: word,
+          // scentName: item.scent,
+          ScentId: scent.id,
+          UserId: userId,
+        }));
         userFeeling = userFeeling.concat(data);
       }
       sails.log.info(userFeeling);
