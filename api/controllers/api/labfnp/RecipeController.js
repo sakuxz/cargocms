@@ -174,7 +174,7 @@ module.exports = {
         RecipeId: id,
         UserId: loginUser.id,
       });
-      if (!result || result.RecipeId !== recipe.id) {
+      if (!result) {
         throw new Error(`try to like recipe id '${id}' failed`);
       }
       return res.ok({
@@ -207,8 +207,8 @@ module.exports = {
       const result = await UserLikeRecipe.destroy({
         where: { RecipeId: id, UserId: loginUser.id },
       });
-      if (!result || result === 0) {
-        throw new Error(`try to like recipe id '${id}' failed`);
+      if (!result) {
+        throw new Error(`try to unlike recipe id '${id}' failed`);
       }
       return res.ok({
         message: 'success dislike recipe',
