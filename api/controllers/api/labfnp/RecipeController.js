@@ -179,7 +179,9 @@ module.exports = {
       }
       return res.ok({
         message: 'success like recipe',
-        data: true,
+        data: {
+          isFaved: true,
+        },
       });
     } catch (e) {
       sails.log.error(e);
@@ -198,12 +200,12 @@ module.exports = {
       if (!recipe) {
         throw new Error(`giving recipe id '${id}' not exists`);
       }
-      const findLike = await UserLikeRecipe.findOne({
-        where: { RecipeId: id },
-      });
-      if (!findLike) {
-        throw new Error(`recipe id '${id}' is not liked yet.`);
-      }
+      // const findLike = await UserLikeRecipe.findOne({
+      //   where: { RecipeId: id },
+      // });
+      // if (!findLike) {
+      //   throw new Error(`recipe id '${id}' is not liked yet.`);
+      // }
       const result = await UserLikeRecipe.destroy({
         where: { RecipeId: id, UserId: loginUser.id },
       });
@@ -212,7 +214,9 @@ module.exports = {
       }
       return res.ok({
         message: 'success dislike recipe',
-        data: false,
+        data: {
+          isFaved: false,
+        },
       });
     } catch (e) {
       sails.log.error(e);
