@@ -163,20 +163,22 @@
                     <span class="hidden-xs">感覺回饋</span>
                     <span class="hidden-lg hidden-md hidden-sm visable-xs">回饋</span>
                   </a>
-                  <a href="<%= `/recipe/order/${recipe.hashId}` %>" id="orderButton" class="btn-u btn-custom-order" data-id="<%= recipe.hashId %>">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                    訂購
-                  </a>
+                  <% if (recipe.visibility === 'PUBLIC') { %>
+                    <a href="<%= `/recipe/order/${recipe.hashId}` %>" id="orderButton" class="btn-u btn-custom-order" data-id="<%= recipe.hashId %>">
+                      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                      訂購
+                    </a>
+                  <% } %>
                 <% } else { %>
                   <a href="#" class="btn-u btn-custom-feedback fn-signin-required">
                     <i class="fa fa-comment-o" aria-hidden="true"></i>
                     <span class="hidden-xs">感覺回饋</span>
                     <span class="hidden-lg hidden-md hidden-sm visable-xs">回饋</span>
                   </a>
-                  <a href="#" id="orderButton" class="btn-u btn-custom-order fn-signin-required" data-id="<%= recipe.hashId %>">
+                  <!-- <a href="#" id="orderButton" class="btn-u btn-custom-order fn-signin-required" data-id="<%= recipe.hashId %>">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     訂購
-                  </a>
+                  </a> -->
                 <% } %>
 
                 <div class="fbButton">
