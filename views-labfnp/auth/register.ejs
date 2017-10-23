@@ -60,7 +60,7 @@ em.invalid{
           <p>如果已經註冊帳號，請直接<a href="/login" class="color-green">登入</a>即可。</p>
         </div>
 
-        <% var error = data.error; %>
+        <% var error = data.errors[0]; %>
         <% if(error === 'the email or user name has been registered.' ){ %>
             <div class="alert alert-warning" role="alert"> 此 Email 或使用者名稱已被註冊，請更換後重試！</div>
         <% }%>  

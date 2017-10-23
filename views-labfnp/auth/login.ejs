@@ -81,6 +81,8 @@
           <div class="margin-top-20 alert alert-warning" role="alert">訂購需為本站會員，請先登入帳號或註冊</div>
         <% } else if(error === 'Error.Passport.Username.NotFound') { %>
           <div class="margin-top-20 alert alert-warning" role="alert">請先<a href="/register">註冊</a>後使用！</div>
+        <% } else if (error === 'Error.Passport.Password.CheckFail') { %>
+          <div class="margin-top-20 alert alert-warning" role="alert">帳號或密碼錯誤！</div>
         <% } %>
 
         <% var info = req.flash('info')[0]; %>
