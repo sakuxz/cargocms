@@ -157,13 +157,14 @@
                   <span class="hidden-xs">收藏</span>
                 </button>
 
-                <% if(req.session.authenticated) { %>
+                <% if (req.session.authenticated) { %>
                   <a href="<%= `/recipe/feedback/${recipe.hashId}` %>" class="btn-u btn-custom-feedback">
                     <i class="fa fa-comment-o" aria-hidden="true"></i>
                     <span class="hidden-xs">感覺回饋</span>
                     <span class="hidden-lg hidden-md hidden-sm visable-xs">回饋</span>
                   </a>
-                  <% if (recipe.visibility === 'PUBLIC') { %>
+                  <% const user = AuthService.getSessionUser(req);
+                  if (recipe.visibility === 'PUBLIC' || recipe.UserId === user.id) { %>
                     <a href="<%= `/recipe/order/${recipe.hashId}` %>" id="orderButton" class="btn-u btn-custom-order" data-id="<%= recipe.hashId %>">
                       <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                       訂購
