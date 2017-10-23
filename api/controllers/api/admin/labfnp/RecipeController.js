@@ -13,6 +13,12 @@ module.exports = {
         const items = await sails.models[modelName].findAll();
         result = { data: { items } };
       }
+
+      for (const item in result.data) {
+        const recipeId = result.data[item].dataValues.id;
+        result.data[item].dataValues.orderCount = await RecipeService.getRecipeOderCounts(recipeId);
+      }
+
       res.ok(result);
     } catch (e) {
       res.serverError(e);

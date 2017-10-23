@@ -1,5 +1,6 @@
 var sinon = require('sinon');
-describe.skip('about Recipe Controller operation.', function() {
+// describe.skip('about Recipe Controller operation.', function() {
+describe('about Recipe Controller operation.', function() {
 
   let recipe, user;
   before(async (done) => {
@@ -247,7 +248,7 @@ describe.skip('about Recipe Controller operation.', function() {
       // );
       const result = await Promise.all(repetOrder);
       // sails.log.debug(result[0].status,result[1].status);
-      sails.log.debug(result[0].status);
+      // sails.log.debug(result[0].status);
 
       // await request(sails.hooks.http.app)
       // .post(`/recipe/allpay/${recipe.id}?hashId=${recipe.hashId}`)
@@ -272,6 +273,4 @@ describe.skip('about Recipe Controller operation.', function() {
       done(e);
     }
   });
-
-
 });

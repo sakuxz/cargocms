@@ -238,38 +238,43 @@ passport.endpoint = function(req, res) {
  * @param {Function} next
  */
 
-passport.callback = async function(req, res, next) {
+passport.callback = async function (role, req, res, next) {
   sails.log.info('=== start login ===');
-  var action, provider;
-  provider = req.param('provider', 'local');
-  action = req.param('action');
-
+  const provider = req.param('provider', 'local');
+  const action = req.param('action');
   try {
     sails.log.info('=== provider ===', provider);
     sails.log.info('=== action ===', action);
     if (provider === 'local' && action !== void 0) {
-      if (action === 'register' && !req.user) {
-        await this.protocols.local.register(req, res, next);
+      if (action === 'register') {
+        if (!req.user) {
+          try {
+            return await this.protocols.local.register(role, req, res, next);
+          } catch (e) {
+            sails.log.error('passport.callback=>', e.stack);
+            throw e;
+          }
+        }
+        sails.log('====================================');
+        sails.log('logged user=>', req.user.username);
+        sails.log('====================================');
+        throw new Error('Can not register another user when an user has been logged in.');
       } else if (action === 'connect' && req.user) {
-        this.protocols.local.connect(req, res, next);
+        return this.protocols.local.connect(req, res, next);
       } else if (action === 'disconnect' && req.user) {
-        this.protocols.local.disconnect(req, res, next);
+        return this.protocols.local.disconnect(req, res, next);
       } else {
         throw new Error('Invalid action');
       }
+    } else if (action === 'disconnect' && req.user) {
+      return this.disconnect(req, res, next);
     } else {
-
-      if (action === 'disconnect' && req.user) {
-        this.disconnect(req, res, next);
-      } else {
-        sails.log.info('=== start authenticate ===');
-        this.authenticate(provider, next)(req, res, req.next);
-      }
+      sails.log.info('=== start authenticate ===');
+      return this.authenticate(provider, next)(req, res, req.next);
     }
-
   } catch (e) {
     sails.log.error(e.stack);
-    next(e);
+    return next(e);
   }
 };
 

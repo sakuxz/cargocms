@@ -1,35 +1,37 @@
+// import _ from 'lodash';
+
 module.exports = {
-  getShareUrl: function() {
-    const url = sails.config.appUrl
+  getShareUrl() {
+    const url = sails.config.appUrl;
     return url;
   },
 
-  getFBPageId: function() {
+  getFBPageId() {
     const pageId = sails.config.facebook.pageId;
     return pageId;
   },
-  getFBAppId: function() {
+  getFBAppId() {
     const appId = sails.config.facebook.appId;
     return appId;
   },
 
-  forRecipe: ({recipes}) => {
+  forRecipe: ({ recipes }) => {
     try {
-      let socialsConfig = sails.config.socials
+      const socialsConfig = sails.config.socials;
 
       const socialData = recipes.map((recipe) => {
-        const {id, hashId, description} = recipe;
+        const { id, hashId, description } = recipe;
         const title = recipe.perfumeName;
-        const recipeId = hashId || id
-        const url = SocialService.getShareUrl() + '/recipe/' + recipeId
+        const recipeId = hashId || id;
+        const url = `${SocialService.getShareUrl()}/recipe/${recipeId}`;
         return {
-          description, title, url
-        }
+          description, title, url,
+        };
       });
 
-      let social = {
+      const social = {
         data: socialData,
-        targets: socialsConfig
+        targets: socialsConfig,
       };
       return social;
     } catch (e) {
@@ -37,33 +39,34 @@ module.exports = {
     }
   },
 
-  forPost: ({posts}) => {
+  forPost: (posts) => {
     try {
-      let socialsConfig = sails.config.socials
+      const socialsConfig = sails.config.socials;
+      const socialsPosts = JSON.parse(JSON.stringify(posts));
 
-      const socialData = posts.map((post) => {
-        const {id, title, type, alias} = post;
-        const description = "";
-        let url = ''
-        let domain = SocialService.getShareUrl();
+      const socialData = socialsPosts.map((post) => {
+        const { id, title, type, alias } = post;
+        const description = '';
+        let url = '';
+        const domain = SocialService.getShareUrl();
         if (type === 'blog') {
-          url = `${domain}/blogs/${ alias || id}`
+          url = `${domain}/blogs/${alias || id}`;
         } else {
-          url = `${domain}/events/${ alias || id}`
+          url = `${domain}/events/${alias || id}`;
         }
         return {
-          description, title, url
-        }
+          description, title, url,
+        };
       });
 
-      let social = {
+      const social = {
         data: socialData,
-        targets: socialsConfig
+        targets: socialsConfig,
       };
       return social;
     } catch (e) {
       throw e;
     }
-  }
+  },
 
-}
+};

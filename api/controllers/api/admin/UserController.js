@@ -78,6 +78,13 @@ module.exports = {
     const { id } = req.params;
     try {
       sails.log.info('delete user controller=>', id);
+
+      const deleteResult = await Passport.destroy({
+        where: {
+          UserId: id
+        }
+      });
+      console.log('deleteResult=>', deleteResult);
       const user = await User.deleteById(id);
       res.ok({
         message: 'Delete user success.',

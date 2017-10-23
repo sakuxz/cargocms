@@ -1,25 +1,42 @@
+import _ from 'lodash';
+
 module.exports = {
 
-  findForLab: async (req, res) => {
-    console.log("=== findForLab ===");
+  async findForLab(req, res) {
+    sails.log('=== findForLab ===');
     try {
-      let user = AuthService.getSessionUser(req);
+      // sails.log('req.query=>', req.query)
+      const keyword = req.query.search || null;
+      const user = AuthService.getSessionUser(req);
       const recipes = await Recipe.findAndIncludeUserLike({
         currentUser: user,
         start: parseInt(req.query.start, 10) || 0,
         length: parseInt(req.query.length, 10) || 5,
         likeUser: req.query.type === 'like' ? user : null,
+        search: keyword,
       });
-      console.log();
-      let social = SocialService.forRecipe({recipes});
-      res.ok({
+      const social = SocialService.forRecipe({ recipes });
+      const formatItems = [];
+      for (const item of recipes) {
+        const newItem = JSON.parse(JSON.stringify(item));
+        if (item.UserLikeRecipes && item.UserLikeRecipes.length > 0) {
+          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === user.id);
+          if (isSessionUserLiked.length > 0) {
+            newItem.isFaved = true;
+          } else newItem.isFaved = false;
+        } else newItem.isFaved = false;
+        formatItems.push(newItem);
+      }
+      return res.ok({
         data: {
-          items: recipes,
+          items: formatItems,
           social,
-        }
+          keyword,
+          length: formatItems.length,
+        },
       });
     } catch (e) {
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 
@@ -28,14 +45,32 @@ module.exports = {
     try {
       const currentUser = AuthService.getSessionUser(req);
       const isAdmin = AuthService.isAdmin(req);
-      let { recipe } =  await RecipeService.loadRecipe(id, currentUser, isAdmin);
-      sails.log.info('get recipe =>', recipe);
-      res.ok({
+      let targetRecipe = {};
+      try {
+        const { recipe } = await RecipeService.loadRecipe(id, currentUser, isAdmin);
+        if (!recipe) { throw new Error('can not find recipe'); }
+        targetRecipe = JSON.parse(JSON.stringify(recipe));
+        targetRecipe.isFaved = false;
+        const hasUserLikeRecipes =
+          targetRecipe.UserLikeRecipes && targetRecipe.UserLikeRecipes.length > 0;
+        if (targetRecipe && hasUserLikeRecipes) {
+          const isSessionUserLiked =
+            targetRecipe.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
+          if (isSessionUserLiked.length > 0) { targetRecipe.isFaved = true; }
+        }
+      } catch (e) {
+        return res.serverError(e);
+      }
+      sails.log.info(`get recipe id '${id}' name=> '${targetRecipe.perfumeName}'.`);
+      return res.ok({
         message: 'Get recipe success.',
-        data: {item: recipe},
+        data: {
+          success: true,
+          item: targetRecipe,
+        },
       });
     } catch (e) {
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 
@@ -47,10 +82,13 @@ module.exports = {
         data.UserId = loginedUser.id;
       }
       sails.log.info('create recipe controller=>', data);
+      if (!_.isArray(data.formula)) {
+        throw new Error('required param formula as an array!');
+      }
       const recipe = await RecipeService.create(data);
       await RecipeService.createUserFeeling({
         formula: data.formula,
-        userId: loginedUser.id
+        userId: loginedUser.id,
       });
 
       if (data.feedback && data.feedback.length > 0) {
@@ -79,14 +117,14 @@ module.exports = {
       const user = AuthService.getSessionUser(req);
 
       const recipe = await RecipeService.update({
-        id: id,
+        id,
         ...data,
       });
 
       await RecipeFeedback.update({
-        feeling: data.feedback
-      },{
-        where: { UserId: user.id, RecipeId: id }
+        feeling: data.feedback,
+      }, {
+        where: { UserId: user.id, RecipeId: id },
       });
 
       await RecipeService.updateUserFeeling({
@@ -112,7 +150,7 @@ module.exports = {
       res.ok({
         message: 'Delete recipe success.',
         data: {
-          userId
+          userId,
         },
 
       });
@@ -121,21 +159,33 @@ module.exports = {
     }
   },
 
-  like: async(req, res) => {
+  like: async (req, res) => {
     try {
       const { id } = req.params;
       const loginUser = AuthService.getSessionUser(req);
-      if (!loginUser) throw Error('permission denied');
+      if (!loginUser) {
+        throw new Error('permission denied');
+      }
       const recipe = await Recipe.findById(id);
-      await UserLikeRecipe.createIfNotExist({RecipeId: id, UserId: loginUser.id})
-
-      res.ok({
+      if (!recipe) {
+        throw new Error(`giving recipe id '${id}' not exists`);
+      }
+      const result = await UserLikeRecipe.createIfNotExist({
+        RecipeId: id,
+        UserId: loginUser.id,
+      });
+      if (!result) {
+        throw new Error(`try to like recipe id '${id}' failed`);
+      }
+      return res.ok({
         message: 'success like recipe',
-        data: true,
+        data: {
+          isFaved: true,
+        },
       });
     } catch (e) {
       sails.log.error(e);
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 
@@ -143,34 +193,48 @@ module.exports = {
     try {
       const { id } = req.params;
       const loginUser = AuthService.getSessionUser(req);
-      if (!loginUser) throw Error('permission denied');
-
+      if (!loginUser) {
+        throw new Error('permission denied');
+      }
       const recipe = await Recipe.findById(id);
-      await UserLikeRecipe.destroy({
-        where: {RecipeId: id, UserId: loginUser.id}
-      })
-      res.ok({
+      if (!recipe) {
+        throw new Error(`giving recipe id '${id}' not exists`);
+      }
+      // const findLike = await UserLikeRecipe.findOne({
+      //   where: { RecipeId: id },
+      // });
+      // if (!findLike) {
+      //   throw new Error(`recipe id '${id}' is not liked yet.`);
+      // }
+      const result = await UserLikeRecipe.destroy({
+        where: { RecipeId: id, UserId: loginUser.id },
+      });
+      if (!result) {
+        throw new Error(`try to unlike recipe id '${id}' failed`);
+      }
+      return res.ok({
         message: 'success dislike recipe',
-        data: true,
+        data: {
+          isFaved: false,
+        },
       });
     } catch (e) {
       sails.log.error(e);
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 
   feelings: async (req, res) => {
     try {
       const { id } = req.params;
-      console.log("=== id ===", id);
+      console.log('=== id ===', id);
 
-      const feelings = await Recipe.getFeelings({id});
+      const feelings = await Recipe.getFeelings({ id });
 
       res.ok({
         message: 'success get recipe\'s feelings',
-        data: {feelings},
+        data: { feelings },
       });
-
     } catch (e) {
       sails.log.error(e);
       res.serverError(e);
@@ -198,24 +262,24 @@ module.exports = {
   saveFeedback: async (req, res) => {
     const data = req.body;
     try {
-      if(data.feeling !== ""){
+      if (data.feeling !== '') {
         data.feeling = data.feeling.split(',');
-        let {UserId, RecipeId} = data;
-        let feedback = await RecipeFeedback.findOne({where: {UserId, RecipeId}});
+        const { UserId, RecipeId } = data;
+        let feedback = await RecipeFeedback.findOne({ where: { UserId, RecipeId } });
 
-        if(feedback != null){
+        if (feedback != null) {
           feedback.invoiceNo = data.invoiceNo;
           feedback.tradeNo = data.tradeNo;
           feedback.feeling = data.feeling;
           feedback = await feedback.save(data);
-        }else {
+        } else {
           feedback = await RecipeFeedback.create(data);
         }
       }
 
-      let updateformula = [];
-      if(data.scentFeeling){
-        Object.keys(data.scentFeeling).forEach(function (key) {
+      const updateformula = [];
+      if (data.scentFeeling) {
+        Object.keys(data.scentFeeling).forEach((key) => {
           if (data.scentFeeling[key]) {
             let feeling = data.scentFeeling[key].split(',') ;
             updateformula.push({
@@ -245,4 +309,93 @@ module.exports = {
     }
   },
 
-}
+  async findUserRecipe(req, res) {
+    sails.log('=== findMyRecipe ===');
+    try {
+      const {
+        offset = 0,
+        limit = 20,
+      } = req.query;
+      const { id } = req.params;
+      console.log('findUserRecipe id=>', id);
+      const currentUser = AuthService.getSessionUser(req);
+      if (!currentUser) throw new Error('can not find user by giving user id `id` or not login yet.');
+      const recipes = await Recipe.findAndIncludeUserLike({
+        findByUserId: _.isNil(id) ? currentUser.id : id,
+        currentUser,
+        start: parseInt(offset),
+        length: parseInt(limit),
+        likeUser: null,
+      });
+
+      const formatItems = [];
+      for (const item of recipes) {
+        const newItem = JSON.parse(JSON.stringify(item));
+        if (item.UserLikeRecipes && item.UserLikeRecipes.length > 0) {
+          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
+          if (isSessionUserLiked.length > 0) {
+            newItem.isFaved = true;
+          } else newItem.isFaved = false;
+        } else newItem.isFaved = false;
+        formatItems.push(newItem);
+      }
+
+      const message = 'get user recipes success';
+      return res.ok({
+        data: {
+          recipes: formatItems,
+        },
+        message,
+      });
+    } catch (e) {
+      sails.log.error(e);
+      return res.negotiate(e);
+    }
+  },
+
+  async findUserFavorite(req, res) {
+    sails.log('=== findMyFavorite ===');
+    try {
+      const {
+        offset = 0,
+        limit = 20,
+      } = req.query;
+      const { id } = req.params;
+      const currentUser = AuthService.getSessionUser(req);
+      if (!currentUser) throw new Error('can not find user by giving user id `id`.');
+
+      const findUser = (_.isNil(id)) ? (currentUser) : (await User.findById(id));
+      const recipes = await Recipe.findAndIncludeUserLike({
+        findByUserId: _.isNil(id) ? currentUser.id : id,
+        currentUser,
+        start: parseInt(offset) || 0,
+        length: parseInt(limit) || 20,
+        likeUser: findUser,
+      });
+
+      const formatItems = [];
+      for (const item of recipes) {
+        const newItem = JSON.parse(JSON.stringify(item));
+        if (item.UserLikeRecipes && item.UserLikeRecipes.length > 0) {
+          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === currentUser.id);
+          if (isSessionUserLiked.length > 0) {
+            newItem.isFaved = true;
+          } else newItem.isFaved = false;
+        } else newItem.isFaved = false;
+        formatItems.push(newItem);
+      }
+
+      const message = 'get user favorite recipes success';
+      return res.ok({
+        data: {
+          recipes: formatItems,
+        },
+        message,
+      });
+    } catch (e) {
+      sails.log.error(e);
+      return res.negotiate(e);
+    }
+  },
+
+};

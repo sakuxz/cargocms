@@ -38,7 +38,7 @@ module.exports = {
     res.ok({view: true});
   },
 
-  config: function(req, res) {
+  configJson: function(req, res) {
     let config = {
       title: 'CargoCMS 雲端管理系統',
       copyright: '© Laboratory of Fragrance &amp; Perfume',

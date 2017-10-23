@@ -38,7 +38,9 @@ body {
       display: none;
     }
   }
-  background-color: #3a3c41;
+  background-image: url('/assets/labfnp/img/video.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
   &.image-cover {
     background-color: #796958;
     background-image: url('/assets/labfnp/img/img.index/hero-background.png');
@@ -337,14 +339,36 @@ body {
         font-size: 200px;
       }
     }
+    .swiper-button-prev {
+      padding-top: 0px;
+      left: 0px;
+    }
+    .swiper-button-next {
+      right: 0px;
+    }
     .swiper-button-prev,
     .swiper-button-next {
-      margin-top: -42px;
       font-size: 3em;
       background: transparent;
       color: #2e2f31;
       text-shadow: 0 0 5px rgb(255, 255, 255);
       transition: 0.1s color;
+      text-align: center;
+      vertical-align: middle;
+      height: calc(100vw / 1024 * 535);
+      line-height: calc(100vw / 1024 * 535);
+      width: 60px;
+      z-index: 999999;
+      margin-top: calc(-1 * (100vw / 1024 * 535) / 2);
+      @media screen and (min-width: 1440px) {
+        margin-top: calc(-1 * (1440px / 1024 * 535) / 2);
+        height: calc(1440px / 1024 * 535);
+        line-height: calc(1440px / 1024 * 535);
+      }
+      &:hover {
+        background-color: rgba(138, 138, 138, 0.28);
+        color: #fbefef;
+      }
     }
     .swiper-pagination {
       bottom: 74px;

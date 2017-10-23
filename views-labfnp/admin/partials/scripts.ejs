@@ -31,7 +31,11 @@
 <script src="/assets/admin/js/notification/SmartNotification.min.js"></script>
 
 <!-- Vue parts -->
-<script src="/assets/admin/js/libs/vue.min.js"></script>
+<% if (sails.config.environment === 'production') { %>
+  <script src="/assets/admin/js/libs/vue.min.js"></script>
+<% } else { %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28-csp/vue.js"></script>
+<% } %>
 
 <!-- JARVIS WIDGETS -->
 <script src="/assets/admin/js/smartwidgets/jarvis.widget.min.js"></script>

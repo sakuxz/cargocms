@@ -4,15 +4,15 @@ module.exports = {
   attributes: {
     limit: {
       type: Sequelize.INTEGER,
-      defaultValue: 0
+      defaultValue: 0,
     },
     signupCount: {
       type: Sequelize.INTEGER,
-      defaultValue: 0
+      defaultValue: 0,
     },
     price: {
       type: Sequelize.INTEGER,
-      defaultValue: 0
+      defaultValue: 0,
     },
     title: {
       type: Sequelize.STRING,
@@ -28,7 +28,7 @@ module.exports = {
         } catch (e) {
           sails.log.error(e);
         }
-      }
+      },
     },
     sellEndDate: {
       type: Sequelize.DATE,
@@ -39,7 +39,7 @@ module.exports = {
         } catch (e) {
           sails.log.error(e);
         }
-      }
+      },
     },
     eventStartDate: {
       type: Sequelize.DATE,
@@ -50,7 +50,7 @@ module.exports = {
         } catch (e) {
           sails.log.error(e);
         }
-      }
+      },
     },
     eventEndDate: {
       type: Sequelize.DATE,
@@ -61,35 +61,35 @@ module.exports = {
         } catch (e) {
           sails.log.error(e);
         }
-      }
+      },
     },
-    createdDateTime:{
+    createdDateTime: {
       type: Sequelize.VIRTUAL,
-      get: function(){
-        try{
+      get: function() {
+        try {
           return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
-        } catch(e){
+        } catch (e) {
           sails.log.error(e);
         }
-      }
+      },
     },
 
-    updatedDateTime:{
+    updatedDateTime: {
       type: Sequelize.VIRTUAL,
-      get: function(){
-        try{
+      get: function() {
+        try {
           return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
-        } catch(e){
+        } catch (e) {
           sails.log.error(e);
         }
-      }
-    }
+      },
+    },
 
   },
 
-  associations: function() {
+  associations() {
     Post.hasMany(Event);
-    Event.belongsTo(Post,{ foreignKey: "PostId" } );
+    Event.belongsTo(Post, { foreignKey: 'PostId' });
     // Event.belongsToMany(User, {
     //
     //   through: 'UserEvent',
@@ -120,6 +120,6 @@ module.exports = {
       },
     },
     instanceMethods: {},
-    hooks: {}
-  }
+    hooks: {},
+  },
 };

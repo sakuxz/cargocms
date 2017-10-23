@@ -8,6 +8,13 @@ module.exports = {
   'put /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.update',
   'delete /api/labfnp/recipe/:id': 'api/labfnp/RecipeController.destroy',
 
+  'get /api/labfnp/user/recipe': 'api/labfnp/RecipeController.findUserRecipe',
+  'get /api/labfnp/user/recipe/:id': 'api/labfnp/RecipeController.findUserRecipe',
+  'get /api/labfnp/user/fav': 'api/labfnp/RecipeController.findUserFavorite',
+  'get /api/labfnp/user/fav/:id': 'api/labfnp/RecipeController.findUserFavorite',
+  'get /api/labfnp/user/profile': 'api/UserController.getProfile',
+  'get /api/labfnp/user/profile/:id': 'api/UserController.getProfile',
+
   'get /api/labfnp/recipe/:id/feelings': 'api/labfnp/RecipeController.feelings',
 
   'post /api/admin/labfnp/feeling/exportFeeling': 'api/admin/labfnp/FeelingController.exportFeeling',
@@ -26,9 +33,18 @@ module.exports = {
   'get /api/labfnp/order': 'api/labfnp/RecipeOrderController.find',
   'get /api/labfnp/eventOrder': 'api/labfnp/EventOrderController.find',
 
+  // 取得全部的感覺
+  'get /api/labfnp/feelings': 'api/labfnp/FeelingController.getAll',
+  // 取得全部的感覺以及對應的全部香味分子
+  'get /api/labfnp/feelings/scents': 'api/labfnp/FeelingController.getAllWithAllScents',
+
+  // 取得香味分子
   'get /api/labfnp/scent/simpleList': 'api/labfnp/ScentController.find',
-  'get /api/labfnp/scent': 'api/labfnp/ScentController.find',
   'get /api/labfnp/scentnote': 'api/labfnp/ScentNoteController.find',
+  // 清單
+  'get /api/labfnp/scent': 'api/labfnp/ScentController.getAll',
+  // 依據分子名稱搜尋
+  'get /api/labfnp/scent/:name': 'api/labfnp/ScentController.findBy',
 
   'post /api/admin/labfnp/scentfeedback/exportFeedback': 'api/admin/labfnp/ScentFeedbackController.exportFeedback',
   'get /api/admin/labfnp/scentfeedback': 'api/admin/labfnp/ScentFeedbackController.find',

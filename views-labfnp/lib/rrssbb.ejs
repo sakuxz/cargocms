@@ -2,7 +2,7 @@
     data-url="<%= socialData.url %>"
     data-title="<%= socialData.title %>"
     data-description="<%= socialData.description %>">
-  <% social.targets.forEach(function(target){%>
+  <% JSON.parse(social.targets).forEach(function(target){%>
     <li class="rrssb-<%= target%>">
       <a href="" class="popup">
         <span class="rrssb-icon">

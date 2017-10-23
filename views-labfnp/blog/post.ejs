@@ -22,7 +22,6 @@
       </div>
 
       <div class="col-md-offset-4 col-md-2">
-        <% var socialData = social.data[0] %>
         <%- include ../lib/fbLikeShare.ejs %>
       </div>
     </div>
@@ -58,16 +57,6 @@
       <% }); %>
     </div>
 
-    <!--
-    <% if(social.targets.length > 0){ %>
-      <div class="row">
-        <div class="col-md-6" style="max-width: 400px">
-          <% var socialData = social.data[0] %>
-          <%- include ../lib/rrssbb.ejs %>
-        </div>
-      </div>
-    <% } %>
-  -->
     <div>
       <%- include ../lib/fbLikeShare.ejs %>
     </div>

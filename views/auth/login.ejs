@@ -38,7 +38,7 @@
 <div class="container content">
   <div class="row">
     <div class="login-block col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-      <form class="reg-page" method="post" action="/auth/local?url=/">
+      <form class="reg-page" method="post" action="/auth/local?url=/lab">
         <!--
         <div class="reg-header">
           <h2>使用 Facebook 帳號登入</h2>
@@ -83,8 +83,13 @@
             <button id="submit-button" class="btn-u pull-right" type="submit">登入</button>
           </div>
         </div>
-        <% if (data.errors) { %>
-          <div class="alert alert-warning" role="alert">帳號或密碼錯誤！</div>
+        <% var error = data.errors[0]; %>
+        <% if (error) { %>
+          <% if (error === 'Error.Passport.Username.NotFound') { %>
+            <div class="alert alert-warning" role="alert">使用者不存在，請先<a href="/register">註冊</a>！</div>
+          <% } else { %>
+            <div class="alert alert-warning" role="alert">帳號或密碼錯誤！</div>
+          <% } %>
         <% } %>
         <hr>
 

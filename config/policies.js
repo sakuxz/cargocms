@@ -19,10 +19,13 @@ import customConfigLoader from './util/customConfigLoader.js';
 var customConfig = customConfigLoader('policies.js');
 
 var defaultConfig = {
-  '*': ['nocache', 'passport', 'sessionAuth'],
+  '*': ['nocache', 'passport', 'sessionAuth', 'jwtDecode'],
   'AuthController': {
     '*': ['passport'],
-    'status': [],
+    status: [],
+    callback: ['passport', 'jwtEncode'],
+    logout: ['passport', 'jwtDecode'],
+    provider: ['passport', 'jwtEncode'],
   },
   ...customConfig,
   'BlogController': {
@@ -83,6 +86,9 @@ var defaultConfig = {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
   "api/admin/UserController": {
+    '*': ['passport', 'sessionAuth', 'isAdmin'],
+  },
+  "api/admin/ConfigController": {
     '*': ['passport', 'sessionAuth', 'isAdmin'],
   },
   "UtilsController": {

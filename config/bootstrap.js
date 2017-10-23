@@ -43,12 +43,12 @@ module.exports.bootstrap = async (cb) => {
 
     }
 
-    let adminRole = await Role.findOrCreate({
+    const adminRole = await Role.findOrCreate({
       where: {authority: 'admin'},
       defaults: {authority: 'admin'}
     });
 
-    let userRole = await Role.findOrCreate({
+    const userRole = await Role.findOrCreate({
       where: {authority: 'user'},
       defaults: {authority: 'user'}
     });
@@ -121,6 +121,9 @@ module.exports.bootstrap = async (cb) => {
     if (sails.config.facebook === undefined || sails.config.facebook.pageId === '' || sails.config.facebook.appId === ''){
       sails.log.error('Facebook Page ID or App ID not exist!!');
     }
+
+    await ConfigService.sync();
+    await ConfigService.load();
 
     cb();
   } catch (e) {

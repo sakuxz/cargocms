@@ -74,10 +74,15 @@
           <input type="password" placeholder="Password" value="<%= data.user.password %>" id="password" name="password" class="form-control">
         </div>
 
-        <% if (data.errors === 'Error.Passport.BadUserPassword') { %>
+        <% var error = data.errors.toString(); %>
+        <% if (error === 'Error.Passport.BadUserPassword') { %>
           <div class="margin-top-20 alert alert-warning" role="alert">帳號或密碼錯誤！</div>
-        <% } else if(data.errors === 'Error.Order.Need.Login') { %>
+        <% } else if(error === 'Error.Order.Need.Login') { %>
           <div class="margin-top-20 alert alert-warning" role="alert">訂購需為本站會員，請先登入帳號或註冊</div>
+        <% } else if(error === 'Error.Passport.Username.NotFound') { %>
+          <div class="margin-top-20 alert alert-warning" role="alert">請先<a href="/register">註冊</a>後使用！</div>
+        <% } else if (error === 'Error.Passport.Password.CheckFail') { %>
+          <div class="margin-top-20 alert alert-warning" role="alert">帳號或密碼錯誤！</div>
         <% } %>
 
         <% var info = req.flash('info')[0]; %>

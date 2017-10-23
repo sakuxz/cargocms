@@ -32,7 +32,7 @@ div.note-editable.panel-body ol, div.note-editable.panel-body ul{
 <fieldset>
 
   <div class="row">
-    <section class="col col-md-6 col-sm-6 col-xs-6">
+    <section class="col col-md-4 col-sm-4 col-xs-4">
       <label class="label">內容類型</label>
       <label class="select">
         <select v-model="data.item.type">
@@ -42,7 +42,7 @@ div.note-editable.panel-body ol, div.note-editable.panel-body ul{
         </select> <i></i> </label>
     </section>
 
-    <section class="col col-md-6 col-sm-6 col-xs-6">
+    <section class="col col-md-4 col-sm-4 col-xs-4">
       <label class="label">狀態</label>
       <label class="select">
         <select v-model="data.item.publish">
@@ -50,8 +50,22 @@ div.note-editable.panel-body ol, div.note-editable.panel-body ul{
           <option value=1 >公開</option>
         </select> <i></i> </label>
     </section>
-  </div>
 
+    <section class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+      <label class="label"><span class="text-danger fn-show-hidden">*</span>精選活動</label>
+      <label class="input state-disabled switch"></label>
+      <span class="input-group-addon">
+        <span class="onoffswitch">
+          <input type="checkbox" name="chosen" class="onoffswitch-checkbox" v-model="data.item.chosen" id="chosen">
+          <label class="onoffswitch-label" for="chosen">
+            <span class="onoffswitch-inner" data-swchon-text="On" data-swchoff-text="Off"></span>
+            <span class="onoffswitch-switch"></span>
+          </label>
+        </span>
+      </span>
+      <b class="tooltip tooltip-bottom-right">精選活動</b></label>
+    </section>
+  </div>
 
   <section v-show="data.item.type === 'external-event'">
     <label class="label">外連連結</label>
@@ -140,7 +154,7 @@ div.note-editable.panel-body ol, div.note-editable.panel-body ul{
   <section>
     <label class="label">內容</label>
     <div style="border: 1px solid #a9a9a9;">
-      <div v-summernote="data.item.content" class="summernote">
+      <div v-summernote="data.item.content" class="summernote" >
         {{{ data.item.content }}}
       </div>
     </div>
@@ -150,7 +164,6 @@ div.note-editable.panel-body ol, div.note-editable.panel-body ul{
     <label class="label">標籤</label>
     <input id="tagsinput" value="" data-role="tagsInputLabel">
   </section>
-
 
 </fieldset>
 

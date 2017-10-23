@@ -102,3 +102,8 @@
 ### Feed 欄位變動
 * 修改 fullPicture 欄位 型態 STRING 修改為 TEXT
 * type 欄位等於 'status'，將 publish欄位 修改為 false
+
+## v8
+
+### Post 欄位增加
+* Post 增加 chosen 型態 BOOLEAN，預設 false

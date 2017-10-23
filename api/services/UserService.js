@@ -2,6 +2,82 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 
 module.exports = {
+    async register(userData) {
+    try {
+      // sails.log('====================================');
+      // sails.log('\n userData=>', userData);
+      // sails.log('====================================');
+
+      // check if the user is exist.
+      const existUser = await User.find({
+        where: {
+          $or: [
+            { email: userData.email },
+            { username: userData.username },
+          ],
+        },
+      });
+      if (existUser) {
+        throw new Error('the email or user name has been registered.');
+      }
+
+      // create User
+      if(userData.birthday === '') delete userData.birthday
+      let user = await User.create(userData);
+      if (!user) {
+        throw new Error('create User failed.');
+      }
+
+      // create User's passport
+      const passport = await Passport.create({
+        provider: 'local',
+        protocol: 'local',
+        password: userData.password,
+        UserId: user.id,
+      });
+      if (!passport) {
+        throw new Error('create user Passport failed.');
+      }
+
+      // add Role
+      const roleName = RoleService.getRoleName(userData.role);
+      const userRole = await Role.findOrCreate({
+        where: { authority: roleName },
+        defaults: {
+          authority: roleName,
+          title: roleName,
+          description: `${roleName} user`,
+        },
+      });
+      if (!userRole[0]) {
+        throw new Error('create Role failed.');
+      }
+      await Promise.all(userRole.map(async (role) => {
+        await user.addRole(role);
+      }));
+
+      // get user with role
+      user = await User.findOne({
+        where: {
+          id: user.id,
+        },
+        include: [Role],
+      });
+      await this.sendVerificationEmail({
+        userId: user.id,
+        email: user.email,
+        displayName: user.displayName,
+        signToken: userData.verifyEmailToken,
+        type: '註冊',
+      });
+
+      return user;
+    } catch (e) {
+      sails.log.error(e);
+      throw e;
+    }
+  },
+
   findAll: async () => {
     try {
       return await User.findAll();
@@ -201,7 +277,7 @@ module.exports = {
       }, signToken);
       let messageConfig = await MessageService.checkNewEmail({
         email: email,
-        api: `/validate/email?token=${token}`,
+        api: `validate/email?token=${token}`,
         username: displayName,
         type: type,
       });
