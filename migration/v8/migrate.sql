@@ -15,4 +15,4 @@ CREATE TABLE `StaticPages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 新增發布日期欄位
-ALTER TABLE Post add `date` DATE;
+ALTER TABLE Posts add `date` DATE;
