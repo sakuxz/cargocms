@@ -51,6 +51,7 @@ module.exports = {
           { model: Event },
           { model: Image },
         ],
+        order: [['updatedAt', 'DESC']],
       });
 
       const popular = popularPosts[0] || posts[posts.length - 1];
