@@ -35,7 +35,7 @@ $(document).ready(function(){
     var newRecipe = $('#recipeTmpl').tmpl({
       recipe: recipe,
       social: social,
-      targets: targets,
+      targets: {},
     });
     $container.append(newRecipe).masonry( 'appended', newRecipe)
     setTimeout(function(){
