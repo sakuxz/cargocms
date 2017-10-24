@@ -13,6 +13,10 @@ module.exports = {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
     },
+    date: {
+      type: Sequelize.DATE,
+      defaultValue: null,
+    },
     url: {
       type: Sequelize.STRING,
     },

@@ -32,6 +32,7 @@ module.exports = {
           chosenSocial,
           social,
         },
+        moment,
       });
     } catch (e) {
       res.serverError(e);
@@ -57,7 +58,10 @@ module.exports = {
         e = Object.assign(e, EventService.getTicketStatus(e, new Date()));
       });
 
-      res.view('event/show', { data, social });
+      res.view('event/show', {
+        data,
+        social,
+      });
     } catch (e) {
       res.serverError(e);
     }

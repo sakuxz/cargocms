@@ -5,6 +5,8 @@ module.exports = {
     cover = null,
     coverType,
     coverUrl,
+    chosen,
+    date,
     url,
     abstract,
     UserId,
@@ -16,12 +18,15 @@ module.exports = {
     eventId,
   }) {
     try {
+      const formatedDate = date ? new Date(date) : null;
       const post = await Post.create({
         title,
         content,
         cover: cover === '' ? null : cover,
         coverType,
         coverUrl,
+        chosen,
+        date: formatedDate,
         url,
         abstract,
         UserId,
@@ -64,6 +69,7 @@ module.exports = {
     coverType,
     coverUrl,
     chosen,
+    date,
     url,
     abstract,
     TagsArray,
@@ -108,6 +114,9 @@ module.exports = {
           location = await Location.create({ longitude, latitude });
         }
       }
+      const formatedDate = date ? new Date(date) : null;
+      console.log('date=>', date);
+      console.log('formatedDate=>', formatedDate);
       await Post.update({
         title,
         content,
@@ -115,6 +124,7 @@ module.exports = {
         coverType,
         coverUrl,
         chosen,
+        date: formatedDate,
         url,
         abstract,
         LocationId: location ? location.id : null,
