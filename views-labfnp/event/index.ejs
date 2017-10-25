@@ -42,8 +42,6 @@
                     let date = data.chosen.updatedAt;
                     if (data.chosen.date) date = data.chosen.date;
                     const isChosenEnd = moment(new Date, 'YYYY/MM/DD').isAfter(date, 'YYYY/MM/DD');
-                    console.log('date=>', date);
-                    console.log('isChosenEnd=>', isChosenEnd);
                   %>
                     <div class="card-wrapper">
                       <a href="/events/<%= data.chosen.alias || data.chosen.id %>" <%= data.chosen.type == 'external-event' ? 'target="_blank"' : '' %> ><img class="img img-responsive full-width" src="<%= data.chosen.cover ? data.chosen.coverUrl : '' %>" alt=""></a>

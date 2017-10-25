@@ -28,13 +28,13 @@ module.exports = {
       const posts = await Post.findAllHasJoin({ order, where });
 
 
-      const popularPosts = await Post.findAll({
+      let popularPost = await Post.findOne({
         include: [
           {
             model: Event,
             where: {
               eventEndDate: {
-                gt: new Date(new Date() - (60 * 24 * 60 * 60 * 1000)),
+                gt: new Date(),
               },
             },
           },
@@ -44,6 +44,16 @@ module.exports = {
           [{ model: Event }, 'signupCount', 'DESC'],
         ],
       });
+      //
+      if (!popularPost) {
+        sails.log('all popular Post are end, so find the most popular one in the past for instead.');
+        popularPost = await Post.findOne({
+          include: [Event, Image],
+          order: [
+            [{ model: Event }, 'signupCount', 'DESC'],
+          ],
+        });
+      }
 
       const chosenPosts = await Post.findOne({
         where: { chosen: true },
@@ -54,7 +64,7 @@ module.exports = {
         order: [['updatedAt', 'DESC']],
       });
 
-      const popular = popularPosts[0] || posts[posts.length - 1];
+      const popular = popularPost || posts[posts.length - 1];
       const chosen = chosenPosts ? chosenPosts.toJSON() : posts[posts.length - 2];
 
       return {
