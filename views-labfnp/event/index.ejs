@@ -1,4 +1,9 @@
 
+<%
+
+console.log('social.social=>', social.social);
+%>
+
 <!--=== Event Card ===-->
 <div class="bg-color-light">
 	<div class="container content-sm">
@@ -98,7 +103,7 @@
                     <%= isEnd ? '查看' : '參加' %>
                   </a>
                   <div class="fb-icon pull-right">
-                    <% var socialData = social.social.data[0] %>
+                    <% var socialData = social.social.data[index] %>
                     <%- include ../lib/fbLikeShare.ejs %>
                   </div>
                 </div>
