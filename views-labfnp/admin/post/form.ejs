@@ -150,6 +150,13 @@ div.note-editable.panel-body ol, div.note-editable.panel-body ul{
       <input type="text" name="alias" placeholder="輸入可讀的網址，只限英文、數字、符號'-' 例如: LFP-workshop-in-kaohsiung" v-model="data.item.alias">
       <b class="tooltip tooltip-bottom-right">輸入可讀的網址，只限英文、數字、符號'-' 例如: LFP-workshop-in-kaohsiung</b> </label>
   </section>
+  
+  <section>
+    <label class="label">對外顯示的發布日期</label>
+    <label class="input">
+      <input type="date" name="date" placeholder="輸入日期，以 '/' 隔開，例如: 2017/11/11" v-model="data.item.date">
+      <b class="tooltip tooltip-bottom-right">輸入日期，以 '/' 隔開，例如: 2017/11/11</b> </label>
+  </section>
 
   <section>
     <label class="label">內容</label>

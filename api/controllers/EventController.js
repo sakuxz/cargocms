@@ -5,22 +5,10 @@ module.exports = {
 
   index: async (req, res) => {
     try {
-      // const order = 'DESC';
-      // let where = {
-      //   publish: true,
-      //   type: ["internal-event", "external-event"],
-      // }
-
-      // const posts = await Post.findAllHasJoin({ order, where });
-
       const { popular, chosen, allposts } = await EventService.getEvent();
       const popularSocial = SocialService.forPost([popular]);
       const chosenSocial = SocialService.forPost([chosen]);
       const social = SocialService.forPost(allposts);
-      // const items = posts;
-      // const data = {items}
-
-      // res.view('event/index', {data, social});
       return res.view('event/index', {
         data: {
           popular,
@@ -32,9 +20,10 @@ module.exports = {
           chosenSocial,
           social,
         },
+        moment,
       });
     } catch (e) {
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 
@@ -57,7 +46,10 @@ module.exports = {
         e = Object.assign(e, EventService.getTicketStatus(e, new Date()));
       });
 
-      res.view('event/show', { data, social });
+      res.view('event/show', {
+        data,
+        social,
+      });
     } catch (e) {
       res.serverError(e);
     }

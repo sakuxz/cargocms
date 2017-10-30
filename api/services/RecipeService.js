@@ -105,13 +105,6 @@ module.exports = {
         throw error;
       }
       recipeId = recipe.id;
-      recipe.label = '精選';
-      if (recipe.visibility === 'PRIVATE' && !isAdmin) {
-        recipe.label = '非公開';
-        if (!currentUser || recipe.UserId !== currentUser.id) {
-          recipe.formula = [];
-        }
-      }
       await recipe.checkCurrentUserLike({ currentUser });
 
       const formula = JSON.parse(JSON.stringify(recipe.formula));
@@ -150,9 +143,9 @@ module.exports = {
                 id: scent.ScentNote.id,
                 notes: scent.ScentNote.notes,
                 color: scent.ScentNote.color,
-                'keywords': scent.ScentNote.keywords,
-                'title': scent.ScentNote.title,
-                'title2': scent.ScentNote.title2,
+                keywords: scent.ScentNote.keywords,
+                title: scent.ScentNote.title,
+                title2: scent.ScentNote.title2,
               },
             },
           });
@@ -162,12 +155,8 @@ module.exports = {
       }
       recipeFeelings.sort(() => (0.5 - Math.random()))
         .filter(e => e.title.length < 4)
-      // .map(e => ({
-      //   title: e.title,
-      //   scentName: e.scentName,
-      // }))
         .slice(0, 20);
-      console.log('recipe total feeling=>', recipeFeelings);
+      // console.log('recipe total feeling=>', recipeFeelings);
 
       let editable = false;
       let userId = null;
@@ -192,12 +181,20 @@ module.exports = {
         if (allpay != null) { recipeFeedback.tradeNo = allpay.TradeNo; }
       }
 
+      const recipeJSON = recipe.toJSON();
+      recipeJSON.label = '精選';
+      if (recipeJSON.visibility === 'PRIVATE' && !isAdmin) {
+        recipeJSON.label = '非公開';
+        if (!currentUser || recipeJSON.UserId !== currentUser.id) {
+          recipeJSON.formula = [];
+        }
+      }
       return {
         editable,
         social,
         recipeFeedback,
         recipe: {
-          ...recipe.toJSON(),
+          ...recipeJSON,
           feelings: recipeFeelings,
         },
       };

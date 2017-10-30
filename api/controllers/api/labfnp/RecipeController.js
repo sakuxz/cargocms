@@ -15,18 +15,20 @@ module.exports = {
         likeUser: req.query.type === 'like' ? user : null,
         search: keyword,
       });
-      const social = SocialService.forRecipe({ recipes });
       const formatItems = [];
       for (const item of recipes) {
         const newItem = JSON.parse(JSON.stringify(item));
         if (item.UserLikeRecipes && item.UserLikeRecipes.length > 0) {
-          const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === user.id);
-          if (isSessionUserLiked.length > 0) {
-            newItem.isFaved = true;
+          if (user) {
+            const isSessionUserLiked = item.UserLikeRecipes.filter(e => e.UserId === user.id);
+            if (isSessionUserLiked.length > 0) {
+              newItem.isFaved = true;
+            }
           } else newItem.isFaved = false;
         } else newItem.isFaved = false;
         formatItems.push(newItem);
       }
+      const social = SocialService.forRecipe({ recipes: formatItems });
       return res.ok({
         data: {
           items: formatItems,
@@ -281,16 +283,16 @@ module.exports = {
       if (data.scentFeeling) {
         Object.keys(data.scentFeeling).forEach((key) => {
           if (data.scentFeeling[key]) {
-            let feeling = data.scentFeeling[key].split(',') ;
+            const feeling = data.scentFeeling[key].split(',');
             updateformula.push({
               scent: key,
               userFeeling: feeling,
-            })
+            });
           } else {
             updateformula.push({
               scent: key,
               userFeeling: [],
-            })
+            });
           }
         });
         const user = AuthService.getSessionUser(req);

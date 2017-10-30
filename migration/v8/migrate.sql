@@ -13,3 +13,6 @@ CREATE TABLE `StaticPages` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 新增發布日期欄位
+ALTER TABLE Posts add `date` DATE;
