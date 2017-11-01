@@ -117,6 +117,9 @@ var postApp = new Vue({
           }
           postAppModel.data.option.originCoverType = result.data.coverType;
           postAppModel.data.option.originCoverUrl = result.data.coverUrl;
+          var date = new Date(result.data.date);
+          console.log('date=>', date);
+          postAppModel.data.item.date = date.getFullYear() + '-' + ('00' + (date.getMonth() + 1)).substr(-2,2) + '-' + ('00' + date.getDate()).substr(-2,2);
         }
         if (typeof cb !== 'undefined') setTimeout(cb, 0);
         console.log("loadItem postAppModel.data.item=>", postAppModel.data.item);

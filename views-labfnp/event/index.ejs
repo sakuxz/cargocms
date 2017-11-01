@@ -25,7 +25,7 @@ console.log('social.social=>', social.social);
                       <h3>
                         <% if (date) { %>
                           <img class="icon-img" src="/assets/labfnp/img/time.png" alt="活動時間">
-                          <%= date ? `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` : '' %>
+                          <%= `${date.getFullYear()}/${('00' + (date.getMonth() + 1)).substr(-2, 2)}/${('00' + date.getDate()).substr(-2, 2)}` %>
                           <label><%= isPopularEnd ? '(已結束)' : '' %></label>
                         <% } else { %>
                           <br />
@@ -60,7 +60,7 @@ console.log('social.social=>', social.social);
                         <h3>
                           <% if (date) { %>
                             <img class="icon-img" src="/assets/labfnp/img/time.png" alt="活動時間">
-                            <%= date ? `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` : '' %>
+                            <%= `${date.getFullYear()}/${('00' + (date.getMonth() + 1)).substr(-2, 2)}/${('00' + date.getDate()).substr(-2, 2)}` %>
                             <label><%= isChosenEnd ? '(已結束)' : '' %></label>
                           <% } else { %>
                             <br />
@@ -103,7 +103,7 @@ console.log('social.social=>', social.social);
                     <h3>
                       <% if (date) { %>
                         <img class="icon-img" src="/assets/labfnp/img/time.png" alt="活動時間">
-                        <%= date ? `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` : '' %>
+                        <%= `${date.getFullYear()}/${('00' + (date.getMonth() + 1)).substr(-2, 2)}/${('00' + date.getDate()).substr(-2, 2)}` %>
                         <label><%= isEnd ? '(已結束)' : '' %></label>
                       <% } else { %>
                         <br />
