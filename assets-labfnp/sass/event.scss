@@ -14,6 +14,11 @@ h2 {
 
 .fb-icon {
   padding-top: 6px;
+  @media (max-width: 320px){
+    max-width: 120px;
+    text-align: center;
+    margin-top: -10px;
+  }
 }
 
 .btn-active {

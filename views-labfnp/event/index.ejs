@@ -13,9 +13,8 @@ console.log('social.social=>', social.social);
               <h2><img class="icon-img" src="/assets/labfnp/img/popular.png" alt="">熱門活動</h2>
                 <% if (data.popular !== null) { %>
                   <%
-                    let date = data.popular.updatedAt;
-                    if (data.popular.date) date = data.popular.date;
-                    const isPopularEnd = moment(new Date, 'YYYY/MM/DD').isAfter(date, 'YYYY/MM/DD');
+                    const date = data.popular.date || null;
+                    const isPopularEnd = date ? moment(new Date, 'YYYY/MM/DD HH:mm:ss').isAfter(date, 'YYYY/MM/DD HH:mm:ss') : false;
                   %>
                   <div class="card-wrapper">
                     <a href="/events/<%= data.popular.alias || data.popular.id %>" <%= data.popular.type == 'external-event' ? 'target="_blank"' : '' %> ><img class="img img-responsive full-width" src="<%= data.popular.cover ? data.popular.coverUrl : '' %>" alt=""></a>
@@ -23,9 +22,14 @@ console.log('social.social=>', social.social);
                       <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt=""> 
                         <%= data.popular.title %> 
                       </h3>
-                      <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt="">
-                        <%= `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` %>
-                        <label><%= isPopularEnd ? '(已結束)' : '' %></label>
+                      <h3>
+                        <% if (date) { %>
+                          <img class="icon-img" src="/assets/labfnp/img/time.png" alt="活動時間">
+                          <%= `${date.getFullYear()}/${('00' + (date.getMonth() + 1)).substr(-2, 2)}/${('00' + date.getDate()).substr(-2, 2)}` %>
+                          <label><%= isPopularEnd ? '(已結束)' : '' %></label>
+                        <% } else { %>
+                          <br />
+                        <% } %>
                       </h3>
                       <a class="btn btn-success btn-active btn-lg" href="/events/<%= data.popular.alias || data.popular.id %> #order" <%= data.popular.type == 'external-event' ? 'target="_blank"' : '' %> >
                         <%= isPopularEnd ? '查看' : '參加' %>
@@ -44,9 +48,8 @@ console.log('social.social=>', social.social);
               <h2><img class="icon-img" src="/assets/labfnp/img/featured.png" alt="">精選活動</h2>
                 <% if (data.chosen !== null) { %>
                   <%
-                    let date = data.chosen.updatedAt;
-                    if (data.chosen.date) date = data.chosen.date;
-                    const isChosenEnd = moment(new Date, 'YYYY/MM/DD').isAfter(date, 'YYYY/MM/DD');
+                    const date = data.chosen.date || null;
+                    const isChosenEnd = date ? moment(new Date, 'YYYY/MM/DD HH:mm:ss').isAfter(date, 'YYYY/MM/DD HH:mm:ss') : false;
                   %>
                     <div class="card-wrapper">
                       <a href="/events/<%= data.chosen.alias || data.chosen.id %>" <%= data.chosen.type == 'external-event' ? 'target="_blank"' : '' %> ><img class="img img-responsive full-width" src="<%= data.chosen.cover ? data.chosen.coverUrl : '' %>" alt=""></a>
@@ -54,9 +57,14 @@ console.log('social.social=>', social.social);
                         <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt="">
                           <%= data.chosen.title %>
                         </h3>
-                        <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt="">
-                          <%= `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` %>
-                          <label><%= isChosenEnd ? '(已結束)' : '' %></label>
+                        <h3>
+                          <% if (date) { %>
+                            <img class="icon-img" src="/assets/labfnp/img/time.png" alt="活動時間">
+                            <%= `${date.getFullYear()}/${('00' + (date.getMonth() + 1)).substr(-2, 2)}/${('00' + date.getDate()).substr(-2, 2)}` %>
+                            <label><%= isChosenEnd ? '(已結束)' : '' %></label>
+                          <% } else { %>
+                            <br />
+                          <% } %>
                         </h3>
                         <a class="btn btn-success btn-active btn-lg" 
                         href="/events/<%= data.chosen.alias || data.chosen.id %> #order" <%= data.chosen.type == 'external-event' ? 'target="_blank"' : '' %> >
@@ -81,9 +89,8 @@ console.log('social.social=>', social.social);
       <div class="row">
           <% data.allposts.forEach(function(item, index) { %>
             <%
-              let date = item.updatedAt;
-              if (data.popular.date) date = item.date;
-              const isEnd = moment(new Date, 'YYYY/MM/DD').isAfter(date, 'YYYY/MM/DD');
+              const date = item.date;
+              const isEnd = date ? moment(new Date, 'YYYY/MM/DD HH:mm:ss').isAfter(date, 'YYYY/MM/DD HH:mm:ss') : false;
             %>
             <div class="col-md-4 col-xs-12 native-hide">
               <div class="card-wrapper">
@@ -93,9 +100,14 @@ console.log('social.social=>', social.social);
                     <h3><img class="icon-img" src="/assets/labfnp/img/tag.png" alt="">
                       <%= item.title %>
                     </h3>
-                    <h3><img class="icon-img" src="/assets/labfnp/img/time.png" alt="">
-                      <%= `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` %>
-                      <label><%= isEnd ? '(已結束)' : '' %></label>
+                    <h3>
+                      <% if (date) { %>
+                        <img class="icon-img" src="/assets/labfnp/img/time.png" alt="活動時間">
+                        <%= `${date.getFullYear()}/${('00' + (date.getMonth() + 1)).substr(-2, 2)}/${('00' + date.getDate()).substr(-2, 2)}` %>
+                        <label><%= isEnd ? '(已結束)' : '' %></label>
+                      <% } else { %>
+                        <br />
+                      <% } %>
                     </h3>
                     <p><%= item.abstract %></p>
                   </section>
