@@ -15,7 +15,8 @@
     <iframe class="share" src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=96&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId=<%= SocialService.getFBAppId() %>" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
   <% } else { %>
     <!-- 分享 + 按讚 -->
-    <iframe src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=146&layout=button_count&action=like&size=large&show_faces=false&share=true&height=46&appId=<%= SocialService.getFBAppId() %>" width="146" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    <iframe src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=96&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId=<%= SocialService.getFBAppId() %>" width="96" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    <iframe src="https://www.facebook.com/plugins/share_button.php?href=<%= shareUrl %>&layout=button_count&size=large&mobile_iframe=true&width=110&height=28&appId=<%= SocialService.getFBAppId() %>" width="110" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
   <% } %>
 <% } else { %>
   <% shareUrl = encodeURI(socialData.url); %>
@@ -24,7 +25,8 @@
     <iframe class="like" src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=96&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId=<%= SocialService.getFBAppId() %>" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
   <% } else { %>
     <!-- 分享 + 按讚 -->
-    <iframe src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=146&layout=button_count&action=like&size=large&show_faces=false&share=true&height=46&appId=<%= SocialService.getFBAppId() %>" width="146" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    <iframe src="https://www.facebook.com/plugins/like.php?href=<%= shareUrl %>&width=96&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId=<%= SocialService.getFBAppId() %>" width="96" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    <iframe src="https://www.facebook.com/plugins/share_button.php?href=<%= shareUrl %>&layout=button_count&size=large&mobile_iframe=true&width=110&height=28&appId=<%= SocialService.getFBAppId() %>" width="110" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
   <% } %>
   <script>
     var shareUrl = "<%= shareUrl %>";
