@@ -63,11 +63,11 @@ module.exports = {
       }
       if (DOMAIN_HOST.indexOf('http://') === 0) {
         DOMAIN_HOST = DOMAIN_HOST.replace(/^http:\/\//g, '');
-        sails.log('url=>', `http://${DOMAIN_HOST}${apiPath}`);
+        // sails.log('url=>', `http://${DOMAIN_HOST}${apiPath}`);
         return `http://${DOMAIN_HOST}${apiPath}`;
       } else if (DOMAIN_HOST.indexOf('https://') === 0) {
         DOMAIN_HOST = DOMAIN_HOST.replace(/^https:\/\//g, '');
-        sails.log('url=>', `http://${DOMAIN_HOST}${apiPath}`);
+        // sails.log('url=>', `http://${DOMAIN_HOST}${apiPath}`);
         return `https://${DOMAIN_HOST}${apiPath}`;
       }
       return apiPath.replace(/\/\//g, '/');
