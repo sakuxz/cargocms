@@ -27,7 +27,7 @@ exports.register = async (roleModel, req, res, next) => {
   // sails.log('\n req.body=>', req.body);
   // sails.log('====================================');
   try {
-    const verifyEmailToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
+    const verificationEmailToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
 
     // verify if meet the necessary parameters or not.
     UtilsService.checkRequiredParams([{ email }, { password }]);
@@ -43,7 +43,7 @@ exports.register = async (roleModel, req, res, next) => {
       phone2,
       address,
       address2,
-      verifyEmailToken,
+      verificationEmailToken,
       role: roleModel,
     };
 

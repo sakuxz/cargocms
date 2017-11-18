@@ -179,21 +179,22 @@ module.exports = {
   validateResend: async(req, res) => {
     try {
       const loginUser = AuthService.getSessionUser(req);
-      if (!loginUser) res.forbidden();
+      if (!loginUser) return res.forbidden();
       const user = await User.findById(loginUser.id);
+      console.log('validateResend user.verificationEmailToken=>', user.verificationEmailToken);
       await UserService.sendVerificationEmail({
         userId: user.id,
         email: user.email,
         displayName: user.displayName,
         signToken: user.verificationEmailToken,
         type: '重新驗證',
-      })
-      res.ok({
-        message:`send emaill success.`,
+      });
+      return res.ok({
+        message: 'send emaill success.',
         data: {},
       });
     } catch (e) {
-      res.serverError(e);
+      return res.serverError(e);
     }
   },
 

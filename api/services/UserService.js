@@ -67,7 +67,7 @@ module.exports = {
         userId: user.id,
         email: user.email,
         displayName: user.displayName,
-        signToken: userData.verifyEmailToken,
+        signToken: userData.verificationEmailToken,
         type: '註冊',
       });
 
@@ -271,7 +271,7 @@ module.exports = {
   sendVerificationEmail: async({ userId, email,  displayName, signToken, type}) => {
     try {
       const token = jwt.sign({
-        exp: moment(new Date()).add(1, 'h').valueOf(),
+        exp: moment(new Date()).add(12, 'h').valueOf(),
         userId,
         email,
       }, signToken);
