@@ -1,58 +1,85 @@
-var validator = require('validator');
+import crypto from 'crypto';
+import axios from 'axios';
+import _ from 'lodash';
+import validator from 'validator';
 
-exports.register = async (req, res, next) => {
-  var email, password, username;
-  email = req.param('email');
-  username = req.param('username');
-  password = req.param('password');
+exports.register = async (roleModel, req, res, next) => {
+  // switch for detect the request is from mobile API or form sumbit.
+  const isApi = req.param('api') || false;
+  if (!isApi) {
+    await UtilsService.checkRecaptcha(req.body);
+  }
+  const {
+    email,
+    username,
+    password,
+    lastName,
+    firstName,
+    birthday,
+    phone1,
+    phone2,
+    address,
+    address2,
+    customData,
+  } = req.body;
 
-  let lastName = req.param('lastName');
-  let firstName = req.param('firstName');
-
+  // sails.log('====================================');
+  // sails.log('\n req.body=>', req.body);
+  // sails.log('====================================');
   try {
+    const verificationEmailToken = crypto.randomBytes(32).toString('hex').substr(0, 32);
 
-    if (!email) {
-      throw new Error('No email was entered.');
-    }
+    // verify if meet the necessary parameters or not.
+    UtilsService.checkRequiredParams([{ email }, { password }]);
 
-    if (!password) {
-      throw new Error('No password was entered.');
-    }
-
-    let newUserParams = req.body;
-
-    let newUser = {
-      username: newUserParams.username || email,
-      email: email,
+    const userData = {
+      username: username || email,
+      password,
+      email,
       lastName,
-      firstName
+      firstName,
+      birthday,
+      phone1,
+      phone2,
+      address,
+      address2,
+      verificationEmailToken,
+      role: roleModel,
+    };
+
+    // create basic user with userData. if customData field is null or empty
+    // then will just create basic user, without any releated model.
+    let newUser = {};
+    if (!_.isNil(customData)) {
+      // check and translate the input customData from string into object.
+      let data = customData || {};
+      if (!_.isObject(customData) && _.isString(customData)) {
+        data = JSON.parse(customData);
+      }
+
+      // if exists customData field then try to verfiy it
+      // by using customized ValidationService.checkParams().
+      const hasParams = ValidationService.checkParams(roleModel, data, username);
+      if (hasParams) {
+        console.log(userData)
+        console.log(data)
+        const basicUser = await UserService.register(userData);
+        newUser = await AuthService.customRegister(basicUser, data);
+      }
+    } else {
+      newUser = await UserService.register(userData);
     }
-
-    let user = await User.create(newUser);
-
-    let passport = await Passport.create({
-      protocol: 'local',
-      password: password,
-      UserId: user.id
-    });
-
-    user = await User.findOne({
-      where:{
-        id: user.id
-      },
-      include: [Role]
-    });
-    return next(null, user);
-
+    return next(null, newUser);
   } catch (err) {
-    console.error(err.stack);
-    req.flash('error', err.message);
+    sails.log.error(err.stack);
+    if (_.isArray(err.errors)) {
+      req.flash('error', err.errors[0].message);
+    } else {
+      req.flash('error', err);
+    }
     return next(err);
-
   }
 };
-
-
 
 exports.connect = async (req, res, next) => {
   console.info("=== protocol local connect ===");
@@ -79,52 +106,52 @@ exports.connect = async (req, res, next) => {
   }
 };
 
-
 exports.login = async (req, identifier, password, next) => {
-  console.info("=== protocol local login ===");
+  sails.log.info('=== protocol local login ===');
+  const query = {
+    where: {},
+    include: [Role],
+  };
   try {
-    var isEmail, query;
-    isEmail = validator.isEmail(identifier);
-    query = {
-      where: {},
-      include: [Role]
-    };
-
+    const isEmail = validator.isEmail(identifier);
     if (isEmail) {
       query.where.email = identifier;
     } else {
       query.where.username = identifier;
     }
-    let user = await User.findOne(query);
 
-    if (!user) {
+    const user = await User.findOne(query);
+    if (user) {
+      sails.log('== user ==\n', user.toJSON());
+    } else {
+      sails.log('======\n no any user has been logined.\n===');
       if (isEmail) {
         throw new Error('Error.Passport.Email.NotFound');
       } else {
         throw new Error('Error.Passport.Username.NotFound');
       }
     }
+    // console.log("== user ==", user.toJSON());
 
-    let passport = await Passport.findOne({
+    const passport = await Passport.findOne({
       where: {
-        UserId: user.id
-      }
-    })
-
+        UserId: user.id,
+      },
+    });
     if (passport) {
-      let result = await passport.validatePassword(password, passport);
+      const result = await passport.validatePassword(password);
       if (result) {
         const userAgent = req.headers['user-agent'];
         await user.loginSuccess({ userAgent });
         return next(null, user);
       }
-
+      throw new Error('Error.Passport.Password.CheckFail');
     } else {
       throw new Error('Error.Passport.Password.NotSet');
     }
-
   } catch (e) {
     sails.log.error(e.stack);
-    next(err);
+    req.flash('error', 'Error.Passport.BadUserPassword');
+    return next(e);
   }
 };

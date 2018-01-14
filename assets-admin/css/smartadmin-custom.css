@@ -1,0 +1,108 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the
+ * later versions of this theme.
+ *
+ * We advise that you use use this CSS to override
+ * SmartAdmin styles.
+ *
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+
+/*
+ * INDEX
+ *
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+table.dataTable tbody tr.selected {
+  background-color: #B0BED9;
+}
+
+table.dataTable.stripe tbody tr.odd.selected, table.dataTable.display tbody tr.odd.selected {
+  background-color: #acbad4;
+}
+
+table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
+  background-color: #f6f6f6;
+}
+
+table.dataTable.hover tbody tr:hover.selected, table.dataTable.display tbody tr:hover.selected {
+  background-color: #aab7d1;
+}
+
+.dt-toolbar .dataTables_length {
+  float: right;
+}
+
+nav ul span.menu-item-parent {
+  font-size: 13px;
+}
+
+.btn.btn-default.btn-xs {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.row-action-buttons {
+  cursor: pointer;
+  text-align: center;
+}
+
+#logo img {
+  width: auto;
+  height: 20px;
+  margin-left: 20px;
+}
+
+.yadcf-filter-wrapper {}
+
+.yadcf-filter-range-date.yadcf-filter-range.hasDatepicker {
+  margin-right: 10px;
+}
+
+.yadcf-filter-reset-button {
+  padding-bottom: 4px;
+}
+
+.yadcf-filter-wrapper {
+  display: flex;
+}
+
+.color {
+  color: white;
+  padding: 2px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: none;
+  font-family: monospace;
+}
+
+@media screen and (min-width: 1200px) {
+  #main-table_filter input {
+    width: 300px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+  #main-table_filter input {
+    width: 200px;
+  }
+}
+
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  #main-table_filter input {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  #main-table_filter input {
+    width: 255px;
+  }
+}

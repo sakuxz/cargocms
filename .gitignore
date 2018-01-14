@@ -122,3 +122,8 @@ www
 assets/bower
 coverage
 test-results.xml
+
+package-lock.json
+yarn.lock
+
+

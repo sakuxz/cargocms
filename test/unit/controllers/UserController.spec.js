@@ -1,4 +1,24 @@
+import {mockAdmin, unMockAdmin} from "../../util/adminAuthHelper.js"
+
 describe('about User Controller operation.', function() {
+
+  before(async (done) => {
+    try {
+      await mockAdmin();
+      done();
+    } catch (e) {
+      done(e);
+    }
+  });
+
+  after(async (done)=>{
+    try {
+      await unMockAdmin();
+      done();
+    } catch (e) {
+      done(e);
+    }
+  })
 
   it('create User should success.', async (done) => {
     const createThisUser = {
@@ -11,7 +31,7 @@ describe('about User Controller operation.', function() {
     };
     try {
       const res = await request(sails.hooks.http.app)
-      .post(`/user`)
+      .post(`/api/admin/user`)
       .send(createThisUser);
       sails.log.info('create user controller spec =>', res.body);
       res.body.should.be.Object;
@@ -26,7 +46,7 @@ describe('about User Controller operation.', function() {
   describe('find all users', () => {
     it('should success.', async (done) => {
       try {
-        const res = await request(sails.hooks.http.app).get(`/user`);
+        const res = await request(sails.hooks.http.app).get(`/api/admin/user`);
         sails.log.info('find users controller spec =>', res.body);
         res.body.data.should.be.Array;
         res.body.success.should.be.equal(true);
@@ -59,7 +79,7 @@ describe('about User Controller operation.', function() {
     it('should success.', async (done) => {
       try {
         const res = await request(sails.hooks.http.app)
-        .get(`/user/${findThisUser.id}`);
+        .get(`/api/admin/user/${findThisUser.id}`);
         sails.log.info('find one user controller spec =>', res.body);
         res.body.data.should.be.Object;
         res.body.data.id.should.be.Number;
@@ -92,7 +112,7 @@ describe('about User Controller operation.', function() {
     it('should success.', async (done) => {
       try {
         const res = await request(sails.hooks.http.app)
-        .delete(`/user/${deleteThisUser.id}`);
+        .delete(`/api/admin/user/${deleteThisUser.id}`);
         sails.log.info('delete user controller spec =>', res.body);
         res.body.success.should.be.true;
         done();
@@ -134,7 +154,7 @@ describe('about User Controller operation.', function() {
     it('should success.', async (done) => {
       try {
         const res = await request(sails.hooks.http.app)
-        .post(`/user/${updateThisUser.id}`)
+        .put(`/api/admin/user/${updateThisUser.id}`)
         .send(updatedUser);
         res.status.should.eq(200);
         res.body.data.locale.should.be.equal('hk');

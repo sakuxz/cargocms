@@ -5,7 +5,7 @@ module.exports = function(grunt) {
       options: {
         coverage: true,
         root: 'api/',
-        reportFormats: ['cobertura', 'lcovonly']
+        reportFormats: ['clover', 'cobertura', 'lcovonly']
       }
     }
   });

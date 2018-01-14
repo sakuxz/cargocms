@@ -1,0 +1,84 @@
+<fieldset>
+
+  
+    <section row="">
+      <label class="label name">分類</label>
+      <label class="input state-disabled ">
+      <input type="text" name="name" placeholder="" v-model="data.item.name" disabled>
+      <b class="tooltip tooltip-bottom-right">請輸入分類</b></label>
+    </section>
+  
+    <section row="">
+      <label class="label key">小分類</label>
+      <label class="input state-disabled ">
+      <input type="text" name="key" placeholder="" v-model="data.item.key" disabled>
+      <b class="tooltip tooltip-bottom-right">請輸入小分類</b></label>
+    </section>
+  
+    <section row="">
+      <label class="label">描述</label>
+      <label class="input state-disabled ">
+      <input type="text" name="description" placeholder="" v-model="data.item.description" disabled>
+      <b class="tooltip tooltip-bottom-right">請輸入描述</b></label>
+    </section>
+  
+    <section row="">
+      <label class="label value">數值</label>
+      <label class="input state-disabled ">
+      <input type="text" name="value" placeholder="" v-model="data.item.value" disabled>
+      <b class="tooltip tooltip-bottom-right">請輸入數值</b></label>
+    </section>
+  
+    <section row="">
+      <label class="label type">類型</label>
+      <label class="input state-disabled ">
+      <input type="text" name="type" placeholder="" v-model="data.item.type" disabled>
+      <b class="tooltip tooltip-bottom-right">請輸入類型</b></label>
+    </section>
+  
+
+</fieldset>
+<script>
+  var formRules = {
+    name:{
+      required: true,
+    },
+    key:{
+      required: true,
+    },
+    value:{
+      required: true,
+    },
+    type:{
+      required: true,
+    },
+  };
+
+  var formMessages = {
+    name:{
+      required: "請給予 分類",
+    },
+    key:{
+      required: "請給予 小分類",
+    },
+    value:{
+      required: "請給予 數值",
+    },
+    type:{
+      required: "請給予 類型",
+    },
+  };
+  function getconfig() {
+    var query = location.hash.split('/').reverse()[0].split('?')[1];
+    if(typeof query === 'undefined') {
+      query = '';
+    }
+    return query;
+  }
+  if(getconfig() === 'taxrate') {
+    document.getElementsByClassName('key')[0].parentNode.style.display = 'none';
+    document.getElementsByClassName('type')[0].parentNode.style.display = 'none';
+    document.getElementsByClassName('name')[0].innerHTML = '名稱';
+    document.getElementsByClassName('value')[0].innerHTML = '稅率';
+  }
+</script>

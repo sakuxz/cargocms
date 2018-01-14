@@ -9,6 +9,11 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
 
+import express from 'express';
+import moment from 'moment';
+import fs from 'fs';
+import linkifyStr from 'linkifyjs/string';
+
 module.exports.http = {
 
   /****************************************************************************
@@ -83,8 +88,31 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-  cache: 0,
+  cache: 86400000,
 
+  customMiddleware: function(app) {
+    // app.use(express.logger());
+    // app.use(express.compress());
+    var {environment} = sails.config;
+    var maxAge = sails.config.http.cache;
+    if(environment == 'production'){
+      maxAge = sails.config.http.cache
+    }
+
+    const files = fs.readdirSync('.');
+    for (var dirName of files) {
+      let isDir = fs.statSync(dirName).isDirectory();
+      if (isDir && dirName.startsWith('assets-')) {
+        sails.log.debug('Setup static assets folder: ' + dirName + ', uri: /' + dirName.replace('-', '/'));
+        app.use('/' + dirName.replace('-', '/'), express.static(dirName, {maxAge}));
+      }
+
+      if (isDir && dirName === 'assets') {
+
+        app.use('/assets/', express.static(dirName, {maxAge}));
+      }
+    }
+  },
   middleware: {
     order: [
       'startRequestTimer',
@@ -110,6 +138,7 @@ module.exports.http = {
       res._stylesheetBlock = '';
       res._scripts = [];
       res._scriptBlock = '';
+      res._metas = [];
 
       res.locals.addScripts = function() {
         for (var i = 0; i < arguments.length; i++) {
@@ -140,6 +169,14 @@ module.exports.http = {
       res.locals.getStylesheetBlock = function() {
         return res._stylesheetBlock;
       };
+      res.locals.addMeta = function(meta) {
+        for (var i = 0; i < arguments.length; i++) {
+          res._metas.push(arguments[i]);
+        }
+      },
+      res.locals.getMetas = function() {
+        return res._metas;
+      },
 
       res.locals.LayoutUtils = {
         addScripts: function() {
@@ -170,6 +207,14 @@ module.exports.http = {
         getStylesheetBlock: function() {
           return res._stylesheetBlock;
         },
+        addMeta: function(meta) {
+          for (var i = 0; i < arguments.length; i++) {
+            res._metas.push(arguments[i]);
+          }
+        },
+        getMetas: function() {
+          return res._metas;
+        },
       };
 
       return next();
@@ -178,8 +223,47 @@ module.exports.http = {
   locals: {
     filters: {
       formatDate: function(date) {
-        return "AAA";
-      }
+        if  (!date) {
+          return null;
+        }
+        if (!(date instanceof Date)) {
+          return date;
+        }
+
+        try {
+          return moment(date).format('YYYY/MM/DD');
+        }
+        catch (e) {
+          return date;
+        }
+      },
+      formatDateTime: function(dateTime) {
+        if (!dateTime) {
+          return null;
+        }
+        if (!(dateTime instanceof Date)) {
+          return dateTime;
+        }
+
+        try {
+          return moment(dateTime).format('YYYY/MM/DD hh:mm:ss');
+        }
+        catch (e) {
+          return dateTime;
+        }
+      },
+      nl2br: function(text) {
+        if (!text) {
+          return text;
+        }
+        return text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      },
+      linkifyjs: function(text) {
+        if (!text) {
+          return text;
+        }
+        return linkifyStr(text);
+      },
     }
   }
 };

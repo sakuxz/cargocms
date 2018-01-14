@@ -12,11 +12,50 @@
 
 module.exports = {
   port: 1338,
+  socials: ["facebook", "googleplus", "twitter"],
   models: {
     connection: 'sqlite',
     migrate: 'drop'
   },
   log: {
     level: 'verbose'
+  },
+  verificationEmail: false,
+  passport: {
+    local: {
+      strategy: require('passport-local').Strategy
+    },
+    facebook: {
+      name: 'Facebook',
+      protocol: 'oauth2',
+      strategy: require('passport-facebook').Strategy,
+      options: {
+        clientID: '144219216008720',
+        clientSecret: '',
+        callbackURL: "",
+        scope: [ 'email', 'public_profile' ],
+        profileFields: [
+          'id', 'email', 'gender', 'link', 'locale',
+          'name', 'timezone', 'updated_time', 'verified',
+          'displayName', 'photos'
+        ]
+      }
+    }
+  },
+  storage: {
+    // locate can be s3 or local
+    locate: 'local',
+    s3: {
+      key: 'Access Key Id at local.js',
+      secret: 'Secret Access Key',
+      // region only can be us-standard
+      // other region will get InvalidRequest Error
+      region: 'region of bucket',
+      bucket: 'bucket name'
+    },
+  },
+  google: {
+    name: 'GoogleAPIKey',
+    key: 'AIzaSyBSPvypkv-HnFRsC0ZFDvinPMPlEC59Ous'
   }
 };

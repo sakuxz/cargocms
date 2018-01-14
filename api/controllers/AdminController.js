@@ -10,11 +10,42 @@ const url = require('url');
 module.exports = {
 
   index: function(req, res) {
-    res.view({}, "admin/index");
+    let loginUser = null;
+    let displayName = '未登入';
+    let avatar = '/assets/admin/img/avatars/default.png';
+    loginUser = AuthService.getSessionUser(req);
+
+    if(loginUser != null){
+      if(loginUser.avatar != null) avatar = loginUser.avatar
+      displayName = loginUser.displayName
+    }
+
+    MenuItem.findAllWithSubMenu().then((menuItems) => {
+      res.ok({
+        view: true,
+        menuItems, loginUser, avatar, displayName
+      });
+
+    });
   },
 
-  debug: function(req, res) {
-    res.ok({a: 3});
+  login: function(req, res) {
+    let reqError = req.flash('error')[0] || null;
+    res.ok({view: true, errors: reqError});
+  },
+
+  dashboard: function(req, res) {
+    res.ok({view: true});
+  },
+
+  configJson: function(req, res) {
+    let config = {
+      title: 'CargoCMS 雲端管理系統',
+      copyright: '© Laboratory of Fragrance &amp; Perfume',
+    };
+
+    res.set('Content-Type', 'text/javascript');
+    res.send(new Buffer('var __ADMIN_CONFIG__='+JSON.stringify(config)+';'));
   },
 
 };

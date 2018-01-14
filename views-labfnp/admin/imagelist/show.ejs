@@ -1,0 +1,20 @@
+
+<%- include form.ejs %>
+
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+
+	var pagefunction = function() {
+		<%- include vue.ejs %>
+
+		appMain.$mount("#main-edit");
+    appMain.hideIndex();
+    appMain.loadItem(function() {
+      appMain.getDescription();
+      appMain.getLink();
+      appMain.setImage();
+      appMain.slideLinkOnly();
+    });
+	};
+
+</script>

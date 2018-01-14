@@ -1,5 +1,5 @@
 module.exports = {
-  updateOrCreate: async ({postId, datas}) => {
+  updateOrCreate: async function({postId, datas = []}) {
     try {
       const post = await Post.findById(postId);
       let originTags = await post.getTags();
@@ -9,10 +9,10 @@ module.exports = {
       }
 
       const tags = [];
-      for (let data of datas) {
+      for (let title of datas) {
         const findOrCreate = await Tag.findOrCreate({
-          where: { title: data.title },
-          defaults: data,
+          where: { title },
+          defaults: { title },
         });
         tags.push(findOrCreate[0]);
       }

@@ -1,4 +1,4 @@
-describe.only('about tracer operation.', () => {
+describe('about tracer operation.', () => {
 
   it('custom log', (done) => {
     sails.log.info('info!!!!!!!!!!!');

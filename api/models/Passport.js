@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt"
+import crypto from "crypto"
 
 module.exports = {
   attributes: {
@@ -21,12 +22,36 @@ module.exports = {
         sails.log.info('value', value);
         return this.setDataValue('tokens', JSON.stringify(value));
       }
+    },
+    salt: Sequelize.STRING,
+    createdDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('createdAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
+    },
+
+    updatedDateTime:{
+      type: Sequelize.VIRTUAL,
+      get: function(){
+        try{
+          return UtilsService.DataTimeFormat(this.getDataValue('updatedAt'));
+        } catch(e){
+          sails.log.error(e);
+        }
+      }
     }
   },
+
   associations: function() {
     Passport.belongsTo(User);
   },
   options: {
+    // tableName: 'Passports',
     classMethods: {
       hashPassword: async (passport) => {
 
@@ -41,17 +66,63 @@ module.exports = {
           }
         });
 
+      },
+      createDefaultLocalProviderIfNotExist: async function (user) {
+        try {
+
+          let localPassport = await Passport.findOne({
+            where: {
+              provider: 'local',
+              UserId: user.id
+            }
+          });
+          console.log('localPassport ==', localPassport);
+          if(localPassport == null){
+            let newLocalPassport = {
+              provider: "local",
+              password: "password",
+              UserId: user.id
+            }
+            console.log("=== newLocalPassport ===", newLocalPassport);
+            await Passport.create(newLocalPassport);
+          }
+
+        } catch (e) {
+          throw e;
+        }
       }
     },
     instanceMethods: {
-      validatePassword: async (password, passport) => {
+      validatePassword: async function (password) {
         try {
-          return await new Promise((defer, reject) => {
-            bcrypt.compare(password, passport.password, (err, result) => {
+          var that = this;
+          var result = await new Promise((defer, reject) => {
+
+            if(password === that.password){
+              defer(true);
+            }
+
+            bcrypt.compare(password, that.password, (err, result) => {
               if (err) defer(false);
               else defer(result);
             });
           });
+
+          if(result) return result;
+
+          console.log("=== this.salt ===", that.salt);
+          console.log("=== this.salt ===", result);
+          if(!this.salt) return result;
+
+          console.log("=== check two ===");
+          var comparePassword = crypto.pbkdf2Sync(password, new Buffer(this.salt, 'base64'), 10000, 64).toString('base64');
+
+          if(comparePassword == that.password){
+            result = true
+          }
+
+          return result
+
         } catch (e) {
           throw e;
         }

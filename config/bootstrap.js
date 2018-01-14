@@ -9,108 +9,125 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
+import fs from 'fs';
+import shortid from 'shortid';
+import MailerService from 'sails-service-mailer';
 module.exports.bootstrap = async (cb) => {
-  if(!sails.config.urls) sails.config.urls = {afterSignIn: "/"};
 
-  console.log("=== Setup express-helpers ===");
-  _.extend(sails.hooks.http.app.locals, sails.config.http.locals);
-
-  let porductionInitDb = async () => {
-    let {connection} = sails.config.models;
-    let {environment} = sails.config;
-
-    if(connection == 'mysql' && environment == 'production'){
-
-      let {database} = sails.config.connections.mysql;
-
-      let tableList = await sequelize.query(`
-        select table_name
-        from information_schema.tables
-        where table_schema='${database}';
-      `);
-
-      if(tableList[0].length == 0){
-        sails.log.info("=== porduction init database ===");
-        await sequelize.sync({ force: 'drop' });
-      }
-    }
-  }
 
   try {
+    if(!sails.config.appUrl) sails.config.appUrl = "localhost:"+ sails.config.port
+    if(sails.config.appUrl.endsWith('/'))
+    sails.config.appUrl = sails.config.appUrl.substr(0, sails.config.appUrl.length - 1)
+    // 這個已經用 config/urls.js 定義預設值
+    //if(!sails.config.urls) sails.config.urls = {afterSignIn: "/"};
+    _.extend(sails.hooks.http.app.locals, sails.config.http.locals);
+    const {environment} = sails.config;
 
-    sails.log.info("=== start bootstrap ===");
     sails.services.passport.loadStrategies();
-    await porductionInitDb();
 
-    let adminRole = await Role.findOrCreate({
+    let {connection} = sails.config.models;
+
+    if (!sails.config.hasOwnProperty('offAuth'))
+      sails.config.offAuth = false;
+
+    if(environment == 'production'){
+      sails.config.offAuth = false;
+      let recipes = await Recipe.findAll({where: {hashId:{$eq: null}}})
+      let updateRecipes = recipes.map((recipe) => {
+        recipe.hashId = shortid.generate();
+        return recipe.save();
+      })
+
+      await Promise.all(updateRecipes);
+
+    }
+
+    const adminRole = await Role.findOrCreate({
       where: {authority: 'admin'},
       defaults: {authority: 'admin'}
     });
-    let userRole = await Role.findOrCreate({
+
+    const userRole = await Role.findOrCreate({
       where: {authority: 'user'},
       defaults: {authority: 'user'}
     });
 
-    let user = await User.create({
-      username: 'user',
-      email: 'user@gmail.com',
-      firstName: '王',
-      lastName: '大明'
-    });
-    let passport = await Passport.create({provider: 'local', password: 'user', UserId: user.id});
-
-
-
-    let admin = {
-      username: 'admin',
-      email: 'admin@gmail.com',
-      firstName: '管',
-      lastName: '李仁'
-    };
-
-    let adminUser = await User.findOrCreate({
-      where: {username: 'admin'},
-      defaults: admin
-    });
-
-    await Passport.findOrCreate({
-      where: {provider: 'local', UserId: adminUser[0].id},
-      defaults: {provider: 'local', password: 'admin', UserId: adminUser[0].id}
-    });
-
-    adminUser[0].addRole(adminRole[0]);
-
-    const {environment} = sails.config;
-    if (environment === 'development') {
-      sails.log.info("init Dev data", environment);
-
-      for (let i = 0; i < 30; i ++) {
-        let user = await User.create({
-          username: `user${i}`,
-          email: `user${i}@gmail.com`,
-          firstName: '王',
-          lastName: '大明'
-        });
-        let passport = await Passport.create({provider: 'local', password: 'user', UserId: user.id});
+    let adminUser = await User.findOne({
+      where: {
+        username: 'admin'
       }
+    });
 
-
-      const post = await Post.create({
-        title: '香味的一沙一世界5',
-        content: '我們可以這樣形容，當你手中捧到一束花時，可以聞到花束中的各種花材（ex:玫瑰、康乃馨..等)所組成的『這束花的味道』，接著抽出其中的一朵康乃馨',
-        cover: 'http://www.labfnp.com/modules/core/img/update1.jpg',
-        url: 'http://localhost:5001/blog/flower',
-        abstract: '我們可以這樣形容，當你手中捧到一束花時，可以聞到花束中的各種花材',
-        UserId: user.id
-      })
-      const tag = await Tag.create({
-        title: '花'
+    if (adminUser === null) {
+      adminUser = await User.create({
+        username: 'admin',
+        email: 'admin@example.com',
+        firstName: '李仁',
+        lastName: '管',
       });
-      await post.addTag(tag.id);
+      await Passport.findOrCreate({
+        where: {
+          provider: 'local',
+          UserId: adminUser.id
+        },
+        defaults: {
+          provider: 'local',
+          password: 'admin',
+          UserId: adminUser.id
+        }
+      });
+      await adminUser.addRole(adminRole[0]);
+      await adminUser.addRole(userRole[0]);
     }
+
+    /*
+     * 是否要匯入的判斷必須交給 init 定義的程式負責
+     */
+
+    if (environment !== 'test') {
+      // 自動掃描 init 底下的 module 資料夾後執行資料初始化
+      fs.readdir('./config/init/', function(err, files) {
+        for (var i in files) {
+          let dirName = files[i];
+          let isDir = fs.statSync('./config/init/' + dirName).isDirectory();
+          if (isDir) {
+            let hasIndexFile = fs.statSync('./config/init/' + dirName + '/index.js').isFile();
+
+            try {
+              require('./init/' + dirName).init();
+            }
+            catch (e) {
+              sails.log.error(e);
+            }
+          }
+        }
+      });
+    } else {
+      // 測試時需要初始化的 module
+      try {
+        require(`${__dirname}/init/allpay`).init();
+      }
+      catch (e) {
+        sails.log.error(e);
+      }
+    }
+
+    /* 檢查Google API Key是否存在 */
+    if (sails.config.google===undefined || sails.config.google.key===undefined) {
+      throw('google api Key not exist!!');
+    }
+    //檢查 FB Page & App ID 是否存在
+    if (sails.config.facebook === undefined || sails.config.facebook.pageId === '' || sails.config.facebook.appId === ''){
+      sails.log.error('Facebook Page ID or App ID not exist!!');
+    }
+
+    await ConfigService.sync();
+    await ConfigService.load();
 
     cb();
   } catch (e) {
+    sails.log.error(e.stack);
     cb(e);
   }
 };

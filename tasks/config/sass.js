@@ -11,6 +11,20 @@ module.exports = function(grunt) {
           src: ["importer.scss"],
           dest: ".tmp/public/styles/",
           ext: ".css"
+        },
+        {
+          expand: true,
+          cwd: "assets-labfnp/sass/",
+          src: ["importer.scss"],
+          dest: ".tmp/public/css/labfnp/",
+          ext: ".css"
+        },
+        {
+          expand: true,
+          cwd: "assets-labfnp/sass/",
+          src: ["landingPage.scss"],
+          dest: ".tmp/public/css/labfnp/",
+          ext: ".css"
         }
       ]
     }

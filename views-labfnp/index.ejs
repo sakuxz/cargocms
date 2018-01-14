@@ -1,0 +1,306 @@
+<% LayoutUtils.addMeta({ property:"og:image", content:SocialService.getShareUrl() + "/assets/labfnp/img/fb-og-image.jpg" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:url", content:SocialService.getShareUrl() + "/assets/labfnp/img/fb-og-image.jpg"  }); %>
+<% LayoutUtils.addMeta({ property:"og:image:type", content:"image/jpeg" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:width", content:"1200" }); %>
+<% LayoutUtils.addMeta({ property:"og:image:height", content:"630" }); %>
+<% LayoutUtils.addMeta({ property:"og:title", content:"LFP: 香料香水實驗室，客製專屬香水" }); %>
+<% LayoutUtils.addMeta({ property:"og:description", content:"香水和每個人的氣味，都應該是具有獨特性並具有標誌性的，而唯有透過每個人感受與創造氣味，才能追尋出每個不同自我。" }); %>
+<% LayoutUtils.addMeta({ property:"og:type", content:"website" }); %>
+<div class="cover-wrapper">
+  <div class="cover-video"></div>
+  <% if (!req.session.authenticated) { %>
+    <a class="login-btn" href="/login?url=/lab">Log in</a>
+  <% } %>
+  <div class="cover-content">
+    <img src="/assets/labfnp/img/img.index/logo-with-texts.png" alt="" />
+    <div class="button-group">
+      <button type="button" class="btn btn-brown view-more scroll-to-content">View more</button>
+      <a href="/login?url=/lab" class="btn btn-brown lab" style="letter-spacing: 10px;">開始創作香水</a>
+    </div>
+    <h3 class="slogan">Individual perfume, individual you.</h3>
+  </div>
+</div>
+
+<div class="feature-block">
+  <div class="container row">
+    <div class="col-sm-4">
+      <div class="feature-box" data-target="#perfume-lab">
+        <img src="<%- layoutImages.icon1.url %>" alt="" />
+        <h2>配方探索</h2>
+        <p>
+          進入一趟發現香氣的冒險旅程<br>找尋配方組合的靈感
+        </p>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="feature-box" data-target="#simple-process">
+        <img src="<%- layoutImages.icon2.url %>" alt="" />
+        <h2>香味分子調香</h2>
+        <p>
+          嗅覺體驗創造屬於你的氣味
+        </p>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="feature-box" data-target="#simple-process">
+        <img src="<%- layoutImages.icon3.url %>" alt="" />
+        <h2>氣味感覺調香</h2>
+        <p>
+          於文字感覺中找尋專屬香氣
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container value-block">
+  <h1>
+    香水是每個人最獨特的風格呈現
+  </h1>
+  <p>
+     LFP 提供您不同香調的香味分子，由您創作並<br class="hidden-xs">
+     決定香型組成，由我們製作並把關品質。
+  </p>
+  <div class="fb-like">
+    <% include lib/fbLikeShare.ejs %>
+  </div>
+</div>
+
+<div class="slider-wrapper">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" 
+        style="background-image: url('<%= layoutImages.slides1.url %>');
+        <% if (layoutImages.slides1.link) { %> cursor:pointer; <% } %>"     
+        <% if (layoutImages.slides1.link) { %>
+          onclick="window.open('<%- layoutImages.slides1.link %>', '_blank');"
+        <% } %>
+      ></div>
+      <div class="swiper-slide"
+        style="background-image: url('<%= layoutImages.slides2.url %>');
+        <% if (layoutImages.slides2.link) { %> cursor:pointer; <% } %>"
+        <% if (layoutImages.slides2.link) { %>
+          onclick="window.open('<%- layoutImages.slides2.link %>', '_blank');"
+        <% } %>
+      ></div>
+      <div class="swiper-slide"
+        style="background-image: url('<%= layoutImages.slides3.url %>');
+        <% if (layoutImages.slides3.link) { %> cursor:pointer; <% } %>"     
+        <% if (layoutImages.slides3.link) { %>
+          onclick="window.open('<%- layoutImages.slides3.link %>', '_blank');"
+        <% } %>
+      ></div>
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+    <!-- 如果需要导航按钮 -->
+    <div class="swiper-button-prev"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
+    <div class="swiper-button-next"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
+  </div>
+</div>
+
+<div class="slider-wrapper xs-slider-wrapper">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" style="background-image: url('<%- layoutImages.slidesm1.url %>');"></div>
+      <div class="swiper-slide" style="background-image: url('<%- layoutImages.slidesm2.url %>');"></div>
+      <div class="swiper-slide" style="background-image: url('<%- layoutImages.slidesm3.url %>');"></div>
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+    <!-- 如果需要导航按钮 -->
+    <div class="swiper-button-prev"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
+    <div class="swiper-button-next"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
+  </div>
+</div>
+
+<div class="intro-block full-height-bg" id="perfume-lab">
+  <div class="row">
+    <div class="col-sm-6 col-sm-push-6">
+      <h2 class="intro-title"
+          style="margin-left: -45px;">
+      Laboratory of <br> Fragrance & Perfume
+      </h2>
+      <div class="intro-content"
+          style="width: 16em; transform: translateX(8px);">
+        <h3>香料香水實驗室</h3>
+        <p style="width: 18em;">
+          LFP 專注於每一支香水的誕生，協助每個人從嗅覺體驗、調香實作中，創造專屬自己的獨特氣味，讓香水不再是大量複製，而是可以詮釋無二的個人特色。
+          <a href="/login?url=/lab"><img class="intro-block-link" src="/assets/labfnp/img/img.index/goto-lab-button.png" alt="進入實驗室" /></a>
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-6 col-sm-pull-6 intro-block-cover-cut">
+      <img class="move-up intro-block-cover" src="<%- layoutImages.backgroundImage1.url %>" alt="" />
+    </div>
+  </div>
+
+</div>
+
+<hr class="divider divider-no-line">
+<hr class="divider divider-no-dot">
+
+<div class="intro-block intro-block-fix-height">
+  <div class="container">
+    <div class="row video-content">
+      <iframe width="630" height="360" src="https://www.youtube.com/embed/J6NrnyfII5Y" frameborder="0" allowfullscreen></iframe>
+      <h3 style="margin-bottom: 3em;">香水是每個人最獨特的<br class="hidden-sm hidden-md hidden-lg">風格呈現</h3>
+    </div>
+  </div>
+
+</div>
+
+<hr class="divider divider-no-line">
+<hr class="divider divider-no-dot">
+
+<div class="intro-block">
+  <div class="row">
+    <div class="col-sm-5">
+      <h2 class="intro-title intro-title-2 xs-align-content"
+      style="
+        float: right;
+        transform: translateX(63px);">
+      Custom<br>Perfume
+      </h2>
+      <div class="intro-content"
+        style="width: 16em; transform: translateX(22px);">
+        <h3 style="letter-spacing: 25.2px;">客製化香水</h3>
+        <p style="width: 16em;">
+          香水和每個人的氣味，都應該是具有獨特性並具有標誌性的，而唯有透過每個人感受與創造氣味，才能追尋出每個不同自我。
+          <a href="#"><img class="intro-block-link scroll-to-map" src="/assets/labfnp/img/img.index/store-map-button.png" alt="門市地點" /></a>
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-7">
+      <img class="move-down intro-block-cover" src="<%- layoutImages.backgroundImage2.url %>" alt="" />
+    </div>
+  </div>
+
+</div>
+
+<hr class="divider divider-no-line">
+<hr class="divider divider-no-dot">
+
+<div class="intro-block">
+  <div class="row">
+    <div class="col-sm-5 col-sm-push-7">
+      <h2 class="intro-title xs-align-content"
+          style="
+          margin-left: -34px;
+          position: relative;">
+        We<br>Believe
+      </h2>
+      <div class="intro-content"
+        style="width: 12em; transform: translateX(14px);">
+        <h3 style="letter-spacing: 25.2px;">品牌理念</h3>
+        <p style="width: 12em;">
+          每個人皆有與生俱來的創造力與獨特性，促發人群對於像覺得好奇心與自我價值的展現是我們所努力追求的。
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-7 col-sm-pull-5">
+      <img class="move-down intro-block-cover" src="<%- layoutImages.backgroundImage3.url %>" alt="" />
+    </div>
+  </div>
+
+</div>
+
+<hr class="divider divider-no-line">
+<hr class="divider divider-no-dot">
+
+<div class="intro-block intro-block-pink intro-block-no-max-width">
+  <div class="row">
+    <div class="col-sm-7">
+      <div class="user-comment">
+        <div class="avatar-wrapper xs-align-content">
+          <img src="<%- layoutImages.avatar.url %>" alt="" />
+        </div>
+        <h2 class="intro-title xs-align-content">
+          Amy Chen<br>
+          <span>＃youth＃courage</span>
+        </h2>
+        <div class="intro-content" style="width: 14em;">
+          <h3 style="font-size: 16px; letter-spacing: 2px; margin-bottom: 12px;">22 歲的我</h3>
+          <p style="width: 18em;">
+            花香調領著前味的青春氣息，中味則是帶有清心的朝氣與動力，後味得是散發著獨立與成穩的勇氣。
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <img class="drop-pie-chart" src="/assets/labfnp/img/img.index/drop-chart.png" alt="" />
+    </div>
+  </div>
+
+</div>
+
+<hr class="divider divider-no-line">
+<hr class="divider divider-no-dot high-z-index">
+
+<div class="intro-block intro-block-no-skew" style="margin-bottom: 2.3em;" id="simple-process">
+  <div class="row">
+    <div class="col-sm-5">
+      <h2 class="intro-title intro-title-2 xs-align-content"
+      style="
+        float: right;
+        transform: translateX(63px);">
+      Simplified<br>Process
+      </h2>
+      <div class="intro-content"
+        style="width: 15em; transform: translateX(22px);">
+        <h3 style="letter-spacing: 21.1px;">簡單化流程</h3>
+        <p style="width: 15em;">
+          透過聞香、搭配香味骨架以及創作香水樣品，確認香味組成，輕鬆擁有第一瓶由你創作的客製化香水。
+          <a href="/login?url=/lab"><img class="intro-block-link" src="/assets/labfnp/img/img.index/start-creator-button.png" alt="開始創作香水" /></a>
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-7">
+      <img class="lab-process" src="/assets/labfnp/img/img.index/simple-process-flow.png" alt="" />
+    </div>
+  </div>
+
+</div>
+
+<div class="map-wrapper hidden-xs lfp-map">
+  <div id="map" style="height: 450px;">
+  </div>
+  <script>
+    var googleMapKey = '<%= sails.config.google.key %>';
+  </script>
+  <ul class="map-locations">
+    <li data-idx="0" class="active">
+      <span>台北</span>
+      <span>松菸門市</span>
+    </li>
+    <li data-idx="1">
+      <span>台中</span>
+      <span>綠光計畫門市</span>
+    </li>
+  </ul>
+</div>
+
+<div class="xs-location-info">
+  <div class="location">
+    <span>台北</span>
+    <span>松菸門市</span>
+    <address>
+      <a href="https://www.google.com.tw/maps/place/LFP%E9%A6%99%E6%96%99%E9%A6%99%E6%B0%B4%E5%AF%A6%E9%A9%97%E5%AE%A4(%E5%8F%B0%E5%8C%97%E9%96%80%E5%B8%82)/@25.042562,121.5606943,17z/data=!4m13!1m7!3m6!1s0x3442abb92b2135d1:0x6f03f0aea40b892e!2zMTEw5Y-w5YyX5biC5L-h576p5Y2A5b-g5a2d5p2x6Lev5Zub5q61NTUz5be3MTLomZ8!3b1!8m2!3d25.042562!4d121.562883!3m4!1s0x3442abb92b2135d1:0x432a74d0571869dc!8m2!3d25.042562!4d121.562883" target="_blank">台北市信義區忠孝東路四段553巷12號</a>
+    </address>
+    <a href="tel:+886227657272">Tel: (02)2765-7272</a>
+    <time>營業時間：Mon-Sun 12:00-20:00</time>
+  </div>
+  <div class="location">
+    <span>台中</span>
+    <span>綠光計畫門市</span>
+    <address>
+      <a href="https://www.google.com.tw/maps/place/LFP%E9%A6%99%E6%B0%B4%E5%AF%A6%E9%A9%97%E5%AE%A4/@24.1475427,120.6605388,17z/data=!3m1!4b1!4m5!3m4!1s0x34693d9f0eb06e2d:0x324e39b59dbb10c6!8m2!3d24.1475427!4d120.6627275" target="_blank">台中市西區中興一巷8號2樓K戶</a>
+    </address>
+    <a href="tel:+886423015682">Tel: (04)2301-5682</a>
+    <time>營業時間：Mon-Sun 12:00-20:00</span>
+  </div>
+</div>

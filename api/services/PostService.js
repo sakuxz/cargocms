@@ -1,32 +1,146 @@
 module.exports = {
-  create: async (data = {
+  create: async function ({
     title,
     content,
-    cover,
+    cover = null,
+    coverType,
+    coverUrl,
+    chosen,
+    date,
     url,
     abstract,
-  }) => {
+    UserId,
+    longitude,
+    latitude,
+    alias,
+    type,
+    publish,
+    eventId,
+  }) {
     try {
-      return await Post.create(data);
+      const formatedDate = date ? new Date(date) : null;
+      const post = await Post.create({
+        title,
+        content,
+        cover: cover === '' ? null : cover,
+        coverType,
+        coverUrl,
+        chosen,
+        date: formatedDate,
+        url,
+        abstract,
+        UserId,
+        alias,
+        type,
+        publish,
+      });
+      if (eventId) {
+        for (const event of eventId) {
+          if ( event.id !== 0) {
+            await Event.update({ PostId: post.id }, { where: { id: event.id } });
+          }
+        }
+      }
+      if (longitude && latitude) {
+        // 不知道為什麼無法運作
+        // let location = await Location.findOrCreate({
+        //   where: { longitude, latitude },
+        //   defaults: { longitude, latitude },
+        // });
+        let location = await Location.findOne({
+          where: { longitude, latitude}
+        });
+        if (!location) {
+          location = await Location.create({ longitude, latitude });
+        }
+        await location.addPost(post.id);
+      }
+      return post;
     } catch (e) {
       sails.log.error(e);
       throw e;
     }
   },
 
-  update: async (postId, data = {
+  update: async function (postId, {
     title,
     content,
     cover,
+    coverType,
+    coverUrl,
+    chosen,
+    date,
     url,
     abstract,
-  }) => {
+    TagsArray,
+    longitude,
+    latitude,
+    alias,
+    type,
+    publish,
+    eventId,
+  }) {
     try {
-      return await Post.update(data, {
+      if ( type === 'internal-event') {
+        const id = eventId.map((event) => event.id);
+        const deleteEventPost = [];
+        deleteEventPost.push(
+          Event.update({PostId: null}, {
+            where: {
+              PostId: postId,
+              id: {
+                $notIn: id
+              }
+            }
+          })
+        );
+        await Promise.all(deleteEventPost);
+        for (const event of eventId) {
+          if ( event.id !== 0) {
+            await Event.update({ PostId: postId }, { where: { id: event.id } });
+          }
+        }
+      }
+      let location = null;
+      if (longitude && latitude) {
+        // let location = await Location.findOrCreate({
+        //   where: { longitude, latitude },
+        //   defaults: { longitude, latitude },
+        // });
+        location = await Location.findOne({
+          where: { longitude, latitude}
+        });
+        if (!location) {
+          location = await Location.create({ longitude, latitude });
+        }
+      }
+      const formatedDate = date ? new Date(date) : null;
+      console.log('date=>', date);
+      console.log('formatedDate=>', formatedDate);
+      await Post.update({
+        title,
+        content,
+        cover: cover === '' ? null : cover,
+        coverType,
+        coverUrl,
+        chosen,
+        date: formatedDate,
+        url,
+        abstract,
+        LocationId: location ? location.id : null,
+        alias,
+        type,
+        publish,
+      }, {
         where: {
           id: postId,
         }
       });
+      await TagService.updateOrCreate({
+        postId,
+        datas: TagsArray
+      });
+      return true;
     } catch (e) {
       sails.log.error(e);
       throw e;

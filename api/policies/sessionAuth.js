@@ -7,15 +7,38 @@
  * @docs        :: http://sailsjs.org/#!/documentation/concepts/Policies
  *
  */
-module.exports = function(req, res, next) {
+module.exports = async function(req, res, next) {
 
-  // User is allowed, proceed to the next policy,
-  // or if this is the last policy, the controller
-  if (req.session.authenticated) {
-    return next();
+  try {
+    // User is allowed, proceed to the next policy,
+    // or if this is the last policy, the controller
+    const user = AuthService.getSessionUser(req);
+    console.log("req.session", user, sails.config.offAuth);
+    if (sails.config.offAuth == true || user) {
+      // const noEmail = !user.email;
+      // if (noEmail || user.email === '') {
+      //   sails.log.warn('使用者登入沒有 Email');
+      //   req.flash('info', '請補齊 Email 資料');
+      //   return res.redirect('/edit/me');
+      // }
+
+      if (sails.config.verificationEmail && user && user.verificationEmailToken) {
+        const modelUser = await User.findById(user.id);
+        if (modelUser.verificationEmailToken) {
+          req.flash('info', '請先驗證完您的 Email 才能使用此功能');
+          return res.redirect('/edit/me');
+        }
+      }
+
+      return next();
+    }
+
+    // User is not allowed
+    // (default res.forbidden() behavior can be overridden in `config/403.js`)
+    return res.forbidden('You are not permitted to perform this action.');
+
+  } catch (e) {
+    sails.log.error(e);
+    throw new Error(e);
   }
-
-  // User is not allowed
-  // (default res.forbidden() behavior can be overridden in `config/403.js`)
-  return res.forbidden('You are not permitted to perform this action.');
 };

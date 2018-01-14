@@ -14,3 +14,15 @@ package-production:
 restart-production:
 	- ssh jenkins@localhost cd ~/deploy/production && pm2 delete production
 	ssh jenkins@localhost  cd ~/deploy/production && NODE_ENV=production pm2 start -f app.js --name 'production'
+
+start-e2e-docker:
+	- docker-compose up -d start-e2e-env
+
+preview:
+	- pm2 stop cargo-preview
+	- pm2 delete cargo-preview
+	pm2 start app.js --name cargo-preview
+
+
+deploy-beta:
+	ssh cargo@linode1.trunksys.com ". .nvm/nvm.sh && cd labfnp && git checkout . && git pull origin release-labfnp && npm i && npm run build && pm2 restart labfnp"

@@ -1,5 +1,6 @@
-describe('about User model operation.', function() {
 
+
+describe('about User model operation.', function() {
   describe('test update userAgent', function() {
     let user;
     before(async (done) => {
@@ -124,9 +125,9 @@ describe('about User model operation.', function() {
         sails.log.info('create user model spec =>', res);
         done(new Error("should be 'unique violation'"));
       } catch (e) {
-        sails.log.info('!!!error.type=>', e);
-          sails.log.info('error.type=>', e.errors[0].type);
-        const checkError = e.errors[0].type === 'unique violation';
+        sails.log.info('!!!error=>', e);
+        sails.log.info('error.type=>', e.errors[0].type);
+        const checkError = e.errors[0].message === 'username must be unique';
         if (checkError) done();
         else done(e);
       }
